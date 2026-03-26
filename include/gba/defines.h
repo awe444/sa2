@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdint.h> // for uint16_t
 #endif
+#include "color.h"
 
 #define TRUE  1
 #define FALSE 0
@@ -13,7 +14,6 @@
 #define IWRAM_DATA __attribute__((section("iwram_data")))
 #define EWRAM_DATA __attribute__((section("ewram_data")))
 #else
-#include "color.h"
 #define IWRAM_DATA 
 #define EWRAM_DATA
 #endif
@@ -160,19 +160,6 @@ typedef uint16_t winreg_t;
 #define GET_TILE_NUM(vramPtr) GET_TILE_NUM_COMMON((vramPtr), TILE_SIZE_4BPP) 
 
 #define TOTAL_OBJ_TILE_COUNT 1024
-
-#define RGB16(r, g, b) ((r) | ((g) << 5) | ((b) << 10))
-#define RGB16_REV(r, g, b) (((b) << 10) | ((g) << 5) | (r))
-
-#define RGB_BLACK RGB16(0, 0, 0)
-#define RGB_WHITE RGB16(31, 31, 31)
-#define RGB_RED RGB16(31, 0, 0)
-#define RGB_GREEN RGB16(0, 31, 0)
-#define RGB_BLUE RGB16(0, 0, 31)
-#define RGB_YELLOW RGB16(31, 31, 0)
-#define RGB_MAGENTA RGB16(31, 0, 31)
-#define RGB_CYAN RGB16(0, 31, 31)
-#define RGB_WHITEALPHA (RGB_WHITE | 0x8000)
 
 #define SYSTEM_CLOCK           (16 * 1024 * 1024)   // System Clock
 

@@ -16,7 +16,7 @@
 #include "constants/text.h"
 #include "constants/tilemaps.h"
 
-#define CM_BACKGROUND_COLOR RGB16(0, 27, 30)
+#define CM_BACKGROUND_COLOR RGB16_REV(0, 27, 30)
 
 typedef struct ChaoMessage {
     /* 0x00 */ Background bg;
