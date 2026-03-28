@@ -92,6 +92,8 @@ bool paused = false;
 bool stepOneFrame = false;
 bool headless = false;
 
+static SDL_GameController *sdlGameController = NULL;
+
 double lastGameTime = 0;
 double curGameTime = 0;
 double fixedTimestep = 1.0 / 60.0; // 16.666667ms
@@ -157,9 +159,19 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0) {
         fprintf(stderr, "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return 1;
+    }
+
+    // Open the first available game controller
+    for (int i = 0; i < SDL_NumJoysticks(); i++) {
+        if (SDL_IsGameController(i)) {
+            sdlGameController = SDL_GameControllerOpen(i);
+            if (sdlGameController) {
+                break;
+            }
+        }
     }
 
 #ifdef TITLE_BAR
@@ -350,6 +362,11 @@ void VBlankIntrWait(void)
 
     CloseSaveFile();
 
+    if (sdlGameController) {
+        SDL_GameControllerClose(sdlGameController);
+        sdlGameController = NULL;
+    }
+
     SDL_DestroyWindow(sdlWindow);
     SDL_Quit();
     exit(0);
@@ -523,6 +540,18 @@ void ProcessSDLEvents(void)
                             break;
                     }
                 break;
+            case SDL_CONTROLLERDEVICEADDED:
+                if (!sdlGameController) {
+                    sdlGameController = SDL_GameControllerOpen(event.cdevice.which);
+                }
+                break;
+            case SDL_CONTROLLERDEVICEREMOVED:
+                if (sdlGameController
+                    && event.cdevice.which == SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(sdlGameController))) {
+                    SDL_GameControllerClose(sdlGameController);
+                    sdlGameController = NULL;
+                }
+                break;
             case SDL_WINDOWEVENT:
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
                     unsigned int w = event.window.data1;
@@ -543,25 +572,79 @@ void ProcessSDLEvents(void)
     }
 }
 
+#define STICK_THRESHOLD_SDL 8000
+
+static SharedKeys GetSDLGameControllerKeys(void)
+{
+    if (!sdlGameController) {
+        return 0;
+    }
+
+    SharedKeys gcKeys = 0;
+
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_A))
+        gcKeys |= A_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_X))
+        gcKeys |= B_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_START))
+        gcKeys |= START_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_BACK))
+        gcKeys |= SELECT_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_LEFTSHOULDER))
+        gcKeys |= L_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER))
+        gcKeys |= R_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_DPAD_UP))
+        gcKeys |= DPAD_UP;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+        gcKeys |= DPAD_DOWN;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+        gcKeys |= DPAD_LEFT;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+        gcKeys |= DPAD_RIGHT;
+
+    // Left analog stick
+    Sint16 xAxis = SDL_GameControllerGetAxis(sdlGameController, SDL_CONTROLLER_AXIS_LEFTX);
+    Sint16 yAxis = SDL_GameControllerGetAxis(sdlGameController, SDL_CONTROLLER_AXIS_LEFTY);
+
+    if (xAxis < -STICK_THRESHOLD_SDL)
+        gcKeys |= DPAD_LEFT;
+    else if (xAxis > STICK_THRESHOLD_SDL)
+        gcKeys |= DPAD_RIGHT;
+    if (yAxis < -STICK_THRESHOLD_SDL)
+        gcKeys |= DPAD_UP;
+    else if (yAxis > STICK_THRESHOLD_SDL)
+        gcKeys |= DPAD_DOWN;
+
+    // Right trigger for speed-up
+    Sint16 rightTrigger = SDL_GameControllerGetAxis(sdlGameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+    if (rightTrigger > 20000)
+        gcKeys |= KEY_SPEEDUP;
+
+    return gcKeys;
+}
+
 u16 Platform_GetKeyInput(void)
 {
+    SharedKeys gamepadKeys = GetSDLGameControllerKeys();
+
 #ifdef _WIN32
-    SharedKeys gamepadKeys = GetXInputKeys();
+    if (gamepadKeys == 0) {
+        gamepadKeys = GetXInputKeys();
+    }
+#endif
 
     speedUp = (gamepadKeys & KEY_SPEEDUP) ? true : false;
 
     if (speedUp) {
         timeScale = SPEEDUP_SCALE;
         SDL_PauseAudio(1);
-    } else {
+    } else if (gamepadKeys != 0) {
         timeScale = 1.0f;
         SDL_PauseAudio(0);
     }
 
-    return (gamepadKeys != 0) ? gamepadKeys : keys;
-#endif
-
-    return keys;
+    return (gamepadKeys != 0) ? (u16)(gamepadKeys & 0xFFFF) : keys;
 }
 
 // BIOS function implementations are based on the VBA-M source code.
