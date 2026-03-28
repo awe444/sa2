@@ -78,7 +78,12 @@ function(sa1_preprocess OUTPUT_VAR)
             COMMAND ${CMAKE_COMMAND} -E make_directory "${PP_I_DIR}"
             COMMAND ${CMAKE_C_COMPILER} -E ${CPP_FLAGS} "${SRC}" -o "${PP_I}"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${PP_C_DIR}"
-            COMMAND ${PREPROC} "${PP_I}" sdl "" > "${PP_C}"
+            COMMAND ${CMAKE_COMMAND}
+                -DPREPROC_EXE=${PREPROC}
+                -DPP_INPUT=${PP_I}
+                -DPP_OUTPUT=${PP_C}
+                -DWORK_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+                -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_preproc.cmake"
             DEPENDS "${SRC}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             COMMENT "preproc ${REL}"

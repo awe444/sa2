@@ -639,7 +639,7 @@ u16 Platform_GetKeyInput(void)
     if (speedUp) {
         timeScale = SPEEDUP_SCALE;
         SDL_PauseAudio(1);
-    } else if (gamepadKeys != 0) {
+    } else {
         timeScale = 1.0f;
         SDL_PauseAudio(0);
     }
