@@ -15,10 +15,10 @@ SECTIONS {
         src/sa2/main.o(.text);
         src/sa2/task.o(.text);
         src/background.o(.text);
-        src/sprite.o(.text);
-        src/bg_triangles.o(.text);
-        src/malloc_ewram.o(.text);
-        src/malloc_vram.o(.text);
+        src/sa2/sprite.o(.text);
+        src/sa2/bg_triangles.o(.text);
+        src/sa2/malloc_ewram.o(.text);
+        src/sa2/malloc_vram.o(.text);
         src/sa2/multi_sio.o(.text);
         src/multi_boot.o(.text);
         src/sa2/sio32_multi_load.o(.text);
@@ -285,9 +285,9 @@ SECTIONS {
 
         src/sa2/core.o(.rodata);
         src/background.o(.rodata);
-        src/trig.o(.rodata);
-        src/sprite.o(.rodata);
-        src/bg_triangles.o(.rodata);
+        src/sa2/trig.o(.rodata);
+        src/sa2/sprite.o(.rodata);
+        src/sa2/bg_triangles.o(.rodata);
         src/sa2/multi_sio.o(.rodata);
         src/sa2/sio32_multi_load.o(.rodata);
         src/data/tileset_debug_ascii.o(.rodata);
@@ -573,7 +573,7 @@ SECTIONS {
     EWRAM (NOLOAD) :
     ALIGN(4) {
         src/sa2/lib/m4a/m4a.o(ewram_data);
-        src/malloc_ewram.o(.bss);
+        src/sa2/malloc_ewram.o(ewram_data);
         ewram_end = .;
 
         . = 0x00033000; gUnknown_02033000 = .;

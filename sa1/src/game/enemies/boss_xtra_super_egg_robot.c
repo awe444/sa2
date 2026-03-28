@@ -1386,7 +1386,7 @@ bool32 sub_8052150(s32 arg0, s32 arg1, u16 arg2, SomeTaskManager_7C *arg3)
         sp0[5] = var_r6;
         sp0[6] = var_r2;
         sp0[7] = var_r8;
-        sa2__sub_8006DB4(0U, (TriParam1 *)&sp0, 0, var_r7 + 1);
+        SA2_LABEL(sub_8006DB4)(0U, (TriParam1 *)&sp0, 0, var_r7 + 1);
 
         if (var_r5 >= 0) {
             var_r4_2 = var_r5;
