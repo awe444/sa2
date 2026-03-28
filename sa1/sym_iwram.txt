@@ -1,6 +1,6 @@
 
 /**** bss ****/
-src/lib/m4a/m4a.o(.bss.code);
+src/sa2/lib/m4a/m4a.o(.bss.code);
 
 . = 0x0000400;
 src/multi_boot.o(.bss);
@@ -13,11 +13,11 @@ src/lib/agb_flash/agb_flash.o(.bss);
 *libgcc.a:(.bss);
 
 . = 0x00000470;
-src/core.o(.data);
+src/sa2/core.o(.data);
 
 . = 0x00004C60;
-src/multi_sio.o(.data);
-src/sio32_multi_load.o(.data);
+src/sa2/multi_sio.o(.data);
+src/sa2/sio32_multi_load.o(COMMON);
 
 . = 0x00004FE0;
 src/game/sa1_sa2_shared/globals.o(.data);

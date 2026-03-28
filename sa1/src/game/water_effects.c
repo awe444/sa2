@@ -281,7 +281,7 @@ NONMATCH("asm/non_matching/game/water_effects__Task_StageWaterTask.inc", void Ta
     unk2_0 = (water->SA2_LABEL(unk2));
     if ((unk2_2 = unk2_0 - 1) < DISPLAY_HEIGHT - 1) {
         gIntrTable[INTR_INDEX_VCOUNT] = SA2_LABEL(VCountIntr_8011ACC);
-        SA2_LABEL(gUnknown_03002874) = unk2_0 - 1;
+        gVCountSetting = unk2_0 - 1;
         gFlags |= FLAGS_40;
     } else {
         gIntrTable[INTR_INDEX_VCOUNT] = gIntrTableTemplate[INTR_INDEX_VCOUNT];

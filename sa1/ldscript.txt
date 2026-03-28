@@ -11,7 +11,7 @@ SECTIONS {
         src/crt0.o(.text);
         src/multi_sio_asm.o(.text);
         data/rom_header_old.o(.text);
-        src/core.o(.text);
+        src/sa2/core.o(.text);
         src/main.o(.text);
         src/task.o(.text);
         src/background.o(.text);
@@ -19,9 +19,9 @@ SECTIONS {
         src/bg_triangles.o(.text);
         src/malloc_ewram.o(.text);
         src/malloc_vram.o(.text);
-        src/multi_sio.o(.text);
+        src/sa2/multi_sio.o(.text);
         src/multi_boot.o(.text);
-        src/sio32_multi_load.o(.text);
+        src/sa2/sio32_multi_load.o(.text);
 
         /* Game */
         src/game/sa1_sa2_shared/rings_manager.o(.text);
@@ -246,7 +246,7 @@ SECTIONS {
 
         /* Libs */
         src/lib/m4a/m4a0.o(.text);
-        src/lib/m4a/m4a.o(.text);
+        src/sa2/lib/m4a/m4a.o(.text);
         src/lib/agb_flash/agb_flash.o(.text);
         src/lib/agb_flash/agb_flash_le_512k.o(.text);
         src/lib/agb_flash/agb_flash_mx_512k.o(.text);
@@ -283,13 +283,13 @@ SECTIONS {
     
     /* Data */
 
-        src/core.o(.rodata);
+        src/sa2/core.o(.rodata);
         src/background.o(.rodata);
         src/trig.o(.rodata);
         src/sprite.o(.rodata);
         src/bg_triangles.o(.rodata);
-        src/multi_sio.o(.rodata);
-        src/sio32_multi_load.o(.rodata);
+        src/sa2/multi_sio.o(.rodata);
+        src/sa2/sio32_multi_load.o(.rodata);
         src/data/tileset_debug_ascii.o(.rodata);
         src/game/save.o(.rodata);
         data/chao_garden.o(.rodata);
@@ -376,7 +376,7 @@ SECTIONS {
         src/game/interactables/spiked_barrel.o(.rodata);
         src/game/interactables/air_bubbles.o(.rodata);
         src/data/entities.o(.rodata);
-        src/lib/m4a/m4a_tables.o(.rodata);
+        src/sa2/lib/m4a/m4a_tables.o(.rodata);
         data/sound_data.o(.rodata);
         sound/songs/song001.o(.rodata);
         sound/songs/midi/song002.o(.rodata);
@@ -572,7 +572,7 @@ SECTIONS {
     . = 0x2000000;
     EWRAM (NOLOAD) :
     ALIGN(4) {
-        src/lib/m4a/m4a.o(ewram_data);
+        src/sa2/lib/m4a/m4a.o(ewram_data);
         src/malloc_ewram.o(.bss);
         ewram_end = .;
 

@@ -135,7 +135,7 @@ _0804C756:
 	ldr r1, _0804C78C @ =gIntrTable
 	ldr r0, _0804C790 @ =sa2__VCountIntr_8011ACC
 	str r0, [r1, #0xc]
-	ldr r1, _0804C794 @ =sa2__gUnknown_03002874
+	ldr r1, _0804C794 @ =gVCountSetting
 	subs r0, r3, #1
 	strb r0, [r1]
 	ldr r2, _0804C788 @ =gFlags
@@ -150,7 +150,7 @@ _0804C784: .4byte sa2__sub_8011A4C
 _0804C788: .4byte gFlags
 _0804C78C: .4byte gIntrTable
 _0804C790: .4byte sa2__VCountIntr_8011ACC
-_0804C794: .4byte sa2__gUnknown_03002874
+_0804C794: .4byte gVCountSetting
 _0804C798:
 	ldr r1, _0804C7C0 @ =gIntrTable
 	ldr r0, _0804C7C4 @ =gIntrTableTemplate

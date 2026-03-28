@@ -130,6 +130,9 @@ INCLUDE_DIRS = include
 INCLUDE_CPP_ARGS := $(INCLUDE_DIRS:%=-iquote %)
 INCLUDE_SCANINC_ARGS := $(INCLUDE_DIRS:%=-I %)
 
+SA2_INCLUDE_DIRS = ../include
+SA2_INCLUDE_CPP_ARGS := $(SA2_INCLUDE_DIRS:%=-iquote %)
+
 ASM_SUBDIR = asm
 ASM_BUILDDIR = $(OBJ_DIR)/$(ASM_SUBDIR)
 
@@ -177,6 +180,34 @@ ASM_SRCS := $(wildcard $(ASM_SUBDIR)/*.s)
 ASM_OBJS := $(patsubst $(ASM_SUBDIR)/%.s,$(ASM_BUILDDIR)/%.o,$(ASM_SRCS))
 endif
 
+# TEMP SOLUTION UNTIL MAKEFILES ARE COMBINED
+# Moves any relevant sa2 c files to the build dir
+SA2_C_FILES := \
+	sa2/lib/m4a/m4a.c \
+	sa2/lib/m4a/m4a_tables.c \
+	sa2/multi_sio.c \
+	sa2/sio32_multi_load.c \
+	sa2/core.c \
+# 	sa2/main.c \
+# 	sa2/task.c \
+# 	sa2/background.c \
+# 	sa2/trig.c \
+# 	sa2/sprite.c \
+# 	sa2/malloc_vram.c \
+# 	sa2/bg_triangles.c \
+
+SA2_C_ASM_FILES := \
+# 	sa2/rom_header.s \
+# 	sa2/lib/m4a/m4a0.s \
+# 	sa2/crt0.s \
+# 	sa2/multi_sio_asm.s
+
+SA2_C_SRCS = $(patsubst sa2/%.c,$(C_BUILDDIR)/sa2/%.c,$(SA2_C_FILES))
+SA2_C_OBJS = $(patsubst %.c,%.o,$(SA2_C_SRCS))
+
+SA2_C_ASM_SRCS = $(patsubst sa2/%.s,$(C_BUILDDIR)/sa2/%.s,$(SA2_C_ASM_FILES))
+SA2_C_ASM_OBJS = $(patsubst %.s,%.o,$(SA2_C_ASM_SRCS))
+
 DATA_ASM_SRCS := $(wildcard $(DATA_ASM_SUBDIR)/*.s)
 DATA_ASM_OBJS := $(patsubst $(DATA_ASM_SUBDIR)/%.s,$(DATA_ASM_BUILDDIR)/%.o,$(DATA_ASM_SRCS))
 
@@ -189,7 +220,7 @@ MID_OBJS := $(patsubst $(MID_SUBDIR)/%.mid,$(MID_BUILDDIR)/%.o,$(MID_SRCS))
 SOUND_ASM_SRCS := $(wildcard $(SOUND_ASM_SUBDIR)/*.s)
 SOUND_ASM_OBJS := $(patsubst $(SOUND_ASM_SUBDIR)/%.s,$(SOUND_ASM_BUILDDIR)/%.o,$(SOUND_ASM_SRCS))
 
-OBJS := $(C_OBJS) $(ASM_OBJS) $(C_ASM_OBJS) $(DATA_ASM_OBJS) $(SONG_OBJS) $(MID_OBJS)
+OBJS := $(C_OBJS) $(ASM_OBJS) $(C_ASM_OBJS) $(DATA_ASM_OBJS) $(SONG_OBJS) $(SA2_C_OBJS) $(SA2_C_ASM_OBJS) $(MID_OBJS)
 OBJS_REL := $(patsubst $(OBJ_DIR)/%,%,$(OBJS))
 
 FORMAT_SRC_PATHS := $(shell find . -name "*.c" ! -path '*/src/data/*' ! -path '*/build/*' ! -path '*/ext/*')
@@ -355,8 +386,8 @@ endif
 ifeq ($(PLATFORM),gba)
 # Use the old compiler for m4a, as it was prebuilt and statically linked to the original codebase
 # PROLOGUE_FIX has to be set to nothing, since -fprologue-bugfix does not work with oldagbcc
-$(C_BUILDDIR)/lib/m4a/m4a.o: CC1 := $(CC1_OLD)
-$(C_BUILDDIR)/lib/m4a/m4a.o: PROLOGUE_FIX :=
+$(C_BUILDDIR)/sa2/lib/m4a/m4a.o: CC1 := $(CC1_OLD)
+$(C_BUILDDIR)/sa2/lib/m4a/m4a.o: PROLOGUE_FIX :=
 # Use `-O1` for agb_flash libs, as these were also prebuilt
 $(C_BUILDDIR)/lib/agb_flash/agb_flash.o:  CC1FLAGS := -O1 -mthumb-interwork -Werror
 $(C_BUILDDIR)/lib/agb_flash/agb_flash%.o: CC1FLAGS := -O1 -mthumb-interwork -Werror
@@ -474,6 +505,34 @@ else
 	$(OBJCOPY) -O pei-x86-64 $< $@
 endif
 
+# Copy files from SA2
+$(C_BUILDDIR)/sa2/%.c: ../src/%.c
+	$(shell mkdir -p $(shell dirname '$@'))
+	cp $< $@
+
+$(C_BUILDDIR)/sa2/%.s: ../src/%.s
+	$(shell mkdir -p $(shell dirname '$@'))
+	cp $< $@
+
+# TODO: remove once we are building sources from the same makefile
+# Build C and ASM sources from SA2
+$(C_BUILDDIR)/sa2/%.o: $(C_BUILDDIR)/sa2/%.c
+	@echo "$(CC1) <flags> -o $@ $<"
+	@$(shell mkdir -p $(shell dirname '$(C_BUILDDIR)/sa2/$*.i'))
+	@$(CPP) $(CPPFLAGS) $< -o $(C_BUILDDIR)/sa2/$*.i
+	@$(PREPROC) $(C_BUILDDIR)/sa2/$*.i $(PLATFORM) "" | $(CC1) $(PROLOGUE_FIX) $(CC1FLAGS) -o $(C_BUILDDIR)/sa2/$*.s -
+	@printf ".text\n\t.align\t2, 0\n" >> $(C_BUILDDIR)/sa2/$*.s
+	@$(AS) $(ASFLAGS) $(C_BUILDDIR)/sa2/$*.s -o $@
+
+$(C_BUILDDIR)/sa2/%.d: $(C_BUILDDIR)/sa2/%.c
+	@$(shell mkdir -p $(shell dirname '$(C_BUILDDIR)/sa2/$*.d'))
+	$(SCANINC) -M $@ $(INCLUDE_SCANINC_ARGS) $<
+
+$(C_BUILDDIR)/sa2/%.o: $(C_BUILDDIR)/sa2/%.s
+	@echo "$(AS) <flags> -o $@ $<"
+	@$(shell mkdir -p $(shell dirname '$(C_BUILDDIR)/$*.s'))
+	@$(AS) $(ASFLAGS) -I -o $@ $<
+
 # Build c sources, and ensure alignment
 $(C_BUILDDIR)/%.o: $(C_SUBDIR)/%.c
 	@echo "$(CC1) <flags> -o $@ $<"
@@ -493,10 +552,7 @@ $(C_BUILDDIR)/%.d: $(C_SUBDIR)/%.c
 # rule for sources from the src dir (parts of libraries)
 $(C_BUILDDIR)/%.o: $(C_SUBDIR)/%.s
 	@echo "$(AS) <flags> -o $@ $<"
-	@$(AS) $(ASFLAGS) -o $@ $<
-
-$(ASM_BUILDDIR)/%.o: $(ASM_SUBDIR)/%.s $$(asm_dep)
-	@echo "$(AS) <flags> -o $@ $<"
+	@$(shell mkdir -p $(shell dirname '$(C_BUILDDIR)/$*.s'))
 	@$(AS) $(ASFLAGS) -o $@ $<
 
 $(DATA_ASM_BUILDDIR)/%.o: $(DATA_ASM_SUBDIR)/%.s
