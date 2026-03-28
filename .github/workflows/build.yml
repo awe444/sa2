@@ -109,6 +109,69 @@ jobs:
           path: |
             gh-pages
 
+  build-sa1-gba:
+    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.fork}}
+    runs-on: ubuntu-22.04
+    name: Build GBA (Europe)
+    steps:
+      - name: Checkout PR
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target'}}
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Checkout
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/checkout@master
+
+      - name: Checkout agbcc
+        uses: actions/checkout@master
+        with:
+          path: agbcc
+          repository: SAT-R/agbcc
+
+      - name: Install tools
+        run: |
+          sudo apt update && sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi xorg-dev
+          python3 -m pip install gitpython
+        # build-essential, git, and libpng-dev are already installed
+        # gcc-arm-none-eabi is only needed for the modern build
+        # as an alternative to dkP
+
+      - name: Install agbcc
+        run: |
+          ./build.sh
+          ./install.sh ../
+        working-directory: agbcc
+
+      - name: Fetch assets
+        run: curl -o sa1/baserom_sa1.gba -u ${{ secrets.STORAGE_USERNAME }}:${{ secrets.STORAGE_PASSWORD }} ${{ secrets.STORAGE_URL }}/baserom.gba
+
+      - name: Compare
+        run: make sa1 -j${nproc}
+
+      - name: Progress
+        run: |
+          python3 scripts/progress.py text
+
+      - name: Generate reports
+        run: |
+          mkdir -p gh-pages/reports
+          mkdir -p gh-pages/maps
+          python3 sa1/scripts/progress.py csv >> gh-pages/reports/progress-sa1-nonmatching.csv
+          python3 sa1/scripts/progress.py csv -m >> gh-pages/reports/progress-sa1-matching.csv
+          python3 sa1/scripts/progress.py shield-json > gh-pages/reports/progress-sa1-shield.json
+          python3 sa1/scripts/progress.py shield-json -m > gh-pages/reports/progress-sa1-shield-matching.json
+          echo "REPORTS_COMMIT_MSG=$( git log --format=%s ${GITHUB_SHA} )" >> $GITHUB_ENV
+          cp sa1.map gh-pages/maps/${GITHUB_SHA}.map
+
+      - name: Upload progress
+        if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v7
+        with:
+          path: |
+            gh-pages
+
   publish-progress:
     name: Publish progress
     runs-on: ubuntu-24.04

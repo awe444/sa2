@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "__locale": "c",
-        "global.h": "c",
-        "flash_internal.h": "c"
-    }
-}

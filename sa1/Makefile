@@ -70,8 +70,8 @@ SHELL     := /bin/bash -o pipefail
 SHA1 	  := $(shell { command -v sha1sum || command -v shasum; } 2>/dev/null) -c
 
 ifeq ($(PLATFORM),gba)
-CC1       := tools/agbcc/bin/agbcc$(EXE)
-CC1_OLD   := tools/agbcc/bin/old_agbcc$(EXE)
+CC1       := ../tools/agbcc/bin/agbcc$(EXE)
+CC1_OLD   := ../tools/agbcc/bin/old_agbcc$(EXE)
 else
 CC1       := $(PREFIX)gcc$(EXE)
 CC1_OLD   := $(CC1)
@@ -85,18 +85,18 @@ AS 		  := $(PREFIX)as
 FORMAT    := clang-format-13
 
 ### TOOLS ###
-GFX 	  := tools/gbagfx/gbagfx$(EXE)
-ENT_POS   := tools/entity_positions/entity_positions$(EXE)
-AIF		  := tools/aif2pcm/aif2pcm$(EXE)
-MID2AGB   := tools/mid2agb/mid2agb$(EXE)
-SCANINC   := tools/scaninc/scaninc$(EXE)
-PREPROC	  := tools/preproc/preproc$(EXE)
-RAMSCRGEN := tools/ramscrgen/ramscrgen$(EXE)
-FIX 	  := tools/gbafix/gbafix$(EXE)
+GFX 	  := ../tools/gbagfx/gbagfx$(EXE)
+ENT_POS   := ../tools/entity_positions/entity_positions$(EXE)
+AIF		  := ../tools/aif2pcm/aif2pcm$(EXE)
+MID2AGB   := ../tools/mid2agb/mid2agb$(EXE)
+SCANINC   := ../tools/scaninc/scaninc$(EXE)
+PREPROC	  := ../tools/preproc/preproc$(EXE)
+RAMSCRGEN := ../tools/ramscrgen/ramscrgen$(EXE)
+FIX 	  := ../tools/gbafix/gbafix$(EXE)
 
-TOOLDIRS := $(filter-out tools/agbcc/ tools/BriBaSA_ex/, $(dir $(wildcard tools/*/Makefile)))
+TOOLDIRS := $(filter-out ../tools/agbcc/ ../tools/BriBaSA_ex/, $(dir $(wildcard ../tools/*/Makefile)))
 TOOLBASE = $(TOOLDIRS:tools/%=%)
-TOOLS = $(foreach tool,$(TOOLBASE),tools/$(tool)/$(tool)$(EXE))
+TOOLS = $(foreach tool,$(TOOLBASE),../tools/$(tool)/$(tool)$(EXE))
 
 ### DEPS ###
 
@@ -107,7 +107,7 @@ SDL_MINGW_LIB     := $(SDL_MINGW_PKG)/lib
 SDL_MINGW_FLAGS   := -I$(SDL_MINGW_INCLUDE) -D_THREAD_SAFE
 SDL_MINGW_LIBS    := -L$(SDL_MINGW_LIB) -lSDL2main -lSDL2.dll
 
-LIBABGSYSCALL_LIBS := -L$(ROOT_DIR)/libagbsyscall -lagbsyscall
+LIBABGSYSCALL_LIBS := -L$(ROOT_DIR)/../libagbsyscall/build/gba -lagbsyscall
 
 ### FILES ###
 
@@ -211,8 +211,8 @@ endif
 # the C-preprocessor cannot resolve stuff like:
 # #if (PLATFORM == gba), where PLATFORM is defined via -D.
 ifeq ($(PLATFORM),gba)
-	INCLUDE_SCANINC_ARGS += -I tools/agbcc/include
-	CPPFLAGS += -D PLATFORM_GBA=1 -D PLATFORM_SDL=0 -D PLATFORM_WIN32=0 -D CPU_ARCH_X86=0 -D CPU_ARCH_ARM=1 -nostdinc -I tools/agbcc/include
+	INCLUDE_SCANINC_ARGS += -I ../tools/agbcc/include
+	CPPFLAGS += -D PLATFORM_GBA=1 -D PLATFORM_SDL=0 -D PLATFORM_WIN32=0 -D CPU_ARCH_X86=0 -D CPU_ARCH_ARM=1 -nostdinc -I ../tools/agbcc/include
 	CC1FLAGS += -fhex-asm
 
 ifeq ($(BUILD_NAME), sa1)
@@ -304,7 +304,7 @@ endif
 
 # Libs
 ifeq ($(PLATFORM),gba)
-    LIBS := $(ROOT_DIR)/tools/agbcc/lib/libgcc.a $(ROOT_DIR)/tools/agbcc/lib/libc.a $(LIBABGSYSCALL_LIBS)
+    LIBS := $(ROOT_DIR)/../tools/agbcc/lib/libgcc.a $(ROOT_DIR)/../tools/agbcc/lib/libc.a $(LIBABGSYSCALL_LIBS)
 else ifeq ($(PLATFORM),sdl)
     LIBS := $(shell sdl2-config --cflags --libs)
 else ifeq ($(PLATFORM),sdl_win32)
@@ -378,10 +378,10 @@ rom: $(ROM)
 tools: $(TOOLDIRS)
 
 tool_libs:
-	@$(MAKE) -C tools/_shared
+	@$(MAKE) -C ../tools/_shared
 
 clean: tidy clean-tools
-	@$(MAKE) clean -C tools/BriBaSA_ex
+	@$(MAKE) clean -C ../tools/BriBaSA_ex
 #	@$(MAKE) clean -C chao_garden
 #	@$(MAKE) clean -C multi_boot/subgame_bootstrap
 #	@$(MAKE) clean -C multi_boot/programs/subgame_loader
@@ -479,7 +479,7 @@ $(C_BUILDDIR)/%.o: $(C_SUBDIR)/%.c
 	@echo "$(CC1) <flags> -o $@ $<"
 	@$(shell mkdir -p $(shell dirname '$(C_BUILDDIR)/$*.i'))
 	@$(CPP) $(CPPFLAGS) $< -o $(C_BUILDDIR)/$*.i
-	@$(PREPROC) $(C_BUILDDIR)/$*.i | $(CC1) $(PROLOGUE_FIX) $(CC1FLAGS) -o $(C_BUILDDIR)/$*.s -
+	@$(PREPROC) $(C_BUILDDIR)/$*.i $(PLATFORM) "" | $(CC1) $(PROLOGUE_FIX) $(CC1FLAGS) -o $(C_BUILDDIR)/$*.s -
 ifeq ($(PLATFORM), gba)
 	@printf ".text\n\t.align\t2, 0\n" >> $(C_BUILDDIR)/$*.s
 endif
@@ -501,7 +501,7 @@ $(ASM_BUILDDIR)/%.o: $(ASM_SUBDIR)/%.s $$(asm_dep)
 
 $(DATA_ASM_BUILDDIR)/%.o: $(DATA_ASM_SUBDIR)/%.s
 	@echo "$(AS) <flags> -o $@ $<"
-	@$(PREPROC) $< "" | $(CPP) $(CPPFLAGS) - | $(AS) $(ASFLAGS) -o $@ -
+	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) - | $(AS) $(ASFLAGS) -o $@ -
 
 # Scan the ASM data dependencies to determine if any .inc files have changed
 $(DATA_ASM_BUILDDIR)/%.d: $(DATA_ASM_SUBDIR)/%.s
@@ -514,7 +514,7 @@ endif
 
 $(SONG_BUILDDIR)/%.o: $(SONG_SUBDIR)/%.s
 	@echo "$(AS) <flags> -o $@ $<"
-	@$(PREPROC) $< "" | $(CPP) $(CPPFLAGS) - | $(AS) $(ASFLAGS) -o $@ -
+	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) - | $(AS) $(ASFLAGS) -o $@ -
 
 ### SUB-PROGRAMS ###
 
@@ -565,7 +565,7 @@ collect_rings: tools
 	@$(MAKE) -C multi_boot/collect_rings DEBUG=0
 
 libagbsyscall:
-	@$(MAKE) -C libagbsyscall MODERN=0 PLATFORM=$(PLATFORM) CPU_ARCH=$(CPU_ARCH)
+	@$(MAKE) -C ../libagbsyscall MODERN=0 PLATFORM=$(PLATFORM) CPU_ARCH=$(CPU_ARCH)
 
 bribasa:
 	@$(MAKE) -C tools/BriBaSA_ex

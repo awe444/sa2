@@ -369,7 +369,7 @@ endif
 #### MAIN TARGETS ####
 
 # these commands will run regardless of deps being completed
-.PHONY: clean tools tidy clean-tools $(TOOLDIRS) libagbsyscall ps2
+.PHONY: clean tools tidy clean-tools $(TOOLDIRS) libagbsyscall ps2 sa1
 
 # Ensure required directories exist
 $(shell mkdir -p $(C_BUILDDIR) $(ASM_BUILDDIR) $(DATA_ASM_BUILDDIR) $(SOUND_ASM_BUILDDIR) $(SONG_BUILDDIR) $(MID_BUILDDIR))
@@ -662,6 +662,9 @@ libagbsyscall:
 
 bribasa:
 	@$(MAKE) -C tools/BriBaSA_ex
+
+sa1:
+	@$(MAKE) -C sa1
 
 $(TOOLDIRS): tool_libs
 	@$(MAKE) -C $@

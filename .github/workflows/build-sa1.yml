@@ -2,39 +2,18 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
   pull_request_target:
 
 jobs:
-  format:
-    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.fork}} 
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout PR
-        if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target'}} 
-        uses: actions/checkout@master
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Checkout
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/checkout@master
-      
-      - name: Install tools
-        run: |
-          sudo apt update && sudo apt install clang-format-13
-      
-      - name: Check formatting
-        run: |
-          make check_format
-
   build-gba:
-    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.fork}} 
+    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.fork}}
     runs-on: ubuntu-22.04
     name: Build GBA (Europe)
     steps:
       - name: Checkout PR
-        if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target'}} 
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target'}}
         uses: actions/checkout@master
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -62,7 +41,7 @@ jobs:
           ./build.sh
           ./install.sh ../
         working-directory: agbcc
-        
+
       - name: Fetch assets
         run: curl -o baserom_sa1.gba -u ${{ secrets.STORAGE_USERNAME }}:${{ secrets.STORAGE_PASSWORD }} ${{ secrets.STORAGE_URL }}/baserom.gba
 
@@ -77,13 +56,13 @@ jobs:
         run: |
           mkdir -p gh-pages/reports
           mkdir -p gh-pages/maps
-          python3 scripts/progress.py csv >> gh-pages/reports/progress-sa1-nonmatching.csv
-          python3 scripts/progress.py csv -m >> gh-pages/reports/progress-sa1-matching.csv
-          python3 scripts/progress.py shield-json > gh-pages/reports/progress-sa1-shield.json
-          python3 scripts/progress.py shield-json -m > gh-pages/reports/progress-sa1-shield-matching.json
+          python3 sa1/scripts/progress.py csv >> gh-pages/reports/progress-sa1-nonmatching.csv
+          python3 sa1/scripts/progress.py csv -m >> gh-pages/reports/progress-sa1-matching.csv
+          python3 sa1/scripts/progress.py shield-json > gh-pages/reports/progress-sa1-shield.json
+          python3 sa1/scripts/progress.py shield-json -m > gh-pages/reports/progress-sa1-shield-matching.json
           echo "REPORTS_COMMIT_MSG=$( git log --format=%s ${GITHUB_SHA} )" >> $GITHUB_ENV
           cp sa1.map gh-pages/maps/${GITHUB_SHA}.map
-          
+
       - name: Upload progress
         if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v7
@@ -122,21 +101,21 @@ jobs:
           add: "reports maps"
           message: ${{ env.REPORTS_COMMIT_MSG }}
 
-#
-# Space for other regional variants
-#
+  #
+  # Space for other regional variants
+  #
 
   ports:
     strategy:
-      matrix: 
+      matrix:
         platform: ["sdl", "sdl_win32", "win32"]
         os: ["ubuntu-22.04", "macos-15"]
-    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.fork}} 
+    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.fork}}
     runs-on: ${{ matrix.os }}
     name: Build ${{ matrix.platform }} (${{ matrix.os }})
     steps:
       - name: Checkout PR
-        if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target'}} 
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target'}}
         uses: actions/checkout@master
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -154,12 +133,12 @@ jobs:
         if: ${{ matrix.os == 'macos-15' }}
         run: |
           brew install libpng sdl2 mingw-w64 arm-none-eabi-gcc
-  
+
       - name: Install SDL for win32
         if: ${{ matrix.platform == 'sdl_win32' }}
         run: |
           make SDL2.dll
-  
+
       - name: Fetch assets
         run: curl -o baserom_sa1.gba -u ${{ secrets.STORAGE_USERNAME }}:${{ secrets.STORAGE_PASSWORD }} ${{ secrets.STORAGE_URL }}/baserom.gba
 
@@ -167,29 +146,6 @@ jobs:
         run: |
           make -j${nproc} ${{ matrix.platform }}
 
-#
-# Space for TAS test
-#
-
-  level_editor:
-    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.fork}} 
-    runs-on: ubuntu-22.04
-    name: Level editor (BriBaSA)
-    steps:
-      - name: Checkout PR
-        if: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target'}} 
-        uses: actions/checkout@master
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Checkout
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/checkout@master
-
-      - name: Install deps
-        run: |
-          sudo apt update && sudo apt install xorg-dev libsdl2-dev
-  
-      - name: Build
-        run: |
-          make -j${nproc} bribasa
+  #
+  # Space for TAS test
+  #
