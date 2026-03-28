@@ -248,9 +248,9 @@ SECTIONS {
         sa2/src/lib/m4a/m4a0.o(.text);
         sa2/src/lib/m4a/m4a.o(.text);
         src/lib/agb_flash/agb_flash.o(.text);
-        src/lib/agb_flash/agb_flash_le_512k.o(.text);
-        src/lib/agb_flash/agb_flash_mx_512k.o(.text);
-        src/lib/agb_flash/agb_flash_at_512k.o(.text);
+        sa2/src/lib/agb_flash/agb_flash_le_512k.o(.text);
+        sa2/src/lib/agb_flash/agb_flash_mx_512k.o(.text);
+        sa2/src/lib/agb_flash/agb_flash_at_512k.o(.text);
 
         *libagbsyscall.a:ArcTan2.o(.text);
         *libagbsyscall.a:CpuFastSet.o(.text);
@@ -560,9 +560,9 @@ SECTIONS {
         sound/songs/midi/song307.o(.rodata);
         
         src/lib/agb_flash/agb_flash.o(.rodata);
-        src/lib/agb_flash/agb_flash_le_512k.o(.rodata);
-        src/lib/agb_flash/agb_flash_mx_512k.o(.rodata);
-        src/lib/agb_flash/agb_flash_at_512k.o(.rodata);
+        sa2/src/lib/agb_flash/agb_flash_le_512k.o(.rodata);
+        sa2/src/lib/agb_flash/agb_flash_mx_512k.o(.rodata);
+        sa2/src/lib/agb_flash/agb_flash_at_512k.o(.rodata);
         data/data1.o(.rodata);
         src/game/multiplayer/unk_0.o(.rodata);
         data/data1_1.o(.rodata);

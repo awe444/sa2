@@ -59,7 +59,11 @@ u16 ProgramFlashSector_MX(u16 sectorNum, void *src)
     u8 *dest;
     u16 readFlash1Buffer[0x20];
 
+#ifdef AGBFLASH_USE_V126
+    if (sectorNum >= SECTORS_PER_BANK)
+#else
     if (sectorNum >= gFlash->sector.count)
+#endif
         return 0x80FF;
 
     // TODO: erase verify routine transmit
