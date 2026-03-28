@@ -12,8 +12,8 @@ SECTIONS {
         src/multi_sio_asm.o(.text);
         data/rom_header_old.o(.text);
         src/sa2/core.o(.text);
-        src/main.o(.text);
-        src/task.o(.text);
+        src/sa2/main.o(.text);
+        src/sa2/task.o(.text);
         src/background.o(.text);
         src/sprite.o(.text);
         src/bg_triangles.o(.text);

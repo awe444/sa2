@@ -188,11 +188,11 @@ SA2_C_FILES := \
 	sa2/multi_sio.c \
 	sa2/sio32_multi_load.c \
 	sa2/core.c \
-# 	sa2/main.c \
-# 	sa2/task.c \
-# 	sa2/background.c \
-# 	sa2/trig.c \
+	sa2/main.c \
+	sa2/task.c \
 # 	sa2/sprite.c \
+# 	sa2/trig.c \
+# 	sa2/background.c \
 # 	sa2/malloc_vram.c \
 # 	sa2/bg_triangles.c \
 

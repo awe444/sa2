@@ -267,6 +267,27 @@ PACKED(TileInfo16, {
     /* 0x04 */ u16 variant;
 });
 
+#if (ENGINE == ENGINE_1)
+typedef struct {
+    u32 anim : 16;
+    u32 variant : 8;
+    u32 size : 8;
+} TileInfoBitfield;
+
+// Used in the background code of Casino Paradise
+// TODO: Rename TileInfoFirework!
+typedef struct {
+    /* 0x00 */ AnimId anim;
+    /* 0x04 */ u8 variant;
+    /* 0x06 */ u8 numTiles;
+} TileInfoFirework;
+
+typedef struct {
+    AnimId anim;
+    u16 variant;
+} TileInfoBarrel;
+#endif
+
 extern const u8 gOamShapesSizes[12][2];
 
 typedef enum {
@@ -286,18 +307,19 @@ void ProcessOamBuffers(void);
 OamData *OamMalloc(u8 order);
 
 void TransformSprite(Sprite *, SpriteTransform *);
+// NOTE: Not actually unused in SA1. TODO: Align name with SA2!
 void UnusedTransform(Sprite *, SpriteTransform *);
 void sub_8004E14(Sprite *, SpriteTransform *);
 
-void sub_8003EE4(u16 p0, s16 p1, s16 p2, s16 p3, s16 p4, s16 p5, s16 p6, BgAffineReg *affine);
-void sub_8006228(u8 p0, u8 p1, u8 p2, u8 p3, u8 p4, u8 p5);
-void sub_80064A8(u8 p0, u8 p1, u8 p2, u8 p3, u8 p4, u8 p5);
+void SA2_LABEL(sub_8003EE4)(u16 p0, s16 p1, s16 p2, s16 p3, s16 p4, s16 p5, s16 p6, BgAffineReg *affine);
+void SA2_LABEL(sub_8006228)(u8 p0, u8 p1, u8 p2, u8 p3, u8 p4, u8 p5);
+void SA2_LABEL(sub_80064A8)(u8 p0, u8 p1, u8 p2, u8 p3, u8 p4, u8 p5);
 
 s32 UpdateSpriteAnimation_BG(Sprite *);
 void DisplaySprite_BG(Sprite *);
 void sub_80047A0(u16, s16, s16, u16);
 
-s16 sub_8004418(s16 x, s16 y);
+s16 SA2_LABEL(sub_8004418)(s16 x, s16 y);
 void numToASCII(u8 digits[5], u16 number);
 
 #if ((GAME == GAME_SA1) || (GAME == GAME_SA2))
