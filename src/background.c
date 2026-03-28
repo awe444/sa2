@@ -71,10 +71,11 @@ void DrawBackground(Background *background)
     ADD_TO_BACKGROUNDS_QUEUE(background);
 }
 
+// TODO: The assembly is not the same between SA1 and SA2!
 // (85.37%) https://decomp.me/scratch/617Jb
 // (87.46%) https://decomp.me/scratch/1CFim
 // TODO: ProcessBackgroundsCopyQueue might be a good name for this function?
-NONMATCH("asm/non_matching/engine/sub_8002B20.inc", bool32 sub_8002B20(void))
+NONMATCH("asm/non_matching/engine/sa2__sub_8002B20.inc", bool32 SA2_LABEL(sub_8002B20)(void))
 {
     u16 sp00;
     s32 sp04 = 0;
@@ -857,7 +858,7 @@ void DisplaySprite_BG(Sprite *s)
 
 // Some VBlank function
 // (21.30%) https://decomp.me/scratch/UfJX7
-NONMATCH("asm/non_matching/engine/sub_80039E4.inc", bool32 sub_80039E4(void))
+NONMATCH("asm/non_matching/engine/sa2__sub_80039E4.inc", bool32 SA2_LABEL(sub_80039E4)(void))
 {
     // tilesize (could be 32 and get optimized out?)
     s32 sp28 = 5;
@@ -1020,7 +1021,7 @@ NONMATCH("asm/non_matching/engine/sub_80039E4.inc", bool32 sub_80039E4(void))
 }
 END_NONMATCH
 
-void sub_8003EE4(u16 p0, s16 p1, s16 p2, s16 p3, s16 p4, s16 p5, s16 p6, BgAffineReg *affine)
+void SA2_LABEL(sub_8003EE4)(u16 p0, s16 p1, s16 p2, s16 p3, s16 p4, s16 p5, s16 p6, BgAffineReg *affine)
 {
     affine->pa = (COS_24_8(p0) * (s16)Div(0x10000, p1)) >> 8;
     affine->pb = (SIN_24_8(p0) * (s16)Div(0x10000, p1)) >> 8;
@@ -1050,7 +1051,7 @@ void sub_8003EE4(u16 p0, s16 p1, s16 p2, s16 p3, s16 p4, s16 p5, s16 p6, BgAffin
 // (58.36%) https://decomp.me/scratch/ClyxP
 // (48.23%) https://decomp.me/scratch/bDTEe
 #if 01
-NONMATCH("asm/non_matching/engine/sub_8004010.inc", u32 sub_8004010(void))
+NONMATCH("asm/non_matching/engine/sa2__sub_8004010.inc", u32 SA2_LABEL(sub_8004010)(void))
 {
     u8 bgIndex = 0;
     u16 sp00[2];

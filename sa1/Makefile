@@ -197,7 +197,7 @@ SA2_C_FILES := \
 	sa2/malloc_ewram.c \
 	sa2/bg_triangles.c \
 	sa2/input_recorder.c \
-# 	sa2/background.c \
+	sa2/background.c \
 
 SA2_C_ASM_FILES := \
 # 	sa2/rom_header.s \

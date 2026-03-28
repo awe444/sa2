@@ -14,7 +14,7 @@ SECTIONS {
         src/sa2/core.o(.text);
         src/sa2/main.o(.text);
         src/sa2/task.o(.text);
-        src/background.o(.text);
+        src/sa2/background.o(.text);
         src/sa2/sprite.o(.text);
         src/sa2/bg_triangles.o(.text);
         src/sa2/malloc_ewram.o(.text);
@@ -284,7 +284,7 @@ SECTIONS {
     /* Data */
 
         src/sa2/core.o(.rodata);
-        src/background.o(.rodata);
+        src/sa2/background.o(.rodata);
         src/sa2/trig.o(.rodata);
         src/sa2/sprite.o(.rodata);
         src/sa2/bg_triangles.o(.rodata);
