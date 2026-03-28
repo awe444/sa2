@@ -1,0 +1,14 @@
+# Gradle
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
+local.properties
+
+# Android SDK / NDK
+*.iml
+.idea/
+
+# SDL2 source (downloaded by the user)
+app/jni/SDL2/
