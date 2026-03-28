@@ -798,15 +798,15 @@ static AnimCmdResult animCmd_AddHitbox_BG(void *cursor, Sprite *s)
 
     DmaCopy32(3, &cmd->hitbox, &s->hitboxes[index].index, sizeof(Hitbox));
 
-    if ((cmd->hitbox.left == 0) && (cmd->hitbox.top == 0) && (cmd->hitbox.right == 0) && (cmd->hitbox.bottom == 0)) {
+    if ((cmd->hitbox.b.left == 0) && (cmd->hitbox.b.top == 0) && (cmd->hitbox.b.right == 0) && (cmd->hitbox.b.bottom == 0)) {
         s->hitboxes[index].index = -1;
     } else {
         if (s->frameFlags & SPRITE_FLAG_MASK_Y_FLIP) {
-            XOR_SWAP(s->hitboxes[index].top, s->hitboxes[index].bottom);
+            XOR_SWAP(s->hitboxes[index].b.top, s->hitboxes[index].b.bottom);
         }
 
         if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
-            XOR_SWAP(s->hitboxes[index].left, s->hitboxes[index].right);
+            XOR_SWAP(s->hitboxes[index].b.left, s->hitboxes[index].b.right);
         }
     }
 

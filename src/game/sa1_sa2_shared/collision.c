@@ -27,7 +27,7 @@ u32 Coll_Player_Entity_RectIntersection(Sprite *s, s32 sx, s32 sy, Player *p, Re
         return result;
     }
 
-    if (RECT_COLLISION(sx, sy, &s->hitboxes[0], I(p->qWorldX), I(p->qWorldY), rectPlayer)) {
+    if (RECT_COLLISION(sx, sy, &s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), rectPlayer)) {
         result |= COLL_FLAG_80000;
     }
 
@@ -52,7 +52,7 @@ u32 Coll_Player_PlatformCrumbling(Sprite *s, s32 sx, s32 sy, Player *p)
         ip = TRUE;
     }
 
-    if (RECT_COLLISION_2(sx, sy, &s->hitboxes[0], p->qWorldX, p->qWorldY, (Rect8 *)rectPlayer) && (p->qSpeedAirY >= 0)) {
+    if (RECT_COLLISION_2(sx, sy, &s->hitboxes[0].b, p->qWorldX, p->qWorldY, (Rect8 *)rectPlayer) && (p->qSpeedAirY >= 0)) {
 
 #ifndef NON_MATCHING
         register s32 y asm("r1");
@@ -73,11 +73,11 @@ u32 Coll_Player_PlatformCrumbling(Sprite *s, s32 sx, s32 sy, Player *p)
         p->qSpeedAirY = 0;
 
         if (GRAVITY_IS_INVERTED) {
-            y = s->hitboxes[0].bottom;
+            y = s->hitboxes[0].b.bottom;
             y += sy;
             y += rectPlayer[3];
         } else {
-            y = s->hitboxes[0].top;
+            y = s->hitboxes[0].b.top;
             y += sy;
             y -= rectPlayer[3];
         }
@@ -515,19 +515,19 @@ u32 sub_800CE94(Sprite *s, s32 sx, s32 sy, Rect8 *inRect, Player *p)
     s32 r1;
     s32 r3, r6;
 
-    if (RECT_COLLISION(sx, sy, (Rect8 *)&s->hitboxes[0].left, px, py, inRect)) {
-        s32 sMidX = (sx + ((s->hitboxes[0].left + s->hitboxes[0].right) >> 1));
-        s32 sMidY = (sy + ((s->hitboxes[0].top + s->hitboxes[0].bottom) >> 1));
+    if (RECT_COLLISION(sx, sy, (Rect8 *)&s->hitboxes[0].b.left, px, py, inRect)) {
+        s32 sMidX = (sx + ((s->hitboxes[0].b.left + s->hitboxes[0].b.right) >> 1));
+        s32 sMidY = (sy + ((s->hitboxes[0].b.top + s->hitboxes[0].b.bottom) >> 1));
         if ((sMidX <= px)) {
-            r6 = (sx + s->hitboxes[0].right - (px + inRect->left));
+            r6 = (sx + s->hitboxes[0].b.right - (px + inRect->left));
             result |= COLL_FLAG_40000;
         } else {
-            r6 = (sx + s->hitboxes[0].left - (px + inRect->right));
+            r6 = (sx + s->hitboxes[0].b.left - (px + inRect->right));
             result |= COLL_FLAG_80000;
         }
 
         if (sMidY > py) {
-            r3 = sy + s->hitboxes[0].top - (py + inRect->bottom);
+            r3 = sy + s->hitboxes[0].b.top - (py + inRect->bottom);
             r1 = r3 + 5;
 
             if ((r1) > 0) {
@@ -535,7 +535,7 @@ u32 sub_800CE94(Sprite *s, s32 sx, s32 sy, Rect8 *inRect, Player *p)
             }
             result |= COLL_FLAG_10000;
         } else {
-            r3 = sy + s->hitboxes[0].bottom - (py + inRect->top);
+            r3 = sy + s->hitboxes[0].b.bottom - (py + inRect->top);
             r1 = r3 + 2;
             if ((r1) < 0) {
                 r1 = 0;

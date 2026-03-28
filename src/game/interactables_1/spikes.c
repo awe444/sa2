@@ -554,9 +554,9 @@ static bool32 HandleSpikeMovementUp(Sprite *s, MapEntity *me, Sprite_Spikes *spi
             }
 
             if (!GRAVITY_IS_INVERTED) {
-                player->qWorldY = Q(screenY + s->hitboxes[0].top - sp00[3]);
+                player->qWorldY = Q(screenY + s->hitboxes[0].b.top - sp00[3]);
             } else {
-                player->qWorldY = Q(screenY + s->hitboxes[0].bottom + sp00[3]);
+                player->qWorldY = Q(screenY + s->hitboxes[0].b.bottom + sp00[3]);
             }
 
             if (Coll_DamagePlayer(player)) {
@@ -593,7 +593,7 @@ static bool32 HandleSpikeMovementUp(Sprite *s, MapEntity *me, Sprite_Spikes *spi
                 if (gravityInverted) {
                     if (flags & 0x20000) {
                         player->qSpeedAirY = 0;
-                        player->qWorldY = Q(screenY + s->hitboxes[0].bottom + player->spriteOffsetY);
+                        player->qWorldY = Q(screenY + s->hitboxes[0].b.bottom + player->spriteOffsetY);
                         player->moveState |= MOVESTATE_STOOD_ON_OBJ;
                         player->moveState &= ~MOVESTATE_IN_AIR;
                         player->stoodObj = s;
@@ -666,7 +666,7 @@ static bool32 HandleSpikeMovementDown(Sprite *s, MapEntity *me, Sprite_Spikes *s
         u32 flags = Coll_Player_Platform(s, screenX, screenY, player);
         if (flags) {
             if ((flags & 0x20000) && !GRAVITY_IS_INVERTED) {
-                player->qWorldY = Q((screenY + s->hitboxes[0].bottom) + player->spriteOffsetY + 1);
+                player->qWorldY = Q((screenY + s->hitboxes[0].b.bottom) + player->spriteOffsetY + 1);
                 player->qSpeedAirY = 0;
                 player->qSpeedGround = 0;
 
@@ -676,7 +676,7 @@ static bool32 HandleSpikeMovementDown(Sprite *s, MapEntity *me, Sprite_Spikes *s
                 }
             } else if ((flags & 0x10000) && GRAVITY_IS_INVERTED) {
                 // _080604D0
-                player->qWorldY = Q((screenY + s->hitboxes[0].top) - player->spriteOffsetY - 1);
+                player->qWorldY = Q((screenY + s->hitboxes[0].b.top) - player->spriteOffsetY - 1);
                 player->qSpeedAirY = 0;
                 player->qSpeedGround = 0;
 
@@ -767,9 +767,9 @@ static bool32 HandleSpikeMovementHidingUp(Sprite *s, MapEntity *me, Sprite_Spike
                     s8 sp00[4] = { -v, 1 - player->spriteOffsetY, v, player->spriteOffsetY - 1 };
 
                     if (!GRAVITY_IS_INVERTED) {
-                        player->qWorldY = Q((screenY + s->hitboxes[0].top) - sp00[3]);
+                        player->qWorldY = Q((screenY + s->hitboxes[0].b.top) - sp00[3]);
                     } else {
-                        player->qWorldY = Q((screenY + s->hitboxes[0].bottom) + sp00[3]);
+                        player->qWorldY = Q((screenY + s->hitboxes[0].b.bottom) + sp00[3]);
                     }
                     if (Coll_DamagePlayer(player)) {
                         m4aSongNumStart(SE_SPIKES);
@@ -807,7 +807,7 @@ static bool32 HandleSpikeMovementHidingUp(Sprite *s, MapEntity *me, Sprite_Spike
                         return TRUE;
                     }
                 } else if ((flags & 0x20000) && GRAVITY_IS_INVERTED) {
-                    player->qWorldY = Q(screenY + s->hitboxes[0].bottom + player->spriteOffsetY);
+                    player->qWorldY = Q(screenY + s->hitboxes[0].b.bottom + player->spriteOffsetY);
                     player->moveState |= MOVESTATE_STOOD_ON_OBJ;
                     player->moveState &= ~MOVESTATE_IN_AIR;
                     player->stoodObj = s;
@@ -931,9 +931,9 @@ static bool32 HandleSpikeMovementHidingDown(Sprite *s, MapEntity *me, Sprite_Spi
                 s8 sp00[4] = { -v, 1 - player->spriteOffsetY, v, player->spriteOffsetY - 1 };
 
                 if (!GRAVITY_IS_INVERTED) {
-                    player->qWorldY = Q(s->hitboxes[0].bottom + screenY - sp00[1]);
+                    player->qWorldY = Q(s->hitboxes[0].b.bottom + screenY - sp00[1]);
                 } else {
-                    player->qWorldY = Q(s->hitboxes[0].top + screenY + sp00[1]);
+                    player->qWorldY = Q(s->hitboxes[0].b.top + screenY + sp00[1]);
                 }
                 if (!Coll_DamagePlayer(player)) {
                     return TRUE;
@@ -993,13 +993,13 @@ static u32 HandleSpikePlayerCollision(Sprite *s, s32 x, s32 y, Player *player)
 {
     u32 result;
 
-    s->hitboxes[0].left++;
-    s->hitboxes[0].right--;
+    s->hitboxes[0].b.left++;
+    s->hitboxes[0].b.right--;
 
     result = Coll_Player_Platform(s, x, y, player);
 
-    s->hitboxes[0].left--;
-    s->hitboxes[0].right++;
+    s->hitboxes[0].b.left--;
+    s->hitboxes[0].b.right++;
 
     return result;
 }

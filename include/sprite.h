@@ -2,16 +2,17 @@
 #define GUARD_SPRITE_H
 
 #include "global.h"
+#include "rect.h"
 #include "malloc_vram.h"
 
 typedef u16 AnimId;
 
-struct GraphicsData {
+typedef struct GraphicsData {
     /* 0x00 */ const void *src;
     /* 0x04 */ void *dest;
     /* 0x08 */ u16 size;
     /* 0x0A */ AnimId anim;
-};
+} GraphicsData;
 
 // TODO: Put this somewhere else! (or is this already somewhere?)
 #define TileMask_Index   (0x3FF)
@@ -157,12 +158,7 @@ typedef struct {
 typedef struct {
     // index: -1 on init; lower 4 bits = index (in anim-cmds)
     /* 0x00 */ s32 index;
-
-    // TODO: Make this a Rect8, like in SA1 and SA3!
-    /* 0x04 */ s8 left;
-    /* 0x05 */ s8 top;
-    /* 0x06 */ s8 right;
-    /* 0x07 */ s8 bottom;
+    /* 0x04 */ Rect8 b;
 } Hitbox;
 
 #define SPRITE_ANIM_SPEED(speed) ((int)((float)(speed)*0x10))
@@ -309,7 +305,7 @@ OamData *OamMalloc(u8 order);
 void TransformSprite(Sprite *, SpriteTransform *);
 // NOTE: Not actually unused in SA1. TODO: Align name with SA2!
 void UnusedTransform(Sprite *, SpriteTransform *);
-void sub_8004E14(Sprite *, SpriteTransform *);
+void SA2_LABEL(sub_8004E14)(Sprite *, SpriteTransform *);
 
 void SA2_LABEL(sub_8003EE4)(u16 p0, s16 p1, s16 p2, s16 p3, s16 p4, s16 p5, s16 p6, BgAffineReg *affine);
 void SA2_LABEL(sub_8006228)(u8 p0, u8 p1, u8 p2, u8 p3, u8 p4, u8 p5);
@@ -348,7 +344,7 @@ void numToASCII(u8 digits[5], u16 number);
 
 #define SPRITE_INIT_SCRIPT(_sprite, _speed)                                                                                                \
     _sprite->animCursor = 0;                                                                                                               \
-    _sprite->qAnimDelay = 0;                                                                                                               \
+    _sprite->qAnimDelay = Q(0);                                                                                                            \
     _sprite->prevVariant = -1;                                                                                                             \
     _sprite->animSpeed = SPRITE_ANIM_SPEED(_speed);                                                                                        \
     _sprite->palId = 0;                                                                                                                    \
@@ -396,6 +392,9 @@ void numToASCII(u8 digits[5], u16 number);
 #define SPRITE_FLAG_FLIP(sprite, flagName) (sprite)->frameFlags ^= (SPRITE_FLAG_MASK_##flagName)
 
 #define SPRITE_FLAG_SET_VALUE(sprite, flagName, value) (sprite)->frameFlags |= SPRITE_FLAG(flagName, value)
+
+#define SPRITE_FLAG_ENABLE_ROTATION(value)                                                                                                 \
+    (SPRITE_FLAG(ROT_SCALE, value) | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE | SPRITE_FLAG_MASK_ROT_SCALE_DOUBLE_SIZE)
 
 #define SPRITE_FLAG_SHIFT_ROT_SCALE             0
 #define SPRITE_FLAG_SHIFT_ROT_SCALE_ENABLE      5

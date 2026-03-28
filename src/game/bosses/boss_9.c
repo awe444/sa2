@@ -1793,7 +1793,7 @@ bool32 sub_804EE84(Sprite *sprIn, s32 x, s32 y)
         return FALSE;
     }
 
-    if (RECT_COLLISION(x, y, &sprIn->hitboxes[1], I(qSonicX), I(qSonicY), &sprSonic->hitboxes[1])) {
+    if (RECT_COLLISION(x, y, &sprIn->hitboxes[1].b, I(qSonicX), I(qSonicY), &sprSonic->hitboxes[1].b)) {
         return TRUE;
     }
 
@@ -1806,7 +1806,7 @@ bool32 sub_804EF68(Sprite *sprRocket, s32 rocketX, s32 rocketY, Sprite *sprMouth
         return FALSE;
     }
 
-    if (RECT_COLLISION(rocketX, rocketY, &sprRocket->hitboxes[1], mouthX, mouthY, &sprMouth->hitboxes[0])) {
+    if (RECT_COLLISION(rocketX, rocketY, &sprRocket->hitboxes[1].b, mouthX, mouthY, &sprMouth->hitboxes[0].b)) {
         return TRUE;
     } else {
         return FALSE;

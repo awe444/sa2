@@ -350,19 +350,19 @@ static AnimCmdResult animCmd_AddHitbox(void *cursor, Sprite *s)
 
     DmaCopy32(3, &cmd->hitbox, &s->hitboxes[hitboxId].index, sizeof(Hitbox));
 #if (GAME == GAME_SA3)
-    if (((u8)cmd->hitbox.left == (u8)cmd->hitbox.right) && (*(volatile u8 *)&cmd->hitbox.top == (u8)cmd->hitbox.bottom))
+    if (((u8)cmd->hitbox.b.left == (u8)cmd->hitbox.b.right) && (*(volatile u8 *)&cmd->hitbox.b.top == (u8)cmd->hitbox.b.bottom))
 #else
-    if ((cmd->hitbox.left == 0) && (cmd->hitbox.top == 0) && (cmd->hitbox.right == 0) && (cmd->hitbox.bottom == 0))
+    if ((cmd->hitbox.b.left == 0) && (cmd->hitbox.b.top == 0) && (cmd->hitbox.b.right == 0) && (cmd->hitbox.b.bottom == 0))
 #endif
     {
         s->hitboxes[hitboxId].index = -1;
     } else {
         if (s->frameFlags & SPRITE_FLAG_MASK_Y_FLIP) {
-            SWAP_AND_NEGATE(s->hitboxes[hitboxId].top, s->hitboxes[hitboxId].bottom);
+            SWAP_AND_NEGATE(s->hitboxes[hitboxId].b.top, s->hitboxes[hitboxId].b.bottom);
         }
 
         if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
-            SWAP_AND_NEGATE(s->hitboxes[hitboxId].left, s->hitboxes[hitboxId].right);
+            SWAP_AND_NEGATE(s->hitboxes[hitboxId].b.left, s->hitboxes[hitboxId].b.right);
         }
     }
 
@@ -841,8 +841,8 @@ UNUSED void DisplaySprites(Sprite *sprite, Vec2_16 *positions, u8 numPositions)
         y = sprite->y;
 
         if (sprite->frameFlags & SPRITE_FLAG_GLOBAL_OFFSET) {
-            x -= SA2_LABEL(gSpriteOffset).x;
-            y -= SA2_LABEL(gSpriteOffset).y;
+            x -= gSpriteOffset.x;
+            y -= gSpriteOffset.y;
         }
 
         sprWidth = sprDims->width;
@@ -969,14 +969,14 @@ OamData *OamMalloc(u8 order)
         gOamMallocBuffer[gOamFreeIndex].split.fractional = 0xFF;
         // And store the start of the chain
         gOamMallocOrders_StartIndex[order] = gOamFreeIndex;
-        SA2_LABEL(gOamMallocOrders_EndIndex)[order] = gOamFreeIndex;
+        gOamMallocOrders_EndIndex[order] = gOamFreeIndex;
     } else {
         gOamMallocBuffer[gOamFreeIndex].split.fractional = 0xFF;
         // Store the next index on the previous in the chain
         // This is a bit of a hack cos it requires writing to the "fractional" part of the oam
         // but it's not used for this value
-        gOamMallocBuffer[SA2_LABEL(gOamMallocOrders_EndIndex)[order]].split.fractional = gOamFreeIndex;
-        SA2_LABEL(gOamMallocOrders_EndIndex)[order] = gOamFreeIndex;
+        gOamMallocBuffer[gOamMallocOrders_EndIndex[order]].split.fractional = gOamFreeIndex;
+        gOamMallocOrders_EndIndex[order] = gOamFreeIndex;
     }
 
     gOamFreeIndex++;
@@ -993,7 +993,7 @@ void ProcessOamBuffers(void)
         s8 oamMallocIndex = gOamMallocOrders_StartIndex[layer];
 
         while (oamMallocIndex != -1) {
-            u8 *debugCopyOrders = SA2_LABEL(gOamMallocCopiedOrder);
+            u8 *debugCopyOrders = gOamMallocCopiedOrder;
             DmaCopy16(3, &gOamMallocBuffer[oamMallocIndex], dstOam, sizeof(OamDataShort));
             dstOam++;
 
@@ -1046,10 +1046,10 @@ void ProcessOamBuffers(void)
     gOamFreeIndex = 0;
     if (gFlags & FLAGS_4000) {
         CpuFill32(-1, gOamMallocOrders_StartIndex, sizeof(gOamMallocOrders_StartIndex));
-        CpuFill32(-1, SA2_LABEL(gOamMallocOrders_EndIndex), sizeof(SA2_LABEL(gOamMallocOrders_EndIndex)));
+        CpuFill32(-1, gOamMallocOrders_EndIndex, sizeof(gOamMallocOrders_EndIndex));
     } else {
         DmaFill32(3, -1, gOamMallocOrders_StartIndex, sizeof(gOamMallocOrders_StartIndex));
-        DmaFill32(3, -1, SA2_LABEL(gOamMallocOrders_EndIndex), sizeof(SA2_LABEL(gOamMallocOrders_EndIndex)));
+        DmaFill32(3, -1, gOamMallocOrders_EndIndex, sizeof(gOamMallocOrders_EndIndex));
     }
 }
 

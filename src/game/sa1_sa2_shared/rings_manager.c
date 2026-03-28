@@ -279,11 +279,12 @@ NONMATCH("asm/non_matching/game/sa1_sa2_shared/Task_RingsMgrMain_collect_rings.i
                 if (i != id && gMultiplayerPlayerTasks[i] != NULL) {
                     MultiplayerPlayer *mpp = TASK_DATA(gMultiplayerPlayerTasks[i]);
 
-                    for (regionY = REGION_LOWER(mpp->pos.y, mpp->s.hitboxes[0].top, 0);
-                         regionY <= REGION_UPPER(mpp->pos.y, mpp->s.hitboxes[0].bottom, TILE_WIDTH) && regionY < v_regionCount; regionY++) {
+                    for (regionY = REGION_LOWER(mpp->pos.y, mpp->s.hitboxes[0].b.top, 0);
+                         regionY <= REGION_UPPER(mpp->pos.y, mpp->s.hitboxes[0].b.bottom, TILE_WIDTH) && regionY < v_regionCount;
+                         regionY++) {
 
-                        for (regionX = REGION_LOWER(mpp->pos.x, mpp->s.hitboxes[0].left, -TILE_WIDTH);
-                             regionX <= REGION_UPPER(mpp->pos.x, mpp->s.hitboxes[0].right, TILE_WIDTH * 2) && regionX < h_regionCount;
+                        for (regionX = REGION_LOWER(mpp->pos.x, mpp->s.hitboxes[0].b.left, -TILE_WIDTH);
+                             regionX <= REGION_UPPER(mpp->pos.x, mpp->s.hitboxes[0].b.right, TILE_WIDTH * 2) && regionX < h_regionCount;
                              regionX++) {
 
                             u32 offset = READ_START_INDEX(rings, h_regionCount, regionX, regionY);
@@ -297,7 +298,7 @@ NONMATCH("asm/non_matching/game/sa1_sa2_shared/Task_RingsMgrMain_collect_rings.i
 
                                     rx = TO_WORLD_POS(meRing->x, regionX);
                                     ry = TO_WORLD_POS(meRing->y, regionY);
-                                    if (RECT_TOUCHING_RING(mpp->pos.x, mpp->pos.y, rx, ry, &mpp->s.hitboxes[0])) {
+                                    if (RECT_TOUCHING_RING(mpp->pos.x, mpp->pos.y, rx, ry, &mpp->s.hitboxes[0].b)) {
                                         u8 pAnim = mpp->s.graphics.anim;
                                         u8 anims = gPlayerCharacterIdleAnims[gMultiplayerCharacters[mpp->unk56]];
                                         u8 anim = pAnim - anims;

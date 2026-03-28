@@ -126,7 +126,7 @@ static u32 sub_8074EF4(Sprite_FloatingSpring *floatingSpring)
         u32 temp = Coll_Player_Interactable(&floatingSpring->s, floatingSpring->unk3C, floatingSpring->unk40, &gPlayer);
         if (temp != 0) {
             if (I(gPlayer.qWorldY) < floatingSpring->unk40) {
-                gPlayer.qWorldY += Q(floatingSpring->s.hitboxes[0].top);
+                gPlayer.qWorldY += Q(floatingSpring->s.hitboxes[0].b.top);
                 if (gPlayer.qSpeedAirY > 0) {
                     gPlayer.qSpeedAirY = 0;
                 }

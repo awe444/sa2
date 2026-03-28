@@ -319,15 +319,15 @@ static void Task_ProjPieceMain(void)
     y = s->y;
     if ((s->hitboxes[0].index != -1) && (s2->hitboxes[0].index != -1)) {
         s32 x1, x2;
-        x1 = x + s->hitboxes[0].left;
-        x2 = I(gPlayer.qWorldX) + s2->hitboxes[0].left;
-        if ((x1 <= x2 && x1 + (s->hitboxes[0].right - s->hitboxes[0].left) >= x2)
-            || (x1 >= x2 && x2 + (s2->hitboxes[0].right - s2->hitboxes[0].left) >= x1)) {
+        x1 = x + s->hitboxes[0].b.left;
+        x2 = I(gPlayer.qWorldX) + s2->hitboxes[0].b.left;
+        if ((x1 <= x2 && x1 + (s->hitboxes[0].b.right - s->hitboxes[0].b.left) >= x2)
+            || (x1 >= x2 && x2 + (s2->hitboxes[0].b.right - s2->hitboxes[0].b.left) >= x1)) {
             s32 y1, y2;
-            y1 = y + s->hitboxes[0].top;
-            y2 = I(gPlayer.qWorldY) + s2->hitboxes[0].top;
-            if ((y1 <= y2 && y1 + (s->hitboxes[0].bottom - s->hitboxes[0].top) >= y2)
-                || (y1 >= y2 && y2 + (s2->hitboxes[0].bottom - s2->hitboxes[0].top) >= y1)) {
+            y1 = y + s->hitboxes[0].b.top;
+            y2 = I(gPlayer.qWorldY) + s2->hitboxes[0].b.top;
+            if ((y1 <= y2 && y1 + (s->hitboxes[0].b.bottom - s->hitboxes[0].b.top) >= y2)
+                || (y1 >= y2 && y2 + (s2->hitboxes[0].b.bottom - s2->hitboxes[0].b.top) >= y1)) {
                 Coll_DamagePlayer(&gPlayer);
             }
         }

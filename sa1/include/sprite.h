@@ -34,6 +34,37 @@ typedef struct GraphicsData {
 #define BACKGROUND_UPDATE_ANIMATIONS      0x200
 #define BACKGROUND_FLAG_400               0x400
 #define BACKGROUND_FLAG_800               0x800
+
+// TODO: potentially rename these. For now, all we know is
+// that they are used in the same functions which handles
+// bg sprites
+#define INIT_BG_SPRITES_LAYER_32(index)                                                                                                    \
+    ({                                                                                                                                     \
+        gBgSprites_Unknown1[(index)] = 0;                                                                                                  \
+        gBgSprites_Unknown2[(index)][0] = 0;                                                                                               \
+        gBgSprites_Unknown2[(index)][1] = 0;                                                                                               \
+        gBgSprites_Unknown2[(index)][2] = 255;                                                                                             \
+        gBgSprites_Unknown2[(index)][3] = 32;                                                                                              \
+    });
+
+#define INIT_BG_SPRITES_LAYER_64(index)                                                                                                    \
+    ({                                                                                                                                     \
+        gBgSprites_Unknown1[(index)] = 0;                                                                                                  \
+        gBgSprites_Unknown2[(index)][0] = 0;                                                                                               \
+        gBgSprites_Unknown2[(index)][1] = 0;                                                                                               \
+        gBgSprites_Unknown2[(index)][2] = 255;                                                                                             \
+        gBgSprites_Unknown2[(index)][3] = 64;                                                                                              \
+    })
+
+#define INIT_BG_SPRITES_LAYER_128(index)                                                                                                   \
+    ({                                                                                                                                     \
+        gBgSprites_Unknown1[(index)] = 0;                                                                                                  \
+        gBgSprites_Unknown2[(index)][0] = 0;                                                                                               \
+        gBgSprites_Unknown2[(index)][1] = 0;                                                                                               \
+        gBgSprites_Unknown2[(index)][2] = 255;                                                                                             \
+        gBgSprites_Unknown2[(index)][3] = 128;                                                                                             \
+    })
+
 typedef struct {
     /* 0x00 */ struct GraphicsData graphics;
 
@@ -95,11 +126,18 @@ typedef struct {
 } Background; /* size = 0x40 */
 
 typedef struct {
+#if (ENGINE >= ENGINE_3)
+    // In SA3 flip-bits are integrated into the oamIndex.
+    // X-Flip: Bit 14
+    // Y-Flip: Bit 15
+    /* 0x00 */ u16 oamIndex;
+#else
     /* 0x00 */ u8 flip;
 
     // every animation has an associated oamData pointer, oamIndex starts at
     // 0 for every new animation and ends at variantCount-1
-    /* 0x01 */ u8 oamIndex; // TODO: is oamIndex s8 ?
+    /* 0x01 */ u8 oamIndex;
+#endif
 
     // some sprite frames consist of multiple images (of the same size
     // as GBA's Object Attribute Memory, e.g. 8x8, 8x32, 32x64, ...)
@@ -128,7 +166,6 @@ typedef struct {
 #define SPRITE_OAM_ORDER(index)  ((index) << 6)
 #define GET_SPRITE_OAM_ORDER(s)  ((((s)->oamFlags) & 0x7C0) >> 6)
 
-// TODO: work out what makes this struct different from the above
 typedef struct {
     /* 0x00 */ struct GraphicsData graphics;
     /* 0x0C */ const SpriteOffset *dimensions;
@@ -142,7 +179,7 @@ typedef struct {
                                // bit 10 X-Flip
                                // bit 11 Y-Flip
                                // bit 12-13: priority
-                               // bit 14: Anim Over
+                               // bit 14
                                // bit 15-16: Background ID
                                // bit 17
                                // bit 18
@@ -173,12 +210,21 @@ typedef struct {
     /* 0x28 */ Hitbox hitboxes[1];
 } Sprite /* size = 0x30 */;
 
+// TODO: Unify Sprite with variable hitbox count through a macro
+typedef struct {
+    Sprite s;
+    Hitbox hb1;
+} Sprite2;
+
+// TODO: Unify Sprite with variable hitbox count through a macro
+typedef struct {
+    Sprite s;
+    Hitbox hb1;
+    Hitbox hb2;
+} Sprite3;
+
 typedef struct {
     /* 0x00 */ u16 rotation;
-
-    // TODO:
-    //     Does "scaleX" and "scaleY" fit as names?
-    //     It's 0x100 or Q_8_8(1.0) for 1x, Q_8_8(2.0) for 2x, etc.
     /* 0x02 */ s16 qScaleX;
     /* 0x04 */ s16 qScaleY;
     /* 0x06 */ s16 x;
@@ -205,6 +251,20 @@ typedef struct {
     /* 0x06 */ u8 variant;
 } TileInfo;
 
+// NOTE: (Only?) used by by src/game/bosses/final_intro.c
+typedef struct {
+    /* 0x00 */ void *tiles;
+    /* 0x04 */ AnimId anim;
+    /* 0x06 */ u8 variant;
+} TileInfoPtr;
+
+PACKED(TileInfo16, {
+    /* 0x00 */ u16 numTiles;
+    /* 0x02 */ AnimId anim;
+    /* 0x04 */ u16 variant;
+});
+
+#if (ENGINE == ENGINE_1)
 typedef struct {
     u32 anim : 16;
     u32 variant : 8;
@@ -223,6 +283,7 @@ typedef struct {
     AnimId anim;
     u16 variant;
 } TileInfoBarrel;
+#endif
 
 extern const u8 gOamShapesSizes[12][2];
 
@@ -236,16 +297,15 @@ AnimCmdResult UpdateSpriteAnimation(Sprite *);
 
 void DisplaySprite(Sprite *);
 void DrawBackground(Background *);
-u32 SA2_LABEL(sub_8004010)(void);
-u32 SA2_LABEL(sub_80039E4)(void);
 bool32 SA2_LABEL(sub_8002B20)(void);
+bool32 SA2_LABEL(sub_80039E4)(void);
+bool32 SA2_LABEL(sub_8004010)(void);
 void ProcessOamBuffers(void);
 OamData *OamMalloc(u8 order);
 
 void TransformSprite(Sprite *, SpriteTransform *);
 // NOTE: Not actually unused in SA1. TODO: Align name with SA2!
-void UnusedTransform(Sprite *sprite, SpriteTransform *transform);
-void sub_8004ABC(Sprite *, SpriteTransform *);
+void UnusedTransform(Sprite *, SpriteTransform *);
 void SA2_LABEL(sub_8004E14)(Sprite *, SpriteTransform *);
 
 void SA2_LABEL(sub_8003EE4)(u16 p0, s16 p1, s16 p2, s16 p3, s16 p4, s16 p5, s16 p6, BgAffineReg *affine);
@@ -313,9 +373,12 @@ void numToASCII(u8 digits[5], u16 number);
     SPRITE_INIT_SCRIPT(_sprite, 1.0);                                                                                                      \
     _sprite->frameFlags = (SPRITE_FLAG(PRIORITY, _priority) | (_flags));
 
-#define SPRITE_INIT(_sprite, _numTiles, _anim, _variant, _order, _priority)                                                                \
+#define SPRITE_INIT_FLAGS(_sprite, _numTiles, _anim, _variant, _order, _priority, _flags)                                                  \
     _sprite->graphics.dest = VramMalloc(_numTiles);                                                                                        \
-    SPRITE_INIT_WITHOUT_VRAM(_sprite, _anim, _variant, _order, _priority, 0);
+    SPRITE_INIT_WITHOUT_VRAM(_sprite, _anim, _variant, _order, _priority, _flags);
+
+#define SPRITE_INIT(_sprite, _numTiles, _anim, _variant, _order, _priority)                                                                \
+    SPRITE_INIT_FLAGS(_sprite, _numTiles, _anim, _variant, _order, _priority, 0)
 
 #define SF_SHIFT(name) (SPRITE_FLAG_SHIFT_##name)
 
@@ -351,21 +414,22 @@ void numToASCII(u8 digits[5], u16 number);
 #define SPRITE_FLAG_SHIFT_30                    30
 #define SPRITE_FLAG_SHIFT_31                    31
 
-#define SPRITE_FLAG_MASK_ROT_SCALE             SPRITE_FLAG(ROT_SCALE, 0x1F)
-#define SPRITE_FLAG_MASK_ROT_SCALE_ENABLE      SPRITE_FLAG(ROT_SCALE_ENABLE, 1)
-#define SPRITE_FLAG_MASK_ROT_SCALE_DOUBLE_SIZE SPRITE_FLAG(ROT_SCALE_DOUBLE_SIZE, 1)
-#define SPRITE_FLAG_MASK_OBJ_MODE              SPRITE_FLAG(OBJ_MODE, 3)
-#define SPRITE_FLAG_MASK_MOSAIC                SPRITE_FLAG(MOSAIC, 1)
-#define SPRITE_FLAG_MASK_X_FLIP                SPRITE_FLAG(X_FLIP, 1) // 0x400
-#define SPRITE_FLAG_MASK_Y_FLIP                SPRITE_FLAG(Y_FLIP, 1) // 0x800
-#define SPRITE_FLAG_MASK_PRIORITY              SPRITE_FLAG(PRIORITY, 3) // 0x3000
-#define SPRITE_FLAG_MASK_ANIM_OVER             SPRITE_FLAG(ANIM_OVER, 1)
-#define SPRITE_FLAG_MASK_BG_ID                 SPRITE_FLAG(BG_ID, 3)
-#define SPRITE_FLAG_MASK_17                    SPRITE_FLAG(17, 1)
-#define SPRITE_FLAG_MASK_18                    SPRITE_FLAG(18, 1)
-#define SPRITE_FLAG_MASK_19                    SPRITE_FLAG(19, 1)
-#define SPRITE_FLAG_MASK_26                    SPRITE_FLAG(26, 1)
-#define SPRITE_FLAG_MASK_30                    SPRITE_FLAG(30, 1)
-#define SPRITE_FLAG_MASK_31                    SPRITE_FLAG(31, 1)
+#define SPRITE_FLAG_MASK_ROT_SCALE             SPRITE_FLAG(ROT_SCALE, 0x1F) // 0x1F
+#define SPRITE_FLAG_MASK_ROT_SCALE_ENABLE      SPRITE_FLAG(ROT_SCALE_ENABLE, 1) // 0x20
+#define SPRITE_FLAG_MASK_ROT_SCALE_DOUBLE_SIZE SPRITE_FLAG(ROT_SCALE_DOUBLE_SIZE, 1) // 0x40
+
+#define SPRITE_FLAG_MASK_OBJ_MODE  SPRITE_FLAG(OBJ_MODE, 3) // 0x180
+#define SPRITE_FLAG_MASK_MOSAIC    SPRITE_FLAG(MOSAIC, 1) // 0x200
+#define SPRITE_FLAG_MASK_X_FLIP    SPRITE_FLAG(X_FLIP, 1) // 0x400
+#define SPRITE_FLAG_MASK_Y_FLIP    SPRITE_FLAG(Y_FLIP, 1) // 0x800
+#define SPRITE_FLAG_MASK_PRIORITY  SPRITE_FLAG(PRIORITY, 3) // 0x3000
+#define SPRITE_FLAG_MASK_ANIM_OVER SPRITE_FLAG(ANIM_OVER, 1)
+#define SPRITE_FLAG_MASK_BG_ID     SPRITE_FLAG(BG_ID, 3)
+#define SPRITE_FLAG_GLOBAL_OFFSET  SPRITE_FLAG(17, 1)
+#define SPRITE_FLAG_MASK_18        SPRITE_FLAG(18, 1) // 0x40000
+#define SPRITE_FLAG_MASK_19        SPRITE_FLAG(19, 1)
+#define SPRITE_FLAG_MASK_26        SPRITE_FLAG(26, 1)
+#define SPRITE_FLAG_MASK_30        SPRITE_FLAG(30, 1)
+#define SPRITE_FLAG_MASK_31        SPRITE_FLAG(31, 1)
 
 #endif

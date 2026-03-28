@@ -442,12 +442,12 @@ static void TaskDestructor_PlatformBreakParticles(struct Task *t)
 static u32 HandleThinPlatformCollision(Sprite *s, s32 x, s32 y, Player *player)
 {
     u32 result;
-    s->hitboxes[0].top += 1;
-    s->hitboxes[0].bottom -= 1;
+    s->hitboxes[0].b.top += 1;
+    s->hitboxes[0].b.bottom -= 1;
 
     result = Coll_Player_Platform(s, x, y, player);
 
-    s->hitboxes[0].top -= 1;
-    s->hitboxes[0].bottom += 1;
+    s->hitboxes[0].b.top -= 1;
+    s->hitboxes[0].b.bottom += 1;
     return result;
 }

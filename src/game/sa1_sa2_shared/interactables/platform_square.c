@@ -214,7 +214,7 @@ static void Task_Platform_Square(void)
         u32 otherRes;
         s32 movStateCopy = p->moveState;
 
-        s->hitboxes[0].top -= 3;
+        s->hitboxes[0].b.top -= 3;
         x = (posX + I(platform->offsetX));
         y = (posY + I(platform->offsetY));
         result = Coll_Player_Platform(s, x, y, p);
@@ -247,13 +247,13 @@ static void Task_Platform_Square(void)
             if (result & 0x10000) {
                 if (GRAVITY_IS_INVERTED) {
                     p->qWorldY -= Q_8_8(result);
-                    s->hitboxes[0].left += 16;
-                    s->hitboxes[0].right -= 16;
+                    s->hitboxes[0].b.left += 16;
+                    s->hitboxes[0].b.right -= 16;
 
                     otherRes = Coll_Player_Platform(s, posX + I(platform->offsetX), posY + I(platform->offsetY), p);
 
-                    s->hitboxes[0].left -= 16;
-                    s->hitboxes[0].right += 16;
+                    s->hitboxes[0].b.left -= 16;
+                    s->hitboxes[0].b.right += 16;
 
                     p->qWorldY += Q_8_8(result);
                     p->moveState = movStateCopy;
@@ -326,7 +326,7 @@ static void Task_Platform_Square(void)
             }
         }
 
-        s->hitboxes[0].top += 3;
+        s->hitboxes[0].b.top += 3;
     }
 
     if (IS_OUT_OF_CAM_RANGE_TYPED(u32, posX - gCamera.x, posY - gCamera.y)) {
@@ -364,13 +364,13 @@ static u32 UNUSED HandleSquarePlatformCollision(Sprite *s, s32 x, s32 y, Player 
 {
     u32 result;
 
-    s->hitboxes[0].top++;
-    s->hitboxes[0].bottom--;
+    s->hitboxes[0].b.top++;
+    s->hitboxes[0].b.bottom--;
 
     result = Coll_Player_Platform(s, x, y, p);
 
-    s->hitboxes[0].top--;
-    s->hitboxes[0].bottom++;
+    s->hitboxes[0].b.top--;
+    s->hitboxes[0].b.bottom++;
 
     return result;
 }

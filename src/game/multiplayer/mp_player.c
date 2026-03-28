@@ -1338,7 +1338,7 @@ void SA2_LABEL(sub_801707C)(void)
 #if (GAME == GAME_SA1)
                         y = Q(mpp->pos.y + (s->hitboxes[0].b.bottom) + 17);
 #elif (GAME == GAME_SA2)
-                        y = Q(mpp->pos.y + (s->hitboxes[0].bottom) + 17);
+                        y = Q(mpp->pos.y + (s->hitboxes[0].b.bottom) + 17);
 #endif
                         result = SA2_LABEL(sub_801E4E4)(I(gPlayer.qWorldY) + gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, 8,
                                                         &unusedByte, SA2_LABEL(sub_801EE64));
@@ -1354,7 +1354,7 @@ void SA2_LABEL(sub_801707C)(void)
 #if (GAME == GAME_SA1)
                         y = Q(mpp->pos.y + (s->hitboxes[0].b.top) - 17);
 #elif (GAME == GAME_SA2)
-                        y = Q(mpp->pos.y + (s->hitboxes[0].top) - 17);
+                        y = Q(mpp->pos.y + (s->hitboxes[0].b.top) - 17);
 #endif
                         result = SA2_LABEL(sub_801E4E4)(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, -8,
                                                         &unusedByte, SA2_LABEL(sub_801EE64));
@@ -1576,8 +1576,8 @@ void SA2_LABEL(sub_8017670)(void)
                     result = SA2_LABEL(sub_801F100)((mpp->pos.y + (s->hitboxes[0].b.top) - rect[3]) - playerUnk17, I(x), gPlayer.layer, -8,
                                                     SA2_LABEL(sub_801EC3C));
 #elif (GAME == GAME_SA2)
-                    y = QS((mpp->pos.y + (s->hitboxes[0].top)) - rect[3]);
-                    result = SA2_LABEL(sub_801F100)((mpp->pos.y + (s->hitboxes[0].top) - rect[3]) - playerUnk17, I(x), gPlayer.layer, -8,
+                    y = QS((mpp->pos.y + (s->hitboxes[0].b.top)) - rect[3]);
+                    result = SA2_LABEL(sub_801F100)((mpp->pos.y + (s->hitboxes[0].b.top) - rect[3]) - playerUnk17, I(x), gPlayer.layer, -8,
                                                     SA2_LABEL(sub_801EC3C));
 #endif
 
@@ -1593,8 +1593,8 @@ void SA2_LABEL(sub_8017670)(void)
                     result = SA2_LABEL(sub_801F100)(((mpp->pos.y + (s->hitboxes[0].b.bottom) + rect[3]) + playerUnk17), I(x), gPlayer.layer,
                                                     8, SA2_LABEL(sub_801EC3C));
 #elif (GAME == GAME_SA2)
-                    y = QS(mpp->pos.y + (s->hitboxes[0].bottom) + rect[3]);
-                    result = SA2_LABEL(sub_801F100)(((mpp->pos.y + (s->hitboxes[0].bottom) + rect[3]) + playerUnk17), I(x), gPlayer.layer,
+                    y = QS(mpp->pos.y + (s->hitboxes[0].b.bottom) + rect[3]);
+                    result = SA2_LABEL(sub_801F100)(((mpp->pos.y + (s->hitboxes[0].b.bottom) + rect[3]) + playerUnk17), I(x), gPlayer.layer,
                                                     8, SA2_LABEL(sub_801EC3C));
 #endif
 

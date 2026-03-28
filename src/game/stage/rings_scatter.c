@@ -400,7 +400,7 @@ void RingsScatterSingleplayer_FlippedGravity(void)
         hb = &p->spriteInfoBody->s.hitboxes[0];
 
         if (ring->unkC <= sp0C && (p->charState != SA2_CHAR_ANIM_20 || p->timerInvulnerability == 0) && IS_ALIVE(p)) {
-            Rect8 *rect = (Rect8 *)&hb->left;
+            Rect8 *rect = (Rect8 *)&hb->b.left;
 
             if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), ringIntX, ringIntY, rect)) {
                 CreateCollectRingEffect(ringIntX, ringIntY);
@@ -518,7 +518,7 @@ void RingsScatterSingleplayer_NormalGravity(void)
 #if (GAME == GAME_SA1)
             Rect8 *rect = &hb->b;
 #else
-            Rect8 *rect = (Rect8 *)&hb->left;
+            Rect8 *rect = (Rect8 *)&hb->b.left;
 #endif
             if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), ringIntX, ringIntY, rect)) {
                 CreateCollectRingEffect(bossWorldX, ringIntY);
@@ -636,7 +636,7 @@ NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterMultipak_Flipped
         p = &gPlayer;
 
 #if USE_HITBOX_RECT
-        hb = (Rect8 *)&p->spriteInfoBody->s.hitboxes[0].left;
+        hb = (Rect8 *)&p->spriteInfoBody->s.hitboxes[0].b.left;
 #else
         hb = &p->spriteInfoBody->s.hitboxes[0];
 #endif
@@ -754,7 +754,7 @@ NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterMultipak_NormalG
         p = &gPlayer;
 
 #if USE_HITBOX_RECT
-        hb = (Rect8 *)&p->spriteInfoBody->s.hitboxes[0].left;
+        hb = (Rect8 *)&p->spriteInfoBody->s.hitboxes[0].b.left;
 #else
         hb = &p->spriteInfoBody->s.hitboxes[0];
 #endif
@@ -881,7 +881,7 @@ NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterSinglepakMain_Co
         p = &gPlayer;
 
 #if USE_HITBOX_RECT
-        hb = (Rect8 *)&p->spriteInfoBody->s.hitboxes[0].left;
+        hb = (Rect8 *)&p->spriteInfoBody->s.hitboxes[0].b.left;
 #else
         hb = &p->spriteInfoBody->s.hitboxes[0];
 #endif

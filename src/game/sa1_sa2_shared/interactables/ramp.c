@@ -117,8 +117,8 @@ static void Task_Ramp(void)
                 player->qSpeedAirX = 0;
                 player->qSpeedGround = 0;
             } else if (!(ramp->unk3C & 2)) {
-                s32 hbLeft = screenX + s->hitboxes[0].left;
-                s32 hbWidth = s->hitboxes[0].right - s->hitboxes[0].left;
+                s32 hbLeft = screenX + s->hitboxes[0].b.left;
+                s32 hbWidth = s->hitboxes[0].b.right - s->hitboxes[0].b.left;
                 s32 halfWidth = I(player->qWorldX) - hbLeft;
                 if (halfWidth > 0) {
                     if (halfWidth > hbWidth) {
@@ -131,7 +131,7 @@ static void Task_Ramp(void)
                         player->moveState |= MOVESTATE_IN_AIR;
                     } else {
                         s32 playerMiddleY = I(player->qWorldY) + player->spriteOffsetY - screenY;
-                        s32 temp6 = I(s->hitboxes[0].top * (Q(halfWidth) / hbWidth));
+                        s32 temp6 = I(s->hitboxes[0].b.top * (Q(halfWidth) / hbWidth));
 
                         if (playerMiddleY >= temp6) {
                             if (!(player->moveState & MOVESTATE_IN_AIR) && (player->qSpeedGround > Q(4))

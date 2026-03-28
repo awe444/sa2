@@ -661,7 +661,7 @@ void DisplaySprite(Sprite *sprite)
         x = sprite->x;
         y = sprite->y;
 
-        if (sprite->frameFlags & SPRITE_FLAG_MASK_17) {
+        if (sprite->frameFlags & SPRITE_FLAG_GLOBAL_OFFSET) {
             x -= gSpriteOffset.x;
             y -= gSpriteOffset.y;
         }
@@ -836,7 +836,7 @@ UNUSED void DisplaySprites(Sprite *sprite, Vec2_16 *positions, u8 numPositions)
         x = sprite->x;
         y = sprite->y;
 
-        if (sprite->frameFlags & SPRITE_FLAG_MASK_17) {
+        if (sprite->frameFlags & SPRITE_FLAG_GLOBAL_OFFSET) {
             x -= gSpriteOffset.x;
             y -= gSpriteOffset.y;
         }

@@ -194,13 +194,13 @@ static u32 sub_807AF0C(Sprite_IA78 *ia78)
 {
     if (PLAYER_IS_ALIVE) {
         u32 temp;
-        ia78->s.hitboxes[0].top -= 16;
-        ia78->s.hitboxes[0].bottom += 16;
+        ia78->s.hitboxes[0].b.top -= 16;
+        ia78->s.hitboxes[0].b.bottom += 16;
 
         temp = Coll_Player_Interactable(&ia78->s, ia78->unk3C, ia78->unk40, &gPlayer);
 
-        ia78->s.hitboxes[0].top += 16;
-        ia78->s.hitboxes[0].bottom -= 16;
+        ia78->s.hitboxes[0].b.top += 16;
+        ia78->s.hitboxes[0].b.bottom -= 16;
 
         if (temp != 0) {
             if (temp & 0x10000) {
