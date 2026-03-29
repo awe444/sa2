@@ -34,7 +34,14 @@ elseif(CMAKE_CROSSCOMPILING)
     # preproc must run on the host during the build.  When cross-compiling
     # (e.g. for Android) we cannot use the target toolchain, so compile it
     # directly with the host C++ compiler.
-    find_program(HOST_CXX NAMES c++ g++ clang++ REQUIRED)
+    # NO_CMAKE_PATH prevents find_program from searching in
+    # CMAKE_PROGRAM_PATH, which the Android NDK toolchain file populates
+    # with its own bin/ directory — that would find the NDK's clang++
+    # instead of the host system's compiler.
+    find_program(HOST_CXX NAMES c++ g++ clang++
+        NO_CMAKE_PATH
+        REQUIRED
+    )
     set(PREPROC_HOST_BIN "${CMAKE_CURRENT_BINARY_DIR}/preproc_host")
     add_custom_command(
         OUTPUT "${PREPROC_HOST_BIN}"
@@ -63,12 +70,20 @@ endif()
 # We invoke a CMake script at build time that builds those tools (via their
 # Makefiles) and converts every source asset in the tree.
 
+# mid2agb (C++) needs a host C++ compiler.  When not cross-compiling,
+# CMAKE_CXX_COMPILER is already the host compiler; when cross-compiling,
+# HOST_CXX was discovered above.
+if(NOT HOST_CXX)
+    set(HOST_CXX "${CMAKE_CXX_COMPILER}")
+endif()
+
 set(ASSET_STAMP "${CMAKE_CURRENT_BINARY_DIR}/assets.stamp")
 add_custom_command(
     OUTPUT "${ASSET_STAMP}"
     COMMAND ${CMAKE_COMMAND}
         -DSA1_DIR=${CMAKE_CURRENT_SOURCE_DIR}
         -DSA2_ROOT=${SA2_ROOT}
+        -DHOST_CXX=${HOST_CXX}
         -DSTAMP_FILE=${ASSET_STAMP}
         -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/generate_assets.cmake"
     COMMENT "Generating binary assets (gbapal, 4bpp, entity bins)"

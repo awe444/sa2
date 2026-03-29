@@ -6,6 +6,7 @@
 # Expected variables (set via -D on the cmake command line):
 #   SA1_DIR      – absolute path to the sa1 source directory
 #   SA2_ROOT     – absolute path to the sa2 root directory
+#   HOST_CXX     – host C++ compiler (for building C++ tools like mid2agb)
 #   STAMP_FILE   – path to touch on success
 
 # ── Step 1: Build host tools using their Makefiles ──────────────────────────
@@ -54,7 +55,7 @@ endif()
 
 message(STATUS "Building mid2agb...")
 execute_process(
-    COMMAND "${MAKE_EXE}" -C "${SA2_ROOT}/tools/mid2agb"
+    COMMAND "${MAKE_EXE}" -C "${SA2_ROOT}/tools/mid2agb" "CXX=${HOST_CXX}"
     RESULT_VARIABLE RC
 )
 if(NOT RC EQUAL 0)
