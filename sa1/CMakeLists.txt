@@ -297,6 +297,16 @@ foreach(ASM_SRC ${SA1_ALL_ASM_SRCS})
     set(ASM_PREPROC "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.S")
     get_filename_component(ASM_OBJ_DIR "${ASM_OBJ}" DIRECTORY)
 
+    # For MIDI-derived .s files (generated at build time by mid2agb), we can't
+    # list them in DEPENDS because they don't exist at configure time and Ninja
+    # has no rule to produce them individually.  The ASSET_STAMP dependency
+    # already ensures asset generation (including mid2agb) runs first.
+    if(ASM_SRC IN_LIST SA1_MID_ASM_SRCS)
+        set(_src_dep "")
+    else()
+        set(_src_dep "${ASM_SRC}")
+    endif()
+
     add_custom_command(
         OUTPUT "${ASM_OBJ}"
         COMMAND ${CMAKE_COMMAND} -E make_directory "${ASM_OBJ_DIR}"
@@ -312,7 +322,7 @@ foreach(ASM_SRC ${SA1_ALL_ASM_SRCS})
             "-DCC_FLAGS=${CMAKE_C_FLAGS}"
             "-DDEFS=${_asm_defs}"
             -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_asm.cmake"
-        DEPENDS "${ASM_SRC}" ${PREPROC_DEP} "${ASSET_STAMP}"
+        DEPENDS ${_src_dep} ${PREPROC_DEP} "${ASSET_STAMP}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         COMMENT "asm ${REL}"
         VERBATIM
