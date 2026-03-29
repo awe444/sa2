@@ -86,12 +86,16 @@ add_custom_command(
 # be compiled *instead of* the original sources.
 
 function(sa1_preprocess OUTPUT_VAR)
-    cmake_parse_arguments(PP "" "" "SOURCES;INCLUDE_DIRS;DEFINITIONS" ${ARGN})
+    cmake_parse_arguments(PP "" "" "SOURCES;INCLUDE_DIRS;SYSTEM_INCLUDE_DIRS;DEFINITIONS" ${ARGN})
 
     # Build the -I and -D flags that the C preprocessor step needs
     set(CPP_FLAGS "")
     foreach(dir ${PP_INCLUDE_DIRS})
         list(APPEND CPP_FLAGS "-iquote" "${dir}")
+    endforeach()
+    # System include dirs use -I so that #include <...> (angle brackets) works
+    foreach(dir ${PP_SYSTEM_INCLUDE_DIRS})
+        list(APPEND CPP_FLAGS "-I" "${dir}")
     endforeach()
     foreach(def ${PP_DEFINITIONS})
         list(APPEND CPP_FLAGS "-D" "${def}")
@@ -212,10 +216,32 @@ set(SA1_DEFINITIONS
 # included by any source) into C array initialisers.  The Makefile builds
 # pipe every .c through preproc; we do the same here.
 
+# SDL2 headers are included with angle brackets (#include <SDL.h>) so we need
+# -I flags (not -iquote) for the preprocessing step.
+if(ANDROID AND TARGET SDL2)
+    get_target_property(_sdl2_source_dir SDL2 SOURCE_DIR)
+    get_target_property(_sdl2_binary_dir SDL2 BINARY_DIR)
+    set(SDL2_PP_INCLUDE_DIRS "")
+    if(_sdl2_source_dir)
+        list(APPEND SDL2_PP_INCLUDE_DIRS "${_sdl2_source_dir}/include")
+    endif()
+    if(_sdl2_binary_dir)
+        list(APPEND SDL2_PP_INCLUDE_DIRS
+            "${_sdl2_binary_dir}/include"
+            "${_sdl2_binary_dir}/include/SDL2"
+        )
+    endif()
+elseif(SDL2_INCLUDE_DIRS)
+    set(SDL2_PP_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
+else()
+    set(SDL2_PP_INCLUDE_DIRS "")
+endif()
+
 sa1_preprocess(PP_SRCS
-    SOURCES       ${SA1_GAME_SRCS} ${SA1_PLATFORM_SRCS} ${SA2_SHARED_SRCS}
-    INCLUDE_DIRS  ${SA1_INCLUDE_DIRS}
-    DEFINITIONS   ${SA1_DEFINITIONS}
+    SOURCES            ${SA1_GAME_SRCS} ${SA1_PLATFORM_SRCS} ${SA2_SHARED_SRCS}
+    INCLUDE_DIRS       ${SA1_INCLUDE_DIRS}
+    SYSTEM_INCLUDE_DIRS ${SDL2_PP_INCLUDE_DIRS}
+    DEFINITIONS        ${SA1_DEFINITIONS}
 )
 
 set(ALL_SRCS ${PP_SRCS})
