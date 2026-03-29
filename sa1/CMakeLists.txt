@@ -260,7 +260,54 @@ sa1_preprocess(PP_SRCS
     DEFINITIONS        ${SA1_DEFINITIONS}
 )
 
-set(ALL_SRCS ${PP_SRCS})
+# ── Assembly data files ──────────────────────────────────────────────────────
+# The Makefile compiles sa1/data/*.s assembly files that define data symbols
+# (gObjTiles_4bpp, gObjTiles_8bpp, gUnknown_*, sLangScreenReturnProcs, etc.)
+# referenced by the C code.  The pipeline matches the Makefile:
+#   preproc file.s sdl ""  →  expand .include / .string / .braille
+#   cc -x assembler-with-cpp -c  →  preprocess #ifdef macros, then assemble
+
+file(GLOB SA1_DATA_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/data/*.s")
+
+# Definitions the assembly macros need (portable.inc checks CPU_ARCH_X86).
+# Pipe-delimited because CMake lists (semicolons) are lost when passed via -D;
+# the values (KEY=0/1) never contain pipes.
+string(REPLACE ";" "|" _asm_defs "${SA1_DEFINITIONS}")
+
+set(ASM_OBJS "")
+foreach(ASM_SRC ${SA1_DATA_ASM_SRCS})
+    file(RELATIVE_PATH REL "${CMAKE_CURRENT_SOURCE_DIR}" "${ASM_SRC}")
+    set(ASM_OBJ     "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.o")
+    set(ASM_PREPROC "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.S")
+    get_filename_component(ASM_OBJ_DIR "${ASM_OBJ}" DIRECTORY)
+
+    add_custom_command(
+        OUTPUT "${ASM_OBJ}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${ASM_OBJ_DIR}"
+        COMMAND ${CMAKE_COMMAND}
+            -DPREPROC_EXE=${PREPROC}
+            -DASM_INPUT=${ASM_SRC}
+            -DASM_PREPROC=${ASM_PREPROC}
+            -DASM_OUTPUT=${ASM_OBJ}
+            -DWORK_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+            -DCC=${CMAKE_C_COMPILER}
+            -DCC_TARGET=${CMAKE_C_COMPILER_TARGET}
+            -DCC_SYSROOT=${CMAKE_SYSROOT}
+            "-DCC_FLAGS=${CMAKE_C_FLAGS}"
+            "-DDEFS=${_asm_defs}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_asm.cmake"
+        DEPENDS "${ASM_SRC}" ${PREPROC_DEP} "${ASSET_STAMP}"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "asm ${REL}"
+        VERBATIM
+    )
+    list(APPEND ASM_OBJS "${ASM_OBJ}")
+endforeach()
+
+# Mark the .o files as external pre-compiled objects
+set_source_files_properties(${ASM_OBJS} PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+
+set(ALL_SRCS ${PP_SRCS} ${ASM_OBJS})
 
 # ── Target ───────────────────────────────────────────────────────────────────
 if(ANDROID)
