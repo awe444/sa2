@@ -90,6 +90,15 @@ function(sa1_preprocess OUTPUT_VAR)
 
     # Build the -I and -D flags that the C preprocessor step needs
     set(CPP_FLAGS "")
+    # When cross-compiling (e.g. Android NDK), CMAKE_C_FLAGS contains the
+    # --target and --sysroot flags that tell clang which architecture to
+    # preprocess for.  Without them the NDK clang defaults to the host arch
+    # (x86_64), which defines __MMX__/__SSE__ and causes SDL_cpuinfo.h to
+    # expand x86 intrinsics that then fail to compile on ARM64.
+    if(CMAKE_C_FLAGS)
+        separate_arguments(_c_flags NATIVE_COMMAND "${CMAKE_C_FLAGS}")
+        list(APPEND CPP_FLAGS ${_c_flags})
+    endif()
     foreach(dir ${PP_INCLUDE_DIRS})
         list(APPEND CPP_FLAGS "-iquote" "${dir}")
     endforeach()
