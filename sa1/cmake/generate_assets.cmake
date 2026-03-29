@@ -11,6 +11,8 @@
 # ── Step 1: Build host tools using their Makefiles ──────────────────────────
 # gbagfx converts .pal → .gbapal and .png → .4bpp, and compresses with .rl
 # entity_positions converts .csv → .bin
+# aif2pcm converts .aif → .bin (sound samples)
+# mid2agb converts .mid → .s (MIDI songs)
 
 find_program(MAKE_EXE NAMES make gmake REQUIRED)
 
@@ -41,8 +43,28 @@ if(NOT RC EQUAL 0)
     message(FATAL_ERROR "Failed to build entity_positions (exit ${RC})")
 endif()
 
+message(STATUS "Building aif2pcm...")
+execute_process(
+    COMMAND "${MAKE_EXE}" -C "${SA2_ROOT}/tools/aif2pcm"
+    RESULT_VARIABLE RC
+)
+if(NOT RC EQUAL 0)
+    message(FATAL_ERROR "Failed to build aif2pcm (exit ${RC})")
+endif()
+
+message(STATUS "Building mid2agb...")
+execute_process(
+    COMMAND "${MAKE_EXE}" -C "${SA2_ROOT}/tools/mid2agb"
+    RESULT_VARIABLE RC
+)
+if(NOT RC EQUAL 0)
+    message(FATAL_ERROR "Failed to build mid2agb (exit ${RC})")
+endif()
+
 set(GFX     "${SA2_ROOT}/tools/gbagfx/gbagfx${CMAKE_EXECUTABLE_SUFFIX}")
 set(ENT_POS "${SA2_ROOT}/tools/entity_positions/entity_positions${CMAKE_EXECUTABLE_SUFFIX}")
+set(AIF2PCM "${SA2_ROOT}/tools/aif2pcm/aif2pcm${CMAKE_EXECUTABLE_SUFFIX}")
+set(MID2AGB "${SA2_ROOT}/tools/mid2agb/mid2agb${CMAKE_EXECUTABLE_SUFFIX}")
 
 # ── Step 2: Convert .pal → .gbapal ─────────────────────────────────────────
 file(GLOB_RECURSE PAL_FILES
@@ -130,6 +152,38 @@ foreach(CSV ${CSV_FILES})
         )
         if(NOT RC EQUAL 0)
             message(WARNING "gbagfx rl-compress failed on ${BIN} (exit ${RC})")
+        endif()
+    endif()
+endforeach()
+
+# ── Step 5: Convert .aif → .bin (sound samples) ───────────────────────────
+file(GLOB AIF_FILES "${SA1_DIR}/sound/direct_sound_samples/*.aif")
+foreach(AIF ${AIF_FILES})
+    string(REGEX REPLACE "\\.aif$" ".bin" BIN "${AIF}")
+    if("${AIF}" IS_NEWER_THAN "${BIN}")
+        execute_process(
+            COMMAND "${AIF2PCM}" "${AIF}" "${BIN}"
+            WORKING_DIRECTORY "${SA1_DIR}"
+            RESULT_VARIABLE RC
+        )
+        if(NOT RC EQUAL 0)
+            message(WARNING "aif2pcm failed on ${AIF} (exit ${RC})")
+        endif()
+    endif()
+endforeach()
+
+# ── Step 6: Convert .mid → .s (MIDI songs) ────────────────────────────────
+file(GLOB MID_FILES "${SA1_DIR}/sound/songs/midi/*.mid")
+foreach(MID ${MID_FILES})
+    string(REGEX REPLACE "\\.mid$" ".s" MID_S "${MID}")
+    if("${MID}" IS_NEWER_THAN "${MID_S}")
+        execute_process(
+            COMMAND "${MID2AGB}" "${MID}" "${MID_S}"
+            WORKING_DIRECTORY "${SA1_DIR}"
+            RESULT_VARIABLE RC
+        )
+        if(NOT RC EQUAL 0)
+            message(WARNING "mid2agb failed on ${MID} (exit ${RC})")
         endif()
     endif()
 endforeach()

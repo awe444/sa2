@@ -269,13 +269,29 @@ sa1_preprocess(PP_SRCS
 
 file(GLOB SA1_DATA_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/data/*.s")
 
+# Song assembly files (hand-written .s files in sound/songs/)
+file(GLOB SA1_SONG_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/songs/*.s")
+
+# MIDI songs: mid2agb converts .mid → .s during asset generation.
+# Derive the expected .s paths from the .mid files so CMake knows about them
+# at configure time, even though they're generated at build time.
+file(GLOB SA1_MID_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/songs/midi/*.mid")
+set(SA1_MID_ASM_SRCS "")
+foreach(MID ${SA1_MID_FILES})
+    string(REGEX REPLACE "\\.mid$" ".s" MID_S "${MID}")
+    list(APPEND SA1_MID_ASM_SRCS "${MID_S}")
+endforeach()
+
+# Combine all assembly sources
+set(SA1_ALL_ASM_SRCS ${SA1_DATA_ASM_SRCS} ${SA1_SONG_ASM_SRCS} ${SA1_MID_ASM_SRCS})
+
 # Definitions the assembly macros need (portable.inc checks CPU_ARCH_X86).
 # Pipe-delimited because CMake lists (semicolons) are lost when passed via -D;
 # the values (KEY=0/1) never contain pipes.
 string(REPLACE ";" "|" _asm_defs "${SA1_DEFINITIONS}")
 
 set(ASM_OBJS "")
-foreach(ASM_SRC ${SA1_DATA_ASM_SRCS})
+foreach(ASM_SRC ${SA1_ALL_ASM_SRCS})
     file(RELATIVE_PATH REL "${CMAKE_CURRENT_SOURCE_DIR}" "${ASM_SRC}")
     set(ASM_OBJ     "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.o")
     set(ASM_PREPROC "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.S")
