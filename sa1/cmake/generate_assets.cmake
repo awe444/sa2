@@ -41,8 +41,8 @@ if(NOT RC EQUAL 0)
     message(FATAL_ERROR "Failed to build entity_positions (exit ${RC})")
 endif()
 
-set(GFX     "${SA2_ROOT}/tools/gbagfx/gbagfx")
-set(ENT_POS "${SA2_ROOT}/tools/entity_positions/entity_positions")
+set(GFX     "${SA2_ROOT}/tools/gbagfx/gbagfx${CMAKE_EXECUTABLE_SUFFIX}")
+set(ENT_POS "${SA2_ROOT}/tools/entity_positions/entity_positions${CMAKE_EXECUTABLE_SUFFIX}")
 
 # ── Step 2: Convert .pal → .gbapal ─────────────────────────────────────────
 file(GLOB_RECURSE PAL_FILES
@@ -51,7 +51,8 @@ file(GLOB_RECURSE PAL_FILES
 )
 foreach(PAL ${PAL_FILES})
     string(REGEX REPLACE "\\.pal$" ".gbapal" GBAPAL "${PAL}")
-    if(NOT EXISTS "${GBAPAL}" OR "${PAL}" IS_NEWER_THAN "${GBAPAL}")
+    # IS_NEWER_THAN returns true when the output file does not exist
+    if("${PAL}" IS_NEWER_THAN "${GBAPAL}")
         execute_process(
             COMMAND "${GFX}" "${PAL}" "${GBAPAL}"
             WORKING_DIRECTORY "${SA1_DIR}"
@@ -70,7 +71,7 @@ file(GLOB_RECURSE PNG_FILES
 )
 foreach(PNG ${PNG_FILES})
     string(REGEX REPLACE "\\.png$" ".4bpp" BPP4 "${PNG}")
-    if(NOT EXISTS "${BPP4}" OR "${PNG}" IS_NEWER_THAN "${BPP4}")
+    if("${PNG}" IS_NEWER_THAN "${BPP4}")
         execute_process(
             COMMAND "${GFX}" "${PNG}" "${BPP4}"
             WORKING_DIRECTORY "${SA1_DIR}"
@@ -103,7 +104,7 @@ foreach(CSV ${CSV_FILES})
     endif()
 
     # .csv → .bin
-    if(NOT EXISTS "${BIN}" OR "${CSV}" IS_NEWER_THAN "${BIN}")
+    if("${CSV}" IS_NEWER_THAN "${BIN}")
         execute_process(
             COMMAND "${ENT_POS}" "${CSV}" "${BIN}" ${ENT_FLAGS}
             WORKING_DIRECTORY "${SA1_DIR}"
@@ -116,7 +117,7 @@ foreach(CSV ${CSV_FILES})
 
     # .bin → .bin.rl
     set(BIN_RL "${BIN}.rl")
-    if(NOT EXISTS "${BIN_RL}" OR "${BIN}" IS_NEWER_THAN "${BIN_RL}")
+    if("${BIN}" IS_NEWER_THAN "${BIN_RL}")
         execute_process(
             COMMAND "${GFX}" "${BIN}" "${BIN_RL}"
             WORKING_DIRECTORY "${SA1_DIR}"
