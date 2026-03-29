@@ -56,6 +56,25 @@ else()
     set(PREPROC_DEP preproc)
 endif()
 
+# ── Binary asset generation ──────────────────────────────────────────────────
+# The preproc tool reads binary files referenced by INCBIN_* macros.  These
+# binary assets (.gbapal, .4bpp, .bin.rl) are generated from source files
+# (.pal, .png, .csv) using the gbagfx and entity_positions host tools.
+# We invoke a CMake script at build time that builds those tools (via their
+# Makefiles) and converts every source asset in the tree.
+
+set(ASSET_STAMP "${CMAKE_CURRENT_BINARY_DIR}/assets.stamp")
+add_custom_command(
+    OUTPUT "${ASSET_STAMP}"
+    COMMAND ${CMAKE_COMMAND}
+        -DSA1_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+        -DSA2_ROOT=${SA2_ROOT}
+        -DSTAMP_FILE=${ASSET_STAMP}
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/generate_assets.cmake"
+    COMMENT "Generating binary assets (gbapal, 4bpp, entity bins)"
+    VERBATIM
+)
+
 # ── preproc helper function ──────────────────────────────────────────────────
 # sa1_preprocess(<output_list_var>  SOURCES src1.c src2.c ...)
 #
@@ -104,7 +123,7 @@ function(sa1_preprocess OUTPUT_VAR)
                 -DPP_OUTPUT=${PP_C}
                 -DWORK_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                 -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_preproc.cmake"
-            DEPENDS "${SRC}" ${PREPROC_DEP}
+            DEPENDS "${SRC}" ${PREPROC_DEP} "${ASSET_STAMP}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             COMMENT "preproc ${REL}"
             VERBATIM
