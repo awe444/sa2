@@ -64,16 +64,21 @@ foreach(PAL ${PAL_FILES})
     endif()
 endforeach()
 
-# ── Step 3: Convert .png → .4bpp ──────────────────────────────────────────
+# ── Step 3: Convert .png → .4bpp (or .8bpp for 8bpp tiles) ───────────────
 file(GLOB_RECURSE PNG_FILES
     "${SA1_DIR}/graphics/*.png"
     "${SA1_DIR}/data/*.png"
 )
 foreach(PNG ${PNG_FILES})
-    string(REGEX REPLACE "\\.png$" ".4bpp" BPP4 "${PNG}")
-    if("${PNG}" IS_NEWER_THAN "${BPP4}")
+    # Images under an "8bpp" directory must be converted to .8bpp, not .4bpp
+    if(PNG MATCHES "/8bpp/")
+        string(REGEX REPLACE "\\.png$" ".8bpp" OUT "${PNG}")
+    else()
+        string(REGEX REPLACE "\\.png$" ".4bpp" OUT "${PNG}")
+    endif()
+    if("${PNG}" IS_NEWER_THAN "${OUT}")
         execute_process(
-            COMMAND "${GFX}" "${PNG}" "${BPP4}"
+            COMMAND "${GFX}" "${PNG}" "${OUT}"
             WORKING_DIRECTORY "${SA1_DIR}"
             RESULT_VARIABLE RC
         )
@@ -84,7 +89,7 @@ foreach(PNG ${PNG_FILES})
 endforeach()
 
 # ── Step 4: Convert entity .csv → .bin → .bin.rl ──────────────────────────
-file(GLOB_RECURSE CSV_FILES "${SA1_DIR}/data/maps/*/entities/*.csv")
+file(GLOB_RECURSE CSV_FILES "${SA1_DIR}/data/maps/*/*/entities/*.csv")
 foreach(CSV ${CSV_FILES})
     get_filename_component(CSV_NAME "${CSV}" NAME_WE)
     string(REGEX REPLACE "\\.csv$" ".bin" BIN "${CSV}")
