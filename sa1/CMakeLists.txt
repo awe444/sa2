@@ -10,30 +10,51 @@ set(SA2_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." CACHE PATH "Path to the SA2 root d
 # ── Host tool: preproc ───────────────────────────────────────────────────────
 # The preproc tool converts INCBIN_* macros into C array initialisers by
 # reading binary asset files at build time.  It must run on the *host*, so
-# when cross-compiling (e.g. for Android) we allow the caller to supply a
-# pre-built binary via -DPREPROC_EXECUTABLE=<path>.
+# when cross-compiling (e.g. for Android) we build it with the host C++
+# compiler, or the caller may supply a pre-built binary via
+# -DPREPROC_EXECUTABLE=<path>.
 
 set(PREPROC_TOOL_DIR "${SA2_ROOT}/tools/preproc")
 
+set(PREPROC_SRCS
+    ${PREPROC_TOOL_DIR}/asm_file.cpp
+    ${PREPROC_TOOL_DIR}/c_file.cpp
+    ${PREPROC_TOOL_DIR}/charmap.cpp
+    ${PREPROC_TOOL_DIR}/preproc.cpp
+    ${PREPROC_TOOL_DIR}/string_parser.cpp
+    ${PREPROC_TOOL_DIR}/utf8.cpp
+    ${PREPROC_TOOL_DIR}/ext/gbagfx/jasc_pal.cpp
+)
+
 if(PREPROC_EXECUTABLE)
     set(PREPROC "${PREPROC_EXECUTABLE}")
+    set(PREPROC_DEP "")
     message(STATUS "Using supplied preproc: ${PREPROC}")
-else()
-    # Build preproc from source for the host (only works in non-cross builds)
-    set(PREPROC_SRCS
-        ${PREPROC_TOOL_DIR}/asm_file.cpp
-        ${PREPROC_TOOL_DIR}/c_file.cpp
-        ${PREPROC_TOOL_DIR}/charmap.cpp
-        ${PREPROC_TOOL_DIR}/preproc.cpp
-        ${PREPROC_TOOL_DIR}/string_parser.cpp
-        ${PREPROC_TOOL_DIR}/utf8.cpp
-        ${PREPROC_TOOL_DIR}/ext/gbagfx/jasc_pal.cpp
+elseif(CMAKE_CROSSCOMPILING)
+    # preproc must run on the host during the build.  When cross-compiling
+    # (e.g. for Android) we cannot use the target toolchain, so compile it
+    # directly with the host C++ compiler.
+    find_program(HOST_CXX NAMES c++ g++ clang++ REQUIRED)
+    set(PREPROC_HOST_BIN "${CMAKE_CURRENT_BINARY_DIR}/preproc_host")
+    add_custom_command(
+        OUTPUT "${PREPROC_HOST_BIN}"
+        COMMAND "${HOST_CXX}" -std=c++11 -O2
+            "-I${PREPROC_TOOL_DIR}/ext/gbagfx"
+            ${PREPROC_SRCS}
+            -o "${PREPROC_HOST_BIN}"
+        DEPENDS ${PREPROC_SRCS}
+        COMMENT "Building host preproc tool"
+        VERBATIM
     )
-
+    add_custom_target(preproc_host DEPENDS "${PREPROC_HOST_BIN}")
+    set(PREPROC "${PREPROC_HOST_BIN}")
+    set(PREPROC_DEP "${PREPROC_HOST_BIN}")
+else()
     add_executable(preproc ${PREPROC_SRCS})
     target_include_directories(preproc PRIVATE ${PREPROC_TOOL_DIR}/ext/gbagfx)
     target_compile_features(preproc PRIVATE cxx_std_11)
     set(PREPROC "$<TARGET_FILE:preproc>")
+    set(PREPROC_DEP preproc)
 endif()
 
 # ── preproc helper function ──────────────────────────────────────────────────
@@ -84,7 +105,7 @@ function(sa1_preprocess OUTPUT_VAR)
                 -DPP_OUTPUT=${PP_C}
                 -DWORK_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                 -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_preproc.cmake"
-            DEPENDS "${SRC}"
+            DEPENDS "${SRC}" ${PREPROC_DEP}
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             COMMENT "preproc ${REL}"
             VERBATIM
