@@ -46,7 +46,6 @@ elseif(CMAKE_CROSSCOMPILING)
         COMMENT "Building host preproc tool"
         VERBATIM
     )
-    add_custom_target(preproc_host DEPENDS "${PREPROC_HOST_BIN}")
     set(PREPROC "${PREPROC_HOST_BIN}")
     set(PREPROC_DEP "${PREPROC_HOST_BIN}")
 else()
