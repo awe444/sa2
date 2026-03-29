@@ -6,7 +6,7 @@
   // Pointer tables emitted with mPtr (.quad) produce R_AARCH64_ABS64
   // relocations which the linker cannot place in read-only .rodata.
   // .data.rel.ro is writable during relocation, then made read-only.
-  .section .data.rel.ro,"aw",@progbits
+  .section .data.rel.ro,"aw",%progbits
 #else
   .section .rodata
 #endif
