@@ -185,6 +185,7 @@ endif
 SA2_C_FILES := \
 	src/lib/m4a/m4a.c \
 	src/lib/m4a/m4a_tables.c \
+	src/lib/agb_flash/agb_flash.c \
 	src/lib/agb_flash/agb_flash_at_512k.c \
 	src/lib/agb_flash/agb_flash_le_512k.c \
 	src/lib/agb_flash/agb_flash_mx_512k.c \
@@ -395,9 +396,8 @@ ifeq ($(PLATFORM),gba)
 $(OBJ_DIR)/sa2/src/lib/m4a/m4a.o: CC1 := $(CC1_OLD)
 $(OBJ_DIR)/sa2/src/lib/m4a/m4a.o: PROLOGUE_FIX :=
 # Use `-O1` for agb_flash libs, as these were also prebuilt
-$(C_BUILDDIR)/lib/agb_flash/agb_flash.o:  CC1FLAGS := -O1 -mthumb-interwork -Werror
+$(OBJ_DIR)/sa2/src/lib/agb_flash/agb_flash.o:  CC1FLAGS := -O1 -mthumb-interwork -Werror
 $(OBJ_DIR)/sa2/src/lib/agb_flash/agb_flash%.o: CC1FLAGS := -O1 -mthumb-interwork -Werror
-$(C_BUILDDIR)/lib/agb_flash/agb_flash%.o: CC1FLAGS := -O1 -mthumb-interwork -Werror
 endif
 
 #### Main Targets ####
