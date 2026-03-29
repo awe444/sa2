@@ -305,6 +305,14 @@ set(SA1_ALL_ASM_SRCS ${SA1_DATA_ASM_SRCS} ${SA1_SONG_ASM_SRCS} ${SA1_MID_ASM_SRC
 # the values (KEY=0/1) never contain pipes.
 string(REPLACE ";" "|" _asm_defs "${SA1_DEFINITIONS}")
 
+# When building a shared library (Android), the assembly .o files must be
+# position-independent.  CMake adds -fPIC automatically for C targets but
+# not for objects produced by custom commands, so we pass it explicitly.
+set(_asm_cc_flags "${CMAKE_C_FLAGS}")
+if(ANDROID)
+    string(APPEND _asm_cc_flags " -fPIC")
+endif()
+
 set(ASM_OBJS "")
 foreach(ASM_SRC ${SA1_ALL_ASM_SRCS})
     file(RELATIVE_PATH REL "${CMAKE_CURRENT_SOURCE_DIR}" "${ASM_SRC}")
@@ -334,7 +342,7 @@ foreach(ASM_SRC ${SA1_ALL_ASM_SRCS})
             -DCC=${CMAKE_C_COMPILER}
             -DCC_TARGET=${CMAKE_C_COMPILER_TARGET}
             -DCC_SYSROOT=${CMAKE_SYSROOT}
-            "-DCC_FLAGS=${CMAKE_C_FLAGS}"
+            "-DCC_FLAGS=${_asm_cc_flags}"
             "-DDEFS=${_asm_defs}"
             -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_asm.cmake"
         DEPENDS ${_src_dep} ${PREPROC_DEP} "${ASSET_STAMP}"
