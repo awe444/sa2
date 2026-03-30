@@ -203,6 +203,7 @@ list(TRANSFORM SA1_PLATFORM_SRCS PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
 set(SA2_SHARED_SRCS
     src/lib/m4a/m4a.c
     src/lib/m4a/m4a_tables.c
+    src/lib/agb_flash/agb_flash.c
     src/lib/agb_flash/agb_flash_at_512k.c
     src/lib/agb_flash/agb_flash_le_512k.c
     src/lib/agb_flash/agb_flash_mx_512k.c

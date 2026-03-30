@@ -245,6 +245,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Texture could not be created! SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
+    SDL_SetTextureBlendMode(sdlTexture, SDL_BLENDMODE_NONE);
 
 #if ENABLE_VRAM_VIEW
     vramTexture = SDL_CreateTexture(vramRenderer, SDL_PIXELFORMAT_ABGR1555, SDL_TEXTUREACCESS_STREAMING, vramWindowWidth, vramWindowHeight);
@@ -277,7 +278,9 @@ int main(int argc, char **argv)
 #if ENABLE_VRAM_VIEW
     VramDraw(vramTexture);
 #endif
+    SDL_Log("Calling AgbMain");
     AgbMain();
+    SDL_Log("AgbMain returned");
 
     return 0;
 }
@@ -289,6 +292,12 @@ bool newFrameRequested = FALSE;
 // the loop via a return
 void VBlankIntrWait(void)
 {
+    static int vblankCallCount = 0;
+    if (vblankCallCount < 5) {
+        SDL_Log("VBlankIntrWait called (count=%d)", vblankCallCount);
+        vblankCallCount++;
+    }
+
     // ((struct MultiSioPacket *)gMultiSioArea.nextSendBufp)
 #define HANDLE_VBLANK_INTRS()                                                                                                              \
     ({                                                                                                                                     \
@@ -367,6 +376,13 @@ void VBlankIntrWait(void)
             videoScaleChanged = false;
         }
 
+        {
+            static int presentCount = 0;
+            if (presentCount < 5) {
+                SDL_Log("SDL_RenderPresent (count=%d)", presentCount);
+                presentCount++;
+            }
+        }
         SDL_RenderPresent(sdlRenderer);
 #if ENABLE_VRAM_VIEW
         SDL_RenderPresent(vramRenderer);
@@ -1948,8 +1964,19 @@ void VramDraw(SDL_Texture *texture)
 
 void VDraw(SDL_Texture *texture)
 {
+    static int vdrawCount = 0;
     memset(gameImage, 0, sizeof(gameImage));
     DrawFrame(gameImage);
+    if (vdrawCount < 5) {
+        // Log a sample of pixel data to verify rendering is producing output
+        int nonZeroPixels = 0;
+        for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
+            if (gameImage[i] != 0) nonZeroPixels++;
+        }
+        SDL_Log("VDraw frame %d: nonZeroPixels=%d dispCnt=0x%04x pltt[0]=0x%04x",
+                vdrawCount, nonZeroPixels, REG_DISPCNT, PLTT[0]);
+        vdrawCount++;
+    }
     SDL_UpdateTexture(texture, NULL, gameImage, DISPLAY_WIDTH * sizeof(Uint16));
     REG_VCOUNT = DISPLAY_HEIGHT + 1; // prep for being in VBlank period
 }
