@@ -1964,11 +1964,15 @@ void VDraw(SDL_Texture *texture)
 #ifdef __ANDROID__
     // Convert ABGR1555 (GBA native) to ARGB8888 for Android GPU compatibility.
     // Many mobile OpenGL ES drivers don't natively support 16-bit ABGR1555 textures.
+    // Replicate upper bits into lower bits for accurate 5-bit to 8-bit expansion.
     for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
         uint16_t px = gameImage[i];
-        uint8_t r = (px & 0x001F) << 3;
-        uint8_t g = ((px >> 5) & 0x001F) << 3;
-        uint8_t b = ((px >> 10) & 0x001F) << 3;
+        uint8_t r5 = (px & 0x001F);
+        uint8_t g5 = ((px >> 5) & 0x001F);
+        uint8_t b5 = ((px >> 10) & 0x001F);
+        uint8_t r = (r5 << 3) | (r5 >> 2);
+        uint8_t g = (g5 << 3) | (g5 >> 2);
+        uint8_t b = (b5 << 3) | (b5 >> 2);
         gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
     }
     SDL_UpdateTexture(texture, NULL, gameImage32, DISPLAY_WIDTH * sizeof(uint32_t));
