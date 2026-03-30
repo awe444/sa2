@@ -146,7 +146,20 @@ int main(int argc, char **argv)
     freopen("CON", "w", stdout);
 #endif
 
+#ifdef __ANDROID__
+    {
+        const char *internalPath = SDL_AndroidGetInternalStoragePath();
+        if (internalPath) {
+            char savePath[512];
+            snprintf(savePath, sizeof(savePath), "%s/sa1.sav", internalPath);
+            ReadSaveFile(savePath);
+        } else {
+            ReadSaveFile("sa1.sav");
+        }
+    }
+#else
     ReadSaveFile("sa1.sav");
+#endif
 
     // Prevent the multiplayer screen from being drawn ( see core.c:EngineInit() )
     REG_RCNT = 0x8000;
@@ -379,6 +392,13 @@ static void ReadSaveFile(char *path)
     sSaveFile = fopen(path, "r+b");
     if (sSaveFile == NULL) {
         sSaveFile = fopen(path, "w+b");
+    }
+
+    if (sSaveFile == NULL) {
+        for (int i = 0; i < sizeof(FLASH_BASE); i++) {
+            FLASH_BASE[i] = 0xFF;
+        }
+        return;
     }
 
     fseek(sSaveFile, 0, SEEK_END);
