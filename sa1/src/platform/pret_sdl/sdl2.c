@@ -50,6 +50,9 @@ extern uint8_t VRAM[VRAM_SIZE];
 extern uint8_t OAM[OAM_SIZE];
 extern uint8_t FLASH_BASE[FLASH_ROM_SIZE_1M * SECTORS_PER_BANK];
 ALIGNED(256) uint16_t gameImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+#ifdef __ANDROID__
+static uint32_t gameImage32[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+#endif
 #if ENABLE_VRAM_VIEW
 #define VRAM_VIEW_WIDTH  (32 * TILE_WIDTH)
 #define VRAM_VIEW_HEIGHT (((VRAM_SIZE / TILE_SIZE_4BPP) / 32) * TILE_WIDTH)
@@ -173,7 +176,7 @@ int main(int argc, char **argv)
     }
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0) {
-        fprintf(stderr, "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("SDL could not initialize! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 
@@ -196,7 +199,7 @@ int main(int argc, char **argv)
     sdlWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DISPLAY_WIDTH * videoScale,
                                  DISPLAY_HEIGHT * videoScale, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (sdlWindow == NULL) {
-        fprintf(stderr, "Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 
@@ -211,21 +214,21 @@ int main(int argc, char **argv)
     vramWindow = SDL_CreateWindow("VRAM View", vramWindowX, SDL_WINDOWPOS_CENTERED, vramWindowWidth, vramWindowHeight,
                                   SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (vramWindow == NULL) {
-        fprintf(stderr, "VRAM Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("VRAM Window could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 #endif
 
     sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
     if (sdlRenderer == NULL) {
-        fprintf(stderr, "Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("Renderer could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 
 #if ENABLE_VRAM_VIEW
     vramRenderer = SDL_CreateRenderer(vramWindow, -1, SDL_RENDERER_PRESENTVSYNC);
     if (vramRenderer == NULL) {
-        fprintf(stderr, "VRAM Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("VRAM Renderer could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 #endif
@@ -240,9 +243,13 @@ int main(int argc, char **argv)
     SDL_RenderSetLogicalSize(vramRenderer, vramWindowWidth, vramWindowHeight);
 #endif
 
+#ifdef __ANDROID__
+    sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+#else
     sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ABGR1555, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+#endif
     if (sdlTexture == NULL) {
-        fprintf(stderr, "Texture could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("Texture could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
     SDL_SetTextureBlendMode(sdlTexture, SDL_BLENDMODE_NONE);
@@ -250,7 +257,7 @@ int main(int argc, char **argv)
 #if ENABLE_VRAM_VIEW
     vramTexture = SDL_CreateTexture(vramRenderer, SDL_PIXELFORMAT_ABGR1555, SDL_TEXTUREACCESS_STREAMING, vramWindowWidth, vramWindowHeight);
     if (vramTexture == NULL) {
-        fprintf(stderr, "Texture could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("Texture could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 #endif
@@ -278,9 +285,10 @@ int main(int argc, char **argv)
 #if ENABLE_VRAM_VIEW
     VramDraw(vramTexture);
 #endif
-    SDL_Log("Calling AgbMain");
+    // Initialize timing so first VBlankIntrWait doesn't get a huge delta
+    lastGameTime = (double)SDL_GetPerformanceCounter();
+
     AgbMain();
-    SDL_Log("AgbMain returned");
 
     return 0;
 }
@@ -292,12 +300,6 @@ bool newFrameRequested = FALSE;
 // the loop via a return
 void VBlankIntrWait(void)
 {
-    static int vblankCallCount = 0;
-    if (vblankCallCount < 5) {
-        SDL_Log("VBlankIntrWait called (count=%d)", vblankCallCount);
-        vblankCallCount++;
-    }
-
     // ((struct MultiSioPacket *)gMultiSioArea.nextSendBufp)
 #define HANDLE_VBLANK_INTRS()                                                                                                              \
     ({                                                                                                                                     \
@@ -376,13 +378,6 @@ void VBlankIntrWait(void)
             videoScaleChanged = false;
         }
 
-        {
-            static int presentCount = 0;
-            if (presentCount < 5) {
-                SDL_Log("SDL_RenderPresent (count=%d)", presentCount);
-                presentCount++;
-            }
-        }
         SDL_RenderPresent(sdlRenderer);
 #if ENABLE_VRAM_VIEW
         SDL_RenderPresent(vramRenderer);
@@ -1964,20 +1959,22 @@ void VramDraw(SDL_Texture *texture)
 
 void VDraw(SDL_Texture *texture)
 {
-    static int vdrawCount = 0;
     memset(gameImage, 0, sizeof(gameImage));
     DrawFrame(gameImage);
-    if (vdrawCount < 5) {
-        // Log a sample of pixel data to verify rendering is producing output
-        int nonZeroPixels = 0;
-        for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
-            if (gameImage[i] != 0) nonZeroPixels++;
-        }
-        SDL_Log("VDraw frame %d: nonZeroPixels=%d dispCnt=0x%04x pltt[0]=0x%04x",
-                vdrawCount, nonZeroPixels, REG_DISPCNT, PLTT[0]);
-        vdrawCount++;
+#ifdef __ANDROID__
+    // Convert ABGR1555 (GBA native) to ARGB8888 for Android GPU compatibility.
+    // Many mobile OpenGL ES drivers don't natively support 16-bit ABGR1555 textures.
+    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
+        uint16_t px = gameImage[i];
+        uint8_t r = (px & 0x001F) << 3;
+        uint8_t g = ((px >> 5) & 0x001F) << 3;
+        uint8_t b = ((px >> 10) & 0x001F) << 3;
+        gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
     }
+    SDL_UpdateTexture(texture, NULL, gameImage32, DISPLAY_WIDTH * sizeof(uint32_t));
+#else
     SDL_UpdateTexture(texture, NULL, gameImage, DISPLAY_WIDTH * sizeof(Uint16));
+#endif
     REG_VCOUNT = DISPLAY_HEIGHT + 1; // prep for being in VBlank period
 }
 
