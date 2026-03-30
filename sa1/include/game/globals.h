@@ -131,9 +131,9 @@ extern u32 gCourseTime;
 extern u8 gSpecialRingCount;
 
 // TODO: Types not checked yet!
-extern s32 gUnknown_030054E0;
+extern s32 gWorldSpeedY;
 #if (GAME == GAME_SA2)
-extern s32 gUnknown_030054FC;
+extern s32 gWorldSpeedX;
 #endif
 
 extern u16 gBossCameraClampYLower;
@@ -162,7 +162,6 @@ extern u8 gDifficultyLevel;
 extern s8 gTrappedAnimalVariant;
 
 extern u8 gBossIndex; // TODO: Rename to gLastCheckpointIndex? (SA1 AND SA2!)
-extern u8 gUnknown_030054F8;
 
 // Incremented by 1 every frame if the game is not paused.
 // Starts before the stage-timer that is used for scores does.
@@ -175,7 +174,7 @@ extern u8 gRoomEventQueueWritePos;
 
 extern u8 gBossRingsRespawnCount;
 extern bool8 gBossRingsShallRespawn;
-extern bool8 gUnknown_030055BC;
+extern bool8 gBoostEffectTasksCreated;
 
 extern struct Task *gMultiplayerPlayerTasks[4];
 extern s8 gMultiplayerCharacters[4];
@@ -200,7 +199,7 @@ extern u32 gMultiplayerPseudoRandom;
 
 extern s32 gLevelScore;
 extern u8 gNumLives;
-extern u8 SA2_LABEL(gUnknown_030054B0);
+extern u8 gFinalBossActive;
 
 extern HomingTarget gHomingTarget;
 
@@ -216,7 +215,7 @@ extern RoomEvent gRoomEventQueue[16];
 
 extern CheeseTarget gCheeseTarget;
 
-extern u8 gUnknown_030055D0[4];
+extern u8 gFrameInputsBuf[4];
 
 #if 0
 extern u8 gNewInputCountersIndex;
@@ -231,11 +230,9 @@ extern u8 gNewInputCountersIndex;
 extern struct InputCounters gNewInputCounters[32];
 #endif
 
-extern u8 gUnknown_030055D8;
+extern u8 gFrameInputsBufIndex;
 
-#if (GAME == GAME_SA1)
-struct Task *gChaoTasks[3];
-#endif
+extern struct Task *gChaoTasks[3];
 
 #if (GAME == GAME_SA1) && !defined(BUG_FIX)
 // NOTE: gNumLives is u8, so without the bounds-check,

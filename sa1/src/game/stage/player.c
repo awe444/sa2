@@ -231,8 +231,8 @@ void SA2_LABEL(sub_80213C0)(u32 UNUSED characterId, u32 UNUSED levelId, Player *
 
 #if (GAME == GAME_SA2)
     gStageGoalX = 0;
-    gUnknown_030054FC = 0;
-    gUnknown_030054E0 = 0;
+    gWorldSpeedX = 0;
+    gWorldSpeedY = 0;
 
     InitNewInputCounters();
 #endif
@@ -3930,8 +3930,8 @@ void Task_PlayerMain(void)
     Player_ApplyBoostPhysics(p);
     Player_HandleWalkAnim(p);
 
-    gUnknown_030054FC = 0;
-    gUnknown_030054E0 = 0;
+    gWorldSpeedX = 0;
+    gWorldSpeedY = 0;
     sub_802460C(p);
     sub_800DF8C(p);
     sub_8023878(p);

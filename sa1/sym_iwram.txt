@@ -20,7 +20,7 @@ sa2/src/multi_sio.o(.data);
 sa2/src/sio32_multi_load.o(COMMON);
 
 . = 0x00004FE0;
-src/game/globals.o(.data);
+sa2/src/game/globals.o(.data);
 
 . = 0x00005154; 
 src/game/special_stage/main.o(.data);

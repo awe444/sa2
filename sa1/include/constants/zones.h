@@ -83,7 +83,7 @@
 
 #define CHAOS_EMERALDS_COMPLETED CHAOS_EMERALD(7)
 
-#define IS_BOSS_STAGE(lvl) ((ACT_INDEX(lvl) == ACT_BOSS) || (IS_FINAL_STAGE(lvl) && (gUnknown_030054B0 == 0)) || (IS_EXTRA_STAGE(lvl)))
+#define IS_BOSS_STAGE(lvl) ((ACT_INDEX(lvl) == ACT_BOSS) || (IS_FINAL_STAGE(lvl) && (gFinalBossActive == 0)) || (IS_EXTRA_STAGE(lvl)))
 
 #define IS_FINAL_STAGE(lvl)          ((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_X_ZONE))
 #define IS_EXTRA_STAGE(lvl)          ((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_THE_MOON))

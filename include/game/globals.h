@@ -220,6 +220,8 @@ extern struct InputCounters gNewInputCounters[32];
 
 extern u8 gFrameInputsBufIndex;
 
+extern struct Task *gChaoTasks[3];
+
 #define MPC_FLAG_SHIFT_REGISTERED 0
 #define MPC_FLAG_SHIFT_B_TEAM     4
 

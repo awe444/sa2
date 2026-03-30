@@ -157,7 +157,7 @@ void CreateGameStage(void)
     gActiveCollectRingEffectCount = 0;
 #if (GAME == GAME_SA2)
     gSpecialRingCount = 0;
-    gUnknown_030054B0 = 0;
+    gFinalBossActive = 0;
 #endif
 
     gStageFlags |= (STAGE_FLAG__DISABLE_PAUSE_MENU | STAGE_FLAG__ACT_START);
@@ -166,7 +166,7 @@ void CreateGameStage(void)
 #if (GAME == GAME_SA2)
     gBossRingsShallRespawn = FALSE;
     gBossRingsRespawnCount = BOSS_RINGS_DEFAULT_RESPAWN_COUNT;
-    gUnknown_030055BC = 0;
+    gBoostEffectTasksCreated = 0;
 #endif
 
     SA2_LABEL(sub_801F044)();
@@ -762,7 +762,7 @@ void ApplyGameStageSettings(void)
 {
     gLevelScore = 0;
     gNumLives = 3;
-    SA2_LABEL(gUnknown_030054B0) = gCurrentLevel;
+    gFinalBossActive = gCurrentLevel;
 
     if (IS_MULTI_PLAYER) {
         gNumLives = 1;
