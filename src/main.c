@@ -1,22 +1,26 @@
 #include "core.h"
 #include "game/game.h"
 
-#if !PLATFORM_GBA
+#if PLATFORM_SDL
 #include <SDL.h>
+#define LOG SDL_Log
+#elif !PLATFORM_GBA
+#include <stdio.h>
+#define LOG printf
 #endif
 
 void AgbMain(void)
 {
 #if !PLATFORM_GBA
-    SDL_Log("AgbMain: calling EngineInit");
+    LOG("AgbMain: calling EngineInit\n");
 #endif
     EngineInit();
 #if !PLATFORM_GBA
-    SDL_Log("AgbMain: calling GameInit");
+    LOG("AgbMain: calling GameInit\n");
 #endif
     GameInit();
 #if !PLATFORM_GBA
-    SDL_Log("AgbMain: calling EngineMainLoop");
+    LOG("AgbMain: calling EngineMainLoop\n");
 #endif
     EngineMainLoop();
 }
