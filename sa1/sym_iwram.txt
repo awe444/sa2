@@ -7,7 +7,7 @@ sa2/src/multi_boot.o(.bss);
 src/game/stage/terrain_collision.o(.bss);
 
 . = 0x00000424;
-src/lib/agb_flash/agb_flash.o(.bss);
+sa2/src/lib/agb_flash/agb_flash.o(.bss);
 
 . = 0x00000440; 
 *libgcc.a:(.bss);
@@ -77,8 +77,8 @@ src/game/enemies/boss_xtra_super_egg_robot.o(.data);
 . = 0x00006240; 
 src/game/stage/ui_rendering.o(.data);
 
-. = 0x00006408;
-src/lib/agb_flash/agb_flash.o(.data);
+. = 0x00006414;
+sa2/src/lib/agb_flash/agb_flash.o(.data);
 
 iwram_end = .;
 
