@@ -160,7 +160,7 @@ NONMATCH("asm/non_matching/game/interactables/Task_SegaSonicLetter.inc", void Ta
     i = 0;
     do {
         if (sl == 1) {
-            sub_80096B0(s, worldX, worldY, &PLAYER(i));
+            Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
         }
     } while (++i < gNumSingleplayerCharacters);
 

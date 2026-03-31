@@ -101,7 +101,7 @@ void Task_Flipper_Horizontal()
                     || (PLAYER(i).charState == CHARSTATE_73) || (PLAYER(i).charState == CHARSTATE_74)
                     || (PLAYER(i).charState == CHARSTATE_75))) {
                 if (PLAYER(i).charState != CHARSTATE_73) {
-                    sub_80096B0(s, worldX, worldY, &PLAYER(i));
+                    Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
 
                     if ((PLAYER(i).moveState & 8) && (PLAYER(i).stoodObj == s)) {
                         Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
@@ -360,7 +360,7 @@ void Task_Flipper_Vertical(void)
     do {
         if (!(PLAYER(i).moveState & MOVESTATE_DEAD)) {
             if ((PLAYER(i).moveState & MOVESTATE_IN_AIR) || GetBit(flipper->unk41, i)) {
-                if (sub_80096B0(s, worldX, worldY, &PLAYER(i)) & COLL_FLAG_8) {
+                if (Coll_Player_Platform(s, worldX, worldY, &PLAYER(i)) & COLL_FLAG_8) {
                     SetBit(flipper->unk41, i);
 
                     if (!Coll_Player_Entity_Intersection(s, worldX, worldY, &PLAYER(i))) {

@@ -155,7 +155,7 @@ _080964DC:
 	mov r1, sl
 	adds r2, r7, #0
 	adds r3, r4, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 	b _08096500
 _080964EA:
 	adds r0, r4, #0

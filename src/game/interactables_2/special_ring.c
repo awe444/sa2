@@ -5,7 +5,7 @@
 #include "game/player_callbacks.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
-#include "game/cheese.h"
+#include "game/sa2/cheese.h"
 #include "task.h"
 #include "core.h"
 

@@ -106,7 +106,7 @@ _080226F2:
 	adds r1, r6, #0
 	adds r2, r5, #0
 	adds r3, r4, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 	movs r1, #8
 	ands r1, r0
 	cmp r1, #0

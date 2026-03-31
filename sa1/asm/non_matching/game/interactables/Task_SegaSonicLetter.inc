@@ -257,7 +257,7 @@ _0807EDC8:
 	ldr r3, _0807EE1C @ =gPartner
 _0807EDE2:
 	adds r0, r7, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 _0807EDE8:
 	adds r4, #1
 	ldr r0, _0807EE18 @ =gNumSingleplayerCharacters

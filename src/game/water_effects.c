@@ -4,7 +4,7 @@
 #include "malloc_vram.h"
 #include "task.h"
 
-#include "game/boost_effect.h"
+#include "game/sa2/boost_effect.h"
 #include "game/globals.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"

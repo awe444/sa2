@@ -11,7 +11,7 @@
 
 #if (GAME == GAME_SA2)
 #include "game/sa2/bosses/common.h"
-#include "game/title_screen.h"
+#include "game/sa2/title_screen.h"
 #endif
 
 #if PORTABLE

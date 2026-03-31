@@ -231,7 +231,7 @@ _0801E974:
 	asrs r2, r2, #0x10
 	ldr r3, _0801E9F8 @ =gPartner
 	adds r0, r4, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 _0801E998:
 	ldr r0, [r5, #0x10]
 	movs r1, #8
@@ -260,7 +260,7 @@ _0801E9B6:
 	asrs r2, r2, #0x10
 	ldr r3, _0801E9F0 @ =gPlayer
 	adds r0, r4, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 	movs r1, #0x80
 	lsls r1, r1, #9
 	ands r1, r0

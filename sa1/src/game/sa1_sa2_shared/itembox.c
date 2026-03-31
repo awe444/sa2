@@ -195,14 +195,14 @@ NONMATCH("asm/non_matching/game/sa1_sa2_shared/item_box__Task_ItemBoxMain.inc", 
             // _0801E974
 
             if (gNumSingleplayerCharacters > 1) {
-                sub_80096B0(s, worldX, worldY + itembox->iconOffset, &gPartner);
+                Coll_Player_Platform(s, worldX, worldY + itembox->iconOffset, &gPartner);
             }
             // _0801E998
 
             if (((gPlayer.moveState & MOVESTATE_STOOD_ON_OBJ) && (gPlayer.stoodObj == s))
                 || (gPlayer.spriteInfoBody->s.hitboxes[0].index == HITBOX_STATE_INACTIVE)) {
                 // _0801E9B6
-                res = sub_80096B0(s, worldX, worldY + itembox->iconOffset, &gPlayer);
+                res = Coll_Player_Platform(s, worldX, worldY + itembox->iconOffset, &gPlayer);
             } else {
                 // _0801E9FC
                 res = Coll_Player_Itembox(s, worldX, worldY + itembox->iconOffset, &gPlayer);

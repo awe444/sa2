@@ -254,14 +254,14 @@ void Task_PanelGate_Horizontal2(void)
                 u32 res = Coll_Player_Entity_Intersection(s, worldX, worldY + 5, &PLAYER(i));
                 if (res) {
                     if (PLAYER(i).qSpeedAirY > Q(0)) {
-                        sub_80096B0(s, worldX, worldY, &PLAYER(i));
+                        Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
                     }
                 }
             } else {
                 u32 res = Coll_Player_Entity_Intersection(s, worldX, worldY - 5, &PLAYER(i));
                 if (res) {
                     if (PLAYER(i).qSpeedAirY < Q(0)) {
-                        sub_80096B0(s, worldX, worldY, &PLAYER(i));
+                        Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
                     }
                 }
             }
@@ -367,11 +367,11 @@ bool32 sub_8081F50(PanelGate *gate, Sprite *s, s32 worldX, s32 worldY)
 
                     result = TRUE;
                 } else {
-                    sub_80096B0(s, worldX, worldY, &PLAYER(i));
+                    Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
                 }
 
             } else {
-                sub_80096B0(s, worldX, worldY, &PLAYER(i));
+                Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
             }
         } else {
             if ((worldX <= I(PLAYER(i).qWorldX)) && (worldX + 32 >= I(PLAYER(i).qWorldX)) && (worldY - 28 <= I(PLAYER(i).qWorldY))
@@ -387,11 +387,11 @@ bool32 sub_8081F50(PanelGate *gate, Sprite *s, s32 worldX, s32 worldY)
 
                     result = TRUE;
                 } else {
-                    sub_80096B0(s, worldX, worldY, &PLAYER(i));
+                    Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
                 }
 
             } else {
-                sub_80096B0(s, worldX, worldY, &PLAYER(i));
+                Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
             }
         }
     } while (++i < gNumSingleplayerCharacters);

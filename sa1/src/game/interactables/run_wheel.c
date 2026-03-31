@@ -124,9 +124,9 @@ bool32 sub_808EA80(RunWheel *wheel, Sprite *s, s32 worldX, s32 worldY, Player *p
             worldX32 = (CamCoord)(worldX + Div(COS(((wheel->unk4E * 0x80) & ONE_CYCLE)), 0x1770) * Div(wheel->qUnk40, 0xC80));
             worldY32 = (CamCoord)(worldY + Div(SIN(((wheel->unk4E * 0x80) & ONE_CYCLE)), 0x1770) * Div(wheel->qUnk40, 0xC80));
 
-            sub_80096B0(s, worldX32, worldY32, p);
+            Coll_Player_Platform(s, worldX32, worldY32, p);
         } else {
-            if (sub_80096B0(s, s->x + gCamera.x, s->y + gCamera.y, p) & COLL_FLAG_8) {
+            if (Coll_Player_Platform(s, s->x + gCamera.x, s->y + gCamera.y, p) & COLL_FLAG_8) {
                 p->moveState |= MOVESTATE_STOOD_ON_OBJ;
                 p->stoodObj = s;
                 wheel->unk48 = 0;
@@ -204,8 +204,8 @@ NONMATCH("asm/non_matching/game/interactables/run_wheel__sub_808EC84.inc",
             worldX32 = (CamCoord)(worldX + Div(COS(((wheel->unk4E * 0x80) & ONE_CYCLE)), 0x1770) * Div(wheel->qUnk40, 0xC80));
             worldY32 = (CamCoord)(worldY + Div(SIN(((wheel->unk4E * 0x80) & ONE_CYCLE)), 0x1770) * Div(wheel->qUnk40, 0xC80));
 
-            // u32 sub_80096B0(Sprite *, CamCoord x, CamCoord y, Player *)
-            sub_80096B0(s, worldX32, worldY32, p);
+            // u32 Coll_Player_Platform(Sprite *, CamCoord x, CamCoord y, Player *)
+            Coll_Player_Platform(s, worldX32, worldY32, p);
         } else if ((p->moveState & MOVESTATE_STOOD_ON_OBJ) && p->stoodObj == s) {
             p->qWorldY = Q(s->y + gCamera.y + s->hitboxes[0].b.top - p->spriteOffsetY);
 
@@ -234,7 +234,7 @@ NONMATCH("asm/non_matching/game/interactables/run_wheel__sub_808EC84.inc",
                     p->itemEffect &= ~PLAYER_ITEM_EFFECT__TELEPORT;
                 } else {
                     // 17a
-                    if (sub_80096B0(s, s->x + gCamera.x, s->y + gCamera.y, p) & COLL_FLAG_8) {
+                    if (Coll_Player_Platform(s, s->x + gCamera.x, s->y + gCamera.y, p) & COLL_FLAG_8) {
                         p->moveState |= MOVESTATE_STOOD_ON_OBJ;
                         p->stoodObj = s;
 

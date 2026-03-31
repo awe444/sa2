@@ -14,7 +14,7 @@
 
 #include "game/multiplayer/mp_player.h"
 
-#include "game/assets/compressed/entities.h"
+#include "game/sa2/assets/compressed/entities.h"
 
 #include "constants/animations.h"
 

@@ -8,7 +8,7 @@
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/player.h"
 
-#include "game/cheese.h"
+#include "game/sa2/cheese.h"
 #include "game/entity.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/stage/rings_scatter.h"

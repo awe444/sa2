@@ -9,7 +9,7 @@
 #include "game/sa2/save.h"
 #include "malloc_vram.h"
 #include "game/multiboot/connection.h"
-#include "game/title_screen.h"
+#include "game/sa2/title_screen.h"
 #include "game/sa2/ui/character_select.h"
 
 #include "constants/animations.h"

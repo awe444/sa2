@@ -9,15 +9,15 @@
 #include "game/sa1_sa2_shared/rings_manager.h"
 #include "game/sa2/save.h"
 #include "game/sa2/ui/game_over.h"
-#include "game/cheese.h"
+#include "game/sa2/cheese.h"
 #include "game/stage/player_controls.h"
 #include "game/stage/player_super_sonic.h"
-#include "game/race_progress.h"
+#include "game/sa2/race_progress.h"
 #include "game/stage/screen_shake.h"
 #include "game/stage/stage.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
-#include "game/time_attack/lobby.h"
+#include "game/sa2/time_attack/lobby.h"
 #if (GAME == GAME_SA1)
 #include "game/time_over.h"
 #endif

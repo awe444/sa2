@@ -105,7 +105,7 @@ NONMATCH("asm/non_matching/game/interactables/ice_block__Task_IceBlock.inc", voi
             if (!(p->moveState & MOVESTATE_DEAD)) {
                 bool32 r8 = 0;
                 if (p->charState == CHARSTATE_SPINATTACK) {
-                    u32 res = sub_80096B0(s, worldX, worldY, p);
+                    u32 res = Coll_Player_Platform(s, worldX, worldY, p);
 
                     if (p->character != CHARACTER_AMY) {
                         r8 = (-(res & COLL_FLAG_8)) >> 31;
@@ -160,7 +160,7 @@ NONMATCH("asm/non_matching/game/interactables/ice_block__Task_IceBlock.inc", voi
                 }
             }
 
-            sub_80096B0(s, worldX, worldY, p);
+            Coll_Player_Platform(s, worldX, worldY, p);
         } while (++i < gNumSingleplayerCharacters);
         // _08091A22
 

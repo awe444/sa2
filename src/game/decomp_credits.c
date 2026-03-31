@@ -6,8 +6,8 @@
 #include "lib/m4a/m4a.h"
 #include "game/game.h"
 #include "game/sa2/save.h"
-#include "game/options_screen.h"
-#include "game/title_screen.h"
+#include "game/sa2/options_screen.h"
+#include "game/sa2/title_screen.h"
 #include "game/sa2/gfx/debug_text_printer.h"
 
 #include "constants/animations.h"

@@ -10,7 +10,7 @@
 
 #include "data/sprite_data.h"
 #include "game/sa2/save.h"
-#include "game/title_screen.h"
+#include "game/sa2/title_screen.h"
 
 #include "game/sa2/gfx/screen_fade.h"
 #include "game/stage/tilemap_table.h"

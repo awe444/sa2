@@ -10,11 +10,11 @@
 
 #include "game/player_callbacks.h"
 #include "game/sa2/save.h"
-#include "game/cheese.h"
+#include "game/sa2/cheese.h"
 #include "game/sa2/bosses/boss_1.h"
 #include "game/sa2/bosses/common.h"
 #include "game/sa2/bosses/eggmobile_escape_sequence.h"
-#include "game/cutscenes/level_endings.h"
+#include "game/sa2/cutscenes/level_endings.h"
 #include "game/parameters/bosses.h"
 #include "game/sa2/gfx/boss_results_transition.h"
 #include "game/stage/terrain_collision.h"
@@ -23,7 +23,7 @@
 #include "game/sa2/ui/stage_results.h"
 #include "game/sa2/gfx/screen_fade.h"
 #include "game/stage/screen_shake.h"
-#include "game/time_attack/results.h"
+#include "game/sa2/time_attack/results.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

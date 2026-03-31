@@ -756,7 +756,7 @@ _08083D52:
 	ldr r3, _08083DDC @ =gPartner
 _08083D64:
 	ldr r0, [sp, #0x10]
-	bl sub_80096B0
+	bl Coll_Player_Platform
 _08083D6A_continue:
 	movs r3, #4
 	add sl, r3

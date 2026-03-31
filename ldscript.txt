@@ -44,8 +44,8 @@ SECTIONS
         /* game */
         src/game/sa2/input_buffer.o(.data);
         src/game/water_effects.o(.data);
-        src/game/cheese.o(.data);
-        src/game/boost_effect.o(.data);
+        src/game/sa2/cheese.o(.data);
+        src/game/sa2/boost_effect.o(.data);
         src/game/multiplayer/mp_player.o(.data);
         src/game/multiplayer/mp_attack_2_effect.o(.data);
         src/game/dummy_task.o(.data);
@@ -61,13 +61,13 @@ SECTIONS
         src/game/sa2/gfx/stage_ui.o(.data);
         src/game/sa2/gfx/debug_text_printer.o(.data);
         src/game/sa2/bosses/common.o(.data);
-        src/game/options_screen.o(.data);
+        src/game/sa2/options_screen.o(.data);
         src/game/sa2/special_stage/utils.o(.data);
         src/game/sa2/save.o(.data);
         src/game/multiboot/collect_rings/time_display.o(.data);
         src/game/math.o(.data);
         src/game/multiplayer/mp_attack_1_effect.o(.data);
-        src/game/bg_palette_effects.o(.data);
+        src/game/sa2/bg_palette_effects.o(.data);
 
         /* libs */
         . = ALIGN(16);
@@ -106,7 +106,7 @@ SECTIONS
         src/game/sa1_sa2_shared/unused_level_select.o(.text);
         src/game/sa1_sa2_shared/spot_light_beam_task.o(.text);
         src/game/sa1_sa2_shared/enemy_defeat_score.o(.text);
-        src/game/sa1_sa2_shared/demo_manager.o(.text);
+        src/game/demo_manager.o(.text);
         src/game/sa1_sa2_shared/unused_flash_task.o(.text);
         src/game/sa1_sa2_shared/simple_sprite_particle.o(.text);
         src/game/sa1_sa2_shared/spot_light.o(.text);
@@ -131,8 +131,8 @@ SECTIONS
 
         src/game/water_effects.o(.text);
         src/game/player_callbacks.o(.text);
-        src/game/cheese.o(.text);
-        src/game/boost_effect.o(.text);
+        src/game/sa2/cheese.o(.text);
+        src/game/sa2/boost_effect.o(.text);
         src/game/amy_attack_heart_effect.o(.text);
 
         src/game/multiplayer/mp_player.o(.text);
@@ -188,30 +188,30 @@ SECTIONS
         src/game/sa2/bosses/boss_8.o(.text);
         src/game/sa2/bosses/boss_9.o(.text);
 
-        src/game/enemies/projectiles.o(.text);
-        src/game/enemies/mon.o(.text);
-        src/game/enemies/gohla.o(.text);
-        src/game/enemies/kura_kura.o(.text);
-        src/game/enemies/kubinaga.o(.text);
-        src/game/enemies/buzzer.o(.text);
-        src/game/enemies/kiki.o(.text);
-        src/game/enemies/koura.o(.text);
-        src/game/enemies/bell.o(.text);
-        src/game/enemies/yado.o(.text);
-        src/game/enemies/piko_piko.o(.text);
-        src/game/enemies/circus.o(.text);
-        src/game/enemies/madillo.o(.text);
-        src/game/enemies/straw.o(.text);
-        src/game/enemies/hammerhead.o(.text);
-        src/game/enemies/spinner.o(.text);
-        src/game/enemies/mouse.o(.text);
-        src/game/enemies/pen.o(.text);
-        src/game/enemies/geji_geji.o(.text);
-        src/game/enemies/balloon.o(.text);
-        src/game/enemies/flickey.o(.text);
-        src/game/enemies/kyura.o(.text);
-        src/game/enemies/bullet_buzzer.o(.text);
-        src/game/enemies/star.o(.text);
+        src/game/sa2/enemies/projectiles.o(.text);
+        src/game/sa2/enemies/mon.o(.text);
+        src/game/sa2/enemies/gohla.o(.text);
+        src/game/sa2/enemies/kura_kura.o(.text);
+        src/game/sa2/enemies/kubinaga.o(.text);
+        src/game/sa2/enemies/buzzer.o(.text);
+        src/game/sa2/enemies/kiki.o(.text);
+        src/game/sa2/enemies/koura.o(.text);
+        src/game/sa2/enemies/bell.o(.text);
+        src/game/sa2/enemies/yado.o(.text);
+        src/game/sa2/enemies/piko_piko.o(.text);
+        src/game/sa2/enemies/circus.o(.text);
+        src/game/sa2/enemies/madillo.o(.text);
+        src/game/sa2/enemies/straw.o(.text);
+        src/game/sa2/enemies/hammerhead.o(.text);
+        src/game/sa2/enemies/spinner.o(.text);
+        src/game/sa2/enemies/mouse.o(.text);
+        src/game/sa2/enemies/pen.o(.text);
+        src/game/sa2/enemies/geji_geji.o(.text);
+        src/game/sa2/enemies/balloon.o(.text);
+        src/game/sa2/enemies/flickey.o(.text);
+        src/game/sa2/enemies/kyura.o(.text);
+        src/game/sa2/enemies/bullet_buzzer.o(.text);
+        src/game/sa2/enemies/star.o(.text);
         
         /* multiplayer_screens */
         src/game/multiplayer/mode_select.o(.text);
@@ -236,7 +236,7 @@ SECTIONS
         src/game/interactables_1/checkpoint.o(.text);
         src/game/interactables_1/windmill.o(.text);
 
-        src/game/options_screen.o(.text);
+        src/game/sa2/options_screen.o(.text);
 
         src/game/sa2/special_stage/main.o(.text);
         src/game/sa2/special_stage/utils.o(.text);
@@ -297,32 +297,32 @@ SECTIONS
         src/game/math.o(.text);
 
         src/game/mystery_itembox.o(.text);
-        src/game/heart_particles_effect.o(.text);
-        src/game/race_progress.o(.text);
+        src/game/sa2/heart_particles_effect.o(.text);
+        src/game/sa2/race_progress.o(.text);
         src/game/multiplayer/mp_attack_1_effect.o(.text);
         src/game/multiplayer_lobby.o(.text);
 
         /* time_attack_screens */
-        src/game/time_attack/mode_select.o(.text);
-        src/game/time_attack/lobby.o(.text);
-        src/game/time_attack/results.o(.text);
+        src/game/sa2/time_attack/mode_select.o(.text);
+        src/game/sa2/time_attack/lobby.o(.text);
+        src/game/sa2/time_attack/results.o(.text);
 
-        src/game/boost_mode_particles.o(.text);
+        src/game/sa2/boost_mode_particles.o(.text);
     
-        src/game/sound_test.o(.text);
-        src/game/title_screen.o(.text);
-        src/game/bg_palette_effects.o(.text);
+        src/game/sa2/sound_test.o(.text);
+        src/game/sa2/title_screen.o(.text);
+        src/game/sa2/bg_palette_effects.o(.text);
 
-        src/game/cutscenes/level_endings.o(.text);
-        src/game/cutscenes/endings.o(.text);
-        src/game/cutscenes/credits.o(.text);
-        src/game/cutscenes/credits_slides.o(.text);
-        src/game/cutscenes/credits_end.o(.text);
-        src/game/cutscenes/extra_ending_fall.o(.text);
-        src/game/cutscenes/extra_ending_slides.o(.text);
-        src/game/cutscenes/final_ending_fall.o(.text);
-        src/game/cutscenes/final_ending_land.o(.text);
-        src/game/cutscenes/missing_emeralds.o(.text);
+        src/game/sa2/cutscenes/level_endings.o(.text);
+        src/game/sa2/cutscenes/endings.o(.text);
+        src/game/sa2/cutscenes/credits.o(.text);
+        src/game/sa2/cutscenes/credits_slides.o(.text);
+        src/game/sa2/cutscenes/credits_end.o(.text);
+        src/game/sa2/cutscenes/extra_ending_fall.o(.text);
+        src/game/sa2/cutscenes/extra_ending_slides.o(.text);
+        src/game/sa2/cutscenes/final_ending_fall.o(.text);
+        src/game/sa2/cutscenes/final_ending_land.o(.text);
+        src/game/sa2/cutscenes/missing_emeralds.o(.text);
         
 #if (ENABLE_DECOMP_CREDITS == 1)
         src/game/decomp_credits.o(.text);
@@ -375,8 +375,8 @@ SECTIONS
         src/input_recorder.o(.rodata);
     
         /* game Data */
-        src/game/assets/compressed/entities.o(.rodata);
-        src/game/assets/compressed/roms.o(.rodata);
+        src/game/sa2/assets/compressed/entities.o(.rodata);
+        src/game/sa2/assets/compressed/roms.o(.rodata);
 
         /* "sa1_sa2_shared" data */
         src/game/sa1_sa2_shared/rings_manager.o(.rodata);
@@ -400,8 +400,8 @@ SECTIONS
         /* game */
         src/game/water_effects.o(.rodata);
         src/game/player_callbacks.o(.rodata);
-        src/game/cheese.o(.rodata);
-        src/game/boost_effect.o(.rodata);
+        src/game/sa2/cheese.o(.rodata);
+        src/game/sa2/boost_effect.o(.rodata);
         src/game/amy_attack_heart_effect.o(.rodata);
         src/game/multiplayer/multiplayer_event_mgr.o(.rodata);
         src/game/multiplayer/finish.o(.rodata);
@@ -434,9 +434,9 @@ SECTIONS
         src/game/sa2/bosses/boss_7.o(.rodata);
         src/game/sa2/bosses/boss_8.o(.rodata);
         src/game/sa2/bosses/boss_9.o(.rodata);
-        src/game/enemies/kubinaga.o(.rodata);
-        src/game/enemies/koura.o(.rodata);
-        src/game/enemies/geji_geji.o(.rodata);
+        src/game/sa2/enemies/kubinaga.o(.rodata);
+        src/game/sa2/enemies/koura.o(.rodata);
+        src/game/sa2/enemies/geji_geji.o(.rodata);
         src/game/multiplayer/mode_select.o(.rodata);
         src/game/multiplayer/multipak_connection.o(.rodata);
         src/game/multiplayer/communication_outcome.o(.rodata);
@@ -450,7 +450,7 @@ SECTIONS
         src/game/interactables_1/bouncy_bar.o(.rodata);
         src/game/interactables_1/checkpoint.o(.rodata);
         src/game/interactables_1/windmill.o(.rodata);
-        src/game/options_screen.o(.rodata);
+        src/game/sa2/options_screen.o(.rodata);
         src/game/sa2/special_stage/data.o(.rodata);
         src/game/sa2/special_stage/player.o(.rodata);
         src/game/sa2/special_stage/collectables.o(.rodata);
@@ -476,22 +476,22 @@ SECTIONS
         src/game/multiboot/collect_rings/time_display.o(.rodata);
         src/game/math.o(.rodata);
         src/game/mystery_itembox.o(.rodata);
-        src/game/race_progress.o(.rodata);
+        src/game/sa2/race_progress.o(.rodata);
         src/game/multiplayer/mp_attack_1_effect.o(.rodata);
         src/game/multiplayer_lobby.o(.rodata);
-        src/game/time_attack/mode_select.o(.rodata);
-        src/game/time_attack/lobby.o(.rodata);
-        src/game/time_attack/results.o(.rodata);
-        src/game/sound_test.o(.rodata);
-        src/game/title_screen.o(.rodata);
-        src/game/cutscenes/level_endings.o(.rodata);
-        src/game/cutscenes/credits.o(.rodata);
-        src/game/cutscenes/credits_slides.o(.rodata);
-        src/game/cutscenes/credits_end.o(.rodata);
-        src/game/cutscenes/extra_ending_fall.o(.rodata);
-        src/game/cutscenes/final_ending_fall.o(.rodata);
-        src/game/cutscenes/final_ending_land.o(.rodata);
-        src/game/cutscenes/missing_emeralds.o(.rodata);
+        src/game/sa2/time_attack/mode_select.o(.rodata);
+        src/game/sa2/time_attack/lobby.o(.rodata);
+        src/game/sa2/time_attack/results.o(.rodata);
+        src/game/sa2/sound_test.o(.rodata);
+        src/game/sa2/title_screen.o(.rodata);
+        src/game/sa2/cutscenes/level_endings.o(.rodata);
+        src/game/sa2/cutscenes/credits.o(.rodata);
+        src/game/sa2/cutscenes/credits_slides.o(.rodata);
+        src/game/sa2/cutscenes/credits_end.o(.rodata);
+        src/game/sa2/cutscenes/extra_ending_fall.o(.rodata);
+        src/game/sa2/cutscenes/final_ending_fall.o(.rodata);
+        src/game/sa2/cutscenes/final_ending_land.o(.rodata);
+        src/game/sa2/cutscenes/missing_emeralds.o(.rodata);
 
         src/data/tilemap_data_old_logos.o(.rodata);
 

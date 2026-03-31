@@ -145,10 +145,10 @@ void Task_DecorationMain(void)
             TaskDestroy(gCurTask);
             return;
         } else {
-            sub_80096B0(s, worldX, worldY, &gPlayer);
+            Coll_Player_Platform(s, worldX, worldY, &gPlayer);
 
             if (gNumSingleplayerCharacters == NUM_SINGLEPLAYER_CHARS_MAX) {
-                sub_80096B0(s, worldX, worldY, &gPartner);
+                Coll_Player_Platform(s, worldX, worldY, &gPartner);
             }
 
             if (IS_OUT_OF_CAM_RANGE(s->x, s->y)) {

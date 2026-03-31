@@ -15,7 +15,7 @@
 #include "game/sa1_sa2_shared/player.h"
 
 // TODO: Merge this with collision.c !
-u32 sub_80096B0(Sprite *s, CamCoord x, CamCoord y, Player *p)
+u32 Coll_Player_Platform(Sprite *s, CamCoord x, CamCoord y, Player *p)
 {
     s8 rectOffset[4] = { -(p->spriteOffsetX + 5), (1 - p->spriteOffsetY), (p->spriteOffsetX + 5), (p->spriteOffsetY - 1) };
     s8 rectPlayer[4] = { -p->spriteOffsetX, -p->spriteOffsetY, +p->spriteOffsetX, +p->spriteOffsetY };

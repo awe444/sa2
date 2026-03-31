@@ -933,9 +933,9 @@ void Task_PipeExtend()
     s->x = worldX - gCamera.x;
     s->y = worldY - gCamera.y;
     if (!(6 & pipe->unk44)) {
-        sub_80096B0(s, worldX, worldY, &gPlayer);
+        Coll_Player_Platform(s, worldX, worldY, &gPlayer);
         if (gNumSingleplayerCharacters == NUM_SINGLEPLAYER_CHARS_MAX) {
-            sub_80096B0(s, worldX, worldY, &gPartner);
+            Coll_Player_Platform(s, worldX, worldY, &gPartner);
         }
     }
     UpdateSpriteAnimation(s);

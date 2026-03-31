@@ -116,7 +116,7 @@ void Task_UnderwaterLavaPlatform(void)
 
         PLAYER(i).qWorldX = qPrevPlayerX;
 
-        sub_80096B0(s, worldX, worldY, &PLAYER(i));
+        Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
     } while (++i < gNumSingleplayerCharacters);
 
     if (IS_OUT_OF_DISPLAY_RANGE(worldX, worldY) && IS_OUT_OF_CAM_RANGE(s->x, s->y)) {

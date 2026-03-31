@@ -13,7 +13,7 @@
 #include "game/sa2/save.h"
 #include "game/sa2/gfx/screen_fade.h"
 #include "game/sa2/gfx/boss_results_transition.h"
-#include "game/title_screen.h"
+#include "game/sa2/title_screen.h"
 #include "game/sa2/gfx/screen_mask.h"
 
 #include "constants/animations.h"

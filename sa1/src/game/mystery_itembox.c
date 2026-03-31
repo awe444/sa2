@@ -288,7 +288,7 @@ void Task_MysteryItemBox_Main0()
 
     if (!((0x400000 & gPlayer.moveState) && (sp8 == 0))) {
         if (((gPlayer.moveState & 8) && (gPlayer.stoodObj == s)) || (gPlayer.spriteInfoBody->reserved.index == -1)) {
-            res = sub_80096B0(s, (s16)worldX, (worldY + itembox->unk7C), &gPlayer);
+            res = Coll_Player_Platform(s, (s16)worldX, (worldY + itembox->unk7C), &gPlayer);
             if (0x10000 & res) {
                 itembox->unk7E = -Q(1);
                 itembox->unk80 = 0xFF;

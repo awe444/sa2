@@ -5,11 +5,11 @@
 #include "lib/m4a/m4a.h"
 
 #include "game/amy_attack_heart_effect.h"
-#include "game/boost_effect.h"
-#include "game/boost_mode_particles.h" // incl. CreateBoostModeParticles
+#include "game/sa2/boost_effect.h"
+#include "game/sa2/boost_mode_particles.h" // incl. CreateBoostModeParticles
 #include "game/sa2/bosses/common.h"
-#include "game/cheese.h"
-#include "game/heart_particles_effect.h"
+#include "game/sa2/cheese.h"
+#include "game/sa2/heart_particles_effect.h"
 #include "game/multiplayer/mp_attack_2_effect.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/parameters/bosses.h"
@@ -31,7 +31,7 @@
 #include "game/stage/spawn_positions.h"
 #include "game/stage/stage.h"
 #include "game/stage/underwater_effects.h"
-#include "game/time_attack/results.h" // for Player_VictoryPose
+#include "game/sa2/time_attack/results.h" // for Player_VictoryPose
 #include "game/multiplayer/mp_attack_1_effect.h"
 #include "game/water_effects.h"
 

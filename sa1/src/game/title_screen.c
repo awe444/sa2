@@ -10,7 +10,7 @@
 #include "game/multiplayer/mode_select.h"
 #include "game/options_screen.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/sa1_sa2_shared/demo_manager.h"
+#include "game/demo_manager.h"
 #include "game/sa1/save.h"
 #include "game/stage/terrain_collision.h"
 #include "game/stage/player.h"

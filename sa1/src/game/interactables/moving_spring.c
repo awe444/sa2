@@ -238,7 +238,7 @@ bool32 sub_808B7A0(MovingSpring *spring, Sprite *s, s32 worldX, s32 worldY)
             sub_808BB44(s, worldX + I(spring->qUnk40), worldY + I(spring->qUnk44), (Rect8 *)arr, &PLAYER(i));
 
             {
-                s32 r5 = sub_80096B0(s, worldX + I(spring->qUnk40), worldY + I(spring->qUnk44), &PLAYER(i));
+                s32 r5 = Coll_Player_Platform(s, worldX + I(spring->qUnk40), worldY + I(spring->qUnk44), &PLAYER(i));
 
                 if (PLAYER(i).charState == CHARSTATE_17) {
                     PLAYER(i).qWorldX = qPrevPlayerX;

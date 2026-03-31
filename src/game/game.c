@@ -6,8 +6,8 @@
 #include "game/game.h"
 #include "game/sa2/save.h"
 
-#include "game/title_screen.h"
-#include "game/options_screen.h"
+#include "game/sa2/title_screen.h"
+#include "game/sa2/options_screen.h"
 #include "game/multiboot/connection.h"
 
 #include "game/sa1_sa2_shared/entities_manager.h"

@@ -7,8 +7,8 @@
 #include "game/globals.h"
 
 #include "game/sa2/save.h"
-#include "game/time_attack/lobby.h"
-#include "game/title_screen.h"
+#include "game/sa2/time_attack/lobby.h"
+#include "game/sa2/title_screen.h"
 #include "game/water_effects.h"
 
 #include "constants/animations.h"

@@ -450,11 +450,11 @@ void Task_MarbleTrack_Entrance(void)
 
                 if (sub_80549FC() && (PLAYER(i).charState != CHARSTATE_73)) {
                     if (PLAYER(i).qWorldY > Q(worldY) + Q(12)) {
-                        if (sub_80096B0(s, worldX, worldY, &PLAYER(i)) & 0x10000) {
+                        if (Coll_Player_Platform(s, worldX, worldY, &PLAYER(i)) & 0x10000) {
                             PLAYER(i).qWorldY = Q(worldY + 23);
                         }
                     }
-                } else if ((PLAYER(i).SA2_LABEL(unk99)[0] == 0x7F) && sub_80096B0(s, worldX, worldY, &PLAYER(i)) & 0x8) {
+                } else if ((PLAYER(i).SA2_LABEL(unk99)[0] == 0x7F) && Coll_Player_Platform(s, worldX, worldY, &PLAYER(i)) & 0x8) {
                     entrance->unk3C[i] = 0;
                     entrance->unk40[i] = 0;
                     Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
@@ -684,7 +684,7 @@ NONMATCH("asm/non_matching/game/interactables/marble_track_exit__Task_MarbleTrac
                 // _08083D26
 
                 if (!(PLAYER(i).moveState & MOVESTATE_IGNORE_INPUT)) {
-                    sub_80096B0(s, worldX, worldY, &PLAYER(i));
+                    Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
                 }
             }
         }

@@ -14,7 +14,7 @@
 
 #include "game/player_callbacks.h"
 
-#include "game/cheese.h"
+#include "game/sa2/cheese.h"
 
 #include "game/math.h"
 

@@ -9,8 +9,8 @@
 #include "game/globals.h"
 
 #include "game/sa2/ui/game_over.h"
-#include "game/time_attack/lobby.h"
-#include "game/title_screen.h"
+#include "game/sa2/time_attack/lobby.h"
+#include "game/sa2/title_screen.h"
 
 #include "game/sa2/gfx/screen_fade.h"
 #include "game/stage/stage.h"
