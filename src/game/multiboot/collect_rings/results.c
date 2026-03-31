@@ -12,7 +12,7 @@
 #include "sprite.h"
 #include "data/sprite_data.h"
 #include "bg_triangles.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/title_screen.h"
 #include "game/stage/screen_fade.h"
 #include "lib/m4a/m4a.h"
@@ -102,7 +102,7 @@ void CreateMultiplayerSinglePakResultsScreen(u32 a)
     gRefSpriteTables = (const struct SpriteTables *)(EWRAM_START + 0x20000);
     gMultiplayerLanguage = 0;
 #else
-    gMultiplayerLanguage = gLoadedSaveGame->language;
+    gMultiplayerLanguage = LOADED_SAVE->language;
 #endif
 
     sub_8081FB0();

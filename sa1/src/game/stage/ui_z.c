@@ -3,7 +3,7 @@
 #include "malloc_vram.h"
 #include "data/ui_graphics.h"
 #include "game/sa1_sa2_shared/player.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/gTask_03006240.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/multiplayer/hud.h" // CreateChaoHuntHUD
@@ -295,7 +295,7 @@ NONMATCH("asm/non_matching/game/stage/ui__sub_80550F8.inc", struct Task *sub_805
     u8 i;
     struct Task *t6;
 
-    if ((gCurrentLevel <= LEVEL_INDEX(ZONE_7, ACT_1)) && ((gCurrentLevel & 0x1) != ACT_1) && (SA2_LABEL(gUnknown_030054B0) != gCurrentLevel)
+    if ((gCurrentLevel <= LEVEL_INDEX(ZONE_7, ACT_1)) && ((gCurrentLevel & 0x1) != ACT_1) && (gFinalBossActive != gCurrentLevel)
         && (!IS_EXTRA_STAGE(gCurrentLevel))) {
         for (i = 0; i < 8; i++) {
             OamData *oam = OamMalloc(UI_OAM_ORDER_INDEX);
@@ -375,7 +375,7 @@ NONMATCH("asm/non_matching/game/stage/ui__sub_80550F8.inc", struct Task *sub_805
     ui_24->unk20 = 1;
     ui_24->unk1A = 0;
 
-    if (((gCurrentLevel & 0x1) != ACT_1) && (SA2_LABEL(gUnknown_030054B0) != gCurrentLevel) && (!IS_EXTRA_STAGE(gCurrentLevel))) {
+    if (((gCurrentLevel & 0x1) != ACT_1) && (gFinalBossActive != gCurrentLevel) && (!IS_EXTRA_STAGE(gCurrentLevel))) {
         ui_24->unk0.qUnkA = -Q(16. / 256.);
         ui_24->unk0.unkC = +42;
 
@@ -530,7 +530,7 @@ NONMATCH("asm/non_matching/game/stage/ui__Task_8055458.inc", void Task_8055458(v
         gPlayer.moveState &= ~MOVESTATE_IGNORE_INPUT;
         gPartner.moveState &= ~MOVESTATE_IGNORE_INPUT;
 
-        SA2_LABEL(gUnknown_030054B0) = gCurrentLevel;
+        gFinalBossActive = gCurrentLevel;
 
         gPlayer.itemEffect &= ~PLAYER_ITEM_EFFECT__80;
         gStageFlags &= ~STAGE_FLAG__DISABLE_PAUSE_MENU;
@@ -702,7 +702,7 @@ void Task_8055998(void)
                 strc->unk0.qUnkA = -Q(16. / 256.);
             }
         } else if ((gCurrentLevel < LEVEL_INDEX(ZONE_FINAL, ACT_THE_MOON)) && ((gCurrentLevel & 0x1) != ACT_1)
-                   && ((SA2_LABEL(gUnknown_030054B0)) != gCurrentLevel)) {
+                   && ((gFinalBossActive) != gCurrentLevel)) {
             // Singleplayer Stage
             strc->unk0.qUnkA = -Q(16. / 256.);
             strc->unk0.unkC += 9;

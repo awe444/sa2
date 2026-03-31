@@ -5,7 +5,7 @@
 #include "lib/m4a/m4a.h"
 #include "game/game_over.h"
 #include "game/gTask_03006240.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "data/ui_graphics.h"
 #include "game/multiplayer/mode_select.h"
 #include "game/stage/ui.h"

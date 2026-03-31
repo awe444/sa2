@@ -2,7 +2,7 @@
 #include "flags.h"
 #include "malloc_ewram.h"
 #include "lib/agb_flash/agb_flash.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 
 struct SaveSectorHeader {
     u32 security, version;
@@ -32,13 +32,7 @@ struct SaveGame gLoadedSaveGame = {};
 
 // If the sector's security field is not this value then the sector is either invalid or
 // empty.
-#if (GAME == GAME_SA1)
 #define SECTOR_SECURITY_NUM 0x4F524950
-#elif (GAME == GAME_SA2)
-#define SECTOR_SECURITY_NUM 0x4547474D
-#elif (GAME == GAME_SA3)
-#define SECTOR_SECURITY_NUM 0x47544E4C
-#endif
 
 extern s8 ALIGNED(4) gUsedSaveSectorID;
 
@@ -202,36 +196,3 @@ s32 sub_8012F6C(void)
 }
 
 u32 CalculateChecksum(void *data) { return CalcChecksum(data); }
-
-#if (GAME == GAME_SA2)
-// Read flash data at given sector into data
-// and verify integrity
-static bool16 ReadSaveSectorAndVerifyChecksum(struct SaveSectorData *save, s16 sectorNum)
-{
-    u32 i;
-    u32 sum;
-    u32 *expected;
-
-    ReadFlash(sectorNum, 0, save, sizeof(struct SaveSectorData));
-    expected = &save->checksum;
-
-    sum = CalcChecksum(save);
-
-    if (*expected != sum) {
-        return 0;
-    }
-
-    return 1;
-}
-
-static bool16 StringEquals(u16 *string1Char, u16 *string2Char, s16 length)
-{
-    s16 i;
-    for (i = 0; i < length; i++, string1Char++, string2Char++) {
-        if (*string1Char != *string2Char) {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-#endif

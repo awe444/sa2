@@ -71,7 +71,7 @@
 	mov r3, r8
 	strh r3, [r0, #4]
 	mov r3, sp
-	ldr r2, _08056818 @ =sa2__gUnknown_030054B8
+	ldr r2, _08056818 @ =gOamMatrixIndex
 	ldrb r0, [r2]
 	adds r1, r0, #1
 	strb r1, [r2]
@@ -84,7 +84,7 @@
 	b _0805689E
 	.align 2, 0
 _08056814: .4byte gCurTask
-_08056818: .4byte sa2__gUnknown_030054B8
+_08056818: .4byte gOamMatrixIndex
 _0805681C:
 	cmp r1, #0x14
 	ble _08056864
@@ -102,7 +102,7 @@ _0805681C:
 	mov r1, r8
 	strh r1, [r0, #4]
 	mov r3, sp
-	ldr r2, _08056860 @ =sa2__gUnknown_030054B8
+	ldr r2, _08056860 @ =gOamMatrixIndex
 	ldrb r0, [r2]
 	adds r1, r0, #1
 	strb r1, [r2]
@@ -119,7 +119,7 @@ _0805681C:
 	b _0805689E
 	.align 2, 0
 _0805685C: .4byte 0x000001F1
-_08056860: .4byte sa2__gUnknown_030054B8
+_08056860: .4byte gOamMatrixIndex
 _08056864:
 	mov r4, sp
 	movs r0, #0x74
@@ -138,7 +138,7 @@ _08056864:
 	mov r3, r8
 	strh r3, [r0, #4]
 	mov r3, sp
-	ldr r2, _08056918 @ =sa2__gUnknown_030054B8
+	ldr r2, _08056918 @ =gOamMatrixIndex
 	ldrb r0, [r2]
 	adds r1, r0, #1
 	strb r1, [r2]
@@ -212,7 +212,7 @@ _080568F8:
 	strb r0, [r1]
 	b _08056940
 	.align 2, 0
-_08056918: .4byte sa2__gUnknown_030054B8
+_08056918: .4byte gOamMatrixIndex
 _0805691C: .4byte 0x000004AF
 _08056920: .4byte gCurTask
 _08056924: .4byte Task_DestroyGameOverD

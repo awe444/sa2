@@ -4,7 +4,7 @@
 #include "task.h"
 #include "lib/m4a/m4a.h"
 #include "game/cheese.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
 #include "game/cutscenes/level_endings.h"
@@ -48,7 +48,7 @@ void Task_802ED98(void)
             return;
         }
 
-        if ((gSelectedCharacter == CHARACTER_SONIC) && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+        if ((gSelectedCharacter == CHARACTER_SONIC) && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
             switch (LEVEL_TO_ZONE(gCurrentLevel)) {
                 case ZONE_1: {
                     // This case is never executed.

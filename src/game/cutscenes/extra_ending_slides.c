@@ -5,7 +5,7 @@
 #include "game/stage/screen_fade.h"
 #include "task.h"
 #include "lib/m4a/m4a.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

@@ -1,7 +1,7 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/interactables_2/music_plant/french_horn.h"
 #include "game/interactables_2/music_plant/pipe_sequence.h"
 

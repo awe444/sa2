@@ -18,7 +18,7 @@
 	ands r0, r1
 	cmp r0, #0
 	beq _08055164
-	ldr r0, _08055130 @ =sa2__gUnknown_030054B0
+	ldr r0, _08055130 @ =gFinalBossActive
 	ldrb r1, [r0]
 	adds r0, r3, #0
 	cmp r1, r0
@@ -30,7 +30,7 @@
 	b _08055150
 	.align 2, 0
 _0805512C: .4byte gCurrentLevel
-_08055130: .4byte sa2__gUnknown_030054B0
+_08055130: .4byte gFinalBossActive
 _08055134: .4byte 0x0000042A
 _08055138:
 	strh r5, [r2]
@@ -197,7 +197,7 @@ _08055164:
 	ands r0, r2
 	cmp r0, #0
 	beq _080552E0
-	ldr r0, _080552D8 @ =sa2__gUnknown_030054B0
+	ldr r0, _080552D8 @ =gFinalBossActive
 	ldrb r1, [r0]
 	movs r0, #0
 	ldrsb r0, [r3, r0]
@@ -222,7 +222,7 @@ _080552C8: .4byte Task_8055798
 _080552CC: .4byte Task_8055904
 _080552D0: .4byte Task_8055998
 _080552D4: .4byte gCurrentLevel
-_080552D8: .4byte sa2__gUnknown_030054B0
+_080552D8: .4byte gFinalBossActive
 _080552DC: .4byte 0x0000FFF0
 _080552E0:
 	movs r0, #0xf0

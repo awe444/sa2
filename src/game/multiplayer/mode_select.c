@@ -10,7 +10,7 @@
 #include "game/multiplayer/mode_select.h"
 #include "game/multiplayer/multipak_connection.h"
 #include "game/multiboot/connection.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/stage/screen_fade.h"
 #include "game/stage/boss_results_transition.h"
 #include "game/title_screen.h"
@@ -76,7 +76,7 @@ void CreateMultiplayerModeSelectScreen(void)
     Sprite *s;
     Background *background;
 
-    u8 lang = gLoadedSaveGame->language * 4;
+    u8 lang = LOADED_SAVE->language * 4;
     gDispCnt = 0;
     gDispCnt |= 0x1341;
     DmaFill32(3, 0, &gMultiSioSend, sizeof(gMultiSioSend));
@@ -331,7 +331,7 @@ static void Task_ScreenMain(void)
 
     if (modeScreen->pakMode != PAK_MODE_MULTI) {
         Sprite *subText;
-        u8 lang = gLoadedSaveGame->language * 4;
+        u8 lang = LOADED_SAVE->language * 4;
         modeScreen->unkB0.palId = 1;
         modeScreen->unkE0.palId = 0xFF;
 
@@ -341,7 +341,7 @@ static void Task_ScreenMain(void)
         subText->prevVariant = -1;
     } else {
         Sprite *subText;
-        u8 lang = gLoadedSaveGame->language * 4;
+        u8 lang = LOADED_SAVE->language * 4;
         modeScreen->unkB0.palId = 0;
         modeScreen->unkE0.palId = 0;
         subText = &modeScreen->subText;

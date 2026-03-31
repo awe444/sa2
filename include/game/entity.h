@@ -5,7 +5,7 @@
 #include "gba/types.h"
 #include "sprite.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "game/stage/terrain_collision.h"

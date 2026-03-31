@@ -7,7 +7,7 @@
 #include "lib/m4a/m4a.h"
 #include "game/character_select.h"
 #include "game/stage/boss_results_transition.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/time_attack/mode_select.h"
 #include "game/stage/screen_fade.h"
 #include "game/title_screen.h"
@@ -89,7 +89,7 @@ void CreateTimeAttackModeSelectionScreen(void)
     Sprite *s;
     Background *background;
 
-    s8 lang = gLoadedSaveGame->language - 1;
+    s8 lang = LOADED_SAVE->language - 1;
     if (lang < 0) {
         lang = 0;
     }
@@ -315,7 +315,7 @@ static void Task_ScreenMain(void)
     s8 lang;
 
     if (gPressedKeys & A_BUTTON) {
-        if (modeScreen->unk14D && !gLoadedSaveGame->bossTimeAttackUnlocked) {
+        if (modeScreen->unk14D && !LOADED_SAVE->bossTimeAttackUnlocked) {
             m4aSongNumStart(SE_ABORT);
         } else {
             fade = &modeScreen->fade;
@@ -356,7 +356,7 @@ static void Task_ScreenMain(void)
     }
 
     if (modeScreen->unk14D) {
-        lang = gLoadedSaveGame->language - 1;
+        lang = LOADED_SAVE->language - 1;
         if (lang < 0) {
             lang = 0;
         }
@@ -368,7 +368,7 @@ static void Task_ScreenMain(void)
         s->palId = 0xFF;
 
         s = &modeScreen->infoText;
-        if (gLoadedSaveGame->bossTimeAttackUnlocked) {
+        if (LOADED_SAVE->bossTimeAttackUnlocked) {
             s->graphics.anim = gUnknown_080E0384[TextElementOffset(lang, 5, 3)].anim;
             s->variant = gUnknown_080E0384[TextElementOffset(lang, 5, 3)].variant;
         } else {
@@ -377,7 +377,7 @@ static void Task_ScreenMain(void)
         }
         s->prevVariant = -1;
     } else {
-        lang = gLoadedSaveGame->language - 1;
+        lang = LOADED_SAVE->language - 1;
         if (lang < 0) {
             lang = 0;
         }
@@ -464,7 +464,7 @@ static void Task_HandleModeSelectedExit(void)
     PAUSE_BACKGROUNDS_QUEUE();
     gBgSpritesCount = 0;
     PAUSE_GRAPHICS_QUEUE();
-    CreateCharacterSelectionScreen(0, gLoadedSaveGame->unlockedCharacters & 0x10);
+    CreateCharacterSelectionScreen(0, LOADED_SAVE->unlockedCharacters & 0x10);
 }
 
 static void RenderUI(struct TimeAttackModeSelectionScreen *modeScreen)

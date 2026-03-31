@@ -5,7 +5,7 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 #include "game/game.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/options_screen.h"
 #include "game/title_screen.h"
 #include "game/stage/debug_text_printer.h"

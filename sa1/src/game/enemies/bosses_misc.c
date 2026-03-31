@@ -529,7 +529,7 @@ void Task_8016A14()
 
     if (0x20 & strc->s.frameFlags) {
         strc->s.frameFlags = strc->s.frameFlags & ~0x1F;
-        strc->s.frameFlags |= sa2__gUnknown_030054B8++;
+        strc->s.frameFlags |= gOamMatrixIndex++;
         TransformSprite(&strc->s, tf);
     } else {
         strc->s.x = tf->x;
@@ -761,7 +761,7 @@ void sub_8017054()
     tf->x = (strc->unk44 + I(strc->unk3C)) - gCamera.x;
     tf->y = (strc->unk46 + I(strc->unk40)) - gCamera.y;
     s->frameFlags &= ~0x1F;
-    s->frameFlags |= sa2__gUnknown_030054B8++;
+    s->frameFlags |= gOamMatrixIndex++;
     UpdateSpriteAnimation(s);
     TransformSprite(s, tf);
     DisplaySprite(s);

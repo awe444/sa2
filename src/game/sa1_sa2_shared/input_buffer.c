@@ -1,5 +1,5 @@
 #include "global.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/input_buffer.h"
 #include "game/sa1_sa2_shared/player.h"
 

@@ -9,7 +9,7 @@
 #include "game/course_select.h"
 #include "game/cutscenes/endings.h"
 #include "game/cutscenes/level_endings.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/stage/screen_fade.h"
 #include "game/special_stage/main.h"
 #include "game/stage/results.h"

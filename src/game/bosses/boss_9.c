@@ -12,7 +12,7 @@
 #include "game/stage/results.h"
 #include "game/stage/ui.h"
 #include "game/stage/screen_mask.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/camera.h"
 #include "game/sa1_sa2_shared/player.h"
 

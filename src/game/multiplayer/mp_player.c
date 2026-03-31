@@ -4,7 +4,7 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "game/stage/spawn_positions.h"
@@ -2029,8 +2029,8 @@ bool32 SA2_LABEL(sub_8018300)(void)
                     otherMPP->unk5C &= ~(0x10000 << i);
 
                     {
-                        ChaoTask *chao = TASK_DATA(gChaoTasks[i]);
-                        chao->unk41 = mpp->unk56;
+                        Chao *chao = TASK_DATA(gChaoTasks[i]);
+                        chao->playerIdA = mpp->unk56;
                         {
                             RoomEvent_ChaoCollected *roomEvent = CreateRoomEvent();
                             roomEvent->type = ROOMEVENT_TYPE_CHAO_COLLECTED;

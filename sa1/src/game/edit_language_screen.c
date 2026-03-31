@@ -5,7 +5,7 @@
 #include "lib/m4a/m4a.h"
 #include "game/game_over.h"
 #include "game/options_screen.h" // contains EditLanguageScreen
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/stage/ui.h"
 
 #include "constants/animations.h"

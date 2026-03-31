@@ -7,7 +7,7 @@
 #include "sprite.h"
 #include "task.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/palette_loader.h"
 
 #include "game/entity.h"

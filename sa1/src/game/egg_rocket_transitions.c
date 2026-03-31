@@ -6,7 +6,7 @@
 #include "malloc_vram.h"
 #include "bg_triangles.h"
 #include "game/nuts_and_bolts_task.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/camera.h"
 #include "game/stage/player.h"
 #include "game/stage/screen_shake.h"

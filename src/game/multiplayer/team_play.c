@@ -1,6 +1,6 @@
 #include "global.h"
 #include "game/multiplayer/team_play.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "core.h"
 #include "task.h"
 #include "sprite.h"
@@ -77,7 +77,7 @@ void CreateMultiplayerTeamPlayScreen(void)
     void *vram;
     u8 i;
 
-    lang = gLoadedSaveGame->language;
+    lang = LOADED_SAVE->language;
     if (lang > NUM_LANGUAGES) {
 #ifdef JAPAN
         lang = LANG_DEFAULT;

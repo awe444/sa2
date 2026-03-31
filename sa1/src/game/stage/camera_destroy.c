@@ -2,7 +2,7 @@
 #include "core.h"
 #include "flags.h"
 #include "game/sa1_sa2_shared/camera.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/stage/camera.h"
 #include "constants/zones.h"
 
@@ -52,5 +52,5 @@ void Task_CallUpdateCamera(void)
 static void Task_CallUpdateCameraInternal(void)
 {
     UpdateCamera();
-    sa2__gUnknown_030054B8 = 0x4;
+    gOamMatrixIndex = 0x4;
 }

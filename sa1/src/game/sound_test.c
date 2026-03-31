@@ -5,7 +5,7 @@
 #include "data/ui_graphics.h"
 #include "game/gTask_03006240.h"
 #include "game/options_screen.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/stage/ui.h"
 
 #include "constants/animations.h"
@@ -497,7 +497,7 @@ void Task_SoundTestInit(void)
     var_r5 = state->unk28;
     if (0x20 & gRepeatedKeys) {
         if (var_r5 == 0) {
-            if (gLoadedSaveGame.unk424 != 0) {
+            if (LOADED_SAVE->unk424 != 0) {
                 var_r5 = 0x29;
             } else {
                 var_r5 = 0x26;
@@ -509,7 +509,7 @@ void Task_SoundTestInit(void)
         sp0->unk110 = -1;
         sp0->unk10E = 8;
     } else if (0x10 & gRepeatedKeys) {
-        if (gLoadedSaveGame.unk424 != 0) {
+        if (LOADED_SAVE->unk424 != 0) {
             var_r0 = var_r5 + 1;
             var_r1 = 0x2A;
         } else {

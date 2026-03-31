@@ -9,7 +9,7 @@
 #include "game/special_stage/physics.h"
 #include "game/special_stage/tables.h"
 #include "game/stage/stage.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "sprite.h"
 #include "game/stage/screen_fade.h"
 #include "lib/m4a/m4a.h"
@@ -561,7 +561,7 @@ void sub_806C560(void)
 {
     struct SpecialStage *stage = TASK_DATA(gCurTask);
     u8 character = stage->character;
-    u8 chaosEmeralds = gLoadedSaveGame->chaosEmeralds[character];
+    u8 chaosEmeralds = LOADED_SAVE->chaosEmeralds[character];
 
     if (stage->unk5C7 == 1) {
         if (--stage->unk5C8 == 0) {
@@ -572,14 +572,14 @@ void sub_806C560(void)
 
     if (!(chaosEmeralds & CHAOS_EMERALD(stage->zone))) {
         SpecialStageResultsScreenNewEmeraldSequence(stage);
-        gLoadedSaveGame->chaosEmeralds[character] |= CHAOS_EMERALD(stage->zone);
+        LOADED_SAVE->chaosEmeralds[character] |= CHAOS_EMERALD(stage->zone);
         stage->animFrame = 120;
     } else {
         stage->animFrame = 12;
     }
 
-    if ((gLoadedSaveGame->chaosEmeralds[character] & ALL_ZONE_CHAOS_EMERALDS) == ALL_ZONE_CHAOS_EMERALDS) {
-        gLoadedSaveGame->chaosEmeralds[character] = ALL_ZONE_CHAOS_EMERALDS | CHAOS_EMERALDS_COMPLETED;
+    if ((LOADED_SAVE->chaosEmeralds[character] & ALL_ZONE_CHAOS_EMERALDS) == ALL_ZONE_CHAOS_EMERALDS) {
+        LOADED_SAVE->chaosEmeralds[character] = ALL_ZONE_CHAOS_EMERALDS | CHAOS_EMERALDS_COMPLETED;
     }
 
     gCurTask->main = sub_806C638;
@@ -627,7 +627,7 @@ void sub_806C6A4(void)
 
         INCREMENT_SCORE_A(temp);
 
-        gLoadedSaveGame->score += stage->rings;
+        LOADED_SAVE->score += stage->rings;
 
         TasksDestroyAll();
         PAUSE_BACKGROUNDS_QUEUE();

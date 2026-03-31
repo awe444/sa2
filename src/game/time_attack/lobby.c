@@ -1,7 +1,7 @@
 #include "game/time_attack/lobby.h"
 #include "core.h"
 #include "sprite.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/stage/screen_fade.h"
 #include "game/stage/stage.h"
 #include "malloc_vram.h"
@@ -58,7 +58,7 @@ void sub_8088944(struct TimeAttackLobbyScreen *lobbyScreen)
     ScreenFade *fade;
     Background *background;
     Sprite *s;
-    s8 lang = gLoadedSaveGame->language - 1;
+    s8 lang = LOADED_SAVE->language - 1;
     u32 i;
 
     if (lang < 0) {
@@ -268,7 +268,7 @@ void sub_8088D60(void)
                 GameStageStart();
                 break;
             case 1:
-                CreateCharacterSelectionScreen(gSelectedCharacter, gLoadedSaveGame->unlockedCharacters & CHARACTER_BIT(CHARACTER_AMY));
+                CreateCharacterSelectionScreen(gSelectedCharacter, LOADED_SAVE->unlockedCharacters & CHARACTER_BIT(CHARACTER_AMY));
                 gCurrentLevel = LEVEL_INDEX(ZONE_1, ACT_1);
                 break;
             case 2:

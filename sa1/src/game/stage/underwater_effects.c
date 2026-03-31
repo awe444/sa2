@@ -4,7 +4,7 @@
 #include "sprite.h"
 #include "trig.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/stage/camera.h"
 #include "game/stage/mp_sprite_task.h"
 #include "game/stage/player.h"
@@ -60,7 +60,7 @@ void Task_DrowningCountdown(void)
     ts->unk10 += 1;
 
     s->frameFlags = SPRITE_FLAG(PRIORITY, 2);
-    s->frameFlags |= (sa2__gUnknown_030054B8++ | 0x20);
+    s->frameFlags |= (gOamMatrixIndex++ | 0x20);
 
     UpdateSpriteAnimation(s);
     TransformSprite(s, transform);
@@ -221,7 +221,7 @@ static void Task_SpawnAirBubbles(void)
         ts->unk10 += 1;
         s->frameFlags = SPRITE_FLAG(PRIORITY, 2);
 
-        s->frameFlags |= (sa2__gUnknown_030054B8++ | 0x20);
+        s->frameFlags |= (gOamMatrixIndex++ | 0x20);
 
         UpdateSpriteAnimation(s);
         TransformSprite(s, transform);

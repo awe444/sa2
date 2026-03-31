@@ -8,7 +8,7 @@
 #include "tilemap.h" // struct Tile
 #include "platform/shared/opengl.h"
 #include "trig.h" // ONE_CYCLE
-#include "game/sa1_sa2_shared/globals.h" // gCurrentLevel - TEMP: this shouldn't be exposed to the OpenGL backend...
+#include "game/globals.h" // gCurrentLevel - TEMP: this shouldn't be exposed to the OpenGL backend...
 
 // NOTE: This is NOT final at all. EXPERIMENTAL!!!!!
 

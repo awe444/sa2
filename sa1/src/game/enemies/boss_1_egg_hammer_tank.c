@@ -7,7 +7,7 @@
 #include "game/entity.h"
 #include "game/enemies/bosses_shared.h"
 #include "game/nuts_and_bolts_task.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/stage/player_controls.h"
 #include "game/stage/screen_shake.h"
 #include "game/stage/terrain_collision.h"
@@ -999,8 +999,8 @@ NONMATCH("asm/non_matching/game/enemies/boss_1__Task_80271E4.inc", void Task_802
     tf = &arm->transform;
     tf->rotation = 0;
 
-    arm->unk3C = ((COS(sa2__gUnknown_03001944) * 0x10 * arm->unk50) >> 0xE) + (gCamera.x + sa2__gUnknown_0300194C);
-    arm->unk3E = ((SIN(sa2__gUnknown_03001944) * 0x10 * arm->unk50) >> 0xE) + (gCamera.y + sa2__gUnknown_03002820);
+    arm->unk3C = ((COS(SA2_LABEL(gUnknown_03001944)) * 0x10 * arm->unk50) >> 0xE) + (gCamera.x + SA2_LABEL(gUnknown_0300194C));
+    arm->unk3E = ((SIN(SA2_LABEL(gUnknown_03001944)) * 0x10 * arm->unk50) >> 0xE) + (gCamera.y + SA2_LABEL(gUnknown_03002820));
 
     if (arm->unk50) {
         arm->qUnk4C = +Q(2);
@@ -1145,10 +1145,10 @@ NONMATCH("asm/non_matching/game/enemies/boss_1__Task_EHTHammer.inc", void Task_E
         s32 x32;
         s32 y32;
 #endif
-        x32 = COS(sa2__gUnknown_03001944) * 3;
-        y32 = SIN(sa2__gUnknown_03001944) * 3;
-        x = sa2__gUnknown_0300194C + gCamera.x + (x32 >> 9);
-        y = sa2__gUnknown_03002820 + gCamera.y + (y32 >> 9);
+        x32 = COS(SA2_LABEL(gUnknown_03001944)) * 3;
+        y32 = SIN(SA2_LABEL(gUnknown_03001944)) * 3;
+        x = SA2_LABEL(gUnknown_0300194C) + gCamera.x + (x32 >> 9);
+        y = SA2_LABEL(gUnknown_03002820) + gCamera.y + (y32 >> 9);
     }
     if (tank->unk9B == 0) {
         res = Coll_Player_Entity_Intersection((Sprite *)s, x, y, &gPlayer);
@@ -1209,8 +1209,8 @@ NONMATCH("asm/non_matching/game/enemies/boss_1__Task_8027600.inc", void Task_802
         s32 y32;
         x32 = COS(SA2_LABEL(gUnknown_03001944)) * 3;
         y32 = SIN(SA2_LABEL(gUnknown_03001944)) * 3;
-        x = sa2__gUnknown_0300194C + gCamera.x + (x32 >> 9);
-        y = sa2__gUnknown_03002820 + gCamera.y + (y32 >> 9);
+        x = SA2_LABEL(gUnknown_0300194C) + gCamera.x + (x32 >> 9);
+        y = SA2_LABEL(gUnknown_03002820) + gCamera.y + (y32 >> 9);
         hammer->unk3C = x;
         hammer->unk3E = y;
     }

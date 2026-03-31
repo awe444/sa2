@@ -7,7 +7,7 @@
 #include "game/cutscenes/missing_emeralds.h"
 #include "lib/m4a/m4a.h"
 #include "trig.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/title_screen.h"
 #include "game/math.h"
 
@@ -142,7 +142,7 @@ void CreateFinalEndingLandingCutScene(void)
     t = TaskCreate(sub_8093EDC, sizeof(struct FinalEndingLandCutScene), 0x3100, 0, sub_8093F9C);
     scene = TASK_DATA(t);
     // TODO: chaos emeralds are probabyl wrong
-    if (gLoadedSaveGame->chaosEmeralds[gSelectedCharacter] & CHAOS_EMERALD(ZONE_FINAL)) {
+    if (LOADED_SAVE->chaosEmeralds[gSelectedCharacter] & CHAOS_EMERALD(ZONE_FINAL)) {
         value = 2;
         scene->unk33C = 0;
     } else {
@@ -502,7 +502,7 @@ void CreateFinalEndingLandingCutScene(void)
         DrawBackground(background);
     }
 
-    if (!(gLoadedSaveGame->chaosEmeralds[gSelectedCharacter] & CHAOS_EMERALDS_COMPLETED)) {
+    if (!(LOADED_SAVE->chaosEmeralds[gSelectedCharacter] & CHAOS_EMERALDS_COMPLETED)) {
         memcpy(unk1AF4, gUnknown_080E1AF4, sizeof(unk1AF4));
         DmaCopy32(3, unk1AF4, &GET_PALETTE_COLOR_BG(2, 0), sizeof(unk1AF4));
     }

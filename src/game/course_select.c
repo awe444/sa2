@@ -3,7 +3,7 @@
 #include "sprite.h"
 
 #include "game/stage/screen_fade.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/stage/stage.h"
 
 #include "lib/m4a/m4a.h"
@@ -253,7 +253,7 @@ void CreateCourseSelectionScreen(u8 currentLevel, u8 maxLevel, u8 cutScenes)
     gMultiplayerMissingHeartbeats[0] = 0;
 
     if (cutScenes == CUT_SCENE_UNLOCK_TRUE_AREA_53) {
-        gLoadedSaveGame->extraZoneStatus = 2;
+        LOADED_SAVE->extraZoneStatus = 2;
         WriteSaveGame();
     }
 
@@ -265,7 +265,7 @@ void CreateCourseSelectionScreen(u8 currentLevel, u8 maxLevel, u8 cutScenes)
         if (maxLevel < LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53)) {
             maxLevel++;
         } else {
-            if (gLoadedSaveGame->extraZoneStatus != 0 && gSelectedCharacter == CHARACTER_SONIC) {
+            if (LOADED_SAVE->extraZoneStatus != 0 && gSelectedCharacter == CHARACTER_SONIC) {
                 maxLevel = LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53);
             } else {
                 maxLevel = LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE);
@@ -478,7 +478,7 @@ void CreateCourseSelectionScreen(u8 currentLevel, u8 maxLevel, u8 cutScenes)
     s = &coursesScreen->screenTitle;
     s->x = 0;
     s->y = 0;
-    if (gLoadedSaveGame->language == LANG_JAPANESE) {
+    if (LOADED_SAVE->language == LANG_JAPANESE) {
         s->graphics.dest = VramMalloc(24);
         s->graphics.anim = 763;
         // Set the background color based on the
@@ -921,7 +921,7 @@ static void RenderUI(struct CourseSelectionScreen *coursesScreen)
 {
     Sprite *s;
     s8 somethinga;
-    s8 lang = gLoadedSaveGame->language;
+    s8 lang = LOADED_SAVE->language;
 
     if (lang <= 1) {
         somethinga = 0;
@@ -973,7 +973,7 @@ static void RenderUI(struct CourseSelectionScreen *coursesScreen)
     if (IS_SINGLE_PLAYER) {
         u8 i;
         for (i = 0; i < NUM_COURSE_ZONES; i++) {
-            if (gLoadedSaveGame->chaosEmeralds[gSelectedCharacter] & CHAOS_EMERALD(i)) {
+            if (LOADED_SAVE->chaosEmeralds[gSelectedCharacter] & CHAOS_EMERALD(i)) {
                 s = &coursesScreen->chaosEmeralds[i + 1];
             } else {
                 s = &coursesScreen->chaosEmeralds[0];
@@ -1070,7 +1070,7 @@ static void Task_FadeOutAndExitToCharacterSelect(void)
 
     if (UpdateScreenFade(&coursesScreen->fade) == SCREEN_FADE_COMPLETE) {
         DestroyUI(coursesScreen);
-        CreateCharacterSelectionScreen(gSelectedCharacter, gLoadedSaveGame->unlockedCharacters & 0x10);
+        CreateCharacterSelectionScreen(gSelectedCharacter, LOADED_SAVE->unlockedCharacters & 0x10);
         TaskDestroy(gCurTask);
         return;
     }

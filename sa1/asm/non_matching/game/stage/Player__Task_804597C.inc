@@ -123,7 +123,7 @@ _08045A60:
 	ldr r0, [r4]
 	adds r0, r0, r1
 	str r0, [r4]
-	ldr r1, _08045A94 @ =sa2__gUnknown_0300544C
+	ldr r1, _08045A94 @ =gPrevStageFlags
 	ldrh r0, [r2]
 	ldrh r1, [r1]
 	eors r0, r1
@@ -146,7 +146,7 @@ _08045A80:
 	subs r0, r0, r1
 	b _08045AA0
 	.align 2, 0
-_08045A94: .4byte sa2__gUnknown_0300544C
+_08045A94: .4byte gPrevStageFlags
 _08045A98:
 	movs r0, #0xa
 	ldrsh r1, [r4, r0]

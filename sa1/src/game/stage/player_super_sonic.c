@@ -4,7 +4,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/amy_attack_heart_effect.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/player.h"
 #include "game/stage/dust_effect_braking.h"
@@ -1090,7 +1090,7 @@ void Task_804A71C(void)
     tf->qScaleY = r0;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    s->frameFlags |= SPRITE_FLAG(ROT_SCALE_DOUBLE_SIZE, 1) | SPRITE_FLAG(ROT_SCALE_ENABLE, 1) | SA2_LABEL(gUnknown_030054B8)++;
+    s->frameFlags |= SPRITE_FLAG(ROT_SCALE_DOUBLE_SIZE, 1) | SPRITE_FLAG(ROT_SCALE_ENABLE, 1) | gOamMatrixIndex++;
 
     UpdateSpriteAnimation(s);
     TransformSprite(s, tf);
@@ -1235,7 +1235,7 @@ void Task_804AAC4(void)
 
     transform->rotation = mgr->unk70 >> 6;
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
+    s->frameFlags |= gOamMatrixIndex++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
 
     UpdateSpriteAnimation(s);
     TransformSprite(s, transform);
@@ -1470,7 +1470,7 @@ void Task_804B0D8(void)
     transform->rotation = mgr->unk70 >> 6;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
+    s->frameFlags |= gOamMatrixIndex++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
 
     UpdateSpriteAnimation(s);
     TransformSprite(s, transform);

@@ -9,7 +9,7 @@
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "game/player_callbacks.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/cheese.h"
 #include "game/bosses/boss_1.h"
 #include "game/bosses/common.h"
@@ -298,7 +298,7 @@ void CreateEggHammerTankII(void)
     s->frameFlags
         = (gOamMatrixIndex++) | SPRITE_FLAG(PRIORITY, 2) | SPRITE_FLAG(ROT_SCALE_ENABLE, 1) | SPRITE_FLAG(ROT_SCALE_DOUBLE_SIZE, 1);
 
-    if (!IS_FINAL_STAGE(gCurrentLevel) && gSelectedCharacter == CHARACTER_SONIC && gLoadedSaveGame->unlockedLevels[0] <= gCurrentLevel) {
+    if (!IS_FINAL_STAGE(gCurrentLevel) && gSelectedCharacter == CHARACTER_SONIC && LOADED_SAVE->unlockedLevels[0] <= gCurrentLevel) {
 
         s = &boss->cream;
         s->x = 0;
@@ -454,7 +454,7 @@ static void Task_DestructionSceneOutro(void)
         UpdateScreenFade(fade);
 
         if (!IS_FINAL_STAGE(gCurrentLevel) && gSelectedCharacter == CHARACTER_SONIC
-            && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+            && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
             gPlayer.charState = CHARSTATE_SONIC_CATCHING_CREAM;
         }
 
@@ -491,7 +491,7 @@ static void Task_DestructionSceneOutro(void)
             if (!IS_FINAL_STAGE(gCurrentLevel)) {
                 if (gGameMode == GAME_MODE_BOSS_TIME_ATTACK) {
                     CreateTimeAttackResults(gCourseTime);
-                } else if (gSelectedCharacter == CHARACTER_SONIC && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+                } else if (gSelectedCharacter == CHARACTER_SONIC && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
                     CreateStageResultsCutscene(0);
                 } else {
                     CreateStageResults(gCourseTime, gRingCount, gSpecialRingCount);

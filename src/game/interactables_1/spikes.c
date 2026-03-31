@@ -6,7 +6,7 @@
 #include "malloc_vram.h"
 
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
 #include "game/entity.h"
 #include "game/stage/player.h"

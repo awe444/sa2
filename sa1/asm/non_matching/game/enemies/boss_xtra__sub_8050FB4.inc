@@ -109,7 +109,7 @@
 	rsbs r1, r1, #0
 	ands r0, r1
 	str r0, [r6, #0x10]
-	ldr r2, _080510F0 @ =sa2__gUnknown_030054B8
+	ldr r2, _080510F0 @ =gOamMatrixIndex
 	ldrb r1, [r2]
 	adds r0, r1, #1
 	strb r0, [r2]
@@ -151,7 +151,7 @@ _080510E0: .4byte gSineTable
 _080510E4: .4byte 0x03000076
 _080510E8: .4byte 0x03000070
 _080510EC: .4byte gCamera
-_080510F0: .4byte sa2__gUnknown_030054B8
+_080510F0: .4byte gOamMatrixIndex
 _080510F4: .4byte _080510F8
 _080510F8: @ jump table
 	.4byte _0805112C @ case 0

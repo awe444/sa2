@@ -362,7 +362,7 @@ _08050D46:
 	rsbs r1, r1, #0
 	ands r0, r1
 	str r0, [r4, #0x10]
-	ldr r2, _08050DD0 @ =sa2__gUnknown_030054B8
+	ldr r2, _08050DD0 @ =gOamMatrixIndex
 	ldrb r1, [r2]
 	adds r0, r1, #1
 	strb r0, [r2]
@@ -403,7 +403,7 @@ _08050DC0: .4byte gWinRegs
 _08050DC4: .4byte gBldRegs
 _08050DC8: .4byte gStageTime
 _08050DCC: .4byte 0x00003F1F
-_08050DD0: .4byte sa2__gUnknown_030054B8
+_08050DD0: .4byte gOamMatrixIndex
 _08050DD4: .4byte _08050DD8
 _08050DD8: @ jump table
 	.4byte _08050E0C @ case 0

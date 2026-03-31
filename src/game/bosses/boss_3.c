@@ -14,7 +14,7 @@
 
 #include "game/stage/terrain_collision.h"
 #include "game/stage/player.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/stage/screen_shake.h"
 
 #include "constants/animations.h"
@@ -388,7 +388,7 @@ void CreateEggTotem(void)
 
     // Tails captured animation
     if (!IS_FINAL_STAGE(gCurrentLevel) && gSelectedCharacter == CHARACTER_SONIC
-        && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+        && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
         // __tails_kidnap
         s = &totem->sprTails;
         s->x = 0;

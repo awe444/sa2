@@ -4,7 +4,7 @@
 #include "lib/m4a/m4a.h"
 #include "rect.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
 #include "game/stage/terrain_collision.h"
 #include "game/stage/player.h"
@@ -525,8 +525,8 @@ void RingsScatterSingleplayer_NormalGravity(void)
         ring->x += ring->velX;
         ring->y += ring->velY;
 #elif (GAME == GAME_SA2)
-        ring->x += ring->velX + gUnknown_030054FC;
-        ring->y += ring->velY + gUnknown_030054E0;
+        ring->x += ring->velX + gWorldSpeedX;
+        ring->y += ring->velY + gWorldSpeedY;
 #endif
 
 #if (GAME == GAME_SA1)
@@ -849,7 +849,7 @@ NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterMultipak_NormalG
         ring->x += ring->velX;
         ring->y += ring->velY;
 #elif (GAME == GAME_SA2)
-        ring->x += ring->velX + gUnknown_030054FC;
+        ring->x += ring->velX + gWorldSpeedX;
         ring->y += ring->velY + 0x380;
 #endif
 
@@ -986,7 +986,7 @@ NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterSinglepakMain.in
         ring->x += ring->velX;
         ring->y += ring->velY;
 #elif (GAME == GAME_SA2)
-        ring->x += ring->velX + gUnknown_030054FC;
+        ring->x += ring->velX + gWorldSpeedX;
         ring->y += ring->velY + 0x380;
 #endif
 

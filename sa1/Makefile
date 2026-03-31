@@ -202,6 +202,7 @@ SA2_C_FILES := \
 	src/bg_triangles.c \
 	src/input_recorder.c \
 	src/background.c \
+	src/game/globals.c \
 
 SA2_C_ASM_FILES := \
 	src/rom_header.s \

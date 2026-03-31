@@ -281,7 +281,7 @@ void Task_DecorationDebrisMain(void)
     tf->rotation -= 42;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
     SA2_LABEL(sub_8004E14)(s, tf);
     DisplaySprite(s);
@@ -304,7 +304,7 @@ void Task_DecorationDebrisMain(void)
     tf->rotation += 42;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
     SA2_LABEL(sub_8004E14)(s, tf);
     DisplaySprite(s);
@@ -327,7 +327,7 @@ void Task_DecorationDebrisMain(void)
     tf->rotation += 14;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
     SA2_LABEL(sub_8004E14)(s, tf);
     DisplaySprite(s);
@@ -350,7 +350,7 @@ void Task_DecorationDebrisMain(void)
     tf->rotation -= 14;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
     SA2_LABEL(sub_8004E14)(s, tf);
     DisplaySprite(s);

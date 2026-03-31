@@ -3,7 +3,7 @@
 #include "lib/m4a/m4a.h"
 #include "game/game_over.h"
 #include "game/gTask_03006240.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/special_stage/main.h"
 #include "game/stage/ui.h"
 

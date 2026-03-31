@@ -403,7 +403,7 @@ static void Task_SoundTestScreenMain(void)
     const u8 *soundsList;
     u8 numSounds;
 
-    if (gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] >= 30) {
+    if (LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] >= 30) {
         soundsList = sCompletedGameSoundsOrder;
         numSounds = ARRAY_COUNT(sCompletedGameSoundsOrder);
     } else {

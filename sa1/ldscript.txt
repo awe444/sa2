@@ -6,9 +6,11 @@ SECTIONS {
     . = 0x8000000;
     ROM :
     ALIGN(4) {
-        /* Engine */
+        /* bootstrap */
         sa2/src/rom_header.o(.text);
         sa2/src/crt0.o(.text);
+
+        /* Engine */        
         sa2/src/multi_sio_asm.o(.text);
         data/rom_header_old.o(.text);
         sa2/src/core.o(.text);
@@ -40,7 +42,7 @@ SECTIONS {
         src/game/to_be_continued_screen.o(.text);
         src/game/sa1_sa2_shared/enemy_defeat_score.o(.text);
         src/game/sa1_sa2_shared/demo_manager.o(.text);
-        src/game/save.o(.text);
+        src/game/sa1/save.o(.text);
         src/game/sa1_sa2_shared/unused_flash_task.o(.text);
         src/game/multiplayer/mp_player.o(.text);
         src/game/multiplayer/indicators.o(.text);
@@ -291,7 +293,7 @@ SECTIONS {
         sa2/src/multi_sio.o(.rodata);
         sa2/src/sio32_multi_load.o(.rodata);
         src/data/tileset_debug_ascii.o(.rodata);
-        src/game/save.o(.rodata);
+        src/game/sa1/save.o(.rodata);
         data/chao_garden.o(.rodata);
         src/data/entity_tables.o(.rodata);
         src/game/sa1_sa2_shared/entities_manager.o(.rodata);

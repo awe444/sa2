@@ -6,7 +6,7 @@
 #include "game/stage/screen_fade.h"
 #include "lib/m4a/m4a.h"
 #include "constants/songs.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "malloc_vram.h"
 #include "game/multiboot/connection.h"
 #include "game/title_screen.h"
@@ -117,7 +117,7 @@ static void CreateUI(struct MultiplayerLobbyScreen *lobbyScreen)
     Sprite *s;
     Background *background;
     ScreenFade *fade;
-    s8 lang = gLoadedSaveGame->language - 1;
+    s8 lang = LOADED_SAVE->language - 1;
 
     if (lang < 0) {
         lang = 0;

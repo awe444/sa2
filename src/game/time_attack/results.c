@@ -2,7 +2,7 @@
 #include "core.h"
 #include "sprite.h"
 #include "game/stage/screen_fade.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/stage/player.h"
 #include "game/stage/ui.h"
 #include "malloc_vram.h"
@@ -52,7 +52,7 @@ u32 CreateTimeAttackResults(u32 finishTime)
     s16 millis, minutes, seconds;
     u8 i, level;
     bool8 isBossLevel;
-    gLoadedSaveGame->score += (s16)gRingCount;
+    LOADED_SAVE->score += (s16)gRingCount;
 
     t = TaskCreate(Task_AnimateResults, sizeof(TimeAttackResultsCutScene), 0xC100, 0, TaskDestructor_TimeAttackResults);
     resultsCutScene = TASK_DATA(t);
@@ -379,19 +379,19 @@ static u8 StoreRecord(u32 finishTime)
     u8 rank = 0;
 
     for (i = 0; i < 3; i++) {
-        existingRecords[i] = gLoadedSaveGame->timeRecords.table[character][zone][act][i];
+        existingRecords[i] = LOADED_SAVE->timeRecords.table[character][zone][act][i];
     }
 
     for (i = 0; i < 3; i++) {
         if (finishTime < existingRecords[i]) {
-            gLoadedSaveGame->timeRecords.table[character][zone][act][i] = finishTime;
+            LOADED_SAVE->timeRecords.table[character][zone][act][i] = finishTime;
             rank = ++i;
             break;
         }
     }
 
     for (; i < 3; i++) {
-        gLoadedSaveGame->timeRecords.table[character][zone][act][i] = existingRecords[i - 1];
+        LOADED_SAVE->timeRecords.table[character][zone][act][i] = existingRecords[i - 1];
     }
 
     return rank;

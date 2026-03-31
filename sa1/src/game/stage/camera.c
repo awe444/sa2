@@ -3,7 +3,7 @@
 #include "sprite.h"
 #include "animation_commands_bg.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
 #include "game/stage/camera.h"
 #include "game/stage/stage.h"
@@ -36,7 +36,6 @@ struct Backgrounds ALIGNED(16) gStageBackgroundsRam = {};
 UNUSED u32 unused_3005950[3] = {};
 
 struct Camera ALIGNED(8) gCamera = {};
-const Collision *gRefCollision = NULL;
 
 static void RenderMetatileLayers(s32, s32);
 

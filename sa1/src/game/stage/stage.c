@@ -8,7 +8,7 @@
 #include "game/multiplayer/indicators.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/music_manager.h"
 #include "game/sa1_sa2_shared/palette_loader.h"
@@ -17,7 +17,7 @@
 #include "game/sa1_sa2_shared/rings_manager.h"
 #include "game/sa1_sa2_shared/spot_light_beam_task.h"
 #include "game/parameters/stage.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/stage/camera.h"
 #include "game/stage/player.h"
 #include "game/stage/screen_shake.h"
@@ -157,7 +157,7 @@ void CreateGameStage(void)
     gActiveCollectRingEffectCount = 0;
 #if (GAME == GAME_SA2)
     gSpecialRingCount = 0;
-    gUnknown_030054B0 = 0;
+    gFinalBossActive = 0;
 #endif
 
     gStageFlags |= (STAGE_FLAG__DISABLE_PAUSE_MENU | STAGE_FLAG__ACT_START);
@@ -166,7 +166,7 @@ void CreateGameStage(void)
 #if (GAME == GAME_SA2)
     gBossRingsShallRespawn = FALSE;
     gBossRingsRespawnCount = BOSS_RINGS_DEFAULT_RESPAWN_COUNT;
-    gUnknown_030055BC = 0;
+    gBoostEffectTasksCreated = 0;
 #endif
 
     SA2_LABEL(sub_801F044)();
@@ -178,7 +178,7 @@ void CreateGameStage(void)
         someTask = sub_80550F8();
     }
 
-    SA2_LABEL(gUnknown_030053E0) = 0;
+    gSpikesUnknownTimer = 0;
 
     if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
         CreateChaoHuntHUD();
@@ -235,7 +235,7 @@ void CreateGameStage(void)
         StageInit_MPCollectRings();
     }
 #elif (GAME == GAME_SA2)
-    SA2_LABEL(gUnknown_030053E0) = 0;
+    gSpikesUnknownTimer = 0;
 
     if (!IS_EXTRA_STAGE(gCurrentLevel)) {
         sub_80213C0(gSelectedCharacter, gCurrentLevel, &gPlayer);
@@ -323,7 +323,7 @@ void CreateGameStage(void)
 
 #if (GAME == GAME_SA1)
         if (gGameMode == GAME_MODE_CHAO_HUNT || gGameMode == GAME_MODE_TEAM_PLAY) {
-            for (j = 0; j < NUM_MP_CHAO; j++) {
+            for (j = 0; j < ARRAY_COUNT(gChaoTasks); j++) {
                 gChaoTasks[j] = CreateMultiplayerChao((u8)(uintptr_t)gChaoTasks[j], j);
 
                 if (gGameMode == GAME_MODE_CHAO_HUNT) {
@@ -436,12 +436,12 @@ void Task_GameStage(void)
             gCamera.spectatorTarget = sioId;
         }
 
-        if (SA2_LABEL(gUnknown_030053E0) > 0) {
-            SA2_LABEL(gUnknown_030053E0)--;
+        if (gSpikesUnknownTimer > 0) {
+            gSpikesUnknownTimer--;
         }
     }
 
-    SA2_LABEL(gUnknown_0300544C) = gStageFlags;
+    gPrevStageFlags = gStageFlags;
 
     if (gStageFlags & STAGE_FLAG__ACT_START) {
         return;
@@ -762,7 +762,7 @@ void ApplyGameStageSettings(void)
 {
     gLevelScore = 0;
     gNumLives = 3;
-    SA2_LABEL(gUnknown_030054B0) = gCurrentLevel;
+    gFinalBossActive = gCurrentLevel;
 
     if (IS_MULTI_PLAYER) {
         gNumLives = 1;

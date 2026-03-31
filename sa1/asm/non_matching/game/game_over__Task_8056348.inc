@@ -26,7 +26,7 @@
 	adds r0, r0, r3
 	lsrs r0, r0, #8
 	lsls r2, r0, #0xc
-	ldr r7, _08056474 @ =sa2__gUnknown_030054B8
+	ldr r7, _08056474 @ =gOamMatrixIndex
 	ldrb r0, [r7]
 	adds r1, r0, #1
 	strb r1, [r7]
@@ -147,7 +147,7 @@ _08056458:
 _08056468: .4byte gCurTask
 _0805646C: .4byte 0x0300003C
 _08056470: .4byte 0xFF880000
-_08056474: .4byte sa2__gUnknown_030054B8
+_08056474: .4byte gOamMatrixIndex
 _08056478: .4byte gSineTable
 _0805647C: .4byte 0x000002CB
 _08056480: .4byte 0x03000020

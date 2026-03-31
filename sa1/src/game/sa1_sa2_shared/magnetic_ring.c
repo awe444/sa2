@@ -4,7 +4,7 @@
 #include "trig.h"
 #include "rect.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/collect_ring_effect.h"
 #include "game/sa1_sa2_shared/rings_manager.h"
 #include "game/sa1_sa2_shared/camera.h"

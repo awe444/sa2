@@ -4,7 +4,7 @@
 #include "global.h"
 #include "config.h"
 #include "game/game_over.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "sprite.h"
 #include "constants/text.h"
 

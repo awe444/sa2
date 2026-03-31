@@ -8,7 +8,7 @@
 #include "lib/m4a/m4a.h"
 #include "trig.h"
 #include "game/course_select.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 
 #include "game/stage/terrain_collision.h"
 #include "game/stage/player.h"
@@ -453,7 +453,7 @@ void sub_808E274(struct CharacterUnlockCutScene *scene)
 void sub_808E35C(struct CharacterUnlockCutScene *scene)
 {
     Background *background;
-    s8 lang = gLoadedSaveGame->language - 1;
+    s8 lang = LOADED_SAVE->language - 1;
     if (lang < 0) {
         lang = 0;
     }
@@ -524,7 +524,7 @@ void sub_808E63C(void);
 void sub_808E4C8(void)
 {
     struct CharacterUnlockCutScene *scene;
-    s8 lang = gLoadedSaveGame->language - 1;
+    s8 lang = LOADED_SAVE->language - 1;
 
     if (lang < 0) {
         lang = 0;
@@ -599,10 +599,10 @@ void sub_808E6B0(void)
     sub_8003EE4(0, 0x100, 0x100, 0, 0, 0, 0, gBgAffineRegs);
 
     if (UpdateScreenFade(&scene->unk100) == SCREEN_FADE_COMPLETE) {
-        if (gCurrentLevel >= gLoadedSaveGame->unlockedLevels[gSelectedCharacter]) {
-            CreateCourseSelectionScreen(gCurrentLevel, gLoadedSaveGame->unlockedLevels[gSelectedCharacter], 1);
+        if (gCurrentLevel >= LOADED_SAVE->unlockedLevels[gSelectedCharacter]) {
+            CreateCourseSelectionScreen(gCurrentLevel, LOADED_SAVE->unlockedLevels[gSelectedCharacter], 1);
         } else {
-            CreateCourseSelectionScreen(gCurrentLevel, gLoadedSaveGame->unlockedLevels[gSelectedCharacter], 4);
+            CreateCourseSelectionScreen(gCurrentLevel, LOADED_SAVE->unlockedLevels[gSelectedCharacter], 4);
         }
         TaskDestroy(gCurTask);
     }

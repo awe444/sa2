@@ -6,7 +6,7 @@
 
 #include "game/sa1_sa2_shared/collision.h"
 
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/bosses/common.h"
 #include "game/bosses/eggmobile_escape_sequence.h"
 #include "game/stage/boss_results_transition.h"
@@ -326,7 +326,7 @@ void CreateEggSaucer(void)
     vram += PILOT_TILES * TILE_SIZE_4BPP;
 
     if ((gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE) && gSelectedCharacter == CHARACTER_SONIC)
-        && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+        && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
         s->graphics.anim = SA2_ANIM_EGG_SAUCER_PILOT_KNUCKLES;
         s->variant = 0;
     } else {
@@ -467,7 +467,7 @@ void sub_80435BC(void)
     }
 
     if ((gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE) && gSelectedCharacter == CHARACTER_SONIC)
-        && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+        && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
         if (boss->unk15 == 0 && I(boss->cabinX) - gCamera.x < 50) {
             boss->unk15 = 1;
         }
@@ -680,7 +680,7 @@ void sub_8043BEC(EggSaucer *boss)
 
     if (boss->unk15 == 0
         || (gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE) && gSelectedCharacter == CHARACTER_SONIC
-            && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel)) {
+            && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel)) {
         s = &boss->pilot;
         s->x = I(boss->cabinX) - gCamera.x;
         s->y = I(boss->cabinY) - gCamera.y;
@@ -1567,7 +1567,7 @@ void sub_80452F8(EggSaucer *boss)
     if (boss->unk13 == 0) {
         boss->unk12 = 0x1E;
         if ((gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE) && gSelectedCharacter == CHARACTER_SONIC)
-            && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+            && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
             s->graphics.anim = SA2_ANIM_EGG_SAUCER_PILOT_KNUCKLES;
             s->variant = 1;
 
@@ -1593,7 +1593,7 @@ void sub_8045368(EggSaucer *boss)
     boss->unk13 = 30;
     boss->unk12 = 0;
     if ((gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE) && gSelectedCharacter == CHARACTER_SONIC)
-        && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+        && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
         if (!boss->health) {
             s->graphics.anim = SA2_ANIM_EGG_SAUCER_PILOT_KNUCKLES;
             s->variant = 3;
@@ -1636,7 +1636,7 @@ void sub_80454A4(EggSaucer *boss)
     s = &boss->pilot;
 
     if ((gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE) && gSelectedCharacter == CHARACTER_SONIC)
-        && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
+        && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel) {
         if (!boss->health) {
             s->graphics.anim = SA2_ANIM_EGG_SAUCER_PILOT_KNUCKLES;
             s->variant = 3;

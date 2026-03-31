@@ -9,7 +9,7 @@
 #if (GAME == GAME_SA2)
 #include "game/boost_effect.h"
 #endif
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
 #include "game/stage/mp_sprite_task.h"

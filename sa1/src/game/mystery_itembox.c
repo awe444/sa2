@@ -511,9 +511,9 @@ void Task_801C4EC()
         Task_MysteryItemBox_Main0();
     } else {
         itembox->box.frameFlags &= ~0x1F;
-        itembox->box.frameFlags |= SA2_LABEL(gUnknown_030054B8);
+        itembox->box.frameFlags |= gOamMatrixIndex;
         itembox->identifier.frameFlags &= ~0x1F;
-        itembox->identifier.frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        itembox->identifier.frameFlags |= gOamMatrixIndex++;
 
         sprBox = &itembox->box;
         TransformSprite(sprBox, tf);
@@ -547,9 +547,9 @@ void sub_801C5C4()
         Task_MysteryItemBox_Main1();
     } else {
         itembox->box.frameFlags &= ~0x1F;
-        itembox->box.frameFlags |= SA2_LABEL(gUnknown_030054B8);
+        itembox->box.frameFlags |= gOamMatrixIndex;
         itembox->identifier.frameFlags &= ~0x1F;
-        itembox->identifier.frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        itembox->identifier.frameFlags |= gOamMatrixIndex++;
 
         sprBox = &itembox->box;
         TransformSprite(sprBox, tf);

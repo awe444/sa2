@@ -7,7 +7,7 @@
 #include "task.h"
 #include "lib/m4a/m4a.h"
 #include "trig.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/math.h"
 
 #include "constants/animations.h"

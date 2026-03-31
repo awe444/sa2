@@ -301,7 +301,7 @@ void Task_IceBlockShards(void)
         tf->qScaleY = scale;
         tf->rotation -= Q(42. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -323,7 +323,7 @@ void Task_IceBlockShards(void)
         tf->qScaleY = scale;
         tf->rotation += Q(42. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -345,7 +345,7 @@ void Task_IceBlockShards(void)
         tf->qScaleY = scale;
         tf->rotation += Q(14. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -367,7 +367,7 @@ void Task_IceBlockShards(void)
         tf->qScaleY = scale;
         tf->rotation -= Q(14. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;

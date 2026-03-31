@@ -2,7 +2,7 @@
 #include "lib/agb_flash/agb_flash.h"
 #include "malloc_ewram.h"
 #include "flags.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "lib/m4a/m4a.h"
 #include "game/math.h"
 #include "constants/text.h"

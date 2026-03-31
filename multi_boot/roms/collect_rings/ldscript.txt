@@ -13,7 +13,7 @@ SECTIONS {
         build/collect_rings/src/sa2/multi_sio.o(.data);
         build/collect_rings/src/sa2/sio32_multi_load.o(COMMON);
         build/collect_rings/src/sa2/core.o(.data);
-        build/collect_rings/src/sa2/game/sa1_sa2_shared/globals.o(.data);
+        build/collect_rings/src/sa2/game/globals.o(.data);
         build/collect_rings/src/sa2/game/multiboot/collect_rings/time_display.o(.data);
         build/collect_rings/src/sa2/game/multiplayer/mp_player.o(.data);
         build/collect_rings/src/sa2/game/multiplayer/mp_attack_2_effect.o(.data);

@@ -5,8 +5,8 @@
 #include "data/ui_graphics.h"
 #include "game/gTask_03006240.h"
 #include "game/entity.h"
-#include "game/sa1_sa2_shared/globals.h"
-#include "game/save.h"
+#include "game/globals.h"
+#include "game/sa1/save.h"
 #include "game/special_stage/main.h"
 #include "game/stage/stage.h"
 

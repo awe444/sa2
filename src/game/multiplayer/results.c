@@ -9,7 +9,7 @@
 #include "game/multiplayer/results.h"
 #include "game/multiplayer/multipak_connection.h"
 #include "game/multiplayer_lobby.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 
 #ifdef TEAMPLAY_AVAILABLE
 #include "game/multiplayer/team_play.h"
@@ -128,7 +128,7 @@ void CreateMultiplayerResultsScreen(u8 mode)
     Sprite *s;
 
     u32 count = 0;
-    u32 lang = gLoadedSaveGame->language;
+    u32 lang = LOADED_SAVE->language;
     gWinRegs[4] = 0;
     gWinRegs[5] = 0;
     gWinRegs[0] = 0;
@@ -362,7 +362,7 @@ static void sub_805C3D0(void)
 #else
                 CreateCourseSelectionScreen(0, gMultiplayerUnlockedLevels, COURSE_SELECT_CUT_SCENE_NONE);
 #endif
-            } else if (gGameMode == GAME_MODE_SINGLE_PLAYER && gLoadedSaveGame->unlockedLevels[gSelectedCharacter] == 0) {
+            } else if (gGameMode == GAME_MODE_SINGLE_PLAYER && LOADED_SAVE->unlockedLevels[gSelectedCharacter] == 0) {
                 gCurrentLevel = 0;
                 GameStageStart();
                 return;
@@ -370,7 +370,7 @@ static void sub_805C3D0(void)
 #ifdef TEAMPLAY_AVAILABLE
                 CreateMultiplayerResultsScreen();
 #else
-                CreateCourseSelectionScreen(0, gLoadedSaveGame->unlockedLevels[gSelectedCharacter], COURSE_SELECT_CUT_SCENE_NONE);
+                CreateCourseSelectionScreen(0, LOADED_SAVE->unlockedLevels[gSelectedCharacter], COURSE_SELECT_CUT_SCENE_NONE);
 #endif
             }
         }

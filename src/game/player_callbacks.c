@@ -4,7 +4,7 @@
 #include "malloc_vram.h"
 
 #include "game/amy_attack_heart_effect.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/stage/dust_effect_braking.h"
 #include "game/stage/mp_sprite_task.h"

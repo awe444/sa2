@@ -4,7 +4,7 @@
 #include "game/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 
 #include "constants/animations.h"
 #include "constants/vram_hardcoded.h"

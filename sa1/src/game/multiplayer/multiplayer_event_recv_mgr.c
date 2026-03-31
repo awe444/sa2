@@ -172,10 +172,10 @@ void ReceiveRoomEvent_8(union MultiSioData *msioData, u8 UNUSED mppId)
 #if (GAME == GAME_SA1)
 void ReceiveRoomEvent_CollectChao(union MultiSioData *msioData, u8 mppId)
 {
-    ChaoTask *chao = TASK_DATA(gChaoTasks[msioData->pat5.sioId]);
+    Chao *chao = TASK_DATA(gChaoTasks[msioData->pat5.sioId]);
     MultiplayerPlayer *mpp;
 
-    chao->unk41 = msioData->pat5.unk10;
+    chao->playerIdA = msioData->pat5.unk10;
     mpp = TASK_DATA(gMultiplayerPlayerTasks[mppId]);
     mpp->unk5C &= ~(0x10000 << msioData->pat5.sioId);
 

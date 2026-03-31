@@ -1,6 +1,6 @@
 #include "global.h"
 #include "game/stage/player_controls.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 
 struct ButtonConfig gPlayerControls = {};
 
@@ -40,9 +40,9 @@ UNUSED void sub_802B584(u16 jump, u16 attack, u16 trick)
         }
     }
 #ifndef COLLECT_RINGS_ROM
-    gLoadedSaveGame->buttonConfig.jump = controls->jump;
-    gLoadedSaveGame->buttonConfig.attack = controls->attack;
-    gLoadedSaveGame->buttonConfig.trick = controls->trick;
+    LOADED_SAVE->buttonConfig.jump = controls->jump;
+    LOADED_SAVE->buttonConfig.attack = controls->attack;
+    LOADED_SAVE->buttonConfig.trick = controls->trick;
 #endif
 }
 

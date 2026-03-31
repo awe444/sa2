@@ -5,7 +5,7 @@
 #include "game/entity.h"
 #include "game/game_over.h"
 #include "game/title_screen.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/stage/stage.h"
 #include "game/stage/ui.h"
 #include "data/ui_graphics.h"

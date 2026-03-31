@@ -2,7 +2,7 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "task.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 
 #include "game/stage/player.h"
 #include "game/stage/camera.h"

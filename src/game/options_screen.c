@@ -3,7 +3,7 @@
 #include "game/options_screen.h"
 #include "lib/m4a/m4a.h"
 #include "task.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "malloc_ewram.h"
 #include "game/math.h"
 #include "sprite.h"
@@ -1208,7 +1208,7 @@ void CreateTimeAttackLevelSelectScreen(bool16 isBossView, s16 selectedCharacter,
     struct TimeRecordsScreen *timeRecordsScreen = TASK_DATA(t);
     s16 i;
 
-    ReadAvailableCharacters(i, gLoadedSaveGame->unlockedCharacters);
+    ReadAvailableCharacters(i, LOADED_SAVE->unlockedCharacters);
 
     timeRecordsScreen->playerDataMenu = 0;
     timeRecordsScreen->timeRecords = EwramMalloc(sizeof(struct TimeRecords));
@@ -1220,10 +1220,10 @@ void CreateTimeAttackLevelSelectScreen(bool16 isBossView, s16 selectedCharacter,
     timeRecordsScreen->availableCharacters = i;
 
     for (i = 0; i < NUM_CHARACTERS; i++) {
-        timeRecordsScreen->unlockedCourses[i] = gLoadedSaveGame->unlockedLevels[i];
+        timeRecordsScreen->unlockedCourses[i] = LOADED_SAVE->unlockedLevels[i];
     }
 
-    timeRecordsScreen->language = LanguageIndex(gLoadedSaveGame->language);
+    timeRecordsScreen->language = LanguageIndex(LOADED_SAVE->language);
     timeRecordsScreen->isBossMode = isBossView;
     timeRecordsScreen->view = TIME_RECORDS_SCREEN_VIEW_TIME_ATTACK;
 
@@ -1235,7 +1235,7 @@ void CreateTimeAttackLevelSelectScreen(bool16 isBossView, s16 selectedCharacter,
 #endif
     }
 
-    memcpy(timeRecordsScreen->timeRecords, &gLoadedSaveGame->timeRecords, sizeof(struct TimeRecords));
+    memcpy(timeRecordsScreen->timeRecords, &LOADED_SAVE->timeRecords, sizeof(struct TimeRecords));
 
     ResetProfileScreensVram();
 
@@ -1256,7 +1256,7 @@ void CreateNewProfileScreen(void)
     languageScreen = TASK_DATA(t);
 
     languageScreen->optionsScreen = NULL;
-    languageScreen->menuCursor = LanguageIndex(gLoadedSaveGame->language);
+    languageScreen->menuCursor = LanguageIndex(LOADED_SAVE->language);
     languageScreen->creatingNewProfile = TRUE;
 
     if ((u8)languageScreen->menuCursor >= NUM_LANGUAGES) {
@@ -1281,7 +1281,7 @@ void CreateNewProfileNameScreen(s16 mode)
     s16 i;
 
     profileNameScreen->playerDataMenu = NULL;
-    profileNameScreen->language = LanguageIndex(gLoadedSaveGame->language);
+    profileNameScreen->language = LanguageIndex(LOADED_SAVE->language);
 
     profileNameScreen->onCompleteAction
         = mode == NEW_PROFILE_NAME_START_GAME ? NAME_SCREEN_COMPLETE_ACTION_START_GAME : NAME_SCREEN_COMPLETE_ACTION_MULTIPLAYER;
@@ -1321,7 +1321,7 @@ void CreateNewProfileNameScreen(s16 mode)
 
 static void ReadProfileData(struct OptionsScreen *optionsScreen)
 {
-    struct SaveGame *saveGame = gLoadedSaveGame;
+    struct SaveGame *saveGame = LOADED_SAVE;
     struct OptionsScreenProfileData *profile = &optionsScreen->profileData;
 
     s16 i;
@@ -1380,7 +1380,7 @@ static void ReadProfileData(struct OptionsScreen *optionsScreen)
 
 static void StoreProfileData(struct OptionsScreen *optionsScreen)
 {
-    struct SaveGame *saveGame = gLoadedSaveGame;
+    struct SaveGame *saveGame = LOADED_SAVE;
     struct OptionsScreenProfileData *profile = &optionsScreen->profileData;
 
     memcpy(saveGame->playerName, profile->playerName, sizeof(profile->playerName));
@@ -2998,7 +2998,7 @@ static void Task_LanguageScreenMain(void)
     if (languageScreen->creatingNewProfile) {
         if (gPressedKeys & (A_BUTTON | START_BUTTON)) {
             m4aSongNumStart(SE_SELECT);
-            gLoadedSaveGame->language = languageScreen->menuCursor + 1;
+            LOADED_SAVE->language = languageScreen->menuCursor + 1;
             LanguageScreenHandleExit();
         }
         return;
@@ -3739,7 +3739,7 @@ static void ProfileNameScreenFadeOutAndExit(void)
     }
 
     for (i = 0; i < MAX_PLAYER_NAME_LENGTH; i++) {
-        gLoadedSaveGame->playerName[i] = nameInput->buffer[i];
+        LOADED_SAVE->playerName[i] = nameInput->buffer[i];
     }
     WriteSaveGame();
     TasksDestroyAll();
@@ -3854,7 +3854,7 @@ static void CreateTimeRecordsScreen(struct PlayerDataMenu *playerDataMenu)
     struct TimeRecordsScreen *timeRecordsScreen = TASK_DATA(t);
     s16 availableCharacters;
 
-    ReadAvailableCharacters(availableCharacters, gLoadedSaveGame->unlockedCharacters);
+    ReadAvailableCharacters(availableCharacters, LOADED_SAVE->unlockedCharacters);
 
     timeRecordsScreen->playerDataMenu = playerDataMenu;
     timeRecordsScreen->character = 0;
@@ -3865,7 +3865,7 @@ static void CreateTimeRecordsScreen(struct PlayerDataMenu *playerDataMenu)
     timeRecordsScreen->availableCharacters = availableCharacters;
 
     for (availableCharacters = 0; availableCharacters < NUM_CHARACTERS; availableCharacters++) {
-        timeRecordsScreen->unlockedCourses[availableCharacters] = gLoadedSaveGame->unlockedLevels[availableCharacters];
+        timeRecordsScreen->unlockedCourses[availableCharacters] = LOADED_SAVE->unlockedLevels[availableCharacters];
     }
 
     timeRecordsScreen->language = playerDataMenu->language;
@@ -4013,7 +4013,7 @@ static void CreateTimeRecordsScreenAtCoursesView(struct PlayerDataMenu *playerDa
     struct TimeRecordsScreen *timeRecordsScreen = TASK_DATA(t);
     s16 i;
 
-    ReadAvailableCharacters(i, gLoadedSaveGame->unlockedCharacters);
+    ReadAvailableCharacters(i, LOADED_SAVE->unlockedCharacters);
 
     timeRecordsScreen->playerDataMenu = playerDataMenu;
     timeRecordsScreen->timeRecords = NULL;
@@ -4025,7 +4025,7 @@ static void CreateTimeRecordsScreenAtCoursesView(struct PlayerDataMenu *playerDa
     timeRecordsScreen->availableCharacters = i;
 
     for (i = 0; i < NUM_CHARACTERS; i++) {
-        timeRecordsScreen->unlockedCourses[i] = gLoadedSaveGame->unlockedLevels[i];
+        timeRecordsScreen->unlockedCourses[i] = LOADED_SAVE->unlockedLevels[i];
     }
 
     timeRecordsScreen->language = playerDataMenu->language;

@@ -3,7 +3,7 @@
 #include "flags.h"
 #include "trig.h"
 #include "malloc_vram.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 
 #include "game/stage/player.h"
 #include "game/stage/ui.h"
@@ -275,7 +275,7 @@ void Task_StageUIMain(void)
                 }
             }
 
-            if ((!gLoadedSaveGame->timeLimitDisabled) && (gCourseTime >= TIME(9, 40)) && (Mod(gCourseTime, 60) == 0)) {
+            if ((!LOADED_SAVE->timeLimitDisabled) && (gCourseTime >= TIME(9, 40)) && (Mod(gCourseTime, 60) == 0)) {
                 m4aSongNumStart(SE_TIMER);
             }
 

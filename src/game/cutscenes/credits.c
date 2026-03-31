@@ -7,7 +7,7 @@
 #include "game/stage/screen_fade.h"
 #include "task.h"
 #include "lib/m4a/m4a.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 
 #include "constants/tilemaps.h"
 
@@ -84,9 +84,9 @@ void CreateCreditsCutScene(u8 creditsVariant, u8 b, u8 c)
         scene->unk50 = 0;
     }
 
-    if ((scene->variant == CREDITS_VARIANT_FINAL_ENDING && gLoadedSaveGame->completedCharacters[CHARACTER_AMY])) {
+    if ((scene->variant == CREDITS_VARIANT_FINAL_ENDING && LOADED_SAVE->completedCharacters[CHARACTER_AMY])) {
         scene->unk4D = 1;
-    } else if (scene->variant == CREDITS_VARIANT_EXTRA_ENDING && gLoadedSaveGame->extraEndingCreditsPlayed) {
+    } else if (scene->variant == CREDITS_VARIANT_EXTRA_ENDING && LOADED_SAVE->extraEndingCreditsPlayed) {
         scene->unk4D = 2;
     } else {
         scene->unk4D = 0;

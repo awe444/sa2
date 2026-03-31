@@ -619,7 +619,7 @@ void Task_SkatingStoneDebris(void)
         tf->rotation = (tf->rotation - Q(42. / 256.)) & (SIN_PERIOD - 1);
 
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
         SA2_LABEL(sub_8004E14)(s, tf);
 
@@ -645,7 +645,7 @@ void Task_SkatingStoneDebris(void)
         tf->rotation = (tf->rotation + Q(42. / 256.)) & (SIN_PERIOD - 1);
 
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
         SA2_LABEL(sub_8004E14)(s, tf);
 
@@ -671,7 +671,7 @@ void Task_SkatingStoneDebris(void)
         tf->rotation = (tf->rotation + Q(14. / 256.)) & (SIN_PERIOD - 1);
 
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
         SA2_LABEL(sub_8004E14)(s, tf);
 
@@ -697,7 +697,7 @@ void Task_SkatingStoneDebris(void)
         tf->rotation = (tf->rotation - Q(14. / 256.)) & (SIN_PERIOD - 1);
 
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
         SA2_LABEL(sub_8004E14)(s, tf);
 

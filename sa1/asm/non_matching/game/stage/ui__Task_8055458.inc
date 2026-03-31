@@ -198,7 +198,7 @@ _080555D4:
 	mov sb, r2
 	ldr r1, _080556C4 @ =gPartner
 	mov sl, r1
-	ldr r2, _080556C8 @ =sa2__gUnknown_030054B0
+	ldr r2, _080556C8 @ =gFinalBossActive
 	mov ip, r2
 	cmp r0, #1      @ IS_MULTI_PLAYER
 	bls _08055622
@@ -300,7 +300,7 @@ _080556B8: .4byte gGameMode
 _080556BC: .4byte gPlayer
 _080556C0: .4byte gStageFlags
 _080556C4: .4byte gPartner
-_080556C8: .4byte sa2__gUnknown_030054B0
+_080556C8: .4byte gFinalBossActive
 _080556CC: .4byte gMultiplayerPlayerTasks
 _080556D0: .4byte 0x0000FFFE
 _080556D4: .4byte 0xFFDFFFFF

@@ -5,7 +5,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/entity.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/enemies/bosses_shared.h" // CreatePreBossCameraPan
 #include "game/nuts_and_bolts_task.h"
 #include "game/sa1_sa2_shared/collision.h"

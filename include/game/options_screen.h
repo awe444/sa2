@@ -2,7 +2,7 @@
 #define GUARD_OPTION_SCREEN_H
 
 #include "global.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "sprite.h"
 #include "game/stage/screen_fade.h"
 #include "constants/text.h"

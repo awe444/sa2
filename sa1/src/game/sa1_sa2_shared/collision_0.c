@@ -8,7 +8,7 @@
 #include "game/stage/terrain_collision.h"
 #include "constants/char_states.h"
 #endif
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 #include "game/sa1_sa2_shared/entities_manager.h"

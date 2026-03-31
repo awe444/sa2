@@ -9,7 +9,7 @@
 #include "game/multiplayer/mode_select.h"
 
 #include "data/sprite_data.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/title_screen.h"
 
 #include "game/stage/screen_fade.h"
@@ -106,9 +106,9 @@ void StartMultiPakConnect(void)
 
     s = &connectScreen->s;
     s->graphics.dest = vramAddr;
-    vramAddr += gUnknown_080D9050[gLoadedSaveGame->language].numTiles * TILE_SIZE_4BPP;
-    s->graphics.anim = gUnknown_080D9050[gLoadedSaveGame->language].anim;
-    s->variant = gUnknown_080D9050[gLoadedSaveGame->language].variant;
+    vramAddr += gUnknown_080D9050[LOADED_SAVE->language].numTiles * TILE_SIZE_4BPP;
+    s->graphics.anim = gUnknown_080D9050[LOADED_SAVE->language].anim;
+    s->variant = gUnknown_080D9050[LOADED_SAVE->language].variant;
     s->prevVariant = -1;
     s->x = 8;
     s->y = 24;
@@ -124,9 +124,9 @@ void StartMultiPakConnect(void)
 
     s = &connectScreen->s2;
     s->graphics.dest = vramAddr;
-    vramAddr += gPressStartTiles[gLoadedSaveGame->language].numTiles * TILE_SIZE_4BPP;
-    s->graphics.anim = gPressStartTiles[gLoadedSaveGame->language].anim;
-    s->variant = gPressStartTiles[gLoadedSaveGame->language].variant;
+    vramAddr += gPressStartTiles[LOADED_SAVE->language].numTiles * TILE_SIZE_4BPP;
+    s->graphics.anim = gPressStartTiles[LOADED_SAVE->language].anim;
+    s->variant = gPressStartTiles[LOADED_SAVE->language].variant;
     s->prevVariant = -1;
     s->x = DISPLAY_CENTER_X;
     s->y = 122;
@@ -177,12 +177,12 @@ void StartMultiPakConnect(void)
         MultiSioStart();
     }
 
-    gMultiplayerUnlockedCharacters = gLoadedSaveGame->unlockedCharacters | 0xF;
+    gMultiplayerUnlockedCharacters = LOADED_SAVE->unlockedCharacters | 0xF;
     gMultiplayerUnlockedLevels = 1;
 
     for (i = 0; i < 5; i++) {
-        if (gMultiplayerUnlockedLevels < gLoadedSaveGame->unlockedLevels[i]) {
-            gMultiplayerUnlockedLevels = gLoadedSaveGame->unlockedLevels[i];
+        if (gMultiplayerUnlockedLevels < LOADED_SAVE->unlockedLevels[i]) {
+            gMultiplayerUnlockedLevels = LOADED_SAVE->unlockedLevels[i];
         }
     }
 
@@ -406,10 +406,10 @@ static void sub_805ADAC(void)
             send = &gMultiSioSend.pat0;
             send->unk0 = 0x4011;
             send->unk2 = var3;
-            send->unk4 = gLoadedSaveGame->id;
+            send->unk4 = LOADED_SAVE->id;
             send->unk10 = connectScreen->unkDC;
             for (x = 0; x < 3; x++) {
-                send->unk8[x] = gLoadedSaveGame->playerName[x];
+                send->unk8[x] = LOADED_SAVE->playerName[x];
             }
             send->unkE = gMultiplayerUnlockedCharacters;
             send->unkF = gMultiplayerUnlockedLevels;
@@ -433,9 +433,9 @@ static void sub_805ADAC(void)
     }
     send = &gMultiSioSend.pat0;
     send->unk0 = 0x4010;
-    send->unk4 = gLoadedSaveGame->id;
+    send->unk4 = LOADED_SAVE->id;
     for (x = 0; x < 3; x++) {
-        send->unk8[x] = gLoadedSaveGame->playerName[x];
+        send->unk8[x] = LOADED_SAVE->playerName[x];
     }
     send->unkE = gMultiplayerUnlockedCharacters;
     send->unkF = gMultiplayerUnlockedLevels;
@@ -574,9 +574,9 @@ static void sub_805B4C0(void)
             send = &gMultiSioSend.pat0;
             send->unk0 = 0x4012;
             send->unk2 = recv2;
-            send->unk4 = gLoadedSaveGame->id;
+            send->unk4 = LOADED_SAVE->id;
             for (j = 0; j < 3; j++) {
-                send->unk8[j] = gLoadedSaveGame->playerName[j + 3];
+                send->unk8[j] = LOADED_SAVE->playerName[j + 3];
             }
             send->unkE = gMultiplayerUnlockedCharacters;
             send->unkF = gMultiplayerUnlockedLevels;
@@ -607,7 +607,7 @@ static void sub_805B4C0(void)
                     }
                     send->unk0 = 0x4011;
                     for (j = 0; j < 3; j++) {
-                        send->unk8[j] = gLoadedSaveGame->playerName[j];
+                        send->unk8[j] = LOADED_SAVE->playerName[j];
                     };
 
                     return;
@@ -617,9 +617,9 @@ static void sub_805B4C0(void)
             send = &gMultiSioSend.pat0;
             send->unk0 = 0x4011;
             send->unk2 = recv2;
-            send->unk4 = gLoadedSaveGame->id;
+            send->unk4 = LOADED_SAVE->id;
             for (j = 0; j < 3; j++) {
-                send->unk8[j] = gLoadedSaveGame->playerName[j + 3];
+                send->unk8[j] = LOADED_SAVE->playerName[j + 3];
             }
             send->unkE = gMultiplayerUnlockedCharacters;
             send->unkF = gMultiplayerUnlockedLevels;

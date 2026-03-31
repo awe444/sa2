@@ -9,7 +9,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "trig.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 
 #include "constants/songs.h"
 
@@ -86,7 +86,7 @@ void sub_808E9F8(UNUSED struct Task *t)
 UNUSED void sub_808E9FC(void)
 {
     struct EndingCutSceneTransition *fade = TASK_DATA(gCurTask);
-    if (gLoadedSaveGame->unlockedLevels[gSelectedCharacter] > (LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53))) {
+    if (LOADED_SAVE->unlockedLevels[gSelectedCharacter] > (LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53))) {
         fade->unk6D = 2;
     } else {
         fade->unk6D = 1;

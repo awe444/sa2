@@ -7,12 +7,12 @@
 #include "game/amy_attack_heart_effect.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/parameters/characters.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/camera.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/music_manager.h"
 #include "game/sa1_sa2_shared/player.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/some_task_manager.h"
 #include "game/stage/camera.h"
 #include "game/stage/terrain_collision.h"
@@ -90,7 +90,7 @@ void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *psi);
     {                                                                                                                                      \
         player->qWorldX += player->qSpeedAirX;                                                                                             \
                                                                                                                                            \
-        if ((gStageFlags ^ SA2_LABEL(gUnknown_0300544C)) & STAGE_FLAG__GRAVITY_INVERTED) {                                                 \
+        if ((gStageFlags ^ gPrevStageFlags) & STAGE_FLAG__GRAVITY_INVERTED) {                                                              \
             player->qSpeedAirY = -player->qSpeedAirY;                                                                                      \
         }                                                                                                                                  \
                                                                                                                                            \
@@ -231,8 +231,8 @@ void SA2_LABEL(sub_80213C0)(u32 UNUSED characterId, u32 UNUSED levelId, Player *
 
 #if (GAME == GAME_SA2)
     gStageGoalX = 0;
-    gUnknown_030054FC = 0;
-    gUnknown_030054E0 = 0;
+    gWorldSpeedX = 0;
+    gWorldSpeedY = 0;
 
     InitNewInputCounters();
 #endif
@@ -3930,8 +3930,8 @@ void Task_PlayerMain(void)
     Player_ApplyBoostPhysics(p);
     Player_HandleWalkAnim(p);
 
-    gUnknown_030054FC = 0;
-    gUnknown_030054E0 = 0;
+    gWorldSpeedX = 0;
+    gWorldSpeedY = 0;
     sub_802460C(p);
     sub_800DF8C(p);
     sub_8023878(p);
@@ -4260,7 +4260,7 @@ NONMATCH("asm/non_matching/game/stage/Player__Task_804597C.inc", void Task_80459
 
     gPartner.qWorldX += gPartner.qSpeedAirX;
 
-    if ((gStageFlags ^ SA2_LABEL(gUnknown_0300544C)) & STAGE_FLAG__GRAVITY_INVERTED) {
+    if ((gStageFlags ^ gPrevStageFlags) & STAGE_FLAG__GRAVITY_INVERTED) {
         gPartner.qSpeedAirY = -gPartner.qSpeedAirY;
     }
     // _08045A80
@@ -5181,7 +5181,7 @@ void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *inPsi)
                 p->w.cf.unkB0 = rotation;
                 psi->transform.rotation = rotation << 2;
                 s->frameFlags &= ~SPRITE_FLAG_MASK_ROT_SCALE;
-                s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
+                s->frameFlags |= gOamMatrixIndex++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
 
                 MACRO_8024B10_PSI_UPDATE(p, psi);
                 TransformSprite(s, &psi->transform);
@@ -5220,7 +5220,7 @@ void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *inPsi)
                 {
                     psi->transform.rotation = shift << 2;
                     s->frameFlags &= ~SPRITE_FLAG_MASK_ROT_SCALE;
-                    s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
+                    s->frameFlags |= gOamMatrixIndex++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
 
                     MACRO_8024B10_PSI_UPDATE(p, psi);
                     TransformSprite(s, &psi->transform);

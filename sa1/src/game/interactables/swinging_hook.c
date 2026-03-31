@@ -79,9 +79,9 @@ void CreateEntity_SwingingHook(MapEntity *me, u16 regionX, u16 regionY, u8 id)
         s1->hitboxes[0].index = HITBOX_STATE_INACTIVE;
 
         if (me->d.sData[0]) {
-            s1->frameFlags = SPRITE_FLAG(PRIORITY, SA2_LABEL(gUnknown_030054B8)++) | SPRITE_FLAG_ENABLE_ROTATION(30);
+            s1->frameFlags = SPRITE_FLAG(PRIORITY, gOamMatrixIndex++) | SPRITE_FLAG_ENABLE_ROTATION(30);
         } else {
-            s1->frameFlags = SPRITE_FLAG(PRIORITY, SA2_LABEL(gUnknown_030054B8)++) | SPRITE_FLAG_ENABLE_ROTATION(31);
+            s1->frameFlags = SPRITE_FLAG(PRIORITY, gOamMatrixIndex++) | SPRITE_FLAG_ENABLE_ROTATION(31);
         }
     }
 
@@ -378,9 +378,9 @@ NONMATCH("asm/non_matching/game/interactables/hook__Task_SwingingHook.inc", void
         tf->y = worldY - gCamera.y + (sp1C >> 10);
 
         if (me->d.sData[0]) {
-            s1->frameFlags = SPRITE_FLAG(PRIORITY, SA2_LABEL(gUnknown_030054B8)++) | SPRITE_FLAG_ENABLE_ROTATION(30);
+            s1->frameFlags = SPRITE_FLAG(PRIORITY, gOamMatrixIndex++) | SPRITE_FLAG_ENABLE_ROTATION(30);
         } else {
-            s1->frameFlags = SPRITE_FLAG(PRIORITY, SA2_LABEL(gUnknown_030054B8)++) | SPRITE_FLAG_ENABLE_ROTATION(31);
+            s1->frameFlags = SPRITE_FLAG(PRIORITY, gOamMatrixIndex++) | SPRITE_FLAG_ENABLE_ROTATION(31);
         }
 
 #ifndef BUG_FIX

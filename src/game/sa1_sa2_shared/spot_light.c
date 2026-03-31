@@ -3,7 +3,7 @@
 #include "task.h"
 #include "trig.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/spot_light.h"
 #include "game/sa1_sa2_shared/spot_light_beam_task.h"
 #include "game/sa1_sa2_shared/player.h"

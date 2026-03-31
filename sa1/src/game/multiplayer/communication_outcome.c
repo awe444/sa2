@@ -8,7 +8,7 @@
 #include "lib/m4a/m4a.h"
 
 #include "game/character_select.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/title_screen.h"
 #include "game/multiplayer/communication_outcome.h"
 #include "game/multiplayer/multipak_connection.h"

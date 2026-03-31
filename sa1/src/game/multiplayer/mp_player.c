@@ -4,7 +4,7 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "game/stage/spawn_positions.h"
@@ -524,7 +524,7 @@ block_57:
     }
     if (1 & mpp->unk54) {
         s->frameFlags &= ~0x1F;
-        s->frameFlags |= (SA2_LABEL(gUnknown_030054B8)++ | 0x20);
+        s->frameFlags |= (gOamMatrixIndex++ | 0x20);
         if (2 & mpp->unk54) {
             tf->qScaleX = -Q(1.0);
         } else {
@@ -1989,8 +1989,8 @@ bool32 SA2_LABEL(sub_8018300)(void)
                     otherMPP->unk5C &= ~(0x10000 << i);
 
                     {
-                        ChaoTask *chao = TASK_DATA(gChaoTasks[i]);
-                        chao->unk41 = mpp->unk56;
+                        Chao *chao = TASK_DATA(gChaoTasks[i]);
+                        chao->playerIdA = mpp->unk56;
                         {
                             RoomEvent_ChaoCollected *roomEvent = CreateRoomEvent();
                             roomEvent->type = ROOMEVENT_TYPE_CHAO_COLLECTED;

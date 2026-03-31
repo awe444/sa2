@@ -7,7 +7,7 @@
 #include "game/special_stage/data.h"
 #include "task.h"
 #include "lib/m4a/m4a.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "trig.h"
 #include "flags.h"
 #include "malloc_ewram.h"

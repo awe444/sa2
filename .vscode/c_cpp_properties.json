@@ -1,11 +1,23 @@
 {
     "configurations": [
         {
-            "name": "Linux GBA",
+            "name": "SA2 Linux GBA",
             "includePath": [
                 "${workspaceFolder}/include/**"
             ],
             "defines": ["PLATFORM_GBA=1"],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        },
+        {
+            "name": "SA1 Linux GBA",
+            "includePath": [
+                "${workspaceFolder}/sa1/include/**"
+            ],
+            "defines": ["PLATFORM_GBA=1", "GAME=1"],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu17",
             "cppStandard": "gnu++17",

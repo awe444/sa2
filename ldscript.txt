@@ -39,7 +39,7 @@ SECTIONS
 
         /* "SA1 Leftovers" */
         . = ALIGN(32); 
-        src/game/sa1_sa2_shared/globals.o(.data);
+        src/game/globals.o(.data);
 
         /* game */
         src/game/water_effects.o(.data);
@@ -62,7 +62,7 @@ SECTIONS
         src/game/bosses/common.o(.data);
         src/game/options_screen.o(.data);
         src/game/special_stage/utils.o(.data);
-        src/game/save.o(.data);
+        src/game/sa2/save.o(.data);
         src/game/multiboot/collect_rings/time_display.o(.data);
         src/game/math.o(.data);
         src/game/multiplayer/mp_attack_1_effect.o(.data);
@@ -245,7 +245,7 @@ SECTIONS
         src/game/special_stage/ui.o(.text);
         src/game/special_stage/guard_robo.o(.text);
 
-        src/game/save.o(.text);
+        src/game/sa2/save.o(.text);
 
         src/game/interactables_2/hot_crater/windup_stick.o(.text);
         src/game/interactables_2/hot_crater/hook_rail.o(.text);

@@ -333,7 +333,7 @@ _0804F464:
 	lsls r0, r0, #6
 	ldr r2, [sp]
 	str r0, [r2, #0x10]
-	ldr r2, _0804F4B8 @ =sa2__gUnknown_030054B8
+	ldr r2, _0804F4B8 @ =gOamMatrixIndex
 	ldrb r1, [r2]
 	adds r0, r1, #1
 	strb r0, [r2]
@@ -362,6 +362,6 @@ _0804F4A6:
 	pop {r0}
 	bx r0
 	.align 2, 0
-_0804F4B8: .4byte sa2__gUnknown_030054B8
+_0804F4B8: .4byte gOamMatrixIndex
 
 .syntax divided

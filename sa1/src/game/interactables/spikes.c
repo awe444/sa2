@@ -127,7 +127,7 @@ void Task_Spikes_Up(void)
     s->x = worldX - gCamera.x;
     s->y = worldY - gCamera.y;
 
-    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (SA2_LABEL(gUnknown_030053E0) != 0)) {
+    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (gSpikesUnknownTimer != 0)) {
         i = 0;
         do {
             // This if-else is the only diff between Up/Down
@@ -139,7 +139,7 @@ void Task_Spikes_Up(void)
         } while (++i < gNumSingleplayerCharacters);
     }
 
-    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (me->d.sData[0] == 0) && (SA2_LABEL(gUnknown_030053E0) == 0)) {
+    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (me->d.sData[0] == 0) && (gSpikesUnknownTimer == 0)) {
         j = 0;
         do {
             if (spikes->movestateBuffer[j] & 0x20) {
@@ -158,7 +158,7 @@ void Task_Spikes_Up(void)
         return;
     }
 
-    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (SA2_LABEL(gUnknown_030053E0) != 0)) {
+    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (gSpikesUnknownTimer != 0)) {
         DisplaySprite(s);
     }
 }
@@ -177,7 +177,7 @@ void Task_Spikes_Down(void)
     s->x = worldX - gCamera.x;
     s->y = worldY - gCamera.y;
 
-    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (SA2_LABEL(gUnknown_030053E0) != 0)) {
+    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (gSpikesUnknownTimer != 0)) {
         i = 0;
         do {
             // This if-else is the only diff between Up/Down
@@ -189,7 +189,7 @@ void Task_Spikes_Down(void)
         } while (++i < gNumSingleplayerCharacters);
     }
 
-    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (me->d.sData[0] == 0) && (SA2_LABEL(gUnknown_030053E0) == 0)) {
+    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (me->d.sData[0] == 0) && (gSpikesUnknownTimer == 0)) {
         j = 0;
         do {
             if (spikes->movestateBuffer[j] & MOVESTATE_20) {
@@ -208,7 +208,7 @@ void Task_Spikes_Down(void)
         return;
     }
 
-    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (SA2_LABEL(gUnknown_030053E0) != 0)) {
+    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (gSpikesUnknownTimer != 0)) {
         DisplaySprite(s);
     }
 }
@@ -273,7 +273,7 @@ void Task_Spikes_Horizontal(void)
     s->x = worldX - gCamera.x;
     s->y = worldY - gCamera.y;
 
-    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (SA2_LABEL(gUnknown_030053E0) != 0)) {
+    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (gSpikesUnknownTimer != 0)) {
         i = 0;
         do {
             u32 res = sub_80096B0(s, worldX, worldY, &PLAYER(i));
@@ -314,7 +314,7 @@ void Task_Spikes_Horizontal(void)
         } while (++i < gNumSingleplayerCharacters);
     }
 
-    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (me->d.sData[0] == 0) && (SA2_LABEL(gUnknown_030053E0) == 0)) {
+    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (me->d.sData[0] == 0) && (gSpikesUnknownTimer == 0)) {
         j = 0;
         do {
             if (spikes->movestateBuffer[j] & MOVESTATE_20) {
@@ -333,7 +333,7 @@ void Task_Spikes_Horizontal(void)
         return;
     }
 
-    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (SA2_LABEL(gUnknown_030053E0) != 0)) {
+    if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (gSpikesUnknownTimer != 0)) {
         DisplaySprite(s);
     }
 }
@@ -499,7 +499,7 @@ bool32 sub_8020D44(Sprite *s, MapEntity *me, Spikes *spikes, Player *p)
     s->x = worldX - gCamera.x;
     s->y = worldY - gCamera.y;
 
-    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (me->d.sData[0] == 0) && (SA2_LABEL(gUnknown_030053E0) == 30)
+    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (me->d.sData[0] == 0) && (gSpikesUnknownTimer == 30)
         && (Coll_Player_Entity_Intersection(s, worldX, worldY, p) == 0x80000)) {
         s8 arr[4] = { -(p->spriteOffsetX + 5), (1 - p->spriteOffsetY), +(p->spriteOffsetX + 5), (p->spriteOffsetY - 1) };
 

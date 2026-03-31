@@ -4,7 +4,7 @@
 #include "game/stage/stage.h"
 #include "sprite.h"
 #include "game/character_select.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "lib/m4a/m4a.h"
 #include "task.h"
 #include "malloc_vram.h"
@@ -196,7 +196,7 @@ void CreateCharacterSelectionScreen(u8 initialSelection, bool8 allUnlocked)
     s8 something;
     u8 i;
     s8 lang;
-    lang = gLoadedSaveGame->language - 1;
+    lang = LOADED_SAVE->language - 1;
     if (lang < 0) {
         lang = 0;
     }
@@ -227,7 +227,7 @@ void CreateCharacterSelectionScreen(u8 initialSelection, bool8 allUnlocked)
     t = TaskCreate(Task_FadeInAndStartRollInAnim, sizeof(struct CharacterSelectionScreen), 0x4100, 0, CharacterSelectScreenOnDestroy);
     characterScreen = TASK_DATA(t);
 
-    characterScreen->availableCharacters = gLoadedSaveGame->unlockedCharacters;
+    characterScreen->availableCharacters = LOADED_SAVE->unlockedCharacters;
     characterScreen->selectedCharacter = initialSelection;
     characterScreen->unk3C4 = 0x10;
     characterScreen->cursorAnimFrame = 0;
@@ -487,7 +487,7 @@ void CreateCharacterSelectionScreen(u8 initialSelection, bool8 allUnlocked)
     s->prevVariant = -1;
     s->animSpeed = 0x10;
 #ifndef NON_MATCHING
-    gLoadedSaveGame->language += 0;
+    LOADED_SAVE->language += 0;
 #endif
     s->palId = 0;
     s->hitboxes[0].index = -1;
@@ -1001,19 +1001,19 @@ static void Task_SelectionCompleteFadeOutAndExit(void)
         }
 
         // Only 1 zone available
-        if (gLoadedSaveGame->unlockedLevels[gSelectedCharacter] <= LEVEL_INDEX(ZONE_1, ACT_BOSS)) {
+        if (LOADED_SAVE->unlockedLevels[gSelectedCharacter] <= LEVEL_INDEX(ZONE_1, ACT_BOSS)) {
             gCurrentLevel = LEVEL_INDEX(ZONE_1, ACT_1);
             GameStageStart();
             return;
         }
 
-        if (gLoadedSaveGame->extraZoneStatus == 1 && gSelectedCharacter == CHARACTER_SONIC) {
-            CreateCourseSelectionScreen(LEVEL_INDEX(ZONE_1, ACT_1), gLoadedSaveGame->unlockedLevels[gSelectedCharacter],
+        if (LOADED_SAVE->extraZoneStatus == 1 && gSelectedCharacter == CHARACTER_SONIC) {
+            CreateCourseSelectionScreen(LEVEL_INDEX(ZONE_1, ACT_1), LOADED_SAVE->unlockedLevels[gSelectedCharacter],
                                         CUT_SCENE_UNLOCK_TRUE_AREA_53);
             return;
         }
 
-        CreateCourseSelectionScreen(LEVEL_INDEX(ZONE_1, ACT_1), gLoadedSaveGame->unlockedLevels[gSelectedCharacter],
+        CreateCourseSelectionScreen(LEVEL_INDEX(ZONE_1, ACT_1), LOADED_SAVE->unlockedLevels[gSelectedCharacter],
                                     COURSE_SELECT_CUT_SCENE_NONE);
         return;
     }
@@ -1257,7 +1257,7 @@ static void RenderCarouselScrollAnim(struct CharacterSelectionScreen *characterS
     Sprite *s;
     SpriteTransform *transform;
 
-    s8 lang = gLoadedSaveGame->language - 1;
+    s8 lang = LOADED_SAVE->language - 1;
 
     if (lang < 0) {
         lang = 0;
@@ -1771,8 +1771,8 @@ static void Task_MultiplayerVerifySelections(void)
 
         // WTF: why is this here
         for (i = 0; i < NUM_CHARACTERS; i++) {
-            if (mostLevelsAvailable < gLoadedSaveGame->unlockedLevels[i]) {
-                mostLevelsAvailable = gLoadedSaveGame->unlockedLevels[i];
+            if (mostLevelsAvailable < LOADED_SAVE->unlockedLevels[i]) {
+                mostLevelsAvailable = LOADED_SAVE->unlockedLevels[i];
             }
         }
 
@@ -1797,8 +1797,8 @@ static void Task_MultiplayerVerifySelections(void)
         mostLevelsAvailable = 0;
 
         for (i = 0; i < NUM_CHARACTERS; i++) {
-            if (mostLevelsAvailable < gLoadedSaveGame->unlockedLevels[i]) {
-                mostLevelsAvailable = gLoadedSaveGame->unlockedLevels[i];
+            if (mostLevelsAvailable < LOADED_SAVE->unlockedLevels[i]) {
+                mostLevelsAvailable = LOADED_SAVE->unlockedLevels[i];
             }
         }
         send->pat0.unk3 = mostLevelsAvailable;

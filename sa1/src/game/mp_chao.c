@@ -3,7 +3,7 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/multiplayer/chao.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/stage/terrain_collision.h"
@@ -15,19 +15,6 @@
 /* Chao that spawns in the Chao Hunt minigame */
 
 #define SPAWN_INDEX_COUNT 8
-
-typedef struct Chao {
-    Sprite s;
-    s32 qWorldX;
-    s32 qWorldY;
-    s16 qDistanceToPlayer;
-    s16 qSpeedX;
-    s16 qSpeedY;
-    u16 angle;
-    u8 id;
-    u8 playerIdA;
-    u8 playerIdB;
-} Chao;
 
 static void Task_802816C(void);
 static void Task_8028388(void);

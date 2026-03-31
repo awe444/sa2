@@ -13,7 +13,7 @@
 
 // TODO: add headers for these into sa1_sa2_shared
 // instead of including from the main game
-#include "game/save.h"
+#include "game/sa1/save.h"
 #include "game/title_screen.h"
 
 #include "constants/animations.h"

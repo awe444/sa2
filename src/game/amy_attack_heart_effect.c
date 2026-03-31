@@ -4,7 +4,7 @@
 #include "task.h"
 
 #include "game/amy_attack_heart_effect.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/stage/camera.h"
 #include "game/stage/player.h"
 

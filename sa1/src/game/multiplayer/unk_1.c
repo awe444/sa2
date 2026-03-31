@@ -10,10 +10,10 @@
 #include "game/gTask_03006240.h"
 #include "game/multiplayer/multipak_connection.h"
 #include "game/multiplayer/unk_1.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/stage/player.h"
 #include "game/stage/stage.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 
 #include "constants/songs.h"
 #include "constants/tilemaps.h"

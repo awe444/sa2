@@ -1,7 +1,7 @@
 #include "global.h"
 #include "flags.h"
 #include "game/sa1_sa2_shared/camera.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/stage/camera.h"
 
 void StageBgUpdate_Zone1Acts12(s32 x, s32 UNUSED y)
