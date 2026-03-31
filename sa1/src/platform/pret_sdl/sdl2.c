@@ -116,8 +116,6 @@ static void ReadSaveFile(char *path);
 static void StoreSaveFile(void);
 static void CloseSaveFile(void);
 
-static void UpdateInternalClock(void);
-
 u16 Platform_GetKeyInput(void);
 
 #ifdef _WIN32
@@ -127,6 +125,9 @@ void Platform_free(void *ptr) { HeapFree(GetProcessHeap(), 0, ptr); }
 
 int main(int argc, char **argv)
 {
+#ifdef __ANDROID__
+    SDL_Log("SA1: main() entered");
+#endif
     const char *headlessEnv = getenv("HEADLESS");
 
     if (headlessEnv && strcmp(headlessEnv, "true") == 0) {
@@ -179,6 +180,9 @@ int main(int argc, char **argv)
         SDL_Log("SDL could not initialize! SDL_Error: %s", SDL_GetError());
         return 1;
     }
+#ifdef __ANDROID__
+    SDL_Log("SA1: SDL_Init succeeded");
+#endif
 
     // Open the first available game controller
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
@@ -288,6 +292,9 @@ int main(int argc, char **argv)
     // Initialize timing so first VBlankIntrWait doesn't get a huge delta
     lastGameTime = (double)SDL_GetPerformanceCounter();
 
+#ifdef __ANDROID__
+    SDL_Log("SA1: SDL setup complete, calling AgbMain");
+#endif
     AgbMain();
 
     return 0;
@@ -1685,6 +1692,12 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
 
 static void DrawScanline(uint16_t *pixels, uint16_t vcount)
 {
+    // On real GBA, forced blank displays white
+    if (REG_DISPCNT & DISPCNT_FORCED_BLANK) {
+        memsetu16(pixels, 0x7FFF, DISPLAY_WIDTH);
+        return;
+    }
+
     unsigned int mode = REG_DISPCNT & 3;
     unsigned char numOfBgs = (mode == 0 ? 4 : 3);
     int bgnum, prnum;

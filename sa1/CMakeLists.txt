@@ -220,6 +220,7 @@ set(SA2_SHARED_SRCS
     src/bg_triangles.c
     src/input_recorder.c
     src/background.c
+    src/game/globals.c
 )
 list(TRANSFORM SA2_SHARED_SRCS PREPEND "${SA2_ROOT}/")
 
@@ -374,7 +375,7 @@ target_include_directories(${SA1_TARGET} PRIVATE ${SA1_INCLUDE_DIRS})
 # ── Preprocessor defines ────────────────────────────────────────────────────
 target_compile_definitions(${SA1_TARGET} PRIVATE ${SA1_DEFINITIONS})
 
-if(ANDROID)
+if(NOT ANDROID)
     target_compile_definitions(${SA1_TARGET} PRIVATE SDL_MAIN_HANDLED)
 endif()
 
