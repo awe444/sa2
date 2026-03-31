@@ -85,13 +85,7 @@ const u16 gLevelSongs[] = {
 #if (GAME == GAME_SA1)
 const u16 gUnkMusicMgrData[7] = { 0x001D, 0x001E, 0x001F, 0x0020, 0x0031, 0x0032, 0x0019 };
 #elif (GAME == GAME_SA2)
-// This data is unrelated to this module in SA2 but has been linked in here by some
-// compilation quirk, see it's actual usage in input_buffer.c
-#ifndef NON_MATCHING
-const u16 gUnkMusicMgrData[7] = { 0x0104, 0xF000, 0x1008, 0x08F0, 0xF000, 0x1008, 0x01F0 };
-#else
 const u16 gUnkMusicMgrData[0] = {};
-#endif
 #endif
 
 #if (GAME == GAME_SA1)

@@ -14,7 +14,7 @@
 #include "game/multiplayer/mp_player.h"
 #include "game/parameters/bosses.h"
 #include "game/player_callbacks.h"
-#include "game/sa1_sa2_shared/input_buffer.h"
+#include "game/sa2/input_buffer.h"
 #include "game/sa1_sa2_shared/music_manager.h"
 #include "game/sa2/save.h"
 #include "game/stage/camera.h"

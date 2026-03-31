@@ -7,7 +7,7 @@
 #include "game/entity.h"
 #include "game/globals.h"
 #include "game/sa1/save.h"
-#include "game/special_stage/main.h"
+#include "game/sa1/special_stage/main.h"
 #include "game/stage/stage.h"
 
 #include "constants/ui_graphics.h"

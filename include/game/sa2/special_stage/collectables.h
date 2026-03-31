@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "task.h"
-#include "game/special_stage/main.h"
+#include "game/sa2/special_stage/main.h"
 
 #define MAX_RING_PARTICLES 8
 #define MAX_OBJECTS        323

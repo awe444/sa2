@@ -2,7 +2,7 @@
 #define GUARD_SPECIAL_WORLD_H
 
 #include "global.h"
-#include "game/special_stage/main.h"
+#include "game/sa2/special_stage/main.h"
 
 struct SpecialStageWorld {
     struct SpecialStage *stage;

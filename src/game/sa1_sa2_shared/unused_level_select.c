@@ -15,7 +15,7 @@
 #endif
 
 #if PORTABLE
-#include "game/special_stage/main.h"
+#include "game/sa2/special_stage/main.h"
 #endif
 
 #include "animation_commands_bg.h"

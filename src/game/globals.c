@@ -176,18 +176,4 @@ bool8 ALIGNED(4) gBoostEffectTasksCreated = 0;
 #if COLLECT_RINGS_ROM
 u8 unused2[8] = {};
 #endif
-
-#ifndef COLLECT_RINGS_ROM
-#ifndef NON_MATCHING
-u32 unused_030055C0[4] = {};
-#endif
-
-// TODO: move into input buffer
-u8 gFrameInputsBuf[4] = {};
-u8 gNewInputCountersIndex = 0;
-u8 ALIGNED(4) gFrameInputsBufIndex = 0;
-
-// Fills available space, but size not yet confirmed
-struct InputCounters ALIGNED(8) gNewInputCounters[32] = {};
-#endif
 #endif

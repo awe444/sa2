@@ -4,8 +4,8 @@
 
 #include "global.h"
 #include "task.h"
-#include "game/special_stage/main.h"
-#include "game/special_stage/data.h"
+#include "game/sa2/special_stage/main.h"
+#include "game/sa2/special_stage/data.h"
 
 struct SpecialStageGuardRobo {
     struct SpecialStage *stage;

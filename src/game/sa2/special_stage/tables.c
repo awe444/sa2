@@ -1,5 +1,5 @@
 #include "global.h"
-#include "game/special_stage/tables.h"
+#include "game/sa2/special_stage/tables.h"
 #include "constants/zones.h"
 
 // bearing, acceleration, rotateSpeed, maxSpeed

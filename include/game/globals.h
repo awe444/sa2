@@ -203,23 +203,6 @@ extern RoomEvent gRoomEventQueue[16];
 
 extern CheeseTarget gCheeseTarget;
 
-extern u8 gFrameInputsBuf[4];
-
-#if 0
-extern u8 gNewInputCountersIndex;
-extern u8 gNewInputCounters[128];
-#else
-
-struct InputCounters {
-    u8 unk0, unk1, unk2, unk3;
-};
-
-extern u8 gNewInputCountersIndex;
-extern struct InputCounters gNewInputCounters[32];
-#endif
-
-extern u8 gFrameInputsBufIndex;
-
 extern struct Task *gChaoTasks[3];
 
 #define MPC_FLAG_SHIFT_REGISTERED 0

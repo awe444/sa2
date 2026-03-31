@@ -1,5 +1,5 @@
 #include "global.h"
-#include "game/special_stage/data.h"
+#include "game/sa2/special_stage/data.h"
 
 /**
  * These arrays are likely generated from some compilation

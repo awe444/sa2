@@ -20,7 +20,7 @@
 #endif
 
 #if (GAME == GAME_SA1) || PORTABLE
-#include "game/special_stage/main.h"
+#include "game/sa1/special_stage/main.h"
 #endif
 
 #include "animation_commands_bg.h"

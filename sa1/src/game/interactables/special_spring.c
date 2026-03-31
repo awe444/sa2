@@ -6,7 +6,7 @@
 #include "game/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/stage/player.h"
-#include "game/special_stage/main.h"
+#include "game/sa1/special_stage/main.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

@@ -9,7 +9,7 @@
 #include "game/sa1_sa2_shared/pause_menu.h"
 #include "game/sa1_sa2_shared/player.h"
 #include "game/sa1/save.h"
-#include "game/special_stage/main.h"
+#include "game/sa1/special_stage/main.h"
 #include "game/stage/player_controls.h"
 #include "game/stage/terrain_collision.h"
 
@@ -956,7 +956,7 @@ void sub_802A248(Strc_3005690 *param0)
 }
 
 // (90.14%) https://decomp.me/scratch/ZDa67
-NONMATCH("asm/non_matching/game/special_stage/sub_802A4C4.inc", void sub_802A4C4(Strc_3005690 *param0))
+NONMATCH("asm/non_matching/game/sa1/special_stage/sub_802A4C4.inc", void sub_802A4C4(Strc_3005690 *param0))
 {
     Sprite *s = &gUnknown_030055F0.s;
     SpriteTransform *tf = &gUnknown_030055F0.tf;
@@ -1476,7 +1476,7 @@ void sub_802B008(void)
 }
 
 // (98.11%) https://decomp.me/scratch/jrZYE
-NONMATCH("asm/non_matching/game/special_stage/sub_802B07C.inc", void sub_802B07C(void))
+NONMATCH("asm/non_matching/game/sa1/special_stage/sub_802B07C.inc", void sub_802B07C(void))
 {
     Strc_3005690 *strc5690 = &gUnknown_03005690;
     Sprite *s = &gUnknown_030055F0.s;
@@ -1670,7 +1670,7 @@ void sub_802B5DC(Sprite *s)
 }
 
 // (97.41%) https://decomp.me/scratch/veYrR
-NONMATCH("asm/non_matching/game/special_stage/sub_802B66C.inc", u32 sub_802B66C(SpStage74 *strc74, Sprite *s, s16 param2, s16 param3))
+NONMATCH("asm/non_matching/game/sa1/special_stage/sub_802B66C.inc", u32 sub_802B66C(SpStage74 *strc74, Sprite *s, s16 param2, s16 param3))
 {
     Sprite *spr55F0 = &gUnknown_030055F0.s;
     Strc_3005690 *strc5690;
@@ -1838,7 +1838,7 @@ void sub_802BBF0()
     strc74->unk44 += strc74->unk56;
 }
 
-NONMATCH("asm/non_matching/game/special_stage/sub_802BC6C.inc", bool32 sub_802BC6C(void))
+NONMATCH("asm/non_matching/game/sa1/special_stage/sub_802BC6C.inc", bool32 sub_802BC6C(void))
 {
     s32 var_r0;
     s32 var_r4;
@@ -1905,7 +1905,7 @@ NONMATCH("asm/non_matching/game/special_stage/sub_802BC6C.inc", bool32 sub_802BC
 END_NONMATCH
 
 // (73.95%) https://decomp.me/scratch/2UCbe
-NONMATCH("asm/non_matching/game/special_stage/sub_802BE0C.inc", void sub_802BE0C(Sprite *s, SpriteTransform *tf))
+NONMATCH("asm/non_matching/game/sa1/special_stage/sub_802BE0C.inc", void sub_802BE0C(Sprite *s, SpriteTransform *tf))
 {
     u16 sp00[8];
     const SpriteOffset *dims;
@@ -2329,7 +2329,7 @@ void sub_802C934(void)
 // This function loads all objects' positions, scales and renders them
 // and the player character, and checks the collision between them.
 // NOTE(Jace): I think the loops in this should have the same layout as sub_802D58C().
-NONMATCH("asm/non_matching/game/special_stage/UpdateObjectsAndRender.inc", void UpdateObjectsAndRender(void))
+NONMATCH("asm/non_matching/game/sa1/special_stage/UpdateObjectsAndRender.inc", void UpdateObjectsAndRender(void))
 {
     u16 sp4;
     SpStageC *sp8;

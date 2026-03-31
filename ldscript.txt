@@ -42,6 +42,7 @@ SECTIONS
         src/game/globals.o(.data);
 
         /* game */
+        src/game/sa2/input_buffer.o(.data);
         src/game/water_effects.o(.data);
         src/game/cheese.o(.data);
         src/game/boost_effect.o(.data);
@@ -61,7 +62,7 @@ SECTIONS
         src/game/stage/debug_text_printer.o(.data);
         src/game/bosses/common.o(.data);
         src/game/options_screen.o(.data);
-        src/game/special_stage/utils.o(.data);
+        src/game/sa2/special_stage/utils.o(.data);
         src/game/sa2/save.o(.data);
         src/game/multiboot/collect_rings/time_display.o(.data);
         src/game/math.o(.data);
@@ -116,7 +117,7 @@ SECTIONS
         src/game/sa1_sa2_shared/magnetic_ring.o(.text);
         src/game/sa1_sa2_shared/music_manager.o(.text);
         src/game/sa1_sa2_shared/collision.o(.text);
-        src/game/sa1_sa2_shared/input_buffer.o(.text);
+        src/game/sa2/input_buffer.o(.text);
         src/game/sa1_sa2_shared/interactables/spring.o(.text);
         src/game/sa1_sa2_shared/interactables/platform.o(.text);
         src/game/sa1_sa2_shared/interactables/platform_square.o(.text);
@@ -236,14 +237,14 @@ SECTIONS
 
         src/game/options_screen.o(.text);
 
-        src/game/special_stage/main.o(.text);
-        src/game/special_stage/utils.o(.text);
-        src/game/special_stage/player.o(.text);
-        src/game/special_stage/collectables.o(.text);
-        src/game/special_stage/world.o(.text);
-        src/game/special_stage/physics.o(.text);
-        src/game/special_stage/ui.o(.text);
-        src/game/special_stage/guard_robo.o(.text);
+        src/game/sa2/special_stage/main.o(.text);
+        src/game/sa2/special_stage/utils.o(.text);
+        src/game/sa2/special_stage/player.o(.text);
+        src/game/sa2/special_stage/collectables.o(.text);
+        src/game/sa2/special_stage/world.o(.text);
+        src/game/sa2/special_stage/physics.o(.text);
+        src/game/sa2/special_stage/ui.o(.text);
+        src/game/sa2/special_stage/guard_robo.o(.text);
 
         src/game/sa2/save.o(.text);
 
@@ -384,7 +385,7 @@ SECTIONS
         src/game/sa1_sa2_shared/pause_menu.o(.rodata);
         src/game/sa1_sa2_shared/itembox.o(.rodata);
         src/game/sa1_sa2_shared/music_manager.o(.rodata);
-        src/game/sa1_sa2_shared/input_buffer.o(.rodata);
+        src/game/sa2/input_buffer.o(.rodata);
         src/game/sa1_sa2_shared/interactables/spring.o(.rodata);
         src/game/sa1_sa2_shared/interactables/platform.o(.rodata);
         src/game/sa1_sa2_shared/interactables/platform_square.o(.rodata);
@@ -449,14 +450,14 @@ SECTIONS
         src/game/interactables_1/checkpoint.o(.rodata);
         src/game/interactables_1/windmill.o(.rodata);
         src/game/options_screen.o(.rodata);
-        src/game/special_stage/data.o(.rodata);
-        src/game/special_stage/player.o(.rodata);
-        src/game/special_stage/collectables.o(.rodata);
-        src/game/special_stage/world.o(.rodata);
-        src/game/special_stage/physics.o(.rodata);
-        src/game/special_stage/ui.o(.rodata);
-        src/game/special_stage/guard_robo.o(.rodata);
-        src/game/special_stage/tables.o(.rodata);
+        src/game/sa2/special_stage/data.o(.rodata);
+        src/game/sa2/special_stage/player.o(.rodata);
+        src/game/sa2/special_stage/collectables.o(.rodata);
+        src/game/sa2/special_stage/world.o(.rodata);
+        src/game/sa2/special_stage/physics.o(.rodata);
+        src/game/sa2/special_stage/ui.o(.rodata);
+        src/game/sa2/special_stage/guard_robo.o(.rodata);
+        src/game/sa2/special_stage/tables.o(.rodata);
         src/game/interactables_2/hot_crater/dash_ring.o(.rodata);
         src/game/interactables_2/music_plant/note_sphere.o(.rodata);
         src/game/interactables_2/music_plant/note_block.o(.rodata);
@@ -778,10 +779,10 @@ SECTIONS
         /* It's possible that all of these were actually
            set in a single asm file, since the order doesnt
            make any logical sense */
-        src/game/sa1_sa2_shared/input_buffer.o(.data);
+        src/data/input_combos.o(.rodata);
         data/special_stage_levels.o(.rodata);
         src/data/handlers_ia_pipe_horn_sequences.o(.rodata);
-        src/game/sound_test.o(.data);
+        src/data/palettes.o(.rodata);
         src/data/recordings.o(.rodata);
         data/multiboot_collect_rings.o(.rodata);
         data/multiboot_subgame_loader.o(.rodata);

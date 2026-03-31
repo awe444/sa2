@@ -2,8 +2,8 @@
 #define GUARD_SPECIAL_STAGE_UTILS_H
 
 #include "global.h"
-#include "game/special_stage/main.h"
-#include "game/special_stage/data.h"
+#include "game/sa2/special_stage/main.h"
+#include "game/sa2/special_stage/data.h"
 #include "sprite.h"
 
 extern void *gSpecialStageSubMenuVramPointer;

@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "sprite.h"
-#include "game/special_stage/main.h"
+#include "game/sa2/special_stage/main.h"
 
 struct SpecialStageUI {
     struct SpecialStage *stage;
