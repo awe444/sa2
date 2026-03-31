@@ -116,6 +116,8 @@ static void ReadSaveFile(char *path);
 static void StoreSaveFile(void);
 static void CloseSaveFile(void);
 
+static uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count);
+
 u16 Platform_GetKeyInput(void);
 
 #ifdef _WIN32
@@ -1885,7 +1887,7 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
     }
 }
 
-uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
+static uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
 {
     for (int i = 0; i < count; i++) {
         *dst++ = fill;
