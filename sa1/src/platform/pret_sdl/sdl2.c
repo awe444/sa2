@@ -225,11 +225,20 @@ int main(int argc, char **argv)
     }
 #endif
 
-    sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
+    sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (sdlRenderer == NULL) {
         SDL_Log("Renderer could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
+#ifdef __ANDROID__
+    {
+        SDL_RendererInfo rinfo;
+        if (SDL_GetRendererInfo(sdlRenderer, &rinfo) == 0) {
+            SDL_Log("SA1: renderer=%s flags=0x%08X maxW=%d maxH=%d",
+                    rinfo.name, rinfo.flags, rinfo.max_texture_width, rinfo.max_texture_height);
+        }
+    }
+#endif
 
 #if ENABLE_VRAM_VIEW
     vramRenderer = SDL_CreateRenderer(vramWindow, -1, SDL_RENDERER_PRESENTVSYNC);
@@ -251,6 +260,7 @@ int main(int argc, char **argv)
 
 #ifdef __ANDROID__
     sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    SDL_Log("SA1: texture created %dx%d ARGB8888, ptr=%p", DISPLAY_WIDTH, DISPLAY_HEIGHT, (void*)sdlTexture);
 #else
     sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ABGR1555, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
 #endif
@@ -325,6 +335,17 @@ void VBlankIntrWait(void)
         return;
     }
 
+#ifdef __ANDROID__
+    {
+        static int vbiCount = 0;
+        if (vbiCount < 5) {
+            SDL_Log("SA1 VBlankIntrWait #%d: accum=%.6f newFrameReq=%d",
+                    vbiCount, accumulator, newFrameRequested);
+        }
+        vbiCount++;
+    }
+#endif
+
     bool frameAvailable = TRUE;
 
     while (isRunning) {
@@ -388,6 +409,15 @@ void VBlankIntrWait(void)
         }
 
         SDL_RenderPresent(sdlRenderer);
+#ifdef __ANDROID__
+        {
+            static int presentCount = 0;
+            if (presentCount < 5) {
+                SDL_Log("SA1 RenderPresent #%d", presentCount);
+            }
+            presentCount++;
+        }
+#endif
 #if ENABLE_VRAM_VIEW
         SDL_RenderPresent(vramRenderer);
 #endif
@@ -1980,15 +2010,27 @@ void VDraw(SDL_Texture *texture)
     // Convert ABGR1555 (GBA native) to ARGB8888 for Android GPU compatibility.
     // Many mobile OpenGL ES drivers don't natively support 16-bit ABGR1555 textures.
     // Replicate upper bits into lower bits for accurate 5-bit to 8-bit expansion.
-    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
-        uint16_t px = gameImage[i];
-        uint8_t r5 = (px & 0x001F);
-        uint8_t g5 = ((px >> 5) & 0x001F);
-        uint8_t b5 = ((px >> 10) & 0x001F);
-        uint8_t r = (r5 << 3) | (r5 >> 2);
-        uint8_t g = (g5 << 3) | (g5 >> 2);
-        uint8_t b = (b5 << 3) | (b5 >> 2);
-        gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+    {
+        static int vdrawCount = 0;
+        int nonZero = 0;
+        uint16_t firstNZ = 0;
+        for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
+            uint16_t px = gameImage[i];
+            if (px && !nonZero) { firstNZ = px; }
+            if (px) nonZero++;
+            uint8_t r5 = (px & 0x001F);
+            uint8_t g5 = ((px >> 5) & 0x001F);
+            uint8_t b5 = ((px >> 10) & 0x001F);
+            uint8_t r = (r5 << 3) | (r5 >> 2);
+            uint8_t g = (g5 << 3) | (g5 >> 2);
+            uint8_t b = (b5 << 3) | (b5 >> 2);
+            gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+        }
+        if (vdrawCount < 5 || (vdrawCount % 300 == 0)) {
+            SDL_Log("SA1 VDraw #%d: DISPCNT=0x%04X PLTT[0]=0x%04X nonZero=%d firstNZ=0x%04X",
+                    vdrawCount, REG_DISPCNT, PLTT[0], nonZero, firstNZ);
+        }
+        vdrawCount++;
     }
     SDL_UpdateTexture(texture, NULL, gameImage32, DISPLAY_WIDTH * sizeof(uint32_t));
 #else
