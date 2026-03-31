@@ -117,7 +117,7 @@
     "game/sa2/time_attack/mode_select.h": "c",
     "game/sa2/time_attack/end_menu.h": "c",
     "game/sa2/race_progress.h": "c",
-    "game/multiplayer_lobby.h": "c",
+    "game/sa2/multiplayer_lobby.h": "c",
     "multiboot.h": "c",
     "syscall.h": "c",
     "game/multiboot/connection.h": "c",

@@ -130,7 +130,7 @@ SECTIONS
         /* game/sa1_sa2_shared/globals ? */
 
         src/game/water_effects.o(.text);
-        src/game/player_callbacks.o(.text);
+        src/game/sa2/player_callbacks.o(.text);
         src/game/sa2/cheese.o(.text);
         src/game/sa2/boost_effect.o(.text);
         src/game/amy_attack_heart_effect.o(.text);
@@ -296,11 +296,11 @@ SECTIONS
 
         src/game/math.o(.text);
 
-        src/game/mystery_itembox.o(.text);
+        src/game/sa2/mystery_itembox.o(.text);
         src/game/sa2/heart_particles_effect.o(.text);
         src/game/sa2/race_progress.o(.text);
         src/game/multiplayer/mp_attack_1_effect.o(.text);
-        src/game/multiplayer_lobby.o(.text);
+        src/game/sa2/multiplayer_lobby.o(.text);
 
         /* time_attack_screens */
         src/game/sa2/time_attack/mode_select.o(.text);
@@ -399,7 +399,7 @@ SECTIONS
 
         /* game */
         src/game/water_effects.o(.rodata);
-        src/game/player_callbacks.o(.rodata);
+        src/game/sa2/player_callbacks.o(.rodata);
         src/game/sa2/cheese.o(.rodata);
         src/game/sa2/boost_effect.o(.rodata);
         src/game/amy_attack_heart_effect.o(.rodata);
@@ -475,10 +475,10 @@ SECTIONS
         src/game/multiboot/connection.o(.rodata);
         src/game/multiboot/collect_rings/time_display.o(.rodata);
         src/game/math.o(.rodata);
-        src/game/mystery_itembox.o(.rodata);
+        src/game/sa2/mystery_itembox.o(.rodata);
         src/game/sa2/race_progress.o(.rodata);
         src/game/multiplayer/mp_attack_1_effect.o(.rodata);
-        src/game/multiplayer_lobby.o(.rodata);
+        src/game/sa2/multiplayer_lobby.o(.rodata);
         src/game/sa2/time_attack/mode_select.o(.rodata);
         src/game/sa2/time_attack/lobby.o(.rodata);
         src/game/sa2/time_attack/results.o(.rodata);

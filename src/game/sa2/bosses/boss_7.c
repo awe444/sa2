@@ -12,7 +12,7 @@
 #include "game/sa2/bosses/common.h"
 #include "game/sa2/bosses/eggmobile_escape_sequence.h"
 
-#include "game/player_callbacks.h"
+#include "game/sa2/player_callbacks.h"
 
 #include "game/sa2/cheese.h"
 

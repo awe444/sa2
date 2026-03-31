@@ -7,7 +7,7 @@
 
 #include "game/stage/terrain_collision.h"
 #include "game/stage/camera.h"
-#include "game/player_callbacks.h"
+#include "game/sa2/player_callbacks.h"
 #include "game/stage/player.h"
 
 #include "game/sa2/bosses/common.h"

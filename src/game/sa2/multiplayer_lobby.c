@@ -1,6 +1,6 @@
 #include "global.h"
 #include "core.h"
-#include "game/multiplayer_lobby.h"
+#include "game/sa2/multiplayer_lobby.h"
 #include "task.h"
 #include "sprite.h"
 #include "game/sa2/gfx/screen_fade.h"

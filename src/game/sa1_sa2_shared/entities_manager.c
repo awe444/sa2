@@ -84,7 +84,7 @@
 #include "game/interactables_2/collect_rings_lap_trigger.h"
 #include "game/interactables_2/sky_canyon_init.h"
 
-#include "game/mystery_itembox.h"
+#include "game/sa2/mystery_itembox.h"
 
 #include "game/sa2/enemies/kiki.h"
 #include "game/sa2/enemies/kura_kura.h"

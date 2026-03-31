@@ -122,7 +122,7 @@ SA2_C_FILES := \
 	sa2/game/multiboot/collect_rings/results.c \
 	sa2/game/sa1_sa2_shared/entities_manager.c \
 	sa2/game/sa1_sa2_shared/collision.c \
-	sa2/game/mystery_itembox.c \
+	sa2/game/sa2/mystery_itembox.c \
 	sa2/game/sa1_sa2_shared/rings_manager.c \
 	sa2/game/multiboot/collect_rings/time_display.c \
 	sa2/game/multiplayer/indicators.c \

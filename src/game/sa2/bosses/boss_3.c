@@ -10,7 +10,7 @@
 #include "game/sa2/bosses/eggmobile_escape_sequence.h"
 #include "game/sa2/gfx/boss_results_transition.h"
 #include "game/parameters/bosses.h"
-#include "game/player_callbacks.h"
+#include "game/sa2/player_callbacks.h"
 
 #include "game/stage/terrain_collision.h"
 #include "game/stage/player.h"

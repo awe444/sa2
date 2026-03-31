@@ -9,7 +9,7 @@
 
 #include "game/game.h" // sub_801E4E4
 
-#include "game/player_callbacks.h"
+#include "game/sa2/player_callbacks.h"
 #include "game/stage/player.h"
 #include "game/stage/terrain_collision.h"
 

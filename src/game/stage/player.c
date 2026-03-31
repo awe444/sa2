@@ -13,7 +13,7 @@
 #include "game/multiplayer/mp_attack_2_effect.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/parameters/bosses.h"
-#include "game/player_callbacks.h"
+#include "game/sa2/player_callbacks.h"
 #include "game/sa2/input_buffer.h"
 #include "game/sa1_sa2_shared/music_manager.h"
 #include "game/sa2/save.h"

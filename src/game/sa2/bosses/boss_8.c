@@ -15,7 +15,7 @@
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/player.h"
 #include "game/sa2/bosses/common.h"
-#include "game/player_callbacks.h" // UpdateHomingPosition
+#include "game/sa2/player_callbacks.h" // UpdateHomingPosition
 #include "game/sa2/cheese.h"
 #include "game/stage/camera.h"
 #include "game/stage/player.h"
