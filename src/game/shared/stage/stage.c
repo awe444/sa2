@@ -8,7 +8,7 @@
 #include "game/shared/stage/pause_menu.h"
 #include "game/shared/stage/rings_manager.h"
 #include "game/sa2/save.h"
-#include "game/sa2/stage/game_over.h"
+#include "game/sa2/ui/game_over.h"
 #include "game/sa2/stage/cheese.h"
 #include "game/sa2/stage/player_controls.h"
 #include "game/sa2/stage/player_super_sonic.h"

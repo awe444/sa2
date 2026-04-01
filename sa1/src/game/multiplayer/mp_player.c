@@ -18,7 +18,6 @@
 #include "game/shared/stage/item_tasks.h"
 
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/multiplayer/mp_attack_1_effect.h"
 #if (GAME == GAME_SA1)
 #include "game/multiplayer/chao.h"
 #include "constants/sa2_char_states.h"

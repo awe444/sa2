@@ -9,7 +9,7 @@
 #include "lib/m4a/m4a.h"
 #include "trig.h"
 #include "task.h"
-#include "game/sa2/stage/stage_results.h"
+#include "game/sa2/ui/stage_results.h"
 #include "game/sa2/time_attack/lobby.h"
 
 #include "constants/animations.h"

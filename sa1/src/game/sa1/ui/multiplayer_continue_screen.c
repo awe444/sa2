@@ -2,7 +2,7 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 #include "malloc_vram.h"
-#include "game/sa1/stage/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/globals.h"
 #include "game/multiplayer/multipak_connection.h"
 #include "game/multiplayer/results.h"

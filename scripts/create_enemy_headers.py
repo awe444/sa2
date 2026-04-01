@@ -7,7 +7,7 @@ for file in os.listdir("asm"):
     enemy = file.replace("enemy_", "")
     enemy = enemy.replace(".s", "")
     
-    if not os.path.exists(f"include/game/sa2/enemies/{enemy}.h"):
+    if not os.path.exists(f"include/game/sa2/stage/enemies/{enemy}.h"):
         to_write = f"""\
 #ifndef GUARD_ENEMY_{enemy.upper()}_H
 #define GUARD_ENEMY_{enemy.upper()}_H
@@ -20,5 +20,5 @@ void CreateEntity_{enemy.capitalize()}(MapEntity *me, u16 spriteRegionX, u16 spr
 
 #endif // GUARD_ENEMY_{enemy.upper()}_H"""
 
-        with open(f"include/game/sa2/enemies/{enemy}.h", "w") as new_file:
+        with open(f"include/game/sa2/stage/enemies/{enemy}.h", "w") as new_file:
             new_file.write(to_write)

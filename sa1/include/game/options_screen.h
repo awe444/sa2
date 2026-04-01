@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "config.h"
-#include "game/sa1/stage/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/sa1/save.h"
 #include "sprite.h"
 #include "constants/text.h"

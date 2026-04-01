@@ -13,7 +13,7 @@
 #include "task.h"
 #include "malloc_vram.h"
 #include "game/multiplayer/multipak_connection.h"
-#include "game/sa2/bosses/final_intro.h"
+#include "game/sa2/stage/bosses/final_intro.h"
 #include "trig.h"
 
 #include "constants/animations.h"

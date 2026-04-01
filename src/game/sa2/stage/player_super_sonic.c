@@ -7,8 +7,8 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
-#include "game/sa2/bosses/boss_9.h"
-#include "game/sa2/stage/game_over.h"
+#include "game/sa2/stage/bosses/boss_9.h"
+#include "game/sa2/ui/game_over.h"
 #include "game/sa2/stage/player_super_sonic.h"
 #include "game/sa2/save.h"
 #include "game/shared/stage/stage.h"

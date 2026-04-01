@@ -2,7 +2,7 @@
 #define GUARD_SA1_GAME_STAGE_UI_H
 
 #include "gba/types.h" // for bool32
-#include "game/sa1/stage/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/gTask_03006240.h" // Strc_8052C84 *
 
 /* NOTE: This header is much more complicated than it needs to be.

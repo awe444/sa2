@@ -37,11 +37,9 @@ SECTIONS
         src/core.o(.data);
         src/input_recorder.o(.data);
 
-        /* "SA1 Leftovers" */
+        /* game */
         . = ALIGN(32); 
         src/game/globals.o(.data);
-
-        /* game */
         src/game/sa2/stage/input_buffer.o(.data);
         src/game/shared/stage/water_effects.o(.data);
         src/game/sa2/stage/cheese.o(.data);
@@ -60,13 +58,13 @@ SECTIONS
         src/game/sa2/stage/player_super_sonic.o(.data);
         src/game/sa2/stage/stage_ui.o(.data);
         src/game/sa2/stage/debug_text_printer.o(.data);
-        src/game/sa2/bosses/common.o(.data);
+        src/game/sa2/stage/bosses/common.o(.data);
         src/game/sa2/options_screen.o(.data);
         src/game/sa2/special_stage/utils.o(.data);
         src/game/sa2/save.o(.data);
         src/game/multiboot/collect_rings/time_display.o(.data);
         src/game/math.o(.data);
-        src/game/multiplayer/mp_attack_1_effect.o(.data);
+        src/game/sa2/stage/mp_attack_1_effect.o(.data);
         src/game/sa2/bg_palette_effects.o(.data);
 
         /* libs */
@@ -99,7 +97,7 @@ SECTIONS
         src/malloc_vram.o(.text);
         src/input_recorder.o(.text);
 
-        /* "SA1 Leftovers" */
+        /* game */
         src/game/shared/stage/rings_manager.o(.text);
         src/game/shared/stage/entities_manager.o(.text);
         src/game/shared/stage/palette_loader.o(.text);
@@ -117,8 +115,8 @@ SECTIONS
         src/game/shared/stage/magnetic_ring.o(.text);
         src/game/shared/stage/music_manager.o(.text);
         src/game/shared/stage/collision.o(.text);
-    
         src/game/sa2/stage/input_buffer.o(.text);
+
         src/game/sa2/stage/interactables/spring.o(.text);
         src/game/sa2/stage/interactables/platform.o(.text);
         src/game/sa2/stage/interactables/platform_square.o(.text);
@@ -128,8 +126,8 @@ SECTIONS
         src/game/sa2/stage/interactables/pipe.o(.text);
         src/game/sa2/stage/interactables/platform_thin.o(.text);
         src/game/sa2/stage/interactables/slidy_ice.o(.text);
-    
-        /* game/shared/stage/globals ? */
+
+        src/game/globals.o(.text);
 
         src/game/shared/stage/water_effects.o(.text);
         src/game/sa2/stage/player_callbacks.o(.text);
@@ -161,7 +159,6 @@ SECTIONS
         src/game/shared/stage/screen_shake.o(.text);
         src/game/sa2/stage/player_controls.o(.text);
         src/game/sa2/stage/player_super_sonic.o(.text);
-
         src/game/sa2/stage/stage_ui.o(.text);
         src/game/sa2/stage/debug_text_printer.o(.text);
         src/game/sa2/stage/screen_fade.o(.text);
@@ -169,53 +166,51 @@ SECTIONS
         src/game/sa2/stage/screen_mask.o(.text);
         src/game/sa2/stage/boss_results_transition.o(.text);
 
-        src/game/sa2/stage/stage_intro.o(.text);
-        src/game/sa2/stage/stage_results.o(.text);
-
+        src/game/sa2/ui/stage_intro.o(.text);
+        src/game/sa2/ui/stage_results.o(.text);
         src/game/sa2/ui/character_select.o(.text);
         src/game/sa2/ui/course_select.o(.text);
-    
-        src/game/sa2/stage/countdown.o(.text);
-        src/game/sa2/stage/game_over.o(.text);
+        src/game/sa2/ui/countdown.o(.text);
+        src/game/sa2/ui/game_over.o(.text);
 
-        src/game/sa2/bosses/final_intro.o(.text);
-        src/game/sa2/bosses/explosion_parts.o(.text);
-        src/game/sa2/bosses/common.o(.text);
-        src/game/sa2/bosses/eggmobile_escape_sequence.o(.text);
-        src/game/sa2/bosses/boss_1.o(.text);
-        src/game/sa2/bosses/boss_2.o(.text);
-        src/game/sa2/bosses/boss_3.o(.text);
-        src/game/sa2/bosses/boss_4.o(.text);
-        src/game/sa2/bosses/boss_5.o(.text);
-        src/game/sa2/bosses/boss_6.o(.text);
-        src/game/sa2/bosses/boss_7.o(.text);
-        src/game/sa2/bosses/boss_8.o(.text);
-        src/game/sa2/bosses/boss_9.o(.text);
+        src/game/sa2/stage/bosses/final_intro.o(.text);
+        src/game/sa2/stage/bosses/explosion_parts.o(.text);
+        src/game/sa2/stage/bosses/common.o(.text);
+        src/game/sa2/stage/bosses/eggmobile_escape_sequence.o(.text);
+        src/game/sa2/stage/bosses/boss_1.o(.text);
+        src/game/sa2/stage/bosses/boss_2.o(.text);
+        src/game/sa2/stage/bosses/boss_3.o(.text);
+        src/game/sa2/stage/bosses/boss_4.o(.text);
+        src/game/sa2/stage/bosses/boss_5.o(.text);
+        src/game/sa2/stage/bosses/boss_6.o(.text);
+        src/game/sa2/stage/bosses/boss_7.o(.text);
+        src/game/sa2/stage/bosses/boss_8.o(.text);
+        src/game/sa2/stage/bosses/boss_9.o(.text);
 
-        src/game/sa2/enemies/projectiles.o(.text);
-        src/game/sa2/enemies/mon.o(.text);
-        src/game/sa2/enemies/gohla.o(.text);
-        src/game/sa2/enemies/kura_kura.o(.text);
-        src/game/sa2/enemies/kubinaga.o(.text);
-        src/game/sa2/enemies/buzzer.o(.text);
-        src/game/sa2/enemies/kiki.o(.text);
-        src/game/sa2/enemies/koura.o(.text);
-        src/game/sa2/enemies/bell.o(.text);
-        src/game/sa2/enemies/yado.o(.text);
-        src/game/sa2/enemies/piko_piko.o(.text);
-        src/game/sa2/enemies/circus.o(.text);
-        src/game/sa2/enemies/madillo.o(.text);
-        src/game/sa2/enemies/straw.o(.text);
-        src/game/sa2/enemies/hammerhead.o(.text);
-        src/game/sa2/enemies/spinner.o(.text);
-        src/game/sa2/enemies/mouse.o(.text);
-        src/game/sa2/enemies/pen.o(.text);
-        src/game/sa2/enemies/geji_geji.o(.text);
-        src/game/sa2/enemies/balloon.o(.text);
-        src/game/sa2/enemies/flickey.o(.text);
-        src/game/sa2/enemies/kyura.o(.text);
-        src/game/sa2/enemies/bullet_buzzer.o(.text);
-        src/game/sa2/enemies/star.o(.text);
+        src/game/sa2/stage/enemies/projectiles.o(.text);
+        src/game/sa2/stage/enemies/mon.o(.text);
+        src/game/sa2/stage/enemies/gohla.o(.text);
+        src/game/sa2/stage/enemies/kura_kura.o(.text);
+        src/game/sa2/stage/enemies/kubinaga.o(.text);
+        src/game/sa2/stage/enemies/buzzer.o(.text);
+        src/game/sa2/stage/enemies/kiki.o(.text);
+        src/game/sa2/stage/enemies/koura.o(.text);
+        src/game/sa2/stage/enemies/bell.o(.text);
+        src/game/sa2/stage/enemies/yado.o(.text);
+        src/game/sa2/stage/enemies/piko_piko.o(.text);
+        src/game/sa2/stage/enemies/circus.o(.text);
+        src/game/sa2/stage/enemies/madillo.o(.text);
+        src/game/sa2/stage/enemies/straw.o(.text);
+        src/game/sa2/stage/enemies/hammerhead.o(.text);
+        src/game/sa2/stage/enemies/spinner.o(.text);
+        src/game/sa2/stage/enemies/mouse.o(.text);
+        src/game/sa2/stage/enemies/pen.o(.text);
+        src/game/sa2/stage/enemies/geji_geji.o(.text);
+        src/game/sa2/stage/enemies/balloon.o(.text);
+        src/game/sa2/stage/enemies/flickey.o(.text);
+        src/game/sa2/stage/enemies/kyura.o(.text);
+        src/game/sa2/stage/enemies/bullet_buzzer.o(.text);
+        src/game/sa2/stage/enemies/star.o(.text);
         
         /* multiplayer_screens */
         src/game/multiplayer/mode_select.o(.text);
@@ -224,21 +219,21 @@ SECTIONS
         src/game/multiplayer/results.o(.text);
         src/game/multiplayer/team_play.o(.text);
 
-        src/game/interactables_1/decoration.o(.text);
-        src/game/interactables_1/booster.o(.text);
-        src/game/interactables_1/incline_ramp.o(.text);
-        src/game/interactables_1/spring_bouncy.o(.text);
-        src/game/interactables_1/platform_crumbling.o(.text);
-        src/game/interactables_1/toggle_player_layer.o(.text);
-        src/game/interactables_1/rotating_handle.o(.text);
-        src/game/interactables_1/gapped_loop.o(.text);
-        src/game/interactables_1/spikes.o(.text);
-        src/game/interactables_1/corkscrew.o(.text);
-        src/game/interactables_1/bouncy_bar.o(.text);
-        src/game/interactables_1/corkscrew_3d.o(.text);
-        src/game/interactables_1/stage_goal.o(.text);
-        src/game/interactables_1/checkpoint.o(.text);
-        src/game/interactables_1/windmill.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/decoration.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/booster.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/incline_ramp.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/spring_bouncy.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/platform_crumbling.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/toggle_player_layer.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/rotating_handle.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/gapped_loop.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/spikes.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/corkscrew.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/bouncy_bar.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/corkscrew_3d.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/stage_goal.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/checkpoint.o(.text);
+        src/game/sa2/stage/interactables/leaf_forest/windmill.o(.text);
 
         src/game/sa2/options_screen.o(.text);
 
@@ -253,46 +248,46 @@ SECTIONS
 
         src/game/sa2/save.o(.text);
 
-        src/game/interactables_2/hot_crater/windup_stick.o(.text);
-        src/game/interactables_2/hot_crater/hook_rail.o(.text);
-        src/game/interactables_2/hot_crater/turnaround_bar.o(.text);
-        src/game/interactables_2/hot_crater/crane.o(.text);
-        src/game/interactables_2/hot_crater/dash_ring.o(.text);
-        src/game/interactables_2/hot_crater/floating_spring.o(.text);
-        src/game/interactables_2/music_plant/note_sphere.o(.text);
-        src/game/interactables_2/music_plant/note_block.o(.text);
-        src/game/interactables_2/music_plant/chord.o(.text);
-        src/game/interactables_2/music_plant/keyboard.o(.text);
-        src/game/interactables_2/music_plant/german_flute.o(.text);
-        src/game/interactables_2/music_plant/pipe_sequence.o(.text);
-        src/game/interactables_2/music_plant/pipe_horn.o(.text);
-        src/game/interactables_2/music_plant/french_horn.o(.text);
-        src/game/interactables_2/ice_paradise/slowing_snow.o(.text);
-        src/game/interactables_2/ice_paradise/funnel_sphere.o(.text);
-        src/game/interactables_2/ice_paradise/half_pipe.o(.text);
-        src/game/interactables_2/ice_paradise/big_snowball.o(.text);
-        src/game/interactables_2/techno_base/bounce_block.o(.text);
-        src/game/interactables_2/techno_base/light_bridge.o(.text);
-        src/game/interactables_2/techno_base/arrow_platform.o(.text);
-        src/game/interactables_2/techno_base/spike_platform.o(.text);
-        src/game/interactables_2/techno_base/light_globe.o(.text);
-        src/game/interactables_2/sky_canyon/propeller.o(.text);
-        src/game/interactables_2/sky_canyon/small_windmill.o(.text);
-        src/game/interactables_2/sky_canyon/propeller_spring.o(.text);
-        src/game/interactables_2/sky_canyon/whirlwind.o(.text);
-        src/game/interactables_2/sky_canyon/fan.o(.text);
-        src/game/interactables_2/egg_utopia/launcher.o(.text);
-        src/game/interactables_2/egg_utopia/cannon.o(.text);
-        src/game/interactables_2/egg_utopia/pole.o(.text);
-        src/game/interactables_2/egg_utopia/iron_ball.o(.text);
-        src/game/interactables_2/egg_utopia/flying_handle.o(.text);
-        src/game/interactables_2/egg_utopia/speeding_platform.o(.text);
-        src/game/interactables_2/egg_utopia/gravity_toggle.o(.text);
-        src/game/interactables_2/collect_rings_lap_trigger.o(.text);
-        src/game/interactables_2/sky_canyon_init.o(.text);
-        src/game/interactables_2/105.o(.text);
-        src/game/interactables_2/note_particle.o(.text);
-        src/game/interactables_2/special_ring.o(.text);
+        src/game/sa2/stage/interactables/hot_crater/windup_stick.o(.text);
+        src/game/sa2/stage/interactables/hot_crater/hook_rail.o(.text);
+        src/game/sa2/stage/interactables/hot_crater/turnaround_bar.o(.text);
+        src/game/sa2/stage/interactables/hot_crater/crane.o(.text);
+        src/game/sa2/stage/interactables/hot_crater/dash_ring.o(.text);
+        src/game/sa2/stage/interactables/hot_crater/floating_spring.o(.text);
+        src/game/sa2/stage/interactables/music_plant/note_sphere.o(.text);
+        src/game/sa2/stage/interactables/music_plant/note_block.o(.text);
+        src/game/sa2/stage/interactables/music_plant/chord.o(.text);
+        src/game/sa2/stage/interactables/music_plant/keyboard.o(.text);
+        src/game/sa2/stage/interactables/music_plant/german_flute.o(.text);
+        src/game/sa2/stage/interactables/music_plant/pipe_sequence.o(.text);
+        src/game/sa2/stage/interactables/music_plant/pipe_horn.o(.text);
+        src/game/sa2/stage/interactables/music_plant/french_horn.o(.text);
+        src/game/sa2/stage/interactables/ice_paradise/slowing_snow.o(.text);
+        src/game/sa2/stage/interactables/ice_paradise/funnel_sphere.o(.text);
+        src/game/sa2/stage/interactables/ice_paradise/half_pipe.o(.text);
+        src/game/sa2/stage/interactables/ice_paradise/big_snowball.o(.text);
+        src/game/sa2/stage/interactables/techno_base/bounce_block.o(.text);
+        src/game/sa2/stage/interactables/techno_base/light_bridge.o(.text);
+        src/game/sa2/stage/interactables/techno_base/arrow_platform.o(.text);
+        src/game/sa2/stage/interactables/techno_base/spike_platform.o(.text);
+        src/game/sa2/stage/interactables/techno_base/light_globe.o(.text);
+        src/game/sa2/stage/interactables/sky_canyon/propeller.o(.text);
+        src/game/sa2/stage/interactables/sky_canyon/small_windmill.o(.text);
+        src/game/sa2/stage/interactables/sky_canyon/propeller_spring.o(.text);
+        src/game/sa2/stage/interactables/sky_canyon/whirlwind.o(.text);
+        src/game/sa2/stage/interactables/sky_canyon/fan.o(.text);
+        src/game/sa2/stage/interactables/egg_utopia/launcher.o(.text);
+        src/game/sa2/stage/interactables/egg_utopia/cannon.o(.text);
+        src/game/sa2/stage/interactables/egg_utopia/pole.o(.text);
+        src/game/sa2/stage/interactables/egg_utopia/iron_ball.o(.text);
+        src/game/sa2/stage/interactables/egg_utopia/flying_handle.o(.text);
+        src/game/sa2/stage/interactables/egg_utopia/speeding_platform.o(.text);
+        src/game/sa2/stage/interactables/egg_utopia/gravity_toggle.o(.text);
+        src/game/sa2/stage/interactables/collect_rings_lap_trigger.o(.text);
+        src/game/sa2/stage/interactables/sky_canyon_init.o(.text);
+        src/game/sa2/stage/interactables/105.o(.text);
+        src/game/sa2/stage/interactables/note_particle.o(.text);
+        src/game/sa2/stage/interactables/special_ring.o(.text);
 
         src/game/multiboot/connection.o(.text);
         src/game/multiboot/collect_rings/results.o(.text);
@@ -303,7 +298,7 @@ SECTIONS
         src/game/sa2/stage/mystery_itembox.o(.text);
         src/game/sa2/stage/heart_particles_effect.o(.text);
         src/game/sa2/stage/race_progress.o(.text);
-        src/game/multiplayer/mp_attack_1_effect.o(.text);
+        src/game/sa2/stage/mp_attack_1_effect.o(.text);
 
         /* menus */
         src/game/sa2/multiplayer_lobby.o(.text);
@@ -420,38 +415,40 @@ SECTIONS
         src/game/sa2/stage/stage_ui.o(.rodata);
         src/game/sa2/stage/trapped_animals.o(.rodata);
         src/game/sa2/stage/boss_results_transition.o(.rodata);
-        src/game/sa2/stage/stage_intro.o(.rodata);
-        src/game/sa2/stage/stage_results.o(.rodata);
+
+        src/game/sa2/ui/stage_intro.o(.rodata);
+        src/game/sa2/ui/stage_results.o(.rodata);
         src/game/sa2/ui/character_select.o(.rodata);
         src/game/sa2/ui/course_select.o(.rodata);
-        src/game/sa2/stage/countdown.o(.rodata);
-        src/game/sa2/bosses/final_intro.o(.rodata);
-        src/game/sa2/bosses/common.o(.rodata);
-        src/game/sa2/bosses/boss_1.o(.rodata);
-        src/game/sa2/bosses/boss_2.o(.rodata);
-        src/game/sa2/bosses/boss_3.o(.rodata);
-        src/game/sa2/bosses/boss_4.o(.rodata);
-        src/game/sa2/bosses/boss_5.o(.rodata);
-        src/game/sa2/bosses/boss_6.o(.rodata);
-        src/game/sa2/bosses/boss_7.o(.rodata);
-        src/game/sa2/bosses/boss_8.o(.rodata);
-        src/game/sa2/bosses/boss_9.o(.rodata);
-        src/game/sa2/enemies/kubinaga.o(.rodata);
-        src/game/sa2/enemies/koura.o(.rodata);
-        src/game/sa2/enemies/geji_geji.o(.rodata);
+        src/game/sa2/ui/countdown.o(.rodata);
+
+        src/game/sa2/stage/bosses/final_intro.o(.rodata);
+        src/game/sa2/stage/bosses/common.o(.rodata);
+        src/game/sa2/stage/bosses/boss_1.o(.rodata);
+        src/game/sa2/stage/bosses/boss_2.o(.rodata);
+        src/game/sa2/stage/bosses/boss_3.o(.rodata);
+        src/game/sa2/stage/bosses/boss_4.o(.rodata);
+        src/game/sa2/stage/bosses/boss_5.o(.rodata);
+        src/game/sa2/stage/bosses/boss_6.o(.rodata);
+        src/game/sa2/stage/bosses/boss_7.o(.rodata);
+        src/game/sa2/stage/bosses/boss_8.o(.rodata);
+        src/game/sa2/stage/bosses/boss_9.o(.rodata);
+        src/game/sa2/stage/enemies/kubinaga.o(.rodata);
+        src/game/sa2/stage/enemies/koura.o(.rodata);
+        src/game/sa2/stage/enemies/geji_geji.o(.rodata);
         src/game/multiplayer/mode_select.o(.rodata);
         src/game/multiplayer/multipak_connection.o(.rodata);
         src/game/multiplayer/communication_outcome.o(.rodata);
         src/game/multiplayer/results.o(.rodata);
         src/game/multiplayer/team_play.o(.rodata);
-        src/game/interactables_1/decoration.o(.rodata);
-        src/game/interactables_1/booster.o(.rodata);
-        src/game/interactables_1/spring_bouncy.o(.rodata);
-        src/game/interactables_1/platform_crumbling.o(.rodata);
-        src/game/interactables_1/spikes.o(.rodata);
-        src/game/interactables_1/bouncy_bar.o(.rodata);
-        src/game/interactables_1/checkpoint.o(.rodata);
-        src/game/interactables_1/windmill.o(.rodata);
+        src/game/sa2/stage/interactables/leaf_forest/decoration.o(.rodata);
+        src/game/sa2/stage/interactables/leaf_forest/booster.o(.rodata);
+        src/game/sa2/stage/interactables/leaf_forest/spring_bouncy.o(.rodata);
+        src/game/sa2/stage/interactables/leaf_forest/platform_crumbling.o(.rodata);
+        src/game/sa2/stage/interactables/leaf_forest/spikes.o(.rodata);
+        src/game/sa2/stage/interactables/leaf_forest/bouncy_bar.o(.rodata);
+        src/game/sa2/stage/interactables/leaf_forest/checkpoint.o(.rodata);
+        src/game/sa2/stage/interactables/leaf_forest/windmill.o(.rodata);
         src/game/sa2/options_screen.o(.rodata);
         src/game/sa2/special_stage/data.o(.rodata);
         src/game/sa2/special_stage/player.o(.rodata);
@@ -461,25 +458,25 @@ SECTIONS
         src/game/sa2/special_stage/ui.o(.rodata);
         src/game/sa2/special_stage/guard_robo.o(.rodata);
         src/game/sa2/special_stage/tables.o(.rodata);
-        src/game/interactables_2/hot_crater/dash_ring.o(.rodata);
-        src/game/interactables_2/music_plant/note_sphere.o(.rodata);
-        src/game/interactables_2/music_plant/note_block.o(.rodata);
-        src/game/interactables_2/music_plant/keyboard.o(.rodata);
-        src/game/interactables_2/music_plant/german_flute.o(.rodata);
-        src/game/interactables_2/music_plant/pipe_sequence.o(.rodata);
-        src/game/interactables_2/music_plant/pipe_horn.o(.rodata);
-        src/game/interactables_2/music_plant/french_horn.o(.rodata);
-        src/game/interactables_2/techno_base/bounce_block.o(.rodata);
-        src/game/interactables_2/techno_base/light_bridge.o(.rodata);
-        src/game/interactables_2/techno_base/spike_platform.o(.rodata);
-        src/game/interactables_2/sky_canyon/whirlwind.o(.rodata);
-        src/game/interactables_2/note_particle.o(.rodata);
+        src/game/sa2/stage/interactables/hot_crater/dash_ring.o(.rodata);
+        src/game/sa2/stage/interactables/music_plant/note_sphere.o(.rodata);
+        src/game/sa2/stage/interactables/music_plant/note_block.o(.rodata);
+        src/game/sa2/stage/interactables/music_plant/keyboard.o(.rodata);
+        src/game/sa2/stage/interactables/music_plant/german_flute.o(.rodata);
+        src/game/sa2/stage/interactables/music_plant/pipe_sequence.o(.rodata);
+        src/game/sa2/stage/interactables/music_plant/pipe_horn.o(.rodata);
+        src/game/sa2/stage/interactables/music_plant/french_horn.o(.rodata);
+        src/game/sa2/stage/interactables/techno_base/bounce_block.o(.rodata);
+        src/game/sa2/stage/interactables/techno_base/light_bridge.o(.rodata);
+        src/game/sa2/stage/interactables/techno_base/spike_platform.o(.rodata);
+        src/game/sa2/stage/interactables/sky_canyon/whirlwind.o(.rodata);
+        src/game/sa2/stage/interactables/note_particle.o(.rodata);
         src/game/multiboot/connection.o(.rodata);
         src/game/multiboot/collect_rings/time_display.o(.rodata);
         src/game/math.o(.rodata);
         src/game/sa2/stage/mystery_itembox.o(.rodata);
         src/game/sa2/stage/race_progress.o(.rodata);
-        src/game/multiplayer/mp_attack_1_effect.o(.rodata);
+        src/game/sa2/stage/mp_attack_1_effect.o(.rodata);
         src/game/sa2/multiplayer_lobby.o(.rodata);
         src/game/sa2/time_attack/mode_select.o(.rodata);
         src/game/sa2/time_attack/lobby.o(.rodata);

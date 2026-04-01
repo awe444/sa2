@@ -2,7 +2,7 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 #include "game/sa1/ui/character_select.h"
-#include "game/sa1/stage/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/gTask_03006240.h"
 #include "game/sa1/save.h"
 #include "game/sa1/title_screen.h" // CreateMainMenu

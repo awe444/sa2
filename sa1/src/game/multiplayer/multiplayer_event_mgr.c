@@ -4,7 +4,6 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/item_tasks.h"
 
-#include "game/multiplayer/mp_attack_1_effect.h"
 #include "game/multiplayer/unk_0.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/multiplayer/finish.h"

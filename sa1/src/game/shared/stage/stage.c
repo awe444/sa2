@@ -2,7 +2,7 @@
 #include "core.h"
 #include "flags.h"
 #include "lib/m4a/m4a.h"
-#include "game/sa1/stage/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/multiplayer/chao.h"
 #include "game/multiplayer/finish.h"
 #include "game/multiplayer/indicators.h"

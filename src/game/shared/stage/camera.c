@@ -2381,8 +2381,8 @@ void StageBgUpdate_ZoneFinalActXX(UNUSED s32 x, UNUSED s32 y)
 
 /************************************ BOSS EXTRA ************************************/
 
-#include "game/sa2/bosses/common.h"
-#include "game/sa2/bosses/boss_9.h"
+#include "game/sa2/stage/bosses/common.h"
+#include "game/sa2/stage/bosses/boss_9.h"
 
 void StageBgUpdate_ZoneFinalActTA53(UNUSED s32 a, UNUSED s32 b)
 {

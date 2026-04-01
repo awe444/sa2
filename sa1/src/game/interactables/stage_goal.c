@@ -9,7 +9,7 @@
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/parameters/characters.h"
 #include "game/shared/stage/player.h"
-#include "game/sa1/stage/stage_results.h"
+#include "game/sa1/ui/stage_results.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

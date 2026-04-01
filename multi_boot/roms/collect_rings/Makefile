@@ -128,12 +128,12 @@ SA2_C_FILES := \
 	sa2/game/multiplayer/indicators.c \
 	sa2/game/multiplayer/mp_player.c \
 	sa2/game/multiplayer/finish.c \
-	sa2/game/interactables_1/toggle_player_layer.c \
+	sa2/game/sa2/stage/interactables/leaf_forest/toggle_player_layer.c \
 	sa2/game/sa2/stage/interactables/spring.c \
 	sa2/game/sa2/stage/interactables/ramp.c \
-	sa2/game/interactables_1/spikes.c \
+	sa2/game/sa2/stage/interactables/leaf_forest/spikes.c \
 	sa2/game/sa2/stage/interactables/grind_rail.c \
-	sa2/game/interactables_2/collect_rings_lap_trigger.c \
+	sa2/game/sa2/stage/interactables/collect_rings_lap_trigger.c \
 	sa2/game/shared/stage/dust_cloud.c \
 	sa2/game/shared/stage/collect_ring_effect.c \
 	sa2/game/multiplayer/mp_attack_2_effect.c \

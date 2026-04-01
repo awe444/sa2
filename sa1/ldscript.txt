@@ -87,9 +87,12 @@ SECTIONS {
         src/game/sa1/special_stage/temporary_sound_play_task.o(.text);
         src/game/enemies/boss_1_egg_hammer_tank.o(.text);
         src/game/interactables/breakable_wall.o(.text);
+        
         src/game/mp_chao.o(.text);
         src/game/egg_rocket_transitions.o(.text);
+    
         src/game/sa1/special_stage/main.o(.text);
+
         src/game/enemies/boss_2_egg_press.o(.text);
         src/game/enemies/boss_3_egg_ball.o(.text);
         src/game/enemies/boss_4_egg_spider.o(.text);
@@ -160,10 +163,10 @@ SECTIONS {
         src/game/sa1/stage/stage_ui.o(.text);
         src/game/sa1/stage/trapped_animals.o(.text);
         src/game/sa1/stage/stage_ui_z.o(.text);
-        src/game/sa1/stage/game_over.o(.text);
-        src/game/sa1/stage/stage_results.o(.text);
 
         /* game/sa1/ui */
+        src/game/sa1/ui/game_over.o(.text);
+        src/game/sa1/ui/stage_results.o(.text);
         src/game/sa1/ui/player_name_input_menu.o(.text);
         src/game/sa1/ui/character_select.o(.text);
         src/game/sa1/ui/time_over.o(.text);

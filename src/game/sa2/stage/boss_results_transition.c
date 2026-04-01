@@ -9,7 +9,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa2/cutscenes/level_endings.h"
 #include "game/sa2/stage/screen_fade.h"
-#include "game/sa2/stage/stage_results.h"
+#include "game/sa2/ui/stage_results.h"
 #include "game/sa2/time_attack/results.h"
 #include "game/sa2/stage/boss_results_transition.h"
 

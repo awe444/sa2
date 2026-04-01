@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "malloc_vram.h"
-#include "game/sa1/stage/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/sa1/ui/time_over.h"
 #include "game/types/entity.h"
 #include "game/shared/stage/stage.h"

@@ -7,7 +7,7 @@
 #include "game/shared/stage/amy_attack_heart_effect.h"
 #include "game/sa2/stage/boost_effect.h"
 #include "game/sa2/stage/boost_mode_particles.h" // incl. CreateBoostModeParticles
-#include "game/sa2/bosses/common.h"
+#include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/cheese.h"
 #include "game/sa2/stage/heart_particles_effect.h"
 #include "game/multiplayer/mp_attack_2_effect.h"
@@ -26,13 +26,13 @@
 #include "game/shared/stage/player.h"
 #include "game/sa2/stage/player_controls.h"
 #include "game/sa2/stage/player_super_sonic.h"
-#include "game/sa2/stage/stage_results.h"
+#include "game/sa2/ui/stage_results.h"
 #include "game/shared/stage/rings_scatter.h"
 #include "game/sa2/stage/spawn_positions.h"
 #include "game/shared/stage/stage.h"
 #include "game/shared/stage/underwater_effects.h"
 #include "game/sa2/time_attack/results.h" // for Player_VictoryPose
-#include "game/multiplayer/mp_attack_1_effect.h"
+#include "game/sa2/stage/mp_attack_1_effect.h"
 #include "game/shared/stage/water_effects.h"
 
 #include "constants/animations.h"

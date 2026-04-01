@@ -53,12 +53,12 @@ SECTIONS {
         build/collect_rings/src/sa2/game/multiplayer/indicators.o(.text);
         build/collect_rings/src/sa2/game/multiplayer/mp_player.o(.text);
         build/collect_rings/src/sa2/game/multiplayer/finish.o(.text);
-        build/collect_rings/src/sa2/game/interactables_1/toggle_player_layer.o(.text);
+        build/collect_rings/src/sa2/game/sa2/stage/interactables/leaf_forest/toggle_player_layer.o(.text);
         build/collect_rings/src/sa2/game/sa2/stage/interactables/spring.o(.text);
         build/collect_rings/src/sa2/game/sa2/stage/interactables/ramp.o(.text);
-        build/collect_rings/src/sa2/game/interactables_1/spikes.o(.text);
+        build/collect_rings/src/sa2/game/sa2/stage/interactables/leaf_forest/spikes.o(.text);
         build/collect_rings/src/sa2/game/sa2/stage/interactables/grind_rail.o(.text);
-        build/collect_rings/src/sa2/game/interactables_2/collect_rings_lap_trigger.o(.text);
+        build/collect_rings/src/sa2/game/sa2/stage/interactables/collect_rings_lap_trigger.o(.text);
         build/collect_rings/src/sa2/game/shared/stage/dust_cloud.o(.text);
         build/collect_rings/src/sa2/game/shared/stage/collect_ring_effect.o(.text);
         build/collect_rings/src/sa2/game/multiplayer/mp_attack_2_effect.o(.text);
@@ -101,7 +101,7 @@ SECTIONS {
         build/collect_rings/src/sa2/game/multiplayer/mp_player.o(.rodata);
         build/collect_rings/src/sa2/game/multiplayer/finish.o(.rodata);
         build/collect_rings/src/sa2/game/sa2/stage/interactables/spring.o(.rodata);
-        build/collect_rings/src/sa2/game/interactables_1/spikes.o(.rodata);
+        build/collect_rings/src/sa2/game/sa2/stage/interactables/leaf_forest/spikes.o(.rodata);
         build/collect_rings/src/sa2/game/shared/stage/camera.o(.rodata);
         build/collect_rings/src/sa2/game/shared/stage/player.o(.rodata);
         build/collect_rings/src/sa2/lib/m4a/m4a_tables.o(.rodata);

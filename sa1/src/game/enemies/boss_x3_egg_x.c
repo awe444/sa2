@@ -10,7 +10,7 @@
 #include "game/nuts_and_bolts_task.h"
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/player.h"
-#include "game/sa1/stage/stage_results.h"
+#include "game/sa1/ui/stage_results.h"
 #include "game/shared/stage/rings_scatter.h"
 #include "game/shared/stage/screen_shake.h"
 #include "game/shared/stage/stage.h"
