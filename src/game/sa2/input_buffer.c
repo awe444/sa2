@@ -1,7 +1,7 @@
 #include "global.h"
 
 #include "game/sa2/input_buffer.h"
-#include "game/stage/player.h"
+#include "game/shared/stage/player.h"
 
 #include "data/input_combos.h"
 

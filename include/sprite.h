@@ -250,7 +250,7 @@ typedef struct {
     /* 0x06 */ u8 variant;
 } TileInfo;
 
-// NOTE: (Only?) used by by src/game/bosses/final_intro.c
+// NOTE: (Only?) used by by src/game/sa2/bosses/final_intro.c
 typedef struct {
     /* 0x00 */ void *tiles;
     /* 0x04 */ AnimId anim;

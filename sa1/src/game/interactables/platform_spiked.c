@@ -1,11 +1,11 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/player.h"
+#include "game/shared/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
 #include "game/water_effects.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
@@ -209,7 +209,7 @@ void Task_Platform_Spiked(void)
                 qPrevWorldX = PLAYER(i).qWorldX;
                 qPrevWorldY = PLAYER(i).qWorldY;
 
-                flags = sub_80096B0(s, worldX + I(platform->qUnk3C), worldY + I(platform->qUnk40), &PLAYER(i));
+                flags = Coll_Player_Platform(s, worldX + I(platform->qUnk3C), worldY + I(platform->qUnk40), &PLAYER(i));
 
                 if (flags & 0x70000) {
                     SetBit(platform->unk4F, i);
@@ -314,7 +314,7 @@ void Task_Platform_Spiked(void)
 
                         sub_80805C8(s, worldX + I(platform->qUnk3C), worldY + I(platform->qUnk40), (Rect8 *)&arr[0], &PLAYER(i));
 
-                        flags = sub_80096B0(s, worldX + I(platform->qUnk3C), worldY + I(platform->qUnk40) - 8, &PLAYER(i));
+                        flags = Coll_Player_Platform(s, worldX + I(platform->qUnk3C), worldY + I(platform->qUnk40) - 8, &PLAYER(i));
 
                         if (flags & 0x8) {
                             if (platform->facingUp) {

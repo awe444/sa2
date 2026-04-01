@@ -2,7 +2,7 @@
 #define GUARD_ENEMY_BOSS_SUPER_EGG_ROBO_H
 
 #include "sprite.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/some_task_manager.h"
 
 /* Used in SuperEggRobo.unk58 */

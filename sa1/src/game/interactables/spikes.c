@@ -4,12 +4,12 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/multiplayer/mp_player.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/terrain_collision.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -276,7 +276,7 @@ void Task_Spikes_Horizontal(void)
     if ((gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (me->d.sData[0] != 0) || (gSpikesUnknownTimer != 0)) {
         i = 0;
         do {
-            u32 res = sub_80096B0(s, worldX, worldY, &PLAYER(i));
+            u32 res = Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
             s32 r2;
 
             if (res & 0x10008) {
@@ -515,7 +515,7 @@ bool32 sub_8020D44(Sprite *s, MapEntity *me, Spikes *spikes, Player *p)
         }
     }
 
-    movestate = sub_80096B0(s, worldX, worldY, p);
+    movestate = Coll_Player_Platform(s, worldX, worldY, p);
     spikes->movestateBuffer[tempPlayerID] = movestate;
 
     if (movestate & MOVESTATE_STOOD_ON_OBJ) {
@@ -542,7 +542,7 @@ bool32 sub_8020E98(Sprite *s, MapEntity *me, Spikes *spikes, Player *p)
     s->y = worldY - gCamera.y;
 
     if (!(p->moveState & MOVESTATE_IA_OVERRIDE)) {
-        movestate = sub_80096B0(s, worldX, worldY, p);
+        movestate = Coll_Player_Platform(s, worldX, worldY, p);
         spikes->movestateBuffer[tempPlayerID] = movestate;
 
         if (movestate & MOVESTATE_10000) {
@@ -646,7 +646,7 @@ bool32 sub_8020F2C(Sprite *s, MapEntity *me, Spikes *spikes, Player *p, bool32 *
                     m4aSongNumStart(SE_171);
                 }
             } else {
-                res = sub_80096B0(s, worldX, worldY, p);
+                res = Coll_Player_Platform(s, worldX, worldY, p);
 
                 if (res & COLL_FLAG_8) {
                     if (Coll_DamagePlayer(p)) {
@@ -655,7 +655,7 @@ bool32 sub_8020F2C(Sprite *s, MapEntity *me, Spikes *spikes, Player *p, bool32 *
                 }
             }
         } else {
-            res = sub_80096B0(s, worldX, worldY, p);
+            res = Coll_Player_Platform(s, worldX, worldY, p);
             spikes->movestateBuffer[tempPlayerID] = res;
 
         test:
@@ -791,7 +791,7 @@ bool32 sub_8021208(Sprite *s, MapEntity *me, Spikes *spikes, Player *p, bool32 *
             }
             // Change 2 from sub_8020F2C: removed else-block here
         } else {
-            res = sub_80096B0(s, worldX, worldY, p);
+            res = Coll_Player_Platform(s, worldX, worldY, p);
             spikes->movestateBuffer[tempPlayerID] = res;
 
             // Change 3 from sub_8020F2C: COLL_FLAG_10000 not COLL_FLAG_8

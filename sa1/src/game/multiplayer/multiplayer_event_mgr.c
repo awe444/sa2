@@ -1,8 +1,8 @@
 #include "core.h"
 
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
-#include "game/stage/item_tasks.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/item_tasks.h"
 
 #include "game/multiplayer/mp_attack_1_effect.h"
 #include "game/multiplayer/unk_0.h"
@@ -10,7 +10,7 @@
 #include "game/multiplayer/finish.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 
 #include "lib/m4a/m4a.h"
 

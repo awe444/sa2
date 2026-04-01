@@ -10,7 +10,7 @@
 #include "game/multiplayer/communication_outcome.h"
 #include "game/multiplayer/multipak_connection.h"
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 #include "game/sa1/save.h"
 #include "game/stage/tilemap_table.h"
 

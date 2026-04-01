@@ -10,15 +10,15 @@
 
 #include "data/sprite_data.h"
 #include "game/sa2/save.h"
-#include "game/title_screen.h"
+#include "game/sa2/title_screen.h"
 
-#include "game/stage/screen_fade.h"
+#include "game/sa2/gfx/screen_fade.h"
 #include "game/stage/tilemap_table.h"
 #include "lib/m4a/m4a.h"
 #include "constants/text.h"
 #include "flags.h"
 
-#include "game/character_select.h"
+#include "game/sa2/ui/character_select.h"
 
 #include "data/sprite_tables.h"
 

@@ -5,13 +5,13 @@
 #include "task.h"
 
 #include "game/globals.h"
-#include "game/character_select.h"
+#include "game/sa2/ui/character_select.h"
 
 #include "game/stage/stage.h"
 
 #if (GAME == GAME_SA2)
-#include "game/bosses/common.h"
-#include "game/title_screen.h"
+#include "game/sa2/bosses/common.h"
+#include "game/sa2/title_screen.h"
 #endif
 
 #if PORTABLE

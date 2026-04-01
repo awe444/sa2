@@ -4,11 +4,11 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/terrain_collision.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -100,7 +100,7 @@ void Task_SteamExhaust(void)
 
     i = 0;
     do {
-        if (sub_80096B0(s2, worldX, worldY, &PLAYER(i)) & COLL_FLAG_8) {
+        if (Coll_Player_Platform(s2, worldX, worldY, &PLAYER(i)) & COLL_FLAG_8) {
             PLAYER(i).qWorldY += Q(1);
             continue;
         } else {
@@ -127,7 +127,7 @@ void Task_SteamExhaust(void)
                     }
                 }
             } else {
-                if (sub_80096B0(s, worldX, worldY, &PLAYER(i))) {
+                if (Coll_Player_Platform(s, worldX, worldY, &PLAYER(i))) {
                     s32 res = SA2_LABEL(sub_801E4E4)(I(PLAYER(i).qWorldY) - 19, I(PLAYER(i).qWorldX), PLAYER(i).layer, -8, NULL,
                                                      SA2_LABEL(sub_801EE64));
 
@@ -207,7 +207,7 @@ void Task_SteamExhaust2(void)
             PLAYER(i).qWorldY += Q(1);
         }
 
-        sub_80096B0(s, worldX, worldY, &PLAYER(i));
+        Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
     } while (++i < gNumSingleplayerCharacters);
 
     if (exhaust->qLidOffsetY >= 0) {

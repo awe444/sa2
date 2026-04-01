@@ -5,10 +5,10 @@
 #include "sprite.h"
 #include "task.h"
 #include "game/stage/stage.h"
-#include "game/course_select.h"
+#include "game/sa2/ui/course_select.h"
 #include "game/multiplayer/results.h"
 #include "game/multiplayer/multipak_connection.h"
-#include "game/multiplayer_lobby.h"
+#include "game/sa2/multiplayer_lobby.h"
 #include "game/sa2/save.h"
 
 #ifdef TEAMPLAY_AVAILABLE

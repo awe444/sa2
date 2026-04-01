@@ -39,11 +39,8 @@ typedef struct SomeTaskManager_7C {
 
 void sub_804CFA0(SomeTaskManager_60 *taskData);
 bool32 sub_804CFE0(u16 *param0, u16 param1, u16 param2);
-s32 GetAirDashDirection(s32 n);
-void sub_804D13C(u16 param0);
 struct Task *CreateSomeTaskManager_60_Task(GfxInfo *gfx, TaskMain proc, TaskDestructor dtor); // -> SomeTaskManager_60
 struct Task *CreateSomeTaskManager_7C_Task(GfxInfo *gfx, TaskMain proc, TaskDestructor dtor); // -> SomeTaskManager_7C
 void TaskDestructor_SomeTaskManager_60_Common(struct Task *t);
-extern ALIGNED(16) u16 gUnknown_030060F0[64];
 
 #endif // GUARD_SOME_TASK_MANAGER_H

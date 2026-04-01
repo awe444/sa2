@@ -3,10 +3,10 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "data/ui_graphics.h"
-#include "game/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/gTask_03006240.h"
 #include "game/sa1/save.h"
-#include "game/stage/ui.h"
+#include "game/sa1/gfx/stage_ui.h"
 
 #include "constants/animations.h"
 #include "constants/anim_sizes.h"

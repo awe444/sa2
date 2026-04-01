@@ -2,7 +2,7 @@ import os
 import shutil
 
 content = ""
-with open("src/game/assets/compressed/entities.c") as entities_file:
+with open("src/game/sa2/assets/compressed/entities.c") as entities_file:
     content = "".join(entities_file.readlines())
 
 
@@ -40,6 +40,6 @@ for zone in os.listdir("data/maps"):
         
         content = content.replace(old, new)
 
-with open("src/game/assets/compressed/entities.c", "w") as entities_file:
+with open("src/game/sa2/assets/compressed/entities.c", "w") as entities_file:
     entities_file.write(content)
 

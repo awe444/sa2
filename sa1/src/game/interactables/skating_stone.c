@@ -3,12 +3,12 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/player.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/ui.h" // for sub_80549FC
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/terrain_collision.h"
+#include "game/sa1/gfx/stage_ui.h" // for sub_80549FC
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

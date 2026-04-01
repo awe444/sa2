@@ -1,6 +1,6 @@
 #include "global.h"
 #include "core.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "malloc_vram.h"
 #include "game/nuts_and_bolts_task.h"
 

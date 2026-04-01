@@ -4,8 +4,8 @@
 #include "task.h"
 #include "game/sa2/save.h"
 
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
 
 #include "game/multiplayer/finish.h"
 #include "game/multiplayer/mp_player.h"

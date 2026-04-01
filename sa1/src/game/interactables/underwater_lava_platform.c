@@ -1,11 +1,11 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/player.h"
+#include "game/shared/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
 #include "game/water_effects.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
@@ -116,7 +116,7 @@ void Task_UnderwaterLavaPlatform(void)
 
         PLAYER(i).qWorldX = qPrevPlayerX;
 
-        sub_80096B0(s, worldX, worldY, &PLAYER(i));
+        Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
     } while (++i < gNumSingleplayerCharacters);
 
     if (IS_OUT_OF_DISPLAY_RANGE(worldX, worldY) && IS_OUT_OF_CAM_RANGE(s->x, s->y)) {

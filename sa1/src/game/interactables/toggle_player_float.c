@@ -1,10 +1,10 @@
 #include "global.h"
 #include "core.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/parameters/characters.h"
-#include "game/stage/player.h"
-#include "game/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/terrain_collision.h"
 
 #include "constants/char_states.h"
 #include "constants/songs.h"

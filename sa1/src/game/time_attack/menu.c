@@ -1,12 +1,12 @@
 #include "global.h"
 #include "core.h"
 #include "lib/m4a/m4a.h"
-#include "game/character_select.h"
-#include "game/game_over.h"
+#include "game/sa1/ui/character_select.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/gTask_03006240.h"
 #include "game/sa1/save.h"
-#include "game/title_screen.h" // CreateMainMenu
-#include "game/stage/ui.h" // sub_805423C
+#include "game/sa1/title_screen.h" // CreateMainMenu
+#include "game/sa1/gfx/stage_ui.h" // sub_805423C
 
 #include "constants/songs.h"
 #include "constants/text.h"

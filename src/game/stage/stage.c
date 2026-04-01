@@ -4,20 +4,20 @@
 
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/music_manager.h"
-#include "game/sa1_sa2_shared/palette_loader.h"
+#include "game/shared/palette_loader.h"
 #include "game/sa1_sa2_shared/pause_menu.h"
 #include "game/sa1_sa2_shared/rings_manager.h"
 #include "game/sa2/save.h"
-#include "game/game_over.h"
-#include "game/cheese.h"
-#include "game/stage/player_controls.h"
+#include "game/sa2/ui/game_over.h"
+#include "game/sa2/cheese.h"
+#include "game/sa2/stage/player_controls.h"
 #include "game/stage/player_super_sonic.h"
-#include "game/race_progress.h"
-#include "game/stage/screen_shake.h"
+#include "game/sa2/race_progress.h"
+#include "game/shared/stage/screen_shake.h"
 #include "game/stage/stage.h"
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
-#include "game/time_attack/lobby.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/sa2/time_attack/lobby.h"
 #if (GAME == GAME_SA1)
 #include "game/time_over.h"
 #endif
@@ -316,7 +316,7 @@ void Task_GameStage(void)
 #ifndef COLLECT_RINGS_ROM
     if (IS_SINGLE_PLAYER) {
 #if DEBUG
-#include "game/character_select.h"
+#include "game/sa2/ui/character_select.h"
         if (gInput & SELECT_BUTTON) {
             const u32 initialCharacter = CHARACTER_TAILS;
             const bool32 allUnlocked = TRUE;

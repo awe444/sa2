@@ -2,7 +2,7 @@
 #include "core.h"
 #include "animation_commands_bg.h"
 #include "game/globals.h"
-#include "game/stage/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/stage/backgrounds/zone_5.h"
 
 void StageBgUpdate_Zone5Acts12(s32 x, s32 y)

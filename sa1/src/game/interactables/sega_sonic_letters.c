@@ -2,7 +2,7 @@
 #include "global.h"
 #include "core.h"
 #include "malloc_vram.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "constants/animations.h"
@@ -160,7 +160,7 @@ NONMATCH("asm/non_matching/game/interactables/Task_SegaSonicLetter.inc", void Ta
     i = 0;
     do {
         if (sl == 1) {
-            sub_80096B0(s, worldX, worldY, &PLAYER(i));
+            Coll_Player_Platform(s, worldX, worldY, &PLAYER(i));
         }
     } while (++i < gNumSingleplayerCharacters);
 

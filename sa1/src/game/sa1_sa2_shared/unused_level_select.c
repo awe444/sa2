@@ -5,7 +5,7 @@
 #include "task.h"
 
 #include "game/globals.h"
-#include "game/character_select.h"
+#include "game/sa1/ui/character_select.h"
 
 #include "game/credits.h"
 #include "game/stage/extra_stage.h"
@@ -16,7 +16,7 @@
 
 #if (GAME == GAME_SA2)
 #include "game/bosses/common.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 #endif
 
 #if (GAME == GAME_SA1) || PORTABLE

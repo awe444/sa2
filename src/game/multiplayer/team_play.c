@@ -8,7 +8,7 @@
 #include "game/multiplayer/multipak_connection.h"
 #include "lib/m4a/m4a.h"
 #include "flags.h"
-#include "game/course_select.h"
+#include "game/sa2/ui/course_select.h"
 #include "trig.h"
 
 #include "constants/animations.h"

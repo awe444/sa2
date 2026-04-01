@@ -3,8 +3,8 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
-#include "game/stage/player.h"
+#include "game/types/entity.h"
+#include "game/shared/stage/player.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "constants/animations.h"
@@ -139,7 +139,7 @@ bool32 sub_80753D0(Sprite *s, s32 worldX, s32 worldY)
     i = 0;
     do {
         if (!(PLAYER(i).moveState & MOVESTATE_DEAD)) {
-            if ((sub_80096B0(s, worldX, worldY, &PLAYER(i)) & 0x8)) {
+            if ((Coll_Player_Platform(s, worldX, worldY, &PLAYER(i)) & 0x8)) {
                 if (gGameMode == 3 || gGameMode == 5) {
                     PLAYER(i).timerInvulnerability = 30;
                 }

@@ -90,7 +90,7 @@ _0808ECB6:
 	ldr r0, [sp]
 	adds r1, r4, #0
 	adds r3, r7, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 	b _0808F0A0
 	.align 2, 0
 _0808ED40: .4byte 0x000003FF
@@ -207,7 +207,7 @@ _0808EDFE:
 	asrs r2, r2, #0x10
 	ldr r0, [sp]
 	adds r3, r7, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 	ands r0, r5
 	cmp r0, #0
 	beq _0808EE9C

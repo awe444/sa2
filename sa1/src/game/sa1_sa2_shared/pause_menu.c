@@ -5,7 +5,7 @@
 #include "lib/m4a/m4a.h"
 #include "game/globals.h"
 #include "game/sa1/save.h"
-#include "game/time_attack/lobby.h"
+#include "game/sa1/ui/time_attack_lobby.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

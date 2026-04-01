@@ -331,7 +331,7 @@ _0800AE3C:
 	asrs r2, r3, #0x10
 	ldr r0, [sp, #0xc]
 	adds r3, r7, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 _0800AE68:
 	movs r0, #0
 	b _0800AFCC

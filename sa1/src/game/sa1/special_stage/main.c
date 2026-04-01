@@ -5,13 +5,13 @@
 #include "lib/m4a/m4a.h"
 #include "lib/m4a/m4a_internal.h" // for MP2KSongHeader
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/palette_loader.h"
+#include "game/shared/palette_loader.h"
 #include "game/sa1_sa2_shared/pause_menu.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 #include "game/sa1/save.h"
 #include "game/sa1/special_stage/main.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/terrain_collision.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/terrain_collision.h"
 
 extern struct MP2KSongHeader se_ring_copy;
 
@@ -223,7 +223,7 @@ extern void sub_805C448(u8 arg0);
 extern void sub_805D048(u8 arg0);
 extern void sub_8068D0C();
 
-extern void SetFaceButtonConfig(bool32 flipFaceButtons);
+extern void SetPlayerControls(bool32 flipFaceButtons);
 
 typedef struct TfSprite {
     SpriteTransform tf;
@@ -403,7 +403,7 @@ void CreateSpecialStage()
 
     gPlayer.itemEffect &= ~0x4;
 
-    SetFaceButtonConfig(LOADED_SAVE->btnConfig);
+    SetPlayerControls(LOADED_SAVE->btnConfig);
 
     sub_802D158();
     sub_802D190();

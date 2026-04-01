@@ -2,7 +2,7 @@
 #include "core.h"
 #include "flags.h"
 #include "lib/m4a/m4a.h"
-#include "game/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/multiplayer/chao.h"
 #include "game/multiplayer/finish.h"
 #include "game/multiplayer/indicators.h"
@@ -11,20 +11,21 @@
 #include "game/globals.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/music_manager.h"
-#include "game/sa1_sa2_shared/palette_loader.h"
+#include "game/shared/palette_loader.h"
 #include "game/sa1_sa2_shared/pause_menu.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 #include "game/sa1_sa2_shared/rings_manager.h"
 #include "game/sa1_sa2_shared/spot_light_beam_task.h"
 #include "game/parameters/stage.h"
 #include "game/sa1/save.h"
-#include "game/stage/camera.h"
-#include "game/stage/player.h"
-#include "game/stage/screen_shake.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/screen_shake.h"
 #include "game/stage/stage.h"
-#include "game/time_attack/lobby.h"
+#include "game/sa1/ui/time_attack_lobby.h"
+#include "game/sa1/stage/player_controls.h"
 #if (GAME == GAME_SA1)
-#include "game/time_over.h"
+#include "game/sa1/ui/time_over.h"
 #endif
 
 #include "constants/characters.h"
@@ -48,8 +49,6 @@ extern bool32 CreateSpotlightsManager(void); // Spotlight-beam related
 extern void CreateChaoHuntHUD();
 extern void CreateStageWaterTask(s32 waterLevel, u32 p1, u32 mask);
 extern struct Task *CreateMultiplayerChao(u8, u8);
-extern void SetFaceButtonConfig(bool32);
-
 void SA2_LABEL(sub_801F044)(void);
 #if (GAME == GAME_SA1)
 void SA2_LABEL(sub_80213C0)(u32 UNUSED characterId, u32 UNUSED levelId, Player *player);
@@ -363,7 +362,7 @@ void Task_GameStage(void)
 
     if (IS_SINGLE_PLAYER) {
 #if DEBUG
-#include "game/character_select.h"
+#include "game/sa1/ui/character_select.h"
         if (gInput & SELECT_BUTTON) {
             u32 initialCharacter = CHARACTER_TAILS;
             bool32 allUnlocked = TRUE;
@@ -774,7 +773,7 @@ void ApplyGameStageSettings(void)
         LOADED_SAVE->difficultyLevel = DIFFICULTY_NORMAL;
     }
 
-    SetFaceButtonConfig(LOADED_SAVE->btnConfig);
+    SetPlayerControls(LOADED_SAVE->btnConfig);
     GameStageStart();
 }
 

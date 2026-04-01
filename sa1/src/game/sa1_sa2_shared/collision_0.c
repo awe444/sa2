@@ -4,18 +4,18 @@
 #if (GAME == GAME_SA1)
 #include "lib/m4a/m4a.h"
 #include "game/multiplayer/mp_player.h"
-#include "game/stage/player.h"
-#include "game/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/terrain_collision.h"
 #include "constants/char_states.h"
 #endif
 #include "game/globals.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 
 // TODO: Merge this with collision.c !
-u32 sub_80096B0(Sprite *s, CamCoord x, CamCoord y, Player *p)
+u32 Coll_Player_Platform(Sprite *s, CamCoord x, CamCoord y, Player *p)
 {
     s8 rectOffset[4] = { -(p->spriteOffsetX + 5), (1 - p->spriteOffsetY), (p->spriteOffsetX + 5), (p->spriteOffsetY - 1) };
     s8 rectPlayer[4] = { -p->spriteOffsetX, -p->spriteOffsetY, +p->spriteOffsetX, +p->spriteOffsetY };

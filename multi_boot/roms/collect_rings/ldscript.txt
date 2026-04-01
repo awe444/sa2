@@ -7,7 +7,7 @@ SECTIONS {
     ALIGN(4)
     {
         build/collect_rings/src/sa2/lib/m4a/m4a.o(.bss.code);
-        build/collect_rings/src/sa2/game/stage/terrain_collision.o(.bss);
+        build/collect_rings/src/sa2/game/shared/stage/terrain_collision.o(.bss);
         /**** common ****/
         . = ALIGN(16); 
         build/collect_rings/src/sa2/multi_sio.o(.data);
@@ -17,11 +17,11 @@ SECTIONS {
         build/collect_rings/src/sa2/game/multiboot/collect_rings/time_display.o(.data);
         build/collect_rings/src/sa2/game/multiplayer/mp_player.o(.data);
         build/collect_rings/src/sa2/game/multiplayer/mp_attack_2_effect.o(.data);
-        build/collect_rings/src/sa2/game/stage/camera.o(.data);
-        build/collect_rings/src/sa2/game/stage/terrain_collision.o(.data);
-        build/collect_rings/src/sa2/game/stage/player.o(.data);
-        build/collect_rings/src/sa2/game/stage/rings_scatter.o(.data);
-        build/collect_rings/src/sa2/game/stage/player_controls.o(.data);
+        build/collect_rings/src/sa2/game/shared/stage/camera.o(.data);
+        build/collect_rings/src/sa2/game/shared/stage/terrain_collision.o(.data);
+        build/collect_rings/src/sa2/game/shared/stage/player.o(.data);
+        build/collect_rings/src/sa2/game/shared/stage/rings_scatter.o(.data);
+        build/collect_rings/src/sa2/game/sa2/stage/player_controls.o(.data);
         build/collect_rings/src/sa2/game/stage/stage.o(.data);
         build/collect_rings/src/sa2/game/dummy_task.o(.data);
         iwram_end = .;
@@ -47,7 +47,7 @@ SECTIONS {
         build/collect_rings/src/sa2/game/multiboot/collect_rings/results.o(.text);
         build/collect_rings/src/sa2/game/sa1_sa2_shared/entities_manager.o(.text);
         build/collect_rings/src/sa2/game/sa1_sa2_shared/collision.o(.text);
-        build/collect_rings/src/sa2/game/mystery_itembox.o(.text);
+        build/collect_rings/src/sa2/game/sa2/mystery_itembox.o(.text);
         build/collect_rings/src/sa2/game/sa1_sa2_shared/rings_manager.o(.text);
         build/collect_rings/src/sa2/game/multiboot/collect_rings/time_display.o(.text);
         build/collect_rings/src/sa2/game/multiplayer/indicators.o(.text);
@@ -60,13 +60,13 @@ SECTIONS {
         build/collect_rings/src/sa2/game/sa1_sa2_shared/interactables/grind_rail.o(.text);
         build/collect_rings/src/sa2/game/interactables_2/collect_rings_lap_trigger.o(.text);
         build/collect_rings/src/sa2/game/sa1_sa2_shared/dust_cloud.o(.text);
-        build/collect_rings/src/sa2/game/sa1_sa2_shared/collect_ring_effect.o(.text);
+        build/collect_rings/src/sa2/game/shared/collect_ring_effect.o(.text);
         build/collect_rings/src/sa2/game/multiplayer/mp_attack_2_effect.o(.text);
-        build/collect_rings/src/sa2/game/stage/camera.o(.text);
-        build/collect_rings/src/sa2/game/stage/terrain_collision.o(.text);
-        build/collect_rings/src/sa2/game/stage/player.o(.text);
-        build/collect_rings/src/sa2/game/stage/rings_scatter.o(.text);
-        build/collect_rings/src/sa2/game/stage/player_controls.o(.text);
+        build/collect_rings/src/sa2/game/shared/stage/camera.o(.text);
+        build/collect_rings/src/sa2/game/shared/stage/terrain_collision.o(.text);
+        build/collect_rings/src/sa2/game/shared/stage/player.o(.text);
+        build/collect_rings/src/sa2/game/shared/stage/rings_scatter.o(.text);
+        build/collect_rings/src/sa2/game/sa2/stage/player_controls.o(.text);
         build/collect_rings/src/sa2/game/stage/stage.o(.text);
         build/collect_rings/src/sa2/game/multiboot/connection.o(.text);
         build/collect_rings/src/sa2/game/game.o(.text);
@@ -96,14 +96,14 @@ SECTIONS {
         build/collect_rings/src/sa2/sprite.o(.rodata);
         build/collect_rings/src/sa2/game/multiplayer/multiplayer_event_mgr.o(.rodata);
         build/collect_rings/src/sa2/game/sa1_sa2_shared/entities_manager.o(.rodata);
-        build/collect_rings/src/sa2/game/mystery_itembox.o(.rodata);
+        build/collect_rings/src/sa2/game/sa2/mystery_itembox.o(.rodata);
         build/collect_rings/src/sa2/game/multiboot/collect_rings/time_display.o(.rodata);
         build/collect_rings/src/sa2/game/multiplayer/mp_player.o(.rodata);
         build/collect_rings/src/sa2/game/multiplayer/finish.o(.rodata);
         build/collect_rings/src/sa2/game/sa1_sa2_shared/interactables/spring.o(.rodata);
         build/collect_rings/src/sa2/game/interactables_1/spikes.o(.rodata);
-        build/collect_rings/src/sa2/game/stage/camera.o(.rodata);
-        build/collect_rings/src/sa2/game/stage/player.o(.rodata);
+        build/collect_rings/src/sa2/game/shared/stage/camera.o(.rodata);
+        build/collect_rings/src/sa2/game/shared/stage/player.o(.rodata);
         build/collect_rings/src/sa2/lib/m4a/m4a_tables.o(.rodata);
         build/collect_rings/data/sound_data.o(.rodata);
 

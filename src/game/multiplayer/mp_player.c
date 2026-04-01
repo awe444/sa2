@@ -8,14 +8,14 @@
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "game/stage/spawn_positions.h"
-#include "game/stage/terrain_collision.h"
+#include "game/shared/stage/terrain_collision.h"
 #include "game/stage/stage.h"
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
 
 #include "game/multiplayer/mp_player.h"
-#include "game/stage/player.h"
-#include "game/stage/item_tasks.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/item_tasks.h"
 
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/multiplayer/mp_attack_1_effect.h"

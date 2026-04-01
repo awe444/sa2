@@ -5,10 +5,10 @@
 #include "task.h"
 #include "malloc_vram.h"
 
-#include "game/stage/player_controls.h"
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
-#include "game/entity.h"
+#include "game/sa2/stage/player_controls.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/interactables/ramp.h"
 
 #include "constants/animations.h"

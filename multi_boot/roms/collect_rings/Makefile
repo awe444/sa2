@@ -122,7 +122,7 @@ SA2_C_FILES := \
 	sa2/game/multiboot/collect_rings/results.c \
 	sa2/game/sa1_sa2_shared/entities_manager.c \
 	sa2/game/sa1_sa2_shared/collision.c \
-	sa2/game/mystery_itembox.c \
+	sa2/game/sa2/mystery_itembox.c \
 	sa2/game/sa1_sa2_shared/rings_manager.c \
 	sa2/game/multiboot/collect_rings/time_display.c \
 	sa2/game/multiplayer/indicators.c \
@@ -135,13 +135,13 @@ SA2_C_FILES := \
 	sa2/game/sa1_sa2_shared/interactables/grind_rail.c \
 	sa2/game/interactables_2/collect_rings_lap_trigger.c \
 	sa2/game/sa1_sa2_shared/dust_cloud.c \
-	sa2/game/sa1_sa2_shared/collect_ring_effect.c \
+	sa2/game/shared/collect_ring_effect.c \
 	sa2/game/multiplayer/mp_attack_2_effect.c \
-	sa2/game/stage/camera.c \
-	sa2/game/stage/terrain_collision.c \
-	sa2/game/stage/player.c \
-	sa2/game/stage/rings_scatter.c \
-	sa2/game/stage/player_controls.c \
+	sa2/game/shared/stage/camera.c \
+	sa2/game/shared/stage/terrain_collision.c \
+	sa2/game/shared/stage/player.c \
+	sa2/game/shared/stage/rings_scatter.c \
+	sa2/game/sa2/stage/player_controls.c \
 	sa2/game/stage/stage.c \
 	sa2/game/multiboot/connection.c \
 	sa2/game/game.c \
