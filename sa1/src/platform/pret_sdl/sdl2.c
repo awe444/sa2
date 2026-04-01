@@ -383,13 +383,12 @@ void VBlankIntrWait(void)
             while (accumulator >= dt) {
                 REG_KEYINPUT = KEYS_MASK ^ Platform_GetKeyInput();
                 if (frameAvailable) {
-                    {
-                        static int innerCount = 0;
-                        if (innerCount < 3) {
-                            SA1_LOGD("VBI inner: calling VDraw #%d accum=%.6f dt=%.6f", innerCount, accumulator, dt);
-                        }
-                        innerCount++;
+                    static int innerCount = 0;
+                    if (innerCount < 3 || (innerCount % 600 == 0)) {
+                        SA1_LOGD("VBI inner: calling VDraw #%d accum=%.6f dt=%.6f", innerCount, accumulator, dt);
                     }
+                    innerCount++;
+
                     VDraw(sdlTexture);
                     frameAvailable = FALSE;
 
