@@ -11,7 +11,7 @@ u8 gMultiplayerLanguage = 0;
 #endif
 
 u16 ALIGNED(4) gRingCount = 0;
-struct Task *ALIGNED(4) gChaoTasks[] = {};
+struct Task *ALIGNED(4) gChaoTasks[3] = {};
 
 #if (GAME == GAME_SA2)
 #ifndef NON_MATCHING

@@ -1913,7 +1913,11 @@ static void DrawFrame(uint16_t *pixels)
     int i;
     int j;
     static uint16_t scanlines[DISPLAY_HEIGHT][DISPLAY_WIDTH];
+    static int drawFrameCount = 0;
     unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
+
+    if (drawFrameCount < 5)
+        SA1_DBG("DrawFrame #%d: enter, BLDCNT=0x%04X DISPSTAT=0x%04X", drawFrameCount, REG_BLDCNT, REG_DISPSTAT);
 
     for (i = 0; i < DISPLAY_HEIGHT; i++) {
         REG_VCOUNT = i;
@@ -1926,7 +1930,14 @@ static void DrawFrame(uint16_t *pixels)
         // Render the backdrop color before the each individual scanline.
         // HBlank interrupt code could have changed it inbetween lines.
         memsetu16(scanlines[i], *(uint16_t *)PLTT, DISPLAY_WIDTH);
+
+        if (drawFrameCount < 3 && (i == 0 || i == 79 || i == 159))
+            SA1_DBG("DrawFrame #%d: scanline %d before DrawScanline, DISPCNT=0x%04X", drawFrameCount, i, REG_DISPCNT);
+
         DrawScanline(scanlines[i], i);
+
+        if (drawFrameCount < 3 && (i == 0 || i == 79 || i == 159))
+            SA1_DBG("DrawFrame #%d: scanline %d after DrawScanline", drawFrameCount, i);
 
         REG_DISPSTAT |= INTR_FLAG_HBLANK;
 
@@ -1939,6 +1950,9 @@ static void DrawFrame(uint16_t *pixels)
         REG_DISPSTAT &= ~INTR_FLAG_VCOUNT;
     }
 
+    if (drawFrameCount < 5)
+        SA1_DBG("DrawFrame #%d: scanline loop done, copying to screen", drawFrameCount);
+
     // Copy to screen
     for (i = 0; i < DISPLAY_HEIGHT; i++) {
         uint16_t *src = scanlines[i];
@@ -1946,6 +1960,10 @@ static void DrawFrame(uint16_t *pixels)
             pixels[i * DISPLAY_WIDTH + j] = src[j];
         }
     }
+
+    if (drawFrameCount < 5)
+        SA1_DBG("DrawFrame #%d: done", drawFrameCount);
+    drawFrameCount++;
 }
 
 #if ENABLE_VRAM_VIEW
