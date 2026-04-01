@@ -12,6 +12,13 @@
 
 #include <SDL.h>
 
+#ifdef __ANDROID__
+#include <android/log.h>
+#define SA1_DBG(...) __android_log_print(ANDROID_LOG_DEBUG, "SA1-DBG", __VA_ARGS__)
+#else
+#define SA1_DBG(...) ((void)0)
+#endif
+
 #include "global.h"
 #include "core.h"
 #include "multi_sio.h"
@@ -281,13 +288,17 @@ int main(int argc, char **argv)
     }
 #endif
 
+    SA1_DBG("STEP 1: calling initial VDraw");
     VDraw(sdlTexture);
+    SA1_DBG("STEP 2: initial VDraw complete");
 #if ENABLE_VRAM_VIEW
     VramDraw(vramTexture);
 #endif
     // Initialize timing so first VBlankIntrWait doesn't get a huge delta
     lastGameTime = (double)SDL_GetPerformanceCounter();
+    SA1_DBG("STEP 3: calling AgbMain");
     AgbMain();
+    SA1_DBG("STEP 4: AgbMain returned");
 
     return 0;
 }
@@ -299,6 +310,7 @@ bool newFrameRequested = FALSE;
 // the loop via a return
 void VBlankIntrWait(void)
 {
+    static int vbiCount = 0;
     // ((struct MultiSioPacket *)gMultiSioArea.nextSendBufp)
 #define HANDLE_VBLANK_INTRS()                                                                                                              \
     ({                                                                                                                                     \
@@ -308,6 +320,10 @@ void VBlankIntrWait(void)
             gIntrTable[INTR_INDEX_VBLANK]();                                                                                               \
         REG_DISPSTAT &= ~INTR_FLAG_VBLANK;                                                                                                 \
     })
+
+    if (vbiCount < 5 || vbiCount % 300 == 0)
+        SA1_DBG("VBlankIntrWait #%d: DISPCNT=0x%04X DISPSTAT=0x%04X", vbiCount, REG_DISPCNT, REG_DISPSTAT);
+    vbiCount++;
 
     if (headless) {
         REG_VCOUNT = DISPLAY_HEIGHT + 1;
@@ -378,6 +394,12 @@ void VBlankIntrWait(void)
         }
 
         SDL_RenderPresent(sdlRenderer);
+        {
+            static int presentCount = 0;
+            if (presentCount < 5 || presentCount % 300 == 0)
+                SA1_DBG("SDL_RenderPresent #%d", presentCount);
+            presentCount++;
+        }
 #if ENABLE_VRAM_VIEW
         SDL_RenderPresent(vramRenderer);
 #endif
@@ -1964,27 +1986,40 @@ void VramDraw(SDL_Texture *texture)
 
 void VDraw(SDL_Texture *texture)
 {
+    static int vdrawCount = 0;
+    if (vdrawCount < 5 || vdrawCount % 300 == 0)
+        SA1_DBG("VDraw #%d: DISPCNT=0x%04X PLTT[0]=0x%04X", vdrawCount, REG_DISPCNT, *(uint16_t *)PLTT);
+
     memset(gameImage, 0, sizeof(gameImage));
+    SA1_DBG("VDraw #%d: before DrawFrame", vdrawCount);
     DrawFrame(gameImage);
+    SA1_DBG("VDraw #%d: after DrawFrame", vdrawCount);
 #ifdef __ANDROID__
     // Convert ABGR1555 (GBA native) to ARGB8888 for Android GPU compatibility.
     // Many mobile OpenGL ES drivers don't natively support 16-bit ABGR1555 textures.
     // Replicate upper bits into lower bits for accurate 5-bit to 8-bit expansion.
-    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
-        uint16_t px = gameImage[i];
-        uint8_t r5 = (px & 0x001F);
-        uint8_t g5 = ((px >> 5) & 0x001F);
-        uint8_t b5 = ((px >> 10) & 0x001F);
-        uint8_t r = (r5 << 3) | (r5 >> 2);
-        uint8_t g = (g5 << 3) | (g5 >> 2);
-        uint8_t b = (b5 << 3) | (b5 >> 2);
-        gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+    {
+        int nonzero = 0;
+        for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
+            uint16_t px = gameImage[i];
+            if (px) nonzero++;
+            uint8_t r5 = (px & 0x001F);
+            uint8_t g5 = ((px >> 5) & 0x001F);
+            uint8_t b5 = ((px >> 10) & 0x001F);
+            uint8_t r = (r5 << 3) | (r5 >> 2);
+            uint8_t g = (g5 << 3) | (g5 >> 2);
+            uint8_t b = (b5 << 3) | (b5 >> 2);
+            gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+        }
+        if (vdrawCount < 5 || vdrawCount % 300 == 0)
+            SA1_DBG("VDraw #%d: %d non-zero pixels", vdrawCount, nonzero);
     }
     SDL_UpdateTexture(texture, NULL, gameImage32, DISPLAY_WIDTH * sizeof(uint32_t));
 #else
     SDL_UpdateTexture(texture, NULL, gameImage, DISPLAY_WIDTH * sizeof(Uint16));
 #endif
     REG_VCOUNT = DISPLAY_HEIGHT + 1; // prep for being in VBlank period
+    vdrawCount++;
 }
 
 u8 BinToBcd(u8 bin)

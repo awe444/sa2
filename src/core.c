@@ -10,6 +10,13 @@
 #include "lib/m4a/m4a.h"
 #include "lib/agb_flash/agb_flash.h"
 
+#ifdef __ANDROID__
+#include <android/log.h>
+#define SA1_CORE_DBG(...) __android_log_print(ANDROID_LOG_DEBUG, "SA1-DBG", __VA_ARGS__)
+#else
+#define SA1_CORE_DBG(...) ((void)0)
+#endif
+
 // TODO: Better name
 #define VBLANK_FUNC_ID_NONE 0xFF
 
@@ -250,6 +257,7 @@ void EngineInit(void)
     s16 i;
     u16 errorIdentifying;
 
+    SA1_CORE_DBG("EngineInit: start");
 #if (ENGINE == ENGINE_3)
     REG_IME = 0;
 #endif
@@ -533,6 +541,8 @@ void EngineInit(void)
 
     MultiSioInit(0);
 
+    SA1_CORE_DBG("EngineInit: complete");
+
 #if (ENGINE == ENGINE_3)
     gUnknown_0300620C = 0;
     gUnknown_03002BF0 = 0;
@@ -545,6 +555,7 @@ END_NONMATCH
 
 void EngineMainLoop(void)
 {
+    SA1_CORE_DBG("EngineMainLoop: start");
 #if !PLATFORM_WIN32
     while (TRUE)
 #endif
