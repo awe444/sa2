@@ -12,13 +12,6 @@
 
 #include <SDL.h>
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#define SA1_LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "SA1-DBG", __VA_ARGS__)
-#else
-#define SA1_LOGD(...)
-#endif
-
 #include "global.h"
 #include "core.h"
 #include "multi_sio.h"
@@ -134,9 +127,6 @@ void Platform_free(void *ptr) { HeapFree(GetProcessHeap(), 0, ptr); }
 
 int main(int argc, char **argv)
 {
-#ifdef __ANDROID__
-    SDL_Log("SA1: main() entered");
-#endif
     const char *headlessEnv = getenv("HEADLESS");
 
     if (headlessEnv && strcmp(headlessEnv, "true") == 0) {
@@ -189,9 +179,6 @@ int main(int argc, char **argv)
         SDL_Log("SDL could not initialize! SDL_Error: %s", SDL_GetError());
         return 1;
     }
-#ifdef __ANDROID__
-    SDL_Log("SA1: SDL_Init succeeded");
-#endif
 
     // Open the first available game controller
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
@@ -232,20 +219,11 @@ int main(int argc, char **argv)
     }
 #endif
 
-    sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
     if (sdlRenderer == NULL) {
         SDL_Log("Renderer could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
-#ifdef __ANDROID__
-    {
-        SDL_RendererInfo rinfo;
-        if (SDL_GetRendererInfo(sdlRenderer, &rinfo) == 0) {
-            SDL_Log("SA1: renderer=%s flags=0x%08X maxW=%d maxH=%d",
-                    rinfo.name, rinfo.flags, rinfo.max_texture_width, rinfo.max_texture_height);
-        }
-    }
-#endif
 
 #if ENABLE_VRAM_VIEW
     vramRenderer = SDL_CreateRenderer(vramWindow, -1, SDL_RENDERER_PRESENTVSYNC);
@@ -267,7 +245,6 @@ int main(int argc, char **argv)
 
 #ifdef __ANDROID__
     sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    SDL_Log("SA1: texture created %dx%d ARGB8888, ptr=%p", DISPLAY_WIDTH, DISPLAY_HEIGHT, (void*)sdlTexture);
 #else
     sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ABGR1555, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
 #endif
@@ -304,17 +281,13 @@ int main(int argc, char **argv)
     }
 #endif
 
-    SA1_LOGD("STEP A: before initial VDraw");
     VDraw(sdlTexture);
-    SA1_LOGD("STEP B: after initial VDraw");
 #if ENABLE_VRAM_VIEW
     VramDraw(vramTexture);
 #endif
     // Initialize timing so first VBlankIntrWait doesn't get a huge delta
     lastGameTime = (double)SDL_GetPerformanceCounter();
-    SA1_LOGD("STEP C: lastGameTime initialized, calling AgbMain");
     AgbMain();
-    SA1_LOGD("STEP D: AgbMain returned");
 
     return 0;
 }
@@ -331,7 +304,7 @@ void VBlankIntrWait(void)
     ({                                                                                                                                     \
         REG_DISPSTAT |= INTR_FLAG_VBLANK;                                                                                                  \
         RunDMAs(DMA_VBLANK);                                                                                                               \
-        if (REG_DISPSTAT & DISPSTAT_VBLANK_INTR)                                                                                           \
+        if ((REG_DISPSTAT & DISPSTAT_VBLANK_INTR) && gIntrTable[INTR_INDEX_VBLANK])                                                        \
             gIntrTable[INTR_INDEX_VBLANK]();                                                                                               \
         REG_DISPSTAT &= ~INTR_FLAG_VBLANK;                                                                                                 \
     })
@@ -340,15 +313,6 @@ void VBlankIntrWait(void)
         REG_VCOUNT = DISPLAY_HEIGHT + 1;
         HANDLE_VBLANK_INTRS();
         return;
-    }
-
-    {
-        static int vbiCount = 0;
-        if (vbiCount < 5 || (vbiCount % 600 == 0)) {
-            SA1_LOGD("VBlankIntrWait #%d: accum=%.6f newFrameReq=%d DISPCNT=0x%04X DISPSTAT=0x%04X",
-                     vbiCount, accumulator, newFrameRequested, REG_DISPCNT, REG_DISPSTAT);
-        }
-        vbiCount++;
     }
 
     bool frameAvailable = TRUE;
@@ -383,18 +347,10 @@ void VBlankIntrWait(void)
             while (accumulator >= dt) {
                 REG_KEYINPUT = KEYS_MASK ^ Platform_GetKeyInput();
                 if (frameAvailable) {
-                    static int innerCount = 0;
-                    if (innerCount < 3 || (innerCount % 600 == 0)) {
-                        SA1_LOGD("VBI inner: calling VDraw #%d accum=%.6f dt=%.6f", innerCount, accumulator, dt);
-                    }
-                    innerCount++;
-
                     VDraw(sdlTexture);
                     frameAvailable = FALSE;
 
-                    SA1_LOGD("VBI inner: before HANDLE_VBLANK_INTRS");
                     HANDLE_VBLANK_INTRS();
-                    SA1_LOGD("VBI inner: after HANDLE_VBLANK_INTRS");
 
                     accumulator -= dt;
                 } else {
@@ -422,13 +378,6 @@ void VBlankIntrWait(void)
         }
 
         SDL_RenderPresent(sdlRenderer);
-        {
-            static int presentCount = 0;
-            if (presentCount < 5) {
-                SA1_LOGD("RenderPresent #%d done", presentCount);
-            }
-            presentCount++;
-        }
 #if ENABLE_VRAM_VIEW
         SDL_RenderPresent(vramRenderer);
 #endif
@@ -1948,7 +1897,7 @@ static void DrawFrame(uint16_t *pixels)
         REG_VCOUNT = i;
         if (((REG_DISPSTAT >> 8) & 0xFF) == REG_VCOUNT) {
             REG_DISPSTAT |= INTR_FLAG_VCOUNT;
-            if (REG_DISPSTAT & DISPSTAT_VCOUNT_INTR)
+            if ((REG_DISPSTAT & DISPSTAT_VCOUNT_INTR) && gIntrTable[INTR_INDEX_VCOUNT])
                 gIntrTable[INTR_INDEX_VCOUNT]();
         }
 
@@ -1961,7 +1910,7 @@ static void DrawFrame(uint16_t *pixels)
 
         RunDMAs(DMA_HBLANK);
 
-        if (REG_DISPSTAT & DISPSTAT_HBLANK_INTR)
+        if ((REG_DISPSTAT & DISPSTAT_HBLANK_INTR) && gIntrTable[INTR_INDEX_HBLANK])
             gIntrTable[INTR_INDEX_HBLANK]();
 
         REG_DISPSTAT &= ~INTR_FLAG_HBLANK;
@@ -2015,45 +1964,27 @@ void VramDraw(SDL_Texture *texture)
 
 void VDraw(SDL_Texture *texture)
 {
-    SA1_LOGD("VDraw: entered");
     memset(gameImage, 0, sizeof(gameImage));
-    SA1_LOGD("VDraw: before DrawFrame");
     DrawFrame(gameImage);
-    SA1_LOGD("VDraw: after DrawFrame");
 #ifdef __ANDROID__
     // Convert ABGR1555 (GBA native) to ARGB8888 for Android GPU compatibility.
     // Many mobile OpenGL ES drivers don't natively support 16-bit ABGR1555 textures.
     // Replicate upper bits into lower bits for accurate 5-bit to 8-bit expansion.
-    {
-        static int vdrawCount = 0;
-        int nonZero = 0;
-        uint16_t firstNZ = 0;
-        for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
-            uint16_t px = gameImage[i];
-            if (px && !nonZero) { firstNZ = px; }
-            if (px) nonZero++;
-            uint8_t r5 = (px & 0x001F);
-            uint8_t g5 = ((px >> 5) & 0x001F);
-            uint8_t b5 = ((px >> 10) & 0x001F);
-            uint8_t r = (r5 << 3) | (r5 >> 2);
-            uint8_t g = (g5 << 3) | (g5 >> 2);
-            uint8_t b = (b5 << 3) | (b5 >> 2);
-            gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
-        }
-        if (vdrawCount < 5 || (vdrawCount % 300 == 0)) {
-            SA1_LOGD("VDraw #%d: DISPCNT=0x%04X PLTT[0]=0x%04X nonZero=%d firstNZ=0x%04X",
-                     vdrawCount, REG_DISPCNT, PLTT[0], nonZero, firstNZ);
-        }
-        vdrawCount++;
+    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
+        uint16_t px = gameImage[i];
+        uint8_t r5 = (px & 0x001F);
+        uint8_t g5 = ((px >> 5) & 0x001F);
+        uint8_t b5 = ((px >> 10) & 0x001F);
+        uint8_t r = (r5 << 3) | (r5 >> 2);
+        uint8_t g = (g5 << 3) | (g5 >> 2);
+        uint8_t b = (b5 << 3) | (b5 >> 2);
+        gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
     }
-    SA1_LOGD("VDraw: before SDL_UpdateTexture");
     SDL_UpdateTexture(texture, NULL, gameImage32, DISPLAY_WIDTH * sizeof(uint32_t));
-    SA1_LOGD("VDraw: after SDL_UpdateTexture");
 #else
     SDL_UpdateTexture(texture, NULL, gameImage, DISPLAY_WIDTH * sizeof(Uint16));
 #endif
     REG_VCOUNT = DISPLAY_HEIGHT + 1; // prep for being in VBlank period
-    SA1_LOGD("VDraw: done");
 }
 
 u8 BinToBcd(u8 bin)

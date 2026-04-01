@@ -15,15 +15,15 @@
 
 typedef bool32 (*VBlankProcessFunc)(void);
 
-IntrFunc gIntrTable[] = {};
-u32 gIntrMainBuf[] = {};
-struct Task gTasks[] = {};
+IntrFunc gIntrTable[16] = {};
+u32 gIntrMainBuf[0x80] = {};
+struct Task gTasks[MAX_TASK_NUM] = {};
 u16 SA2_LABEL(gUnknown_030017F0) ALIGNED(4) = 0;
 Vec2_16 gSpriteOffset ALIGNED(4) = {};
-Background *gBackgroundsCopyQueue[] ALIGNED(16) = {};
+Background *gBackgroundsCopyQueue[16] ALIGNED(16) = {};
 u32 gFlags = 0;
-u8 gOamMallocOrders_StartIndex[] ALIGNED(16) = {};
-IntrFunc gVBlankCallbacks[] = {};
+u8 gOamMallocOrders_StartIndex[32] ALIGNED(16) = {};
+IntrFunc gVBlankCallbacks[4] = {};
 u16 gPhysicalInput = 0;
 
 void *gBgOffsetsHBlankPrimary = NULL;
@@ -55,9 +55,9 @@ u8 gUnknown_03002C60 ALIGNED(4) = 0;
 u32 gMultiSioStatusFlags = 0;
 bool8 gMultiSioEnabled = FALSE;
 
-struct Task *gTaskPtrs[] ALIGNED(16) = {};
+struct Task *gTaskPtrs[MAX_TASK_NUM] ALIGNED(16) = {};
 int_vcount gBgOffsetsBuffer[2][DISPLAY_HEIGHT][4] = {}; /* TODO: Find out how this is different from gBgOffsetsHBlankPrimary */
-ColorRaw gObjPalette[] = {};
+ColorRaw gObjPalette[16 * PALETTE_LEN_4BPP] = {};
 Tilemap **gTilemapsRef = NULL;
 u32 gFrameCount = 0;
 winreg_t gWinRegs[6] ALIGNED(16) = {};
@@ -68,9 +68,9 @@ u16 gInput = 0;
 s32 gUnknown_030035A4 = 0;
 struct Task *gNextTaskToCheckForDestruction = NULL;
 #endif // (ENGINE >= ENGINE_3)
-u8 gRepeatedKeysTestCounter[] ALIGNED(16) = {};
+u8 gRepeatedKeysTestCounter[10] ALIGNED(16) = {};
 void *gBgOffsetsHBlankSecondary = NULL;
-u16 gBgCntRegs[] = {};
+u16 gBgCntRegs[4] = {};
 u16 gRepeatedKeys ALIGNED(4) = 0;
 struct Task *gNextTask = NULL;
 #if ((ENGINE == ENGINE_1) || (ENGINE == ENGINE_2))
