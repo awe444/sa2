@@ -6,7 +6,7 @@
 #include "game/stage/terrain_collision.h"
 #include "game/stage/player.h"
 
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 #include "constants/animations.h"
 

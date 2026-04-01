@@ -6,7 +6,7 @@
 #include "game/globals.h"
 #include "game/sa1_sa2_shared/spot_light.h"
 #include "game/sa1_sa2_shared/spot_light_beam_task.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 
 /* Spot Lights that appear in the background of Ice Paradise
    (seem to be the same as in Sonic Advance's Secret Base Zone) */

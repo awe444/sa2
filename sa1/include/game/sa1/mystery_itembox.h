@@ -2,7 +2,7 @@
 #define GUARD_MYSTERY_ITEM_BOX_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_MysteryItemBox(MapEntity *ia, u16 spriteRegionX, u16 spriteRegionY, u8 spriteY);
 

@@ -6,12 +6,12 @@
 #include "game/game.h"
 #include "game/sa1/save.h"
 
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 #include "game/options_screen.h"
 #include "game/multiboot/connection.h"
 
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 //#include "game/sa1_sa2_shared/entities_manager.h"
 
 #include "game/sa1/ui/character_select.h"

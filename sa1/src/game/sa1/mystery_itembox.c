@@ -2,8 +2,8 @@
 #include "malloc_vram.h"
 #include "game/sa1_sa2_shared/collision.h"
 
-#include "game/entity.h"
-#include "game/mystery_itembox.h"
+#include "game/types/entity.h"
+#include "game/sa1/mystery_itembox.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"

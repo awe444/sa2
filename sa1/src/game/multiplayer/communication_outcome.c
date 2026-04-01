@@ -9,7 +9,7 @@
 
 #include "game/sa1/ui/character_select.h"
 #include "game/sa1/save.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 #include "game/multiplayer/communication_outcome.h"
 #include "game/multiplayer/multipak_connection.h"
 #if (GAME == GAME_SA1)

@@ -2,7 +2,7 @@
 #define GUARD_UNDERWATER_EFFECTS_H
 
 #include "core.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 
 extern void sub_804C40C(void);
 

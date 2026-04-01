@@ -3,7 +3,7 @@
 #include "task.h"
 #include "malloc_vram.h"
 
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 #include "game/sa1_sa2_shared/entities_manager.h"
 

@@ -4,7 +4,7 @@
 
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/music_manager.h"
-#include "game/sa1_sa2_shared/palette_loader.h"
+#include "game/shared/palette_loader.h"
 #include "game/sa1_sa2_shared/pause_menu.h"
 #include "game/sa1_sa2_shared/rings_manager.h"
 #include "game/sa2/save.h"

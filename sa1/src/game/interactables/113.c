@@ -1,6 +1,6 @@
 #include "global.h"
 #include "core.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/stage/player_controls.h"
 
 #include "constants/move_states.h"

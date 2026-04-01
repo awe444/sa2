@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_PIPE_SEQUENCE_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 #define NUM_PIPE_SEGMENT_TYPES      16
 #define PIPE_SEGMENT_TYPE_TRANSLATE 0

@@ -2,7 +2,7 @@
 #define GUARD_STAGE_PLAYER_H
 
 // TODO: Merge this file with this one!!!
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 
 // TODO: merge these
 #include "constants/characters.h"

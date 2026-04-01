@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/stage/player.h"
 #include "game/water_effects.h"
 #include "malloc_vram.h"

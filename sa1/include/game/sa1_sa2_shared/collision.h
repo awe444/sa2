@@ -3,8 +3,8 @@
 
 #include "core.h"
 #include "rect.h"
-#include "game/sa1_sa2_shared/camera.h" // for CamCoord
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/camera.h" // for CamCoord
+#include "game/types/player.h"
 
 #define COLL_NONE        0
 #define COLL_FLAG_1      0x00000001

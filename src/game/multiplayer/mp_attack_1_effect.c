@@ -3,7 +3,7 @@
 #include "game/multiplayer/mp_attack_1_effect.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "lib/m4a/m4a.h"
 
 #include "constants/songs.h"

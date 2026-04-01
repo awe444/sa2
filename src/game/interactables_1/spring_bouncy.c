@@ -6,7 +6,7 @@
 
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "sprite.h"
 #include "task.h"

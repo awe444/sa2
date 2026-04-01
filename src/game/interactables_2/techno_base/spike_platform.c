@@ -9,7 +9,7 @@
 
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/interactables_2/techno_base/spike_platform.h"
 #include "constants/animations.h"
 #include "constants/songs.h"

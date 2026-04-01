@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_SPRING_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_Spring_Normal_Up(MapEntity *, u16, u16, u8);
 void CreateEntity_Spring_Normal_Down(MapEntity *, u16, u16, u8);

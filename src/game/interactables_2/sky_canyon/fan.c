@@ -1,7 +1,7 @@
 #include "global.h"
 #include "gba/types.h"
 
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
 

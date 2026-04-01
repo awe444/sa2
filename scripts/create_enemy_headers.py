@@ -13,7 +13,7 @@ for file in os.listdir("asm"):
 #define GUARD_ENEMY_{enemy.upper()}_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_{enemy.capitalize()}(MapEntity *me, u16 spriteRegionX, u16 spriteRegionY,
                         u8 spriteY);

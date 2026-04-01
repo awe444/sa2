@@ -7,14 +7,14 @@
 #include "game/sa1/ui/game_over.h"
 #include "game/gTask_03006240.h"
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/camera.h"
+#include "game/types/camera.h"
 #if DEBUG
 #include "game/sa1_sa2_shared/unused_level_select.h"
 #endif
 #include "game/sa1/save.h"
 #include "game/stage/stage.h"
 #include "game/sa1/gfx/stage_ui.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 #include "data/ui_graphics.h"
 
 #include "constants/animations.h"

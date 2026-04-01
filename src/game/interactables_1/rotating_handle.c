@@ -4,7 +4,7 @@
 #include "gba/types.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
 #include "game/stage/player_controls.h"

@@ -15,13 +15,13 @@
 #include "game/math.h"
 #include "game/multiplayer/mode_select.h"
 #include "game/sa2/options_screen.h"
-#include "game/demo_manager.h"
+#include "game/shared/demo_manager.h"
 #include "game/sa2/save.h"
 #include "game/stage/stage.h"
 #include "game/sa2/gfx/screen_fade.h"
 #include "game/sa2/time_attack/lobby.h"
 #include "game/sa2/time_attack/mode_select.h"
-#include "game/sa1_sa2_shared/camera.h" // TILE_WIDTH
+#include "game/types/camera.h" // TILE_WIDTH
 
 #include "data/recordings.h"
 

@@ -6,18 +6,18 @@
 #include "bg_triangles.h"
 #include "lib/m4a/m4a.h"
 #include "game/sa1/ui/character_select.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/multiplayer/mode_select.h"
 #include "game/options_screen.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/demo_manager.h"
+#include "game/shared/demo_manager.h"
 #include "game/sa1/save.h"
 #include "game/stage/terrain_collision.h"
 #include "game/stage/player.h"
 #include "game/stage/stage.h"
 #include "game/sa1/gfx/stage_ui.h"
 #include "game/time_attack/menu.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 #include "game/water_effects.h"
 
 // LoadTinyChaoGarden
@@ -872,11 +872,7 @@ void LoadTinyChaoGarden(void)
     TinyChaoGardenConfig[0] = LOADED_SAVE->score;
     TinyChaoGardenConfig[1] = LOADED_SAVE->language;
 
-#if (GAME == GAME_SA1)
     TinyChaoGardenConfig[2] = gFrameCount + LOADED_SAVE->checksum;
-#else
-    TinyChaoGardenConfig[2] = ((Random() + gFrameCount) << 8) + Random();
-#endif
 
     SoftResetExram(0U);
 }

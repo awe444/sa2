@@ -6,8 +6,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "game/sa1_sa2_shared/camera.h"
-#include "game/entity.h"
+#include "game/types/camera.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/itembox.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/enemy_defeat_score.h"

@@ -2,7 +2,7 @@
 
 #include "game/sa1_sa2_shared/collision.h"
 
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa2/enemies/geji_geji.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"

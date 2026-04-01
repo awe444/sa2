@@ -5,7 +5,7 @@
 #include "game/sa1/ui/game_over.h"
 #include "game/gTask_03006240.h"
 #include "game/sa1/save.h"
-#include "game/title_screen.h" // CreateMainMenu
+#include "game/sa1/title_screen.h" // CreateMainMenu
 #include "game/sa1/gfx/stage_ui.h" // sub_805423C
 
 #include "constants/songs.h"

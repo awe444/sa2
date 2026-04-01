@@ -3,7 +3,7 @@
 #define GUARD_STAGE_ITEM_BOX_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_ItemBox(MapEntity *, u16, u16, u8);
 

@@ -3,7 +3,7 @@
 #include "malloc_vram.h"
 #include "task.h"
 
-#include "game/amy_attack_heart_effect.h"
+#include "game/shared/amy_attack_heart_effect.h"
 #include "game/globals.h"
 #include "game/stage/camera.h"
 #include "game/stage/player.h"

@@ -10,7 +10,7 @@
 #include "game/multiplayer/finish.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 
 #include "lib/m4a/m4a.h"
 

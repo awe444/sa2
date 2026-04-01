@@ -4,7 +4,7 @@
 #include "task.h"
 #include "trig.h"
 #include "lib/m4a/m4a.h"
-#include "game/sa1_sa2_shared/camera.h"
+#include "game/types/camera.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "game/game.h" // sub_801E4E4
@@ -13,7 +13,7 @@
 #include "game/stage/player.h"
 #include "game/stage/terrain_collision.h"
 
-#include "game/entity.h" // Coll_Player_Entity_Intersection
+#include "game/types/entity.h" // Coll_Player_Entity_Intersection
 #include "game/sa2/bosses/common.h"
 #include "game/sa2/bosses/eggmobile_escape_sequence.h"
 #include "game/parameters/bosses.h"

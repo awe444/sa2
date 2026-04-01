@@ -3,7 +3,7 @@
 #include "gba/defines.h"
 #include "trig.h"
 #include "flags.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 
 #include "constants/animations.h"
 #include "constants/vram_hardcoded.h"

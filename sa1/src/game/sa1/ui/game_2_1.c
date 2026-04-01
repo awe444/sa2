@@ -4,7 +4,7 @@
 #include "lib/m4a/m4a.h"
 #include "data/ui_graphics.h"
 #include "game/gTask_03006240.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/globals.h"
 #include "game/sa1/save.h"
 #include "game/sa1/special_stage/main.h"

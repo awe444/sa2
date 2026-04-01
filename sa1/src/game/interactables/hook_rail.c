@@ -2,7 +2,7 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 #include "malloc_vram.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/stage/player.h"
 
 #include "constants/animations.h"

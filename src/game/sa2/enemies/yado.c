@@ -3,7 +3,7 @@
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa2/cheese.h"
 #include "game/sa2/enemies/projectiles.h"
 #include "game/sa2/gfx/trapped_animals.h"

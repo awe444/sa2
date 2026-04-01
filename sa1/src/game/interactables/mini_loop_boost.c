@@ -1,8 +1,8 @@
 #include "global.h"
 #include "task.h"
-#include "game/sa1_sa2_shared/camera.h"
+#include "game/types/camera.h"
 #include "game/stage/player_controls.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 typedef struct {
     /* 0x00 */ MapEntity *me;

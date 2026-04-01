@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_SLIDY_ICE_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_SlidyIce(MapEntity *, u16, u16, u8);
 

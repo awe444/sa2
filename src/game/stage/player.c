@@ -4,7 +4,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/amy_attack_heart_effect.h"
+#include "game/shared/amy_attack_heart_effect.h"
 #include "game/sa2/boost_effect.h"
 #include "game/sa2/boost_mode_particles.h" // incl. CreateBoostModeParticles
 #include "game/sa2/bosses/common.h"

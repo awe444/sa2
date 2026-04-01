@@ -2,7 +2,7 @@
 #define GUARD_ENEMY_GOHLA_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_Gohla(MapEntity *me, u16 spriteRegionX, u16 spriteRegionY, u8 spriteY);
 

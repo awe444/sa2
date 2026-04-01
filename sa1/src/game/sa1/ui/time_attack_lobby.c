@@ -7,7 +7,7 @@
 #include "game/gTask_03006240.h"
 #include "game/sa1/save.h"
 #include "game/sa1/gfx/stage_ui.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 
 #include "constants/songs.h"
 #include "constants/text.h"

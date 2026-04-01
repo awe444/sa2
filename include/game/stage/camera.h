@@ -4,7 +4,7 @@
 #include "global.h"
 #include "core.h"
 
-#include "game/sa1_sa2_shared/camera.h"
+#include "game/types/camera.h"
 
 void InitCamera(u32);
 void DestroyCameraMovementTask(void);

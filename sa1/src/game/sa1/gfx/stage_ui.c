@@ -3,7 +3,7 @@
 #include "lib/m4a/m4a.h"
 #include "malloc_vram.h"
 #include "data/ui_graphics.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 #include "game/globals.h"
 #include "game/sa1/special_stage/main.h"
 #include "game/gTask_03006240.h"

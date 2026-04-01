@@ -1,7 +1,7 @@
 #include "global.h"
 #include "game/stage/player.h"
 #include "game/stage/camera.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "core.h"
 #include "task.h"
 #include "lib/m4a/m4a.h"

@@ -11,7 +11,7 @@
 #include "game/sa1/gfx/stage_ui.h"
 #include "game/sa1/save.h"
 #include "game/time_attack/menu.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 
 #include "constants/characters.h"
 #include "constants/songs.h"

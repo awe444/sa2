@@ -2,7 +2,7 @@
 #define GUARD_IRON_BALL_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_IronBall(MapEntity *, u16, u16, u8);
 

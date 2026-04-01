@@ -30,10 +30,10 @@ SECTIONS {
         src/game/sa1_sa2_shared/entities_manager.o(.text);
         src/game/sa1_sa2_shared/collision_0.o(.text);
         src/game/sa1_sa2_shared/collision.o(.text);
-        src/game/sa1_sa2_shared/palette_loader.o(.text);
+        src/game/shared/palette_loader.o(.text);
 
         /* Menus */
-        src/game/title_screen.o(.text);
+        src/game/sa1/title_screen.o(.text);
         src/game/sa1_sa2_shared/unused_level_select.o(.text);
         src/game/multiplayer/mode_select.o(.text);
         src/game/multiplayer/mode_select_2.o(.text);
@@ -42,9 +42,9 @@ SECTIONS {
         src/game/player_data_menu.o(.text);
 
         src/game/sa1_sa2_shared/spot_light_beam_task.o(.text);
-        src/game/to_be_continued_screen.o(.text);
+        src/game/sa1/to_be_continued_screen.o(.text);
         src/game/sa1_sa2_shared/enemy_defeat_score.o(.text);
-        src/game/demo_manager.o(.text);
+        src/game/shared/demo_manager.o(.text);
         src/game/sa1/save.o(.text);
         src/game/sa1_sa2_shared/unused_flash_task.o(.text);
         src/game/multiplayer/mp_player.o(.text);
@@ -61,12 +61,12 @@ SECTIONS {
         src/game/sa1_sa2_shared/pause_menu.o(.text);
         src/game/multiplayer/results_2.o(.text);
         src/game/multiplayer/hud.o(.text);
-        src/game/mystery_itembox.o(.text);
+        src/game/sa1/mystery_itembox.o(.text);
         src/game/multiplayer/unk_0.o(.text);
         src/game/multiplayer/unk_1.o(.text);
         src/game/enemies/kiki.o(.text);
         src/game/enemies/buzzer.o(.text);
-        src/game/sa1_sa2_shared/collect_ring_effect.o(.text);
+        src/game/shared/collect_ring_effect.o(.text);
         src/game/sa1_sa2_shared/itembox.o(.text);
         src/game/interactables/stage_goal.o(.text);
         src/game/sa1_sa2_shared/dust_cloud.o(.text);
@@ -77,7 +77,7 @@ SECTIONS {
         src/game/interactables/toggle_player_layer.o(.text);
         src/game/interactables/grind_rail.o(.text);
         src/game/interactables/platform_thin.o(.text);
-        src/game/sa1_sa2_shared/magnetic_ring.o(.text);
+        src/game/shared/interactables/magnetic_ring.o(.text);
         src/game/interactables/platform_crumbling.o(.text);
         src/game/interactables/fadein_to_be_continued.o(.text);
         src/game/sa1/special_stage/temporary_sound_play_task.o(.text);
@@ -96,7 +96,7 @@ SECTIONS {
 
         src/game/multiplayer/chao_message.o(.text);
         src/game/multiplayer/communication_outcome.o(.text);
-        src/game/amy_attack_heart_effect.o(.text);
+        src/game/shared/amy_attack_heart_effect.o(.text);
         src/game/sa1_sa2_shared/music_manager.o(.text);
         src/game/game.o(.text);
         src/game/dummy_task.o(.text);
@@ -307,7 +307,7 @@ SECTIONS {
         src/data/entity_tables.o(.rodata);
         src/game/sa1_sa2_shared/entities_manager.o(.rodata);
         src/game/sa1_sa2_shared/itembox.o(.rodata);
-        src/game/title_screen.o(.rodata);
+        src/game/sa1/title_screen.o(.rodata);
         src/game/sa1_sa2_shared/unused_level_select.o(.rodata);
         src/game/multiplayer/mode_select.o(.rodata);
         src/game/time_attack/menu.o(.rodata);
@@ -320,7 +320,7 @@ SECTIONS {
         src/game/multiplayer/results.o(.rodata);
         src/game/multiplayer/finish.o(.rodata);
         src/game/multiboot/collect_rings/time_display.o(.rodata);
-        src/game/mystery_itembox.o(.rodata);
+        src/game/sa1/mystery_itembox.o(.rodata);
         src/game/interactables/spring.o(.rodata);
         src/game/interactables/platform_thin.o(.rodata);
         src/game/interactables/platform_crumbling.o(.rodata);
@@ -342,7 +342,7 @@ SECTIONS {
         src/data/tilemap_data_2.o(.rodata);
         data/data_0_3_2.o(.rodata);
         src/game/multiplayer/communication_outcome.o(.rodata);
-        src/game/amy_attack_heart_effect.o(.rodata);
+        src/game/shared/amy_attack_heart_effect.o(.rodata);
         src/game/sa1_sa2_shared/music_manager.o(.rodata);
         src/game/stage/stage.o(.rodata);
         src/game/stage/camera.o(.rodata);

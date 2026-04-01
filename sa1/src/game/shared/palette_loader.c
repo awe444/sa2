@@ -1,8 +1,8 @@
 #include "global.h"
 #include "task.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
-#include "game/sa1_sa2_shared/palette_loader.h"
+#include "game/shared/palette_loader.h"
 
 static void Task_StagePaletteLoader(void);
 

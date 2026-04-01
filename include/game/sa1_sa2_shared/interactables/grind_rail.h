@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_GRIND_RAIL_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_GrindRail_Start(MapEntity *, u16, u16, u8);
 void CreateEntity_GrindRail_StartAir(MapEntity *, u16, u16, u8);

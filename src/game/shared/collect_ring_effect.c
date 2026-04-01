@@ -3,11 +3,11 @@
 #include "lib/m4a/m4a.h"
 
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/collect_ring_effect.h"
+#include "game/shared/collect_ring_effect.h"
 #include "game/sa1_sa2_shared/rings_manager.h"
 
-#include "game/sa1_sa2_shared/camera.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
+#include "game/types/camera.h"
 
 #include "constants/animations.h"
 
@@ -35,7 +35,7 @@ void CreateCollectRingEffect(s16 x, s16 y)
         s->graphics.dest = RESERVED_RING_EFFECT_TILES_VRAM;
         s->oamFlags = SPRITE_OAM_ORDER(15);
         s->graphics.size = 0;
-        s->graphics.anim = SA1_ANIM_RING_COLLECT_EFFECT;
+        s->graphics.anim = SA2_ANIM_RING_COLLECT_EFFECT;
         s->variant = 0;
         s->animCursor = 0;
         s->qAnimDelay = 0;

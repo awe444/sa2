@@ -6,7 +6,7 @@
 
 #include "game/sa1_sa2_shared/entities_manager.h"
 
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa2/enemies/kubinaga.h"
 
 #include "game/sa2/enemies/projectiles.h"

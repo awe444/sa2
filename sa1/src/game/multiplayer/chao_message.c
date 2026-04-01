@@ -9,7 +9,7 @@
 #include "game/multiplayer/multipak_connection.h"
 #include "game/globals.h"
 #include "game/sa1/save.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

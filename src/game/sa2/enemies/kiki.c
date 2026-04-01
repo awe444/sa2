@@ -1,5 +1,5 @@
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa2/enemies/kiki.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/collision.h"

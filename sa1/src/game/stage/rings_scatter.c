@@ -11,7 +11,7 @@
 #include "game/stage/camera.h"
 
 #include "game/stage/rings_scatter.h"
-#include "game/sa1_sa2_shared/collect_ring_effect.h"
+#include "game/shared/collect_ring_effect.h"
 #include "game/sa1_sa2_shared/rings_manager.h" // for RESERVED_RING_TILES_VRAM
 
 #include "constants/animations.h"

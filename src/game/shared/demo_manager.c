@@ -8,8 +8,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "game/demo_manager.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/shared/demo_manager.h"
+#include "game/types/player.h"
 
 // TODO: add headers for these into sa1_sa2_shared
 // instead of including from the main game

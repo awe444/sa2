@@ -3,7 +3,7 @@
 #include "malloc_vram.h"
 #include "game/sa1/ui/game_over.h"
 #include "game/sa1/ui/time_over.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/stage/stage.h"
 #include "game/sa1/gfx/stage_ui.h"
 

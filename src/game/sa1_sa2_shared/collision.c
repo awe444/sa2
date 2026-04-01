@@ -6,10 +6,10 @@
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 
 #include "game/sa2/cheese.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/stage/rings_scatter.h"
 #include "game/sa2/gfx/trapped_animals.h"
