@@ -14,7 +14,14 @@
 
 #ifdef __ANDROID__
 #include <android/log.h>
+#include <signal.h>
 #define SA1_DBG(...) __android_log_print(ANDROID_LOG_DEBUG, "SA1-DBG", __VA_ARGS__)
+static void sa1_signal_handler(int sig) {
+    __android_log_print(ANDROID_LOG_ERROR, "SA1-DBG", "SIGNAL %d caught! (SIGSEGV=11, SIGBUS=7, SIGABRT=6)", sig);
+    // Re-raise to get the default handler's tombstone
+    signal(sig, SIG_DFL);
+    raise(sig);
+}
 #else
 #define SA1_DBG(...) ((void)0)
 #endif
@@ -134,6 +141,13 @@ void Platform_free(void *ptr) { HeapFree(GetProcessHeap(), 0, ptr); }
 
 int main(int argc, char **argv)
 {
+#ifdef __ANDROID__
+    signal(SIGSEGV, sa1_signal_handler);
+    signal(SIGBUS, sa1_signal_handler);
+    signal(SIGABRT, sa1_signal_handler);
+    signal(SIGFPE, sa1_signal_handler);
+    SA1_DBG("main() entered, signal handlers installed");
+#endif
     const char *headlessEnv = getenv("HEADLESS");
 
     if (headlessEnv && strcmp(headlessEnv, "true") == 0) {
@@ -1706,9 +1720,24 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
 
 static void DrawScanline(uint16_t *pixels, uint16_t vcount)
 {
+    static int dsCallCount = 0;
+
+    if (dsCallCount < 2)
+        SA1_DBG("DS[%d] v=%d: enter DISPCNT=0x%04X", dsCallCount, vcount, REG_DISPCNT);
+
     // On real GBA, forced blank displays white
     if (REG_DISPCNT & DISPCNT_FORCED_BLANK) {
         memsetu16(pixels, 0x7FFF, DISPLAY_WIDTH);
+        dsCallCount++;
+        return;
+    }
+
+    // If no BGs and no OBJ are enabled, the scanline is just the backdrop color
+    // (already pre-filled by DrawFrame). Skip the expensive rendering path.
+    if (!(REG_DISPCNT & (DISPCNT_BG_ALL_ON | DISPCNT_OBJ_ON))) {
+        if (dsCallCount < 2)
+            SA1_DBG("DS[%d]: no BGs/OBJ enabled (DISPCNT=0x%04X), early return", dsCallCount, REG_DISPCNT);
+        dsCallCount++;
         return;
     }
 
@@ -1719,11 +1748,17 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
     unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
     unsigned int xpos;
 
+    if (dsCallCount < 2)
+        SA1_DBG("DS[%d]: mode=%u numBgs=%u sizeof(scanline)=%u, memset start", dsCallCount, mode, numOfBgs, (unsigned)sizeof(scanline));
+
     // initialize all priority bookkeeping data
     memset(scanline.layers, 0, sizeof(scanline.layers));
     memset(scanline.winMask, 0, sizeof(scanline.winMask));
     memset(scanline.spriteLayers, 0, sizeof(scanline.spriteLayers));
     memset(scanline.prioritySortedBgsCount, 0, sizeof(scanline.prioritySortedBgsCount));
+
+    if (dsCallCount < 2)
+        SA1_DBG("DS[%d]: memset done, BG bookkeeping", dsCallCount);
 
     for (bgnum = 0; bgnum < numOfBgs; bgnum++) {
         uint16_t bgcnt = *(uint16_t *)(REG_ADDR_BG0CNT + bgnum * 2);
@@ -1735,6 +1770,9 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         scanline.prioritySortedBgs[priority][priorityCount] = bgnum;
         scanline.prioritySortedBgsCount[priority]++;
     }
+
+    if (dsCallCount < 2)
+        SA1_DBG("DS[%d]: BG bookkeeping done, switch mode=%u", dsCallCount, mode);
 
     switch (mode) {
         case 0:
@@ -1769,6 +1807,9 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
             printf("Video mode %u is unsupported.\n", mode);
             break;
     }
+
+    if (dsCallCount < 2)
+        SA1_DBG("DS[%d]: switch done, windows check", dsCallCount);
 
     bool windowsEnabled = false;
     u16 WIN0bottom, WIN0top, WIN0right, WIN0left;
@@ -1834,8 +1875,14 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         }
     }
 
+    if (dsCallCount < 2)
+        SA1_DBG("DS[%d]: windows done (en=%d), OBJ check", dsCallCount, windowsEnabled);
+
     if (REG_DISPCNT & DISPCNT_OBJ_ON)
         DrawOamSprites(&scanline, vcount, windowsEnabled);
+
+    if (dsCallCount < 2)
+        SA1_DBG("DS[%d]: OBJ done, compositing prnum loop", dsCallCount);
 
     // iterate trough every priority in order
     for (prnum = 3; prnum >= 0; prnum--) {
@@ -1897,6 +1944,10 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
             }
         }
     }
+
+    if (dsCallCount < 2)
+        SA1_DBG("DS[%d]: compositing done, returning", dsCallCount);
+    dsCallCount++;
 }
 
 static uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
