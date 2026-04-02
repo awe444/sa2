@@ -1148,8 +1148,17 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
     unsigned int mapPixelWidth = mapWidth * TILE_WIDTH;
     unsigned int mapPixelHeight = mapHeight * TILE_WIDTH;
 
-    uint8_t *bgtiles = (uint8_t *)BG_CHAR_ADDR(charBaseBlock);
-    uint16_t *bgmap = (uint16_t *)BG_SCREEN_ADDR(screenBaseBlock);
+    // Use offsets relative to VRAM base for bounds safety.
+    // On real GBA, VRAM accesses wrap; on SDL port, out-of-bounds access crashes.
+    unsigned int charBaseOffset = charBaseBlock * 0x4000;
+    unsigned int screenBaseOffset = screenBaseBlock * 0x800;
+
+    // Bounds-check: if base offsets exceed VRAM, skip rendering this BG
+    if (charBaseOffset >= VRAM_SIZE || screenBaseOffset >= VRAM_SIZE)
+        return;
+
+    uint8_t *bgtiles = &VRAM[charBaseOffset];
+    uint16_t *bgmap = (uint16_t *)&VRAM[screenBaseOffset];
     uint16_t *pal = (uint16_t *)PLTT;
 
     // Apply vertical mosaic effect to the entire scanline if enabled
@@ -1185,6 +1194,11 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
         // as the original code used a hardcoded map width of 32 tiles.
         unsigned int mapIndex = mapY * mapWidth + mapX;
 
+        // Bounds-check map access: ensure we don't read outside VRAM
+        unsigned int mapByteOffset = screenBaseOffset + mapIndex * 2;
+        if (mapByteOffset + 1 >= VRAM_SIZE)
+            continue;
+
         uint16_t entry = bgmap[mapIndex];
         unsigned int tileNum = entry & 0x3FF;
         unsigned int paletteNum = (entry >> 12) & 0xF;
@@ -1207,6 +1221,9 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
         if (bitsPerPixel == 4) {
             uint32_t tileDataOffset = tileNum * TILE_SIZE_4BPP;
             uint32_t pixelByteOffset = (tileY * TILE_WIDTH + tileX) / 2;
+            // Bounds-check tile data access
+            if (charBaseOffset + tileDataOffset + pixelByteOffset >= VRAM_SIZE)
+                continue;
             uint8_t pixelPair = bgtiles[tileDataOffset + pixelByteOffset];
 
             uint8_t pixel;
@@ -1222,6 +1239,9 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
         } else { // 8 bits per pixel
             uint32_t tileDataOffset = tileNum * TILE_SIZE_8BPP;
             uint32_t pixelByteOffset = tileY * TILE_WIDTH + tileX;
+            // Bounds-check tile data access
+            if (charBaseOffset + tileDataOffset + pixelByteOffset >= VRAM_SIZE)
+                continue;
             uint8_t pixel = bgtiles[tileDataOffset + pixelByteOffset];
 
             if (pixel != 0) {
@@ -1305,8 +1325,14 @@ static void RenderRotScaleBGScanline(int bgNum, uint16_t control, uint16_t x, ui
     unsigned int screenBaseBlock = bgcnt->screenBaseBlock;
     unsigned int mapWidth = 1 << (4 + (bgcnt->screenSize)); // number of tiles
 
-    uint8_t *bgtiles = (uint8_t *)(VRAM + charBaseBlock * 0x4000);
-    uint8_t *bgmap = (uint8_t *)(VRAM + screenBaseBlock * 0x800);
+    // Use offsets relative to VRAM base for bounds safety
+    unsigned int charBaseOffset = charBaseBlock * 0x4000;
+    unsigned int screenBaseOffset = screenBaseBlock * 0x800;
+    if (charBaseOffset >= VRAM_SIZE || screenBaseOffset >= VRAM_SIZE)
+        return;
+
+    uint8_t *bgtiles = &VRAM[charBaseOffset];
+    uint8_t *bgmap = &VRAM[screenBaseOffset];
     uint16_t *pal = (uint16_t *)PLTT;
 
     if (control & BGCNT_MOSAIC)
@@ -1370,12 +1396,16 @@ static void RenderRotScaleBGScanline(int bgNum, uint16_t control, uint16_t x, ui
             int xxx = (realX >> 8) & maskX;
             int yyy = (realY >> 8) & maskY;
 
-            int tile = bgmap[(xxx >> 3) + ((yyy >> 3) << yshift)];
+            unsigned int mapOffset = (xxx >> 3) + ((yyy >> 3) << yshift);
+            if (screenBaseOffset + mapOffset >= VRAM_SIZE) { realX += pa; realY += pc; continue; }
+            int tile = bgmap[mapOffset];
 
             int tileX = xxx & 7;
             int tileY = yyy & 7;
 
-            uint8_t pixel = bgtiles[(tile << 6) + (tileY << 3) + tileX];
+            unsigned int tileOffset = (tile << 6) + (tileY << 3) + tileX;
+            if (charBaseOffset + tileOffset >= VRAM_SIZE) { realX += pa; realY += pc; continue; }
+            uint8_t pixel = bgtiles[tileOffset];
 
             if (pixel != 0) {
                 line[x] = pal[pixel] | 0x8000;
@@ -1392,12 +1422,16 @@ static void RenderRotScaleBGScanline(int bgNum, uint16_t control, uint16_t x, ui
             if (xxx < 0 || yyy < 0 || xxx >= sizeX || yyy >= sizeY) {
                 // line[x] = 0x80000000;
             } else {
-                int tile = bgmap[(xxx >> 3) + ((yyy >> 3) << yshift)];
+                unsigned int mapOffset = (xxx >> 3) + ((yyy >> 3) << yshift);
+                if (screenBaseOffset + mapOffset >= VRAM_SIZE) { realX += pa; realY += pc; continue; }
+                int tile = bgmap[mapOffset];
 
                 int tileX = xxx & 7;
                 int tileY = yyy & 7;
 
-                uint8_t pixel = bgtiles[(tile << 6) + (tileY << 3) + tileX];
+                unsigned int tileOffset = (tile << 6) + (tileY << 3) + tileX;
+                if (charBaseOffset + tileOffset >= VRAM_SIZE) { realX += pa; realY += pc; continue; }
+                uint8_t pixel = bgtiles[tileOffset];
 
                 if (pixel != 0) {
                     line[x] = pal[pixel] | 0x8000;
@@ -1739,6 +1773,7 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
 static void DrawScanline(uint16_t *pixels, uint16_t vcount)
 {
     static int dsCallCount = 0;
+    static int dsRealRenderCount = 0; // Count of scanlines that actually render content
 
     if (dsCallCount < 2)
         SA1_DBG("DS[%d] v=%d: enter DISPCNT=0x%04X", dsCallCount, vcount, REG_DISPCNT);
@@ -1757,6 +1792,8 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         return;
     }
 
+    bool dsLog = (dsRealRenderCount < 3);
+
     unsigned int mode = REG_DISPCNT & 3;
     unsigned char numOfBgs = (mode == 0 ? 4 : 3);
     int bgnum, prnum;
@@ -1764,11 +1801,16 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
     unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
     unsigned int xpos;
 
+    if (dsLog)
+        SA1_DBG("DS-REAL[%d] v=%d: DISPCNT=0x%04X mode=%d", dsRealRenderCount, vcount, REG_DISPCNT, mode);
+
     // initialize all priority bookkeeping data
     memset(scanline.layers, 0, sizeof(scanline.layers));
     memset(scanline.winMask, 0, sizeof(scanline.winMask));
     memset(scanline.spriteLayers, 0, sizeof(scanline.spriteLayers));
     memset(scanline.prioritySortedBgsCount, 0, sizeof(scanline.prioritySortedBgsCount));
+
+    if (dsLog) SA1_DBG("DS-REAL[%d]: memset done", dsRealRenderCount);
 
     for (bgnum = 0; bgnum < numOfBgs; bgnum++) {
         uint16_t bgcnt = *(uint16_t *)(REG_ADDR_BG0CNT + bgnum * 2);
@@ -1776,10 +1818,15 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         scanline.bgcnts[bgnum] = bgcnt;
         scanline.bgtoprio[bgnum] = priority = (bgcnt & 3);
 
+        if (dsLog)
+            SA1_DBG("DS-REAL[%d]: BG%d CNT=0x%04X prio=%d", dsRealRenderCount, bgnum, bgcnt, priority);
+
         char priorityCount = scanline.prioritySortedBgsCount[priority];
         scanline.prioritySortedBgs[priority][priorityCount] = bgnum;
         scanline.prioritySortedBgsCount[priority]++;
     }
+
+    if (dsLog) SA1_DBG("DS-REAL[%d]: BG bookkeeping done, entering mode switch", dsRealRenderCount);
 
     switch (mode) {
         case 0:
@@ -1789,7 +1836,11 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
                     uint16_t bghoffs = *(uint16_t *)(REG_ADDR_BG0HOFS + bgnum * 4);
                     uint16_t bgvoffs = *(uint16_t *)(REG_ADDR_BG0VOFS + bgnum * 4);
 
+                    if (dsLog)
+                        SA1_DBG("DS-REAL[%d]: RenderBG%d hoffs=%d voffs=%d cnt=0x%04X", dsRealRenderCount, bgnum, bghoffs, bgvoffs, scanline.bgcnts[bgnum]);
                     RenderBGScanline(bgnum, scanline.bgcnts[bgnum], bghoffs, bgvoffs, vcount, scanline.layers[bgnum]);
+                    if (dsLog)
+                        SA1_DBG("DS-REAL[%d]: RenderBG%d done", dsRealRenderCount, bgnum);
                 }
             }
 
@@ -1814,6 +1865,8 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
             printf("Video mode %u is unsupported.\n", mode);
             break;
     }
+
+    if (dsLog) SA1_DBG("DS-REAL[%d]: mode switch done, windows/OBJ next", dsRealRenderCount);
 
     bool windowsEnabled = false;
     u16 WIN0bottom, WIN0top, WIN0right, WIN0left;
@@ -1879,8 +1932,13 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         }
     }
 
-    if (REG_DISPCNT & DISPCNT_OBJ_ON)
+    if (REG_DISPCNT & DISPCNT_OBJ_ON) {
+        if (dsLog) SA1_DBG("DS-REAL[%d]: before DrawOamSprites", dsRealRenderCount);
         DrawOamSprites(&scanline, vcount, windowsEnabled);
+        if (dsLog) SA1_DBG("DS-REAL[%d]: after DrawOamSprites", dsRealRenderCount);
+    }
+
+    if (dsLog) SA1_DBG("DS-REAL[%d]: before compositing", dsRealRenderCount);
 
     // iterate trough every priority in order
     for (prnum = 3; prnum >= 0; prnum--) {
@@ -1944,6 +2002,7 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
     }
 
     dsCallCount++;
+    dsRealRenderCount++;
 }
 
 static uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
@@ -1967,25 +2026,37 @@ static void DrawFrame(uint16_t *pixels)
         SA1_DBG("DrawFrame #%d: enter, BLDCNT=0x%04X DISPCNT=0x%04X", drawFrameCount, REG_BLDCNT, REG_DISPCNT);
 
     for (i = 0; i < DISPLAY_HEIGHT; i++) {
+        // Log first 3 scanlines of first 5 frames for crash diagnosis
+        bool dfLog = (drawFrameCount < 5 && i < 3);
+
         REG_VCOUNT = i;
         if (((REG_DISPSTAT >> 8) & 0xFF) == REG_VCOUNT) {
             REG_DISPSTAT |= INTR_FLAG_VCOUNT;
-            if ((REG_DISPSTAT & DISPSTAT_VCOUNT_INTR) && gIntrTable[INTR_INDEX_VCOUNT])
+            if ((REG_DISPSTAT & DISPSTAT_VCOUNT_INTR) && gIntrTable[INTR_INDEX_VCOUNT]) {
+                if (dfLog) SA1_DBG("DF[%d] sl%d: before VCount handler %p", drawFrameCount, i, (void*)gIntrTable[INTR_INDEX_VCOUNT]);
                 gIntrTable[INTR_INDEX_VCOUNT]();
+            }
         }
 
         // Render the backdrop color before the each individual scanline.
         // HBlank interrupt code could have changed it inbetween lines.
         memsetu16(scanlines[i], *(uint16_t *)PLTT, DISPLAY_WIDTH);
 
+        if (dfLog) SA1_DBG("DF[%d] sl%d: before DrawScanline DISPCNT=0x%04X", drawFrameCount, i, REG_DISPCNT);
         DrawScanline(scanlines[i], i);
+        if (dfLog) SA1_DBG("DF[%d] sl%d: after DrawScanline", drawFrameCount, i);
 
         REG_DISPSTAT |= INTR_FLAG_HBLANK;
 
+        if (dfLog) SA1_DBG("DF[%d] sl%d: before RunDMAs(HBLANK)", drawFrameCount, i);
         RunDMAs(DMA_HBLANK);
+        if (dfLog) SA1_DBG("DF[%d] sl%d: after RunDMAs", drawFrameCount, i);
 
-        if ((REG_DISPSTAT & DISPSTAT_HBLANK_INTR) && gIntrTable[INTR_INDEX_HBLANK])
+        if ((REG_DISPSTAT & DISPSTAT_HBLANK_INTR) && gIntrTable[INTR_INDEX_HBLANK]) {
+            if (dfLog) SA1_DBG("DF[%d] sl%d: before HBlank handler %p", drawFrameCount, i, (void*)gIntrTable[INTR_INDEX_HBLANK]);
             gIntrTable[INTR_INDEX_HBLANK]();
+            if (dfLog) SA1_DBG("DF[%d] sl%d: after HBlank handler", drawFrameCount, i);
+        }
 
         REG_DISPSTAT &= ~INTR_FLAG_HBLANK;
         REG_DISPSTAT &= ~INTR_FLAG_VCOUNT;
