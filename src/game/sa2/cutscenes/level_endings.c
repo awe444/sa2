@@ -2,7 +2,7 @@
 #include "game/sa2/cutscenes/level_endings.h"
 #include "core.h"
 #include "sprite.h"
-#include "game/sa2/gfx/screen_fade.h"
+#include "game/sa2/stage/screen_fade.h"
 #include "task.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"

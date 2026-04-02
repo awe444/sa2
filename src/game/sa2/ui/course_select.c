@@ -2,9 +2,9 @@
 #include "core.h"
 #include "sprite.h"
 
-#include "game/sa2/gfx/screen_fade.h"
+#include "game/sa2/stage/screen_fade.h"
 #include "game/sa2/save.h"
-#include "game/stage/stage.h"
+#include "game/shared/stage/stage.h"
 
 #include "lib/m4a/m4a.h"
 #include "game/sa2/ui/character_select.h"
@@ -12,8 +12,8 @@
 #include "constants/text.h"
 #include "task.h"
 #include "malloc_vram.h"
-#include "game/multiplayer/multipak_connection.h"
-#include "game/sa2/bosses/final_intro.h"
+#include "game/sa2/multiplayer/multipak_connection.h"
+#include "game/sa2/stage/bosses/final_intro.h"
 #include "trig.h"
 
 #include "constants/animations.h"

@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "sprite.h"
-#include "game/sa2/gfx/screen_fade.h"
+#include "game/sa2/stage/screen_fade.h"
 #include "task.h"
 #include "game/sa2/cutscenes/credits.h"
 #include "game/sa2/cutscenes/missing_emeralds.h"

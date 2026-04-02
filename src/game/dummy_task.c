@@ -2,7 +2,7 @@
 #include "task.h"
 
 #include "game/dummy_task.h"
-#include "game/stage/stage.h"
+#include "game/shared/stage/stage.h"
 
 struct Task *gDummyTask = NULL;
 

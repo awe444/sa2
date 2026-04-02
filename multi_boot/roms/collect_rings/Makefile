@@ -117,33 +117,33 @@ SA2_C_FILES := \
 	sa2/malloc_vram.c \
 	sa2/bg_triangles.c \
 	sa2/game/globals.c \
-	sa2/game/multiplayer/multiplayer_event_mgr.c \
-	sa2/game/multiplayer/multiplayer_event_recv_mgr.c \
-	sa2/game/multiboot/collect_rings/results.c \
-	sa2/game/sa1_sa2_shared/entities_manager.c \
-	sa2/game/sa1_sa2_shared/collision.c \
-	sa2/game/sa2/mystery_itembox.c \
-	sa2/game/sa1_sa2_shared/rings_manager.c \
-	sa2/game/multiboot/collect_rings/time_display.c \
-	sa2/game/multiplayer/indicators.c \
-	sa2/game/multiplayer/mp_player.c \
-	sa2/game/multiplayer/finish.c \
-	sa2/game/interactables_1/toggle_player_layer.c \
-	sa2/game/sa1_sa2_shared/interactables/spring.c \
-	sa2/game/sa1_sa2_shared/interactables/ramp.c \
-	sa2/game/interactables_1/spikes.c \
-	sa2/game/sa1_sa2_shared/interactables/grind_rail.c \
-	sa2/game/interactables_2/collect_rings_lap_trigger.c \
-	sa2/game/sa1_sa2_shared/dust_cloud.c \
-	sa2/game/shared/collect_ring_effect.c \
-	sa2/game/multiplayer/mp_attack_2_effect.c \
+	sa2/game/shared/stage/mp_event_mgr.c \
+	sa2/game/shared/stage/mp_event_recv_mgr.c \
+	sa2/game/shared/collect_rings/results.c \
+	sa2/game/shared/stage/entities_manager.c \
+	sa2/game/shared/stage/collision.c \
+	sa2/game/sa2/stage/mystery_itembox.c \
+	sa2/game/shared/stage/rings_manager.c \
+	sa2/game/sa2/collect_rings/time_display.c \
+	sa2/game/shared/stage/mp_indicators.c \
+	sa2/game/shared/stage/mp_player.c \
+	sa2/game/shared/stage/mp_finish.c \
+	sa2/game/sa2/stage/interactables/leaf_forest/toggle_player_layer.c \
+	sa2/game/sa2/stage/interactables/spring.c \
+	sa2/game/sa2/stage/interactables/ramp.c \
+	sa2/game/sa2/stage/interactables/leaf_forest/spikes.c \
+	sa2/game/sa2/stage/interactables/grind_rail.c \
+	sa2/game/sa2/stage/interactables/collect_rings_lap_trigger.c \
+	sa2/game/shared/stage/dust_cloud.c \
+	sa2/game/shared/stage/collect_ring_effect.c \
+	sa2/game/sa2/stage/mp_attack_2_effect.c \
 	sa2/game/shared/stage/camera.c \
 	sa2/game/shared/stage/terrain_collision.c \
 	sa2/game/shared/stage/player.c \
 	sa2/game/shared/stage/rings_scatter.c \
 	sa2/game/sa2/stage/player_controls.c \
-	sa2/game/stage/stage.c \
-	sa2/game/multiboot/connection.c \
+	sa2/game/shared/stage/stage.c \
+	sa2/game/sa2/collect_rings/singlepak_connection.c \
 	sa2/game/game.c \
 	sa2/game/dummy_task.c
 

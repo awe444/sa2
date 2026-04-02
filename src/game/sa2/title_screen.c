@@ -13,12 +13,12 @@
 #include "game/sa2/bg_palette_effects.h"
 #include "game/sa2/ui/character_select.h"
 #include "game/math.h"
-#include "game/multiplayer/mode_select.h"
+#include "game/sa2/multiplayer/mode_select.h"
 #include "game/sa2/options_screen.h"
-#include "game/shared/demo_manager.h"
+#include "game/shared/stage/demo_manager.h"
 #include "game/sa2/save.h"
-#include "game/stage/stage.h"
-#include "game/sa2/gfx/screen_fade.h"
+#include "game/shared/stage/stage.h"
+#include "game/sa2/stage/screen_fade.h"
 #include "game/sa2/time_attack/lobby.h"
 #include "game/sa2/time_attack/mode_select.h"
 #include "game/types/camera.h" // TILE_WIDTH
@@ -27,7 +27,7 @@
 
 // Temp hack to allow playing the special stages from the chao garden
 #if PORTABLE
-#include "game/sa1_sa2_shared/unused_level_select.h"
+#include "game/shared/menus/unused_level_select.h"
 #endif
 
 #if (GAME == GAME_SA1)

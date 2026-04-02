@@ -8,7 +8,7 @@
 #include "game/globals.h"
 #include "game/sa1/save.h"
 #include "game/sa1/special_stage/main.h"
-#include "game/stage/stage.h"
+#include "game/shared/stage/stage.h"
 
 #include "constants/ui_graphics.h"
 #include "constants/vram_hardcoded.h"

@@ -4,16 +4,16 @@
 #include "malloc_vram.h"
 #include "gba/io_reg.h"
 #include "lib/m4a/m4a.h"
-#include "game/shared/amy_attack_heart_effect.h"
-#include "game/multiplayer/mp_player.h"
+#include "game/shared/stage/amy_attack_heart_effect.h"
+#include "game/shared/stage/mp_player.h"
 #include "game/parameters/characters.h"
 #include "game/globals.h"
 #include "game/types/camera.h"
-#include "game/sa1_sa2_shared/collision.h"
-#include "game/sa1_sa2_shared/music_manager.h"
+#include "game/shared/stage/collision.h"
+#include "game/shared/stage/music_manager.h"
 #include "game/types/player.h"
 #include "game/sa1/save.h"
-#include "game/some_task_manager.h"
+#include "game/sa1/stage/some_task_manager.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/terrain_collision.h"
 #include "game/shared/stage/dust_effect_braking.h"
@@ -21,14 +21,14 @@
 #include "game/shared/stage/mp_sprite_task.h"
 #include "game/shared/stage/player.h"
 #include "game/sa1/stage/player_controls.h"
-#include "game/stage/player_sonic.h"
-#include "game/stage/player_tails.h"
-#include "game/stage/player_super_sonic.h"
+#include "game/sa1/stage/player_sonic.h"
+#include "game/sa1/stage/player_tails.h"
+#include "game/sa1/stage/player_super_sonic.h"
 #include "game/shared/stage/rings_scatter.h"
-#include "game/stage/spawn_positions.h"
-#include "game/stage/stage.h"
+#include "game/sa1/stage/spawn_positions.h"
+#include "game/shared/stage/stage.h"
 #include "game/shared/stage/underwater_effects.h"
-#include "game/water_effects.h"
+#include "game/shared/stage/water_effects.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -2703,7 +2703,7 @@ void Player_8043DDC(Player *p)
 
 // TODO: Check how this differs from SA2 func sub_80232D0!
 // (98.94%) https://decomp.me/scratch/KZphy
-NONMATCH("asm/non_matching/game/stage/Player__Player_8043EC0.inc", void SA2_LABEL(sub_80232D0)(Player *p))
+NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_8043EC0.inc", void SA2_LABEL(sub_80232D0)(Player *p))
 {
     Camera *cam = &gCamera;
     s32 qWorldX = p->qWorldX;
@@ -2991,7 +2991,7 @@ bool32 Player_TryJump(Player *p)
 }
 
 // (98.55%) https://decomp.me/scratch/lAHT0
-NONMATCH("asm/non_matching/game/stage/Player__sub_8044434.inc", bool32 sub_8044434(Player *p))
+NONMATCH("asm/non_matching/game/sa1/stage/Player__sub_8044434.inc", bool32 sub_8044434(Player *p))
 {
     u8 rot = p->rotation;
     s32 r2 = 0;
@@ -3067,7 +3067,7 @@ NONMATCH("asm/non_matching/game/stage/Player__sub_8044434.inc", bool32 sub_80444
 END_NONMATCH
 
 // (91.12%) https://decomp.me/scratch/hJuDa
-NONMATCH("asm/non_matching/game/stage/Player__Player_AirInputControls.inc", void Player_AirInputControls(Player *p))
+NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_AirInputControls.inc", void Player_AirInputControls(Player *p))
 {
     s32 r5 = p->acceleration * 2;
     s32 r6 = p->maxSpeed;
@@ -3208,7 +3208,7 @@ void Player_8044750(Player *p)
 
 // TODO: Look up|down function?
 // (98.79%) https://decomp.me/scratch/yy7rw
-NONMATCH("asm/non_matching/game/stage/Player__Player_80447D8.inc", void Player_80447D8(Player *p))
+NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_80447D8.inc", void Player_80447D8(Player *p))
 {
     Camera *cam = &gCamera;
 
@@ -4092,7 +4092,7 @@ void Task_PlayerMain(void)
 // TODO(Jace): Could this be exclusively for the CPU Tails?
 //             I didn't find a way to trigger this procedure yet.
 // (93.14%) https://decomp.me/scratch/CpseV
-NONMATCH("asm/non_matching/game/stage/Player__Player_Tails_804571C.inc", void Player_Tails_804571C(Player *p))
+NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_Tails_804571C.inc", void Player_Tails_804571C(Player *p))
 {
     u16 gravityFlag = (gStageFlags & STAGE_FLAG__GRAVITY_INVERTED);
 
@@ -4201,7 +4201,7 @@ NONMATCH("asm/non_matching/game/stage/Player__Player_Tails_804571C.inc", void Pl
 END_NONMATCH
 
 // (90.78%) https://decomp.me/scratch/SwkK7
-NONMATCH("asm/non_matching/game/stage/Player__Task_804597C.inc", void Task_804597C(void))
+NONMATCH("asm/non_matching/game/sa1/stage/Player__Task_804597C.inc", void Task_804597C(void))
 {
     PlayerSpriteInfo *psiPartnerBody = gPartner.spriteInfoBody;
     PlayerSpriteInfo *psiPartnerLimbs = gPartner.spriteInfoLimbs;
@@ -4570,7 +4570,7 @@ void sub_8045DF0(Player *p)
 
 // This function is in SA2, but looks very different in many aspects
 // (99.16%) https://decomp.me/scratch/7kBSw
-NONMATCH("asm/non_matching/game/stage/Player__sa2__sub_802486C.inc", void SA2_LABEL(sub_802486C)(Player *p, PlayerSpriteInfo *psi))
+NONMATCH("asm/non_matching/game/sa1/stage/Player__sa2__sub_802486C.inc", void SA2_LABEL(sub_802486C)(Player *p, PlayerSpriteInfo *psi))
 {
     s32 speed;
     Sprite *s = &psi->s;
@@ -4704,7 +4704,7 @@ END_NONMATCH
 //       if-else blocks setting CHARSTATE_IDLE and CHARSTATE_WALK_A.
 //       It "matches semantically".
 // (99.99%) https://decomp.me/scratch/e9oqw
-NONMATCH("asm/non_matching/game/stage/Player__sa2__sub_8024B10.inc", void SA2_LABEL(sub_8024B10)(Player *p, PlayerSpriteInfo *inPsi))
+NONMATCH("asm/non_matching/game/sa1/stage/Player__sa2__sub_8024B10.inc", void SA2_LABEL(sub_8024B10)(Player *p, PlayerSpriteInfo *inPsi))
 {
     struct MultiSioData_0_4 *send;
     MultiplayerPlayer *mpp;

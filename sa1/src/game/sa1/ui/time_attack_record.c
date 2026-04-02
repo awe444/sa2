@@ -5,7 +5,7 @@
 #include "game/sa1/ui/course_select.h"
 #include "game/gTask_03006240.h"
 #include "game/sa1/save.h"
-#include "game/sa1/gfx/stage_ui.h"
+#include "game/sa1/stage/stage_ui.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

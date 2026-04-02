@@ -4,13 +4,13 @@
 #include "task.h"
 #include "trig.h"
 
-#include "game/multiplayer/mp_player.h"
+#include "game/shared/stage/mp_player.h"
 #include "game/globals.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/mp_sprite_task.h"
 #include "game/shared/stage/player.h"
-#include "game/stage/stage.h"
-#include "game/water_effects.h"
+#include "game/shared/stage/stage.h"
+#include "game/shared/stage/water_effects.h"
 
 #include "constants/animations.h"
 

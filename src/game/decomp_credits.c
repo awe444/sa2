@@ -8,7 +8,7 @@
 #include "game/sa2/save.h"
 #include "game/sa2/options_screen.h"
 #include "game/sa2/title_screen.h"
-#include "game/sa2/gfx/debug_text_printer.h"
+#include "game/sa2/stage/debug_text_printer.h"
 
 #include "constants/animations.h"
 #include "constants/characters.h"

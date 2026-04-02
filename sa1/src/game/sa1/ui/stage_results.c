@@ -9,8 +9,8 @@
 #include "game/globals.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
-#include "game/stage/stage.h"
-#include "game/sa1/gfx/stage_ui.h"
+#include "game/shared/stage/stage.h"
+#include "game/sa1/stage/stage_ui.h"
 #include "data/ui_graphics.h"
 
 #include "constants/ui_graphics.h"
@@ -177,7 +177,7 @@ void sub_8056FE4(VramPtrs *arg0)
 }
 
 // (93.06%) https://decomp.me/scratch/mM5tB
-NONMATCH("asm/non_matching/game/sa1/ui/stage_results__CreateStageResults.inc", u32 CreateStageResults(u32 ringCount, u32 courseTime))
+NONMATCH("asm/non_matching/game/sa1/stage/stage_results__CreateStageResults.inc", u32 CreateStageResults(u32 ringCount, u32 courseTime))
 {
     s16 temp_r2_5;
     s16 var_r5_6;

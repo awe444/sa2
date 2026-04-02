@@ -13,7 +13,7 @@
 
 /* TODO: Make including <entity>.h from game code work */
 
-//From "game/interactables_2/music_plant/chord.h"
+//From "game/sa2/stage/interactables/music_plant/chord.h"
 #define NUM_CHORD_ELEMS 6
 
 // From light_bridge.h

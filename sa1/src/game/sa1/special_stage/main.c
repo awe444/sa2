@@ -5,8 +5,8 @@
 #include "lib/m4a/m4a.h"
 #include "lib/m4a/m4a_internal.h" // for MP2KSongHeader
 #include "game/globals.h"
-#include "game/shared/palette_loader.h"
-#include "game/sa1_sa2_shared/pause_menu.h"
+#include "game/shared/stage/palette_loader.h"
+#include "game/shared/stage/pause_menu.h"
 #include "game/types/player.h"
 #include "game/sa1/save.h"
 #include "game/sa1/special_stage/main.h"

@@ -9,7 +9,7 @@
 #include "game/shared/stage/mp_sprite_task.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/underwater_effects.h"
-#include "game/water_effects.h"
+#include "game/shared/stage/water_effects.h"
 
 #include "constants/animations.h"
 

@@ -6,10 +6,10 @@
 #include "sprite.h"
 
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/collision.h"
+#include "game/shared/stage/collision.h"
 
 #include "game/shared/stage/terrain_collision.h"
-#include "game/sa2/player_callbacks.h"
+#include "game/sa2/stage/player_callbacks.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 

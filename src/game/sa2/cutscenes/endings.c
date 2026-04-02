@@ -2,7 +2,7 @@
 #include "game/sa2/cutscenes/endings.h"
 #include "core.h"
 #include "sprite.h"
-#include "game/sa2/gfx/screen_fade.h"
+#include "game/sa2/stage/screen_fade.h"
 #include "task.h"
 #include "game/sa2/cutscenes/extra_ending_fall.h"
 #include "game/sa2/cutscenes/final_ending_fall.h"

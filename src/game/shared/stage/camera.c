@@ -5,12 +5,12 @@
 #include "trig.h"
 
 #include "game/globals.h"
-#include "game/sa1_sa2_shared/spot_light.h"
+#include "game/shared/stage/spot_light.h"
 
-#include "game/stage/player_super_sonic.h"
+#include "game/sa2/stage/player_super_sonic.h"
 
 #include "game/shared/stage/camera.h"
-#include "game/stage/stage.h"
+#include "game/shared/stage/stage.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/terrain_collision.h"
 
@@ -890,7 +890,8 @@ void StageBgUpdate_Zone1Acts12(s32 UNUSED a, s32 UNUSED b)
 // (88.05%) https://decomp.me/scratch/ekyaq
 // (91.40%) https://decomp.me/scratch/vapLV
 // (95.71%) https://decomp.me/scratch/Naixp (more accurate)
-NONMATCH("asm/non_matching/game/stage/background/StageBgUpdate_Zone2Acts12.inc", void StageBgUpdate_Zone2Acts12(s32 cameraX, s32 cameraY))
+NONMATCH("asm/non_matching/game/sa2/stage/background/StageBgUpdate_Zone2Acts12.inc",
+         void StageBgUpdate_Zone2Acts12(s32 cameraX, s32 cameraY))
 {
     s16 something;
     u8 i, j;
@@ -1086,7 +1087,8 @@ void CreateStageBg_Zone3(void)
 
 // (85.02%) https://decomp.me/scratch/Esyzr
 #if 01
-NONMATCH("asm/non_matching/game/stage/background/StageBgUpdate_Zone3Acts12.inc", void StageBgUpdate_Zone3Acts12(s32 cameraX, s32 cameraY))
+NONMATCH("asm/non_matching/game/sa2/stage/background/StageBgUpdate_Zone3Acts12.inc",
+         void StageBgUpdate_Zone3Acts12(s32 cameraX, s32 cameraY))
 #else
 void StageBgUpdate_Zone3Acts12(s32 cameraX, s32 cameraY)
 #endif
@@ -1511,7 +1513,7 @@ void CreateStageBg_Zone6_Boss(void)
 
 // (82.58%) https://decomp.me/scratch/tB3Bs
 // (85.82%) https://decomp.me/scratch/pNyvP
-NONMATCH("asm/non_matching/game/stage/background/sub_801D24C.inc", void sub_801D24C(u8 p0, s16 p1, u8 p2))
+NONMATCH("asm/non_matching/game/sa2/stage/background/sub_801D24C.inc", void sub_801D24C(u8 p0, s16 p1, u8 p2))
 {
     s16 r6;
     u16 *hOffsets;
@@ -1636,7 +1638,7 @@ END_NONMATCH
 
 // (84.63%) https://decomp.me/scratch/W9B0j
 // (82.95%) https://decomp.me/scratch/ZEtCx (newer)
-NONMATCH("asm/non_matching/game/stage/background/StageBgUpdate_Zone6Acts12.inc", void StageBgUpdate_Zone6Acts12(s32 x, s32 UNUSED y))
+NONMATCH("asm/non_matching/game/sa2/stage/background/StageBgUpdate_Zone6Acts12.inc", void StageBgUpdate_Zone6Acts12(s32 x, s32 UNUSED y))
 {
     u16 r6;
     u8 r5;
@@ -1866,7 +1868,7 @@ void CreateStageBg_Zone7(void)
 
 // (98.52%) https://decomp.me/scratch/DUPkY
 // (99.82%) https://decomp.me/scratch/pfVTf (fake match)
-NONMATCH("asm/non_matching/game/stage/background/Zone7BgUpdate_Inside.inc", void Zone7BgUpdate_Inside(s32 x, s32 y))
+NONMATCH("asm/non_matching/game/sa2/stage/background/Zone7BgUpdate_Inside.inc", void Zone7BgUpdate_Inside(s32 x, s32 y))
 {
     u16 *dst;
     s32 someX;
@@ -2381,8 +2383,8 @@ void StageBgUpdate_ZoneFinalActXX(UNUSED s32 x, UNUSED s32 y)
 
 /************************************ BOSS EXTRA ************************************/
 
-#include "game/sa2/bosses/common.h"
-#include "game/sa2/bosses/boss_9.h"
+#include "game/sa2/stage/bosses/common.h"
+#include "game/sa2/stage/bosses/boss_9.h"
 
 void StageBgUpdate_ZoneFinalActTA53(UNUSED s32 a, UNUSED s32 b)
 {

@@ -11,8 +11,8 @@
 #include "game/shared/stage/camera.h"
 
 #include "game/shared/stage/rings_scatter.h"
-#include "game/shared/collect_ring_effect.h"
-#include "game/sa1_sa2_shared/rings_manager.h"
+#include "game/shared/stage/collect_ring_effect.h"
+#include "game/shared/stage/rings_manager.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"
@@ -597,7 +597,7 @@ void RingsScatterSingleplayer_NormalGravity(void)
 //       A ton of code is missing here.
 //       (Basically a copy-paste of RingsScatterSingleplayer_FlippedGravity)
 // (66.09%) https://decomp.me/scratch/qHlN9
-NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterMultipak_FlippedGravity.inc",
+NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_FlippedGravity.inc",
          void RingsScatterMultipak_FlippedGravity(void))
 {
     RingsScatter *rs = TASK_DATA(gCurTask);
@@ -716,7 +716,8 @@ END_NONMATCH
 //       A ton of code is missing here.
 //       (Basically a copy-paste of RingsScatterSingleplayer_NormalGravity)
 // (64.03%) https://decomp.me/scratch/KBtBo
-NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterMultipak_NormalGravity.inc", void RingsScatterMultipak_NormalGravity(void))
+NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_NormalGravity.inc",
+         void RingsScatterMultipak_NormalGravity(void))
 {
     RingsScatter *rs = TASK_DATA(gCurTask);
     ScatterRing *ring = &rs->rings[0];
@@ -840,9 +841,10 @@ END_NONMATCH
 //       (Basically a copy-paste of RingsScatterSingleplayer_NormalGravity)
 // (54.61%) https://decomp.me/scratch/v9rXO
 #ifndef COLLECT_RINGS_ROM
-NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterSinglepakMain.inc", void RingsScatterSinglepakMain(void))
+NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterSinglepakMain.inc", void RingsScatterSinglepakMain(void))
 #else
-NONMATCH("asm/non_matching/game/stage/rings_scatter/RingsScatterSinglepakMain_CollectRings.inc", void RingsScatterSinglepakMain(void))
+NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterSinglepakMain_CollectRings.inc",
+         void RingsScatterSinglepakMain(void))
 #endif
 {
     RingsScatter *rs = TASK_DATA(gCurTask);

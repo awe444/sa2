@@ -10,9 +10,9 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "game/stage/stage.h"
-#include "game/water_effects.h"
-#include "game/multiplayer/mp_player.h"
+#include "game/shared/stage/stage.h"
+#include "game/shared/stage/water_effects.h"
+#include "game/shared/stage/mp_player.h"
 
 #include "constants/animations.h"
 

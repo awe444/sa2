@@ -7,7 +7,7 @@
 #include "flags.h"
 #include "trig.h"
 #include "game/sa2/bg_palette_effects.h"
-#include "game/sa2/gfx/screen_fade.h"
+#include "game/sa2/stage/screen_fade.h"
 #include "data/palettes.h"
 
 #include "constants/animations.h"

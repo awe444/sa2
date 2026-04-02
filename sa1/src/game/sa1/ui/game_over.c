@@ -9,12 +9,12 @@
 #include "game/globals.h"
 #include "game/types/camera.h"
 #if DEBUG
-#include "game/sa1_sa2_shared/unused_level_select.h"
+#include "game/shared/menus/unused_level_select.h"
 #endif
 #include "game/sa1/save.h"
-#include "game/stage/stage.h"
-#include "game/sa1/gfx/stage_ui.h"
-#include "game/sa1/title_screen.h"
+#include "game/shared/stage/stage.h"
+#include "game/sa1/stage/stage_ui.h"
+#include "game/sa1/menus/title_screen.h"
 #include "data/ui_graphics.h"
 
 #include "constants/animations.h"
@@ -399,7 +399,7 @@ void Task_8056218(void)
 }
 
 // (96.84%) https://decomp.me/scratch/HKhxZ
-NONMATCH("asm/non_matching/game/sa1/ui/game_over__Task_8056348.inc", void Task_8056348(void))
+NONMATCH("asm/non_matching/game/sa1/stage/game_over__Task_8056348.inc", void Task_8056348(void))
 {
     GameOverScreen *screen = TASK_DATA(gCurTask);
     s16 frames = screen->frames;
@@ -468,7 +468,7 @@ NONMATCH("asm/non_matching/game/sa1/ui/game_over__Task_8056348.inc", void Task_8
 END_NONMATCH
 
 // (91.56%) https://decomp.me/scratch/Rl7oS
-NONMATCH("asm/non_matching/game/sa1/ui/game_over__Task_805648C.inc", void Task_805648C(void))
+NONMATCH("asm/non_matching/game/sa1/stage/game_over__Task_805648C.inc", void Task_805648C(void))
 {
     GameOverScreen *screen = TASK_DATA(gCurTask);
     s16 frames = screen->frames;
@@ -621,7 +621,7 @@ void Task_8056714(void)
 }
 
 // (98.85%) https://decomp.me/scratch/Sz0mp
-NONMATCH("asm/non_matching/game/sa1/ui/game_over__Task_805676C.inc", void Task_805676C(void))
+NONMATCH("asm/non_matching/game/sa1/stage/game_over__Task_805676C.inc", void Task_805676C(void))
 {
     GameOverD *overD = TASK_DATA(gCurTask);
     s16 unk24 = overD->unk24;

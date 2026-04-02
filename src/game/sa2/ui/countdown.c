@@ -8,7 +8,7 @@
 
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
-#include "game/multiplayer/mp_player.h"
+#include "game/shared/stage/mp_player.h"
 #include "lib/m4a/m4a.h"
 
 #include "constants/animations.h"

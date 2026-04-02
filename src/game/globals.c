@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "game/globals.h"
-#include "game/multiplayer/multiplayer_event_mgr.h"
+#include "game/shared/stage/mp_event_mgr.h"
 
 u8 gSpikesUnknownTimer = 0;
 u32 gCheckpointTime = 0;

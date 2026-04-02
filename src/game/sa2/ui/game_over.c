@@ -12,9 +12,9 @@
 #include "game/sa2/time_attack/lobby.h"
 #include "game/sa2/title_screen.h"
 
-#include "game/sa2/gfx/screen_fade.h"
-#include "game/stage/stage.h"
-#include "game/sa2/gfx/debug_text_printer.h"
+#include "game/sa2/stage/screen_fade.h"
+#include "game/shared/stage/stage.h"
+#include "game/sa2/stage/debug_text_printer.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

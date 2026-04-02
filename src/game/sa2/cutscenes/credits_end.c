@@ -8,7 +8,7 @@
 #include "game/sa2/cutscenes/credits_end.h"
 #include "game/sa2/cutscenes/missing_emeralds.h"
 #include "game/sa2/save.h"
-#include "game/sa2/gfx/screen_fade.h"
+#include "game/sa2/stage/screen_fade.h"
 #include "game/sa2/title_screen.h"
 
 #include "constants/animations.h"

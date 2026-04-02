@@ -6,23 +6,23 @@
 #include "game/globals.h"
 
 #include "game/shared/stage/camera.h"
-#include "game/stage/stage.h"
+#include "game/shared/stage/stage.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/terrain_collision.h"
 
 #if (GAME == GAME_SA1)
-#include "game/multiplayer/mp_player.h"
+#include "game/shared/stage/mp_player.h"
 #elif (GAME == GAME_SA2)
-#include "game/stage/player_super_sonic.h"
-#include "game/stage/background/dummy.h"
-#include "game/stage/background/zone_1.h"
-#include "game/stage/background/zone_2.h"
-#include "game/stage/background/zone_3.h"
-#include "game/stage/background/zone_4.h"
-#include "game/stage/background/zone_5.h"
-#include "game/stage/background/zone_6.h"
-#include "game/stage/background/zone_7.h"
-#include "game/stage/background/zone_final.h"
+#include "game/sa2/stage/player_super_sonic.h"
+#include "game/sa1/stage/background/dummy.h"
+#include "game/sa1/stage/background/zone_1.h"
+#include "game/sa1/stage/background/zone_2.h"
+#include "game/sa1/stage/background/zone_3.h"
+#include "game/sa1/stage/background/zone_4.h"
+#include "game/sa1/stage/background/zone_5.h"
+#include "game/sa1/stage/background/zone_6.h"
+#include "game/sa1/stage/background/zone_7.h"
+#include "game/sa1/stage/background/zone_final.h"
 #endif
 
 #include "constants/animations.h"

@@ -1,5 +1,5 @@
 #include "constants/characters.h"
-#include "game/sa2/input_buffer.h"
+#include "game/sa2/stage/input_buffer.h"
 
 // Unsure if this spacing is applied here
 const u8 *const gUnknown_08c87098_unused[64] = { 0 };
