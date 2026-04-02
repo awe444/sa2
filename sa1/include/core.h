@@ -7,6 +7,7 @@
 
 #include "global.h"
 #include "sprite.h"
+#include "malloc_vram.h"
 #include "task.h"
 #include "tilemap.h"
 #include "input_recorder.h"
@@ -244,7 +245,7 @@ extern u8 gNumHBlankIntrs;
 
 extern void *gVramHeapStartAddr;
 extern u16 gVramHeapMaxTileSlots;
-extern u16 gVramHeapState[256];
+extern u16 gVramHeapState[OBJ_VRAM_TOTAL_SIZE / VRAM_HEAP_SEGMENT_SIZE];
 
 extern bool8 gExecSoundMain;
 

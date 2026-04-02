@@ -2,29 +2,30 @@
 #include "core.h"
 #include "flags.h"
 #include "lib/m4a/m4a.h"
-#include "game/game_over.h"
+#include "game/sa1/ui/game_over.h"
 #include "game/multiplayer/chao.h"
 #include "game/multiplayer/finish.h"
 #include "game/multiplayer/indicators.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/music_manager.h"
-#include "game/sa1_sa2_shared/palette_loader.h"
+#include "game/shared/palette_loader.h"
 #include "game/sa1_sa2_shared/pause_menu.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 #include "game/sa1_sa2_shared/rings_manager.h"
 #include "game/sa1_sa2_shared/spot_light_beam_task.h"
 #include "game/parameters/stage.h"
-#include "game/save.h"
-#include "game/stage/camera.h"
-#include "game/stage/player.h"
-#include "game/stage/screen_shake.h"
+#include "game/sa1/save.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/screen_shake.h"
 #include "game/stage/stage.h"
-#include "game/time_attack/lobby.h"
+#include "game/sa1/ui/time_attack_lobby.h"
+#include "game/sa1/stage/player_controls.h"
 #if (GAME == GAME_SA1)
-#include "game/time_over.h"
+#include "game/sa1/ui/time_over.h"
 #endif
 
 #include "constants/characters.h"
@@ -48,8 +49,6 @@ extern bool32 CreateSpotlightsManager(void); // Spotlight-beam related
 extern void CreateChaoHuntHUD();
 extern void CreateStageWaterTask(s32 waterLevel, u32 p1, u32 mask);
 extern struct Task *CreateMultiplayerChao(u8, u8);
-extern void SetFaceButtonConfig(bool32);
-
 void SA2_LABEL(sub_801F044)(void);
 #if (GAME == GAME_SA1)
 void SA2_LABEL(sub_80213C0)(u32 UNUSED characterId, u32 UNUSED levelId, Player *player);
@@ -157,7 +156,7 @@ void CreateGameStage(void)
     gActiveCollectRingEffectCount = 0;
 #if (GAME == GAME_SA2)
     gSpecialRingCount = 0;
-    gUnknown_030054B0 = 0;
+    gFinalBossActive = 0;
 #endif
 
     gStageFlags |= (STAGE_FLAG__DISABLE_PAUSE_MENU | STAGE_FLAG__ACT_START);
@@ -166,7 +165,7 @@ void CreateGameStage(void)
 #if (GAME == GAME_SA2)
     gBossRingsShallRespawn = FALSE;
     gBossRingsRespawnCount = BOSS_RINGS_DEFAULT_RESPAWN_COUNT;
-    gUnknown_030055BC = 0;
+    gBoostEffectTasksCreated = 0;
 #endif
 
     SA2_LABEL(sub_801F044)();
@@ -178,7 +177,7 @@ void CreateGameStage(void)
         someTask = sub_80550F8();
     }
 
-    SA2_LABEL(gUnknown_030053E0) = 0;
+    gSpikesUnknownTimer = 0;
 
     if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
         CreateChaoHuntHUD();
@@ -235,7 +234,7 @@ void CreateGameStage(void)
         StageInit_MPCollectRings();
     }
 #elif (GAME == GAME_SA2)
-    SA2_LABEL(gUnknown_030053E0) = 0;
+    gSpikesUnknownTimer = 0;
 
     if (!IS_EXTRA_STAGE(gCurrentLevel)) {
         sub_80213C0(gSelectedCharacter, gCurrentLevel, &gPlayer);
@@ -323,7 +322,7 @@ void CreateGameStage(void)
 
 #if (GAME == GAME_SA1)
         if (gGameMode == GAME_MODE_CHAO_HUNT || gGameMode == GAME_MODE_TEAM_PLAY) {
-            for (j = 0; j < NUM_MP_CHAO; j++) {
+            for (j = 0; j < ARRAY_COUNT(gChaoTasks); j++) {
                 gChaoTasks[j] = CreateMultiplayerChao((u8)(uintptr_t)gChaoTasks[j], j);
 
                 if (gGameMode == GAME_MODE_CHAO_HUNT) {
@@ -363,7 +362,7 @@ void Task_GameStage(void)
 
     if (IS_SINGLE_PLAYER) {
 #if DEBUG
-#include "game/character_select.h"
+#include "game/sa1/ui/character_select.h"
         if (gInput & SELECT_BUTTON) {
             u32 initialCharacter = CHARACTER_TAILS;
             bool32 allUnlocked = TRUE;
@@ -436,12 +435,12 @@ void Task_GameStage(void)
             gCamera.spectatorTarget = sioId;
         }
 
-        if (SA2_LABEL(gUnknown_030053E0) > 0) {
-            SA2_LABEL(gUnknown_030053E0)--;
+        if (gSpikesUnknownTimer > 0) {
+            gSpikesUnknownTimer--;
         }
     }
 
-    SA2_LABEL(gUnknown_0300544C) = gStageFlags;
+    gPrevStageFlags = gStageFlags;
 
     if (gStageFlags & STAGE_FLAG__ACT_START) {
         return;
@@ -762,7 +761,7 @@ void ApplyGameStageSettings(void)
 {
     gLevelScore = 0;
     gNumLives = 3;
-    SA2_LABEL(gUnknown_030054B0) = gCurrentLevel;
+    gFinalBossActive = gCurrentLevel;
 
     if (IS_MULTI_PLAYER) {
         gNumLives = 1;
@@ -774,7 +773,7 @@ void ApplyGameStageSettings(void)
         LOADED_SAVE->difficultyLevel = DIFFICULTY_NORMAL;
     }
 
-    SetFaceButtonConfig(LOADED_SAVE->btnConfig);
+    SetPlayerControls(LOADED_SAVE->btnConfig);
     GameStageStart();
 }
 

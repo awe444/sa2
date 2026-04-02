@@ -2,7 +2,7 @@
 #define GUARD_SA1_IA_PARTY_BALLOON_H
 
 #include "core.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 typedef enum EPartyBallonColors {
     PBCOLOR_BLUE,

@@ -2,8 +2,8 @@
 #include "core.h"
 #include "flags.h"
 #include "animation_commands_bg.h"
-#include "game/sa1_sa2_shared/globals.h"
-#include "game/stage/camera.h"
+#include "game/globals.h"
+#include "game/shared/stage/camera.h"
 #include "game/stage/backgrounds/zone_5.h"
 
 extern void HBlankCallback_803F92C(int_vcount line);

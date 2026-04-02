@@ -1,16 +1,16 @@
 #include "core.h"
 
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
-#include "game/stage/item_tasks.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/item_tasks.h"
 
 #include "game/multiplayer/mp_attack_1_effect.h"
 #include "game/multiplayer/unk_0.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/multiplayer/finish.h"
 #include "game/multiplayer/mp_player.h"
-#include "game/sa1_sa2_shared/globals.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/globals.h"
+#include "game/types/player.h"
 
 #include "lib/m4a/m4a.h"
 
@@ -206,7 +206,7 @@ void ReceiveRoomEvent_ItemEffect(union MultiSioData *recv, u8 i)
 
             case 3: {
 #if (GAME == GAME_SA1)
-                sa2__gUnknown_030053E0 = 30;
+                gSpikesUnknownTimer = 30;
 #else
                 if (IS_MP_OR_TEAM_PLAY
                     || ((gMultiplayerConnections & (0x10 << (i))) >> ((i + 4))

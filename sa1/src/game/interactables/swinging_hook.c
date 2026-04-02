@@ -1,11 +1,11 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h" // gPlayerControls
+#include "game/shared/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h" // gPlayerControls
 #include "game/water_effects.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
@@ -79,9 +79,9 @@ void CreateEntity_SwingingHook(MapEntity *me, u16 regionX, u16 regionY, u8 id)
         s1->hitboxes[0].index = HITBOX_STATE_INACTIVE;
 
         if (me->d.sData[0]) {
-            s1->frameFlags = SPRITE_FLAG(PRIORITY, SA2_LABEL(gUnknown_030054B8)++) | SPRITE_FLAG_ENABLE_ROTATION(30);
+            s1->frameFlags = SPRITE_FLAG(PRIORITY, gOamMatrixIndex++) | SPRITE_FLAG_ENABLE_ROTATION(30);
         } else {
-            s1->frameFlags = SPRITE_FLAG(PRIORITY, SA2_LABEL(gUnknown_030054B8)++) | SPRITE_FLAG_ENABLE_ROTATION(31);
+            s1->frameFlags = SPRITE_FLAG(PRIORITY, gOamMatrixIndex++) | SPRITE_FLAG_ENABLE_ROTATION(31);
         }
     }
 
@@ -378,9 +378,9 @@ NONMATCH("asm/non_matching/game/interactables/hook__Task_SwingingHook.inc", void
         tf->y = worldY - gCamera.y + (sp1C >> 10);
 
         if (me->d.sData[0]) {
-            s1->frameFlags = SPRITE_FLAG(PRIORITY, SA2_LABEL(gUnknown_030054B8)++) | SPRITE_FLAG_ENABLE_ROTATION(30);
+            s1->frameFlags = SPRITE_FLAG(PRIORITY, gOamMatrixIndex++) | SPRITE_FLAG_ENABLE_ROTATION(30);
         } else {
-            s1->frameFlags = SPRITE_FLAG(PRIORITY, SA2_LABEL(gUnknown_030054B8)++) | SPRITE_FLAG_ENABLE_ROTATION(31);
+            s1->frameFlags = SPRITE_FLAG(PRIORITY, gOamMatrixIndex++) | SPRITE_FLAG_ENABLE_ROTATION(31);
         }
 
 #ifndef BUG_FIX

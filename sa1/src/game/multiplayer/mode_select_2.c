@@ -9,14 +9,14 @@
 #include "game/multiplayer/communication_outcome.h"
 #include "game/multiplayer/mode_select.h"
 #include "game/multiplayer/multipak_connection.h"
-#include "game/sa1_sa2_shared/globals.h"
-#include "game/sa1_sa2_shared/camera.h"
-#include "game/sa1_sa2_shared/player.h"
-#include "game/save.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/rings_scatter.h"
+#include "game/globals.h"
+#include "game/types/camera.h"
+#include "game/types/player.h"
+#include "game/sa1/save.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/rings_scatter.h"
 #include "game/stage/stage.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"
@@ -98,7 +98,7 @@ void sa2__sub_80818B8(void)
     if (gMultiSioStatusFlags & 0x10) {
         modeSelect->unk202 = 1;
     }
-    gMultiSioSend.pat2.unk0 = gLoadedSaveGame.uiLanguage;
+    gMultiSioSend.pat2.unk0 = LOADED_SAVE->uiLanguage;
     gMultiSioStatusFlags = MultiSioMain(&gMultiSioSend, gMultiSioRecv, modeSelect->unk202);
     if (modeSelect->unk205 == 0) {
         MultiSioStart();

@@ -1,11 +1,11 @@
 #include "global.h"
 #include "core.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/multiplayer/chao.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/stage/rings_scatter.h"
+#include "game/shared/stage/rings_scatter.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 
 #include "constants/songs.h"
@@ -172,10 +172,10 @@ void ReceiveRoomEvent_8(union MultiSioData *msioData, u8 UNUSED mppId)
 #if (GAME == GAME_SA1)
 void ReceiveRoomEvent_CollectChao(union MultiSioData *msioData, u8 mppId)
 {
-    ChaoTask *chao = TASK_DATA(gChaoTasks[msioData->pat5.sioId]);
+    Chao *chao = TASK_DATA(gChaoTasks[msioData->pat5.sioId]);
     MultiplayerPlayer *mpp;
 
-    chao->unk41 = msioData->pat5.unk10;
+    chao->playerIdA = msioData->pat5.unk10;
     mpp = TASK_DATA(gMultiplayerPlayerTasks[mppId]);
     mpp->unk5C &= ~(0x10000 << msioData->pat5.sioId);
 

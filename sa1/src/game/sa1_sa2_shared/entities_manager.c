@@ -6,8 +6,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "game/sa1_sa2_shared/camera.h"
-#include "game/entity.h"
+#include "game/types/camera.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/itembox.h"
 
@@ -84,7 +84,7 @@
 #include "game/interactables_2/notification_ring_bonus.h"
 #include "game/interactables_2/sky_canyon_init.h"
 
-#include "game/mystery_itembox.h"
+#include "game/sa1/mystery_itembox.h"
 
 #include "game/enemies/kiki.h"
 #include "game/enemies/kura_kura.h"

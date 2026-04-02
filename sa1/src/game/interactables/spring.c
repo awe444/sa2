@@ -4,11 +4,11 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/multiplayer/mp_player.h"
-#include "game/stage/player.h"
+#include "game/shared/stage/player.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/player_controls.h"
+#include "game/sa1/stage/player_controls.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -601,7 +601,7 @@ NONMATCH("asm/non_matching/game/interactables/Spring__sub_8022640.inc",
     if (!(p->moveState & MOVESTATE_IA_OVERRIDE) || r6) {
         // _080226F2
 
-        if (!(sub_80096B0(s, worldX, worldY, p) & COLL_FLAG_8)) {
+        if (!(Coll_Player_Platform(s, worldX, worldY, p) & COLL_FLAG_8)) {
             hitWithHammer = Coll_AmyHammer_Spring(s, worldX, worldY, p);
 
             if (!hitWithHammer) {
@@ -674,7 +674,7 @@ bool32 sub_8022804(Sprite *s, MapEntity *me, SpringA *spring, Player *p)
 
     // _080226F2
 
-    collRes = sub_80096B0(s, worldX, worldY, p);
+    collRes = Coll_Player_Platform(s, worldX, worldY, p);
     if (collRes & COLL_FLAG_10000) {
         if (gGameMode == GAME_MODE_MULTI_PLAYER || gGameMode == GAME_MODE_TEAM_PLAY) {
             p->timerInvulnerability = 2;
@@ -942,10 +942,10 @@ bool32 sub_8022AB4(Sprite *s, MapEntity *me, SpringB *spring, Player *p)
 
             return TRUE;
         } else {
-            sub_80096B0(s, worldX, worldY, p);
+            Coll_Player_Platform(s, worldX, worldY, p);
         }
     } else {
-        sub_80096B0(s, worldX, worldY, p);
+        Coll_Player_Platform(s, worldX, worldY, p);
     }
 
     return FALSE;
@@ -1064,10 +1064,10 @@ bool32 sub_8022E14(Sprite *s, MapEntity *me, SpringB *spring, Player *p)
 
             return TRUE;
         } else {
-            sub_80096B0(s, worldX, worldY, p);
+            Coll_Player_Platform(s, worldX, worldY, p);
         }
     } else {
-        sub_80096B0(s, worldX, worldY, p);
+        Coll_Player_Platform(s, worldX, worldY, p);
     }
 
     return FALSE;

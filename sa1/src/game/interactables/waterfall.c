@@ -2,10 +2,10 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h" // for gPlayerControls
-#include "game/stage/ui.h" // sub_80549FC
+#include "game/types/entity.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h" // for gPlayerControls
+#include "game/sa1/gfx/stage_ui.h" // sub_80549FC
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

@@ -1,8 +1,8 @@
 #include "global.h"
 #include "core.h"
 #include "sprite.h"
-#include "game/stage/camera.h"
-#include "game/entity.h"
+#include "game/shared/stage/camera.h"
+#include "game/types/entity.h"
 
 #include "constants/interactables.h"
 

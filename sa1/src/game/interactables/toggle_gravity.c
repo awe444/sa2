@@ -1,6 +1,6 @@
 #include "global.h"
 #include "core.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

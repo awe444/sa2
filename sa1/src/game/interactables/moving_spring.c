@@ -1,12 +1,12 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/player.h"
-#include "game/stage/ui.h" // for sub_80549FC
+#include "game/shared/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/gfx/stage_ui.h" // for sub_80549FC
 #include "game/water_effects.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
@@ -238,7 +238,7 @@ bool32 sub_808B7A0(MovingSpring *spring, Sprite *s, s32 worldX, s32 worldY)
             sub_808BB44(s, worldX + I(spring->qUnk40), worldY + I(spring->qUnk44), (Rect8 *)arr, &PLAYER(i));
 
             {
-                s32 r5 = sub_80096B0(s, worldX + I(spring->qUnk40), worldY + I(spring->qUnk44), &PLAYER(i));
+                s32 r5 = Coll_Player_Platform(s, worldX + I(spring->qUnk40), worldY + I(spring->qUnk44), &PLAYER(i));
 
                 if (PLAYER(i).charState == CHARSTATE_17) {
                     PLAYER(i).qWorldX = qPrevPlayerX;

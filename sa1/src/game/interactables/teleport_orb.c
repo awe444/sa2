@@ -3,8 +3,8 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
-#include "game/stage/player.h"
+#include "game/types/entity.h"
+#include "game/shared/stage/player.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "constants/animations.h"

@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_SPRING_BOUNCY_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_BouncySpring(MapEntity *, u16, u16, u8);
 

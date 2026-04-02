@@ -2,9 +2,9 @@
 #include "gba/types.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
-#include "game/entity.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/types/entity.h"
 #include "sprite.h"
 #include "task.h"
 

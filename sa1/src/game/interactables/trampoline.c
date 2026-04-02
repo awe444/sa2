@@ -2,9 +2,9 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/player.h"
+#include "game/shared/stage/player.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -131,7 +131,7 @@ bool32 sub_8074FB0(Sprite *s, s16 worldX, s16 worldY)
     do {
         Player *p = &PLAYER(i);
         s32 qSpeedAirY = p->qSpeedAirY;
-        u32 res = sub_80096B0(s, worldX, worldY, p);
+        u32 res = Coll_Player_Platform(s, worldX, worldY, p);
 
         if (res & 0x8) {
             s32 a;

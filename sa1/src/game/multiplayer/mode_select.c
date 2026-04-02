@@ -6,8 +6,8 @@
 #include "game/multiplayer/communication_outcome.h"
 #include "game/multiplayer/mode_select.h"
 #include "game/multiplayer/multipak_connection.h"
-#include "game/save.h"
-#include "game/title_screen.h"
+#include "game/sa1/save.h"
+#include "game/sa1/title_screen.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"
@@ -80,7 +80,7 @@ void CreateMultiplayerModeSelectScreen(void)
     ModeSelect *modeSelect;
     Background *bg;
 
-    if (gLoadedSaveGame.unk4 == 0) {
+    if (LOADED_SAVE->unk4 == 0) {
         m4aSongNumStartOrChange(MUS_CHARACTER_SELECTION);
         gGameMode = 2;
         CreatePlayerNameInputMenu();
@@ -576,8 +576,7 @@ void Task_MultiPak()
     DmaCopy32(3, &LOADED_SAVE->playerName[0], send_recv->pat0.unk8, sizeof(LOADED_SAVE->playerName));
 }
 
-// (99.87%) https://decomp.me/scratch/TdivT
-NONMATCH("asm/non_matching/game/multiplayer/mode_select__Task_800F058.inc", void Task_800F058())
+void Task_800F058(void)
 {
     Sprite *s;
     s32 var_r3_2;
@@ -702,12 +701,11 @@ NONMATCH("asm/non_matching/game/multiplayer/mode_select__Task_800F058.inc", void
             send_recv_r6 = &gMultiSioSend;
             send_recv_r6->pat0.unk0 = 0x12;
             send_recv_r6->pat0.unk2 = var_r7;
-            send_recv_r6->pat0.unk4 = gLoadedSaveGame.unk4;
+            send_recv_r6->pat0.unk4 = LOADED_SAVE->unk4;
             DmaCopy32(3, &LOADED_SAVE->playerName[0], send_recv_r6->pat0.unk8, sizeof(LOADED_SAVE->playerName));
 
-            for (var_r5 = 0, var_r7 = gMultiplayerConnections; var_r5 < 4; var_r5++) {
-                // union MultiSioData *recv = gMultiSioRecv;
-                if (!GetBit(var_r7, var_r5) || var_r5 == 0) {
+            for (var_r5 = 0, gMultiplayerConnections; var_r5 < 4; var_r5++) {
+                if (!GetBit(gMultiplayerConnections, var_r5) || var_r5 == 0) {
                     continue;
                 }
 
@@ -723,12 +721,11 @@ NONMATCH("asm/non_matching/game/multiplayer/mode_select__Task_800F058.inc", void
             send_recv_r6 = &gMultiSioSend;
             gMultiSioSend.pat0.unk0 = 0x11;
             gMultiSioSend.pat0.unk2 = var_r7;
-            gMultiSioSend.pat0.unk4 = gLoadedSaveGame.unk4;
+            gMultiSioSend.pat0.unk4 = LOADED_SAVE->unk4;
             DmaCopy32(3, &LOADED_SAVE->playerName[0], send_recv_r6->pat0.unk8, sizeof(LOADED_SAVE->playerName));
         }
     }
 }
-END_NONMATCH
 
 void ModeSelect_InitSinglePak()
 {

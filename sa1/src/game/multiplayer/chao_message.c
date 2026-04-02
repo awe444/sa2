@@ -7,9 +7,9 @@
 #include "data/ui_graphics.h"
 #include "game/gTask_03006240.h"
 #include "game/multiplayer/multipak_connection.h"
-#include "game/sa1_sa2_shared/globals.h"
-#include "game/save.h"
-#include "game/title_screen.h"
+#include "game/globals.h"
+#include "game/sa1/save.h"
+#include "game/sa1/title_screen.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"
@@ -544,7 +544,7 @@ void Task_ChaoMessageInit(void)
 
         s = &msgSprite->s;
         s->graphics.dest = VramMalloc(26);
-        if (gLoadedSaveGame.uiLanguage == UILANG_JAPANESE) {
+        if (LOADED_SAVE->uiLanguage == UILANG_JAPANESE) {
             s->graphics.anim = SA1_ANIM_MP_PLAYER_MSG_JP;
         } else {
             s->graphics.anim = SA1_ANIM_MP_PLAYER_MSG_EN;

@@ -3,8 +3,8 @@
 
 #include "core.h"
 #include "rect.h"
-#include "game/sa1_sa2_shared/camera.h" // for CamCoord
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/camera.h" // for CamCoord
+#include "game/types/player.h"
 
 #define COLL_NONE        0
 #define COLL_FLAG_1      0x00000001
@@ -57,7 +57,7 @@ u32 SA2_LABEL(sub_800DA4C)(Sprite *opponent, s16 oppX, s16 oppY, UNUSED s32 para
 bool32 Coll_DamagePlayer(Player *);
 void Collision_AdjustPlayerSpeed(Player *);
 
-u32 sub_80096B0(Sprite *s, CamCoord x, CamCoord y, Player *p);
+u32 Coll_Player_Platform(Sprite *s, CamCoord x, CamCoord y, Player *p);
 bool32 Coll_AmyHammer_Spring(Sprite *s, CamCoord worldX, CamCoord worldY, Player *p);
 u32 Coll_Player_Spring_Sideways(Sprite *s, CamCoord worldX, CamCoord worldY, Player *p);
 u32 Coll_Player_Itembox(Sprite *s, CamCoord worldX, CamCoord worldY, Player *p);

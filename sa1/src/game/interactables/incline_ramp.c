@@ -1,8 +1,8 @@
 #include "global.h"
 #include "core.h"
-#include "game/entity.h"
-#include "game/sa1_sa2_shared/player.h"
-#include "game/stage/player.h"
+#include "game/types/entity.h"
+#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "lib/m4a/m4a.h"
 
 #include "constants/char_states.h"

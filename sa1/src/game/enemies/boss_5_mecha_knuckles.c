@@ -3,23 +3,23 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/sa1_sa2_shared/player.h"
-#include "game/entity.h"
+#include "game/types/player.h"
+#include "game/types/entity.h"
 #include "game/enemies/bosses_shared.h"
 #include "game/nuts_and_bolts_task.h"
-#include "game/save.h"
-#include "game/stage/dust_effect_braking.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/rings_scatter.h"
-#include "game/stage/screen_shake.h"
-#include "game/stage/terrain_collision.h"
+#include "game/sa1/save.h"
+#include "game/shared/stage/dust_effect_braking.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/rings_scatter.h"
+#include "game/shared/stage/screen_shake.h"
+#include "game/shared/stage/terrain_collision.h"
 #include "game/water_effects.h"
 
 #include "constants/animations.h"
 #include "constants/anim_sizes.h"
 #include "constants/char_states.h"
 #include "constants/songs.h"
-#include "game/stage/underwater_effects.h"
+#include "game/shared/stage/underwater_effects.h"
 
 // TODO: Automate inserting 'MECHA_KNUX_PARTS_VARIANTS' from animation itself!
 #define MECHA_KNUX_PARTS_VARIANTS 6
@@ -1236,7 +1236,7 @@ NONMATCH("asm/non_matching/game/enemies/boss_5__Task_MechaKnucklesRocketInit.inc
     }
     tf->rotation = ((var_r1 + 0x80) * 4) & 0x3FF;
     s->frameFlags = 0x2000;
-    s->frameFlags |= (sa2__gUnknown_030054B8++ | 0x20);
+    s->frameFlags |= (gOamMatrixIndex++ | 0x20);
     UpdateSpriteAnimation(s);
     TransformSprite(s, tf);
     DisplaySprite(s);
@@ -1351,7 +1351,7 @@ void Task_MechaKnucklesPartsInit()
     tf->rotation = ((u16)parts->unk12 >> 6);
     s->frameFlags &= ~0x1F;
 
-    s->frameFlags |= (sa2__gUnknown_030054B8++ | 0x20);
+    s->frameFlags |= (gOamMatrixIndex++ | 0x20);
     UpdateSpriteAnimation(s);
     TransformSprite(s, tf);
     DisplaySprite(s);

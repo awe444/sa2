@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_PLATFORM_THIN_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_PlatformThin(MapEntity *, u16, u16, u8);
 

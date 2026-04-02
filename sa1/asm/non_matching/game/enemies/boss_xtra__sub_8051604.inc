@@ -179,7 +179,7 @@ _0805173E:
 	rsbs r1, r1, #0
 	ands r0, r1
 	str r0, [r5, #0x10]
-	ldr r2, _080517D8 @ =sa2__gUnknown_030054B8
+	ldr r2, _080517D8 @ =gOamMatrixIndex
 	ldrb r1, [r2]
 	adds r0, r1, #1
 	strb r0, [r2]
@@ -224,7 +224,7 @@ _080517C8: .4byte 0x03000070
 _080517CC: .4byte gCamera
 _080517D0: .4byte gPlayer
 _080517D4: .4byte 0xFFFFC000
-_080517D8: .4byte sa2__gUnknown_030054B8
+_080517D8: .4byte gOamMatrixIndex
 _080517DC: .4byte _080517E0
 _080517E0: @ jump table
 	.4byte _08051814 @ case 0

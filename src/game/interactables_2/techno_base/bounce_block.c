@@ -1,8 +1,8 @@
 #include "global.h"
 #include "game/interactables_2/music_plant/note_block.h"
 #include "trig.h"
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
 #include "lib/m4a/m4a.h"
 
 #include "constants/animations.h"

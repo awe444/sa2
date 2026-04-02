@@ -9,10 +9,10 @@
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 
-#include "game/entity.h"
-#include "game/stage/item_tasks.h"
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
+#include "game/types/entity.h"
+#include "game/shared/stage/item_tasks.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
 
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/multiplayer/mp_player.h"

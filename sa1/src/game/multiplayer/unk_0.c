@@ -2,7 +2,7 @@
 #include "core.h"
 #include "flags.h"
 #include "game/multiplayer/unk_0.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
 void Task_801C770(void);
 void Task_801C810(void);

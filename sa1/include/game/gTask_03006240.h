@@ -2,7 +2,7 @@
 #define GUARD_gTask_03006240
 
 #include "task.h"
-#include "game/game_over.h"
+#include "game/sa1/ui/game_over.h"
 
 // TODO: Seems like this task is Game Over-related?
 

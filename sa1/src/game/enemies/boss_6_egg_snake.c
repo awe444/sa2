@@ -3,13 +3,13 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/enemies/bosses_shared.h" // CreatePreBossCameraPan
 #include "game/nuts_and_bolts_task.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/results.h"
-#include "game/save.h"
+#include "game/shared/stage/terrain_collision.h"
+#include "game/sa1/ui/stage_results.h"
+#include "game/sa1/save.h"
 
 #include "constants/animations.h"
 #include "constants/anim_sizes.h"

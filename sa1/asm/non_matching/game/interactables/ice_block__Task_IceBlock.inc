@@ -125,7 +125,7 @@ _080918D6:
 	mov r3, sb
 	asrs r2, r3, #0x10
 	adds r3, r6, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 	adds r1, r0, #0
 	adds r0, r6, #0
 	adds r0, #0x59
@@ -259,7 +259,7 @@ _080919FC:
 	mov r3, sb
 	asrs r2, r3, #0x10
 	adds r3, r6, #0
-	bl sub_80096B0
+	bl Coll_Player_Platform
 	ldr r0, [sp, #8]
 	adds r0, #1
 	str r0, [sp, #8]

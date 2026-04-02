@@ -8,8 +8,8 @@
 #include "game/multiplayer/mp_player.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/parameters/characters.h"
-#include "game/stage/player.h"
-#include "game/stage/results.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/ui/stage_results.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

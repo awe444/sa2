@@ -1,13 +1,13 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 #include "game/sa1_sa2_shared/entities_manager.h" // TaskDestructor_EntityShared
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/player.h"
+#include "game/shared/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
 #include "game/water_effects.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
@@ -105,7 +105,7 @@ NONMATCH("asm/non_matching/game/interactables/ice_block__Task_IceBlock.inc", voi
             if (!(p->moveState & MOVESTATE_DEAD)) {
                 bool32 r8 = 0;
                 if (p->charState == CHARSTATE_SPINATTACK) {
-                    u32 res = sub_80096B0(s, worldX, worldY, p);
+                    u32 res = Coll_Player_Platform(s, worldX, worldY, p);
 
                     if (p->character != CHARACTER_AMY) {
                         r8 = (-(res & COLL_FLAG_8)) >> 31;
@@ -160,7 +160,7 @@ NONMATCH("asm/non_matching/game/interactables/ice_block__Task_IceBlock.inc", voi
                 }
             }
 
-            sub_80096B0(s, worldX, worldY, p);
+            Coll_Player_Platform(s, worldX, worldY, p);
         } while (++i < gNumSingleplayerCharacters);
         // _08091A22
 
@@ -301,7 +301,7 @@ void Task_IceBlockShards(void)
         tf->qScaleY = scale;
         tf->rotation -= Q(42. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -323,7 +323,7 @@ void Task_IceBlockShards(void)
         tf->qScaleY = scale;
         tf->rotation += Q(42. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -345,7 +345,7 @@ void Task_IceBlockShards(void)
         tf->qScaleY = scale;
         tf->rotation += Q(14. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -367,7 +367,7 @@ void Task_IceBlockShards(void)
         tf->qScaleY = scale;
         tf->rotation -= Q(14. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;

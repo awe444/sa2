@@ -15,15 +15,15 @@
 
 typedef bool32 (*VBlankProcessFunc)(void);
 
-IntrFunc gIntrTable[] = {};
-u32 gIntrMainBuf[] = {};
-struct Task gTasks[] = {};
+IntrFunc gIntrTable[16] = {};
+u32 gIntrMainBuf[0x80] = {};
+struct Task gTasks[MAX_TASK_NUM] = {};
 u16 SA2_LABEL(gUnknown_030017F0) ALIGNED(4) = 0;
 Vec2_16 gSpriteOffset ALIGNED(4) = {};
-Background *gBackgroundsCopyQueue[] ALIGNED(16) = {};
+Background *gBackgroundsCopyQueue[16] ALIGNED(16) = {};
 u32 gFlags = 0;
-u8 gOamMallocOrders_StartIndex[] ALIGNED(16) = {};
-IntrFunc gVBlankCallbacks[] = {};
+u8 gOamMallocOrders_StartIndex[32] ALIGNED(16) = {};
+IntrFunc gVBlankCallbacks[4] = {};
 u16 gPhysicalInput = 0;
 
 void *gBgOffsetsHBlankPrimary = NULL;
@@ -55,9 +55,9 @@ u8 gUnknown_03002C60 ALIGNED(4) = 0;
 u32 gMultiSioStatusFlags = 0;
 bool8 gMultiSioEnabled = FALSE;
 
-struct Task *gTaskPtrs[] ALIGNED(16) = {};
+struct Task *gTaskPtrs[MAX_TASK_NUM] ALIGNED(16) = {};
 int_vcount gBgOffsetsBuffer[2][DISPLAY_HEIGHT][4] = {}; /* TODO: Find out how this is different from gBgOffsetsHBlankPrimary */
-ColorRaw gObjPalette[] = {};
+ColorRaw gObjPalette[16 * PALETTE_LEN_4BPP] = {};
 Tilemap **gTilemapsRef = NULL;
 u32 gFrameCount = 0;
 winreg_t gWinRegs[6] ALIGNED(16) = {};
@@ -68,9 +68,9 @@ u16 gInput = 0;
 s32 gUnknown_030035A4 = 0;
 struct Task *gNextTaskToCheckForDestruction = NULL;
 #endif // (ENGINE >= ENGINE_3)
-u8 gRepeatedKeysTestCounter[] ALIGNED(16) = {};
+u8 gRepeatedKeysTestCounter[10] ALIGNED(16) = {};
 void *gBgOffsetsHBlankSecondary = NULL;
-u16 gBgCntRegs[] = {};
+u16 gBgCntRegs[4] = {};
 u16 gRepeatedKeys ALIGNED(4) = 0;
 struct Task *gNextTask = NULL;
 #if ((ENGINE == ENGINE_1) || (ENGINE == ENGINE_2))
@@ -95,17 +95,17 @@ u8 sLastCalledVblankFuncId = 0;
 u8 gKeysFirstRepeatIntervals[10] ALIGNED(16) = {};
 
 u16 gReleasedKeys ALIGNED(4) = 0;
-u8 gOamMallocCopiedOrder[] ALIGNED(16) = {};
+u8 gOamMallocCopiedOrder[128] ALIGNED(16) = {};
 u32 gFlagsPreVBlank = 0;
 /* 0x03002794 */ const struct SpriteTables *gRefSpriteTables = NULL;
 
 #if PORTABLE
 // TODO: Once SA3 works in PORTABLE, it can just use
 // the regular gVramGraphicsCopyQueue[].
-struct GraphicsData gVramGraphicsCopyQueueBuffer[] = {};
+struct GraphicsData gVramGraphicsCopyQueueBuffer[32] = {};
 #endif // PORTABLE
 #if ((ENGINE == ENGINE_1) || (ENGINE == ENGINE_2))
-struct GraphicsData *gVramGraphicsCopyQueue[] ALIGNED(16) = {};
+struct GraphicsData *gVramGraphicsCopyQueue[32] ALIGNED(16) = {};
 #else
 // NOT here in SA3
 // struct GraphicsData gVramGraphicsCopyQueue[32] = {};
@@ -115,7 +115,7 @@ struct GraphicsData *gVramGraphicsCopyQueue[] ALIGNED(16) = {};
 VoidFn gUnknown_03003C08 = NULL;
 #endif
 s16 SA2_LABEL(gUnknown_03002820) = 0;
-s16 gBgScrollRegs[][2] ALIGNED(16) = {};
+s16 gBgScrollRegs[NUM_BACKGROUNDS][2] ALIGNED(16) = {};
 u16 gDispCnt = 0;
 u8 gKeysContinuedRepeatIntervals[10] ALIGNED(16) = {};
 union MultiSioData gMultiSioSend ALIGNED(8) = {};
@@ -129,7 +129,7 @@ u16 gRgbMap[3][2 * 16] __attribute__((aligned(4))) = {};
 #endif // (ENGINE == ENGINE_3)
 
 u8 gBackgroundsCopyQueueIndex = 0;
-ColorRaw gBgPalette[] ALIGNED(16) = {};
+ColorRaw gBgPalette[16 * PALETTE_LEN_4BPP] ALIGNED(16) = {};
 
 u8 gHBlankCopySize ALIGNED(4) = 0;
 
@@ -146,7 +146,7 @@ HBlankIntrFunc gHBlankIntrs[4] ALIGNED(16) = {};
 
 u8 gIwramHeap[TASK_HEAP_SIZE] = {};
 
-Sprite *gBgSprites[] ALIGNED(16) = {};
+Sprite *gBgSprites[16] ALIGNED(16) = {};
 u8 gNumVBlankCallbacks ALIGNED(4) = 0;
 #if (ENGINE == ENGINE_2)
 void *gBgOffsetsPrimary = NULL;
@@ -156,14 +156,14 @@ u8 gVramGraphicsCopyCursor ALIGNED(4) = 0;
 #if (ENGINE == ENGINE_3)
 u8 gUnknown_0300620C ALIGNED(4) = 0;
 #endif
-u8 gOamMallocOrders_EndIndex[] ALIGNED(16) = {};
-u8 gBgSprites_Unknown1[] = {};
-OamData gOamBuffer[] ALIGNED(16) = {};
-u16 gVramHeapState[] = {};
+u8 gOamMallocOrders_EndIndex[0x20] ALIGNED(16) = {};
+u8 gBgSprites_Unknown1[16] = {};
+OamData gOamBuffer[OAM_ENTRY_COUNT] ALIGNED(16) = {};
+u16 gVramHeapState[OBJ_VRAM_TOTAL_SIZE / VRAM_HEAP_SEGMENT_SIZE] = {};
 u8 gBgSpritesCount ALIGNED(4) = 0;
 u16 SA2_LABEL(gUnknown_03005394) ALIGNED(4) = 0;
 u16 SA2_LABEL(gUnknown_03005398) ALIGNED(4) = 0;
-IntrFunc gVBlankIntrs[] ALIGNED(16) = {};
+IntrFunc gVBlankIntrs[4] ALIGNED(16) = {};
 const u8 *gInputPlaybackData = NULL;
 bool8 gExecSoundMain ALIGNED(4) = FALSE;
 s32 gPseudoRandom = 0;
@@ -478,6 +478,7 @@ void EngineInit(void)
     EwramInitHeap();
 #endif
 
+
     // VRAM_TILE_SEGMENTS / 256 max useable segments
     gVramHeapMaxTileSlots = VRAM_TILE_SEGMENTS * VRAM_TILE_SLOTS_PER_SEGMENT;
     gVramHeapStartAddr = OBJ_VRAM1 - (VRAM_HEAP_TILE_COUNT * TILE_SIZE_4BPP);
@@ -532,6 +533,7 @@ void EngineInit(void)
     gMultiSioEnabled = FALSE;
 
     MultiSioInit(0);
+
 
 #if (ENGINE == ENGINE_3)
     gUnknown_0300620C = 0;

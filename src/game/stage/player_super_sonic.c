@@ -1,16 +1,16 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
 #include "game/stage/spawn_positions.h"
-#include "game/stage/camera.h"
-#include "game/stage/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/player.h"
 
-#include "game/bosses/boss_9.h"
-#include "game/game_over.h"
+#include "game/sa2/bosses/boss_9.h"
+#include "game/sa2/ui/game_over.h"
 #include "game/stage/player_super_sonic.h"
-#include "game/save.h"
+#include "game/sa2/save.h"
 #include "game/stage/stage.h"
 
 #include "lib/m4a/m4a.h"
@@ -201,7 +201,7 @@ static s32 sub_802B8A8(struct SuperSonic *sonic)
     s32 zero = 0;
 
     if (!(sonic->flags & SUPER_FLAG__10) && !(gStageFlags & STAGE_FLAG__100)) {
-        if (gCourseTime >= MAX_COURSE_TIME && !gLoadedSaveGame->timeLimitDisabled) {
+        if (gCourseTime >= MAX_COURSE_TIME && !LOADED_SAVE->timeLimitDisabled) {
             gPlayer.moveState = MOVESTATE_DEAD;
 
             sonic->func24 = sub_802C8EC;

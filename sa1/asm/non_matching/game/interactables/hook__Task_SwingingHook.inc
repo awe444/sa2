@@ -1335,7 +1335,7 @@ _080882A4:
 	ldrsb r0, [r4, r0]
 	cmp r0, #0
 	beq _0808830C
-	ldr r2, _08088308 @ =sa2__gUnknown_030054B8
+	ldr r2, _08088308 @ =gOamMatrixIndex
 	ldrb r0, [r2]
 	adds r1, r0, #1
 	strb r1, [r2]
@@ -1350,9 +1350,9 @@ _080882A4:
 _080882FC: .4byte gNumSingleplayerCharacters
 _08088300: .4byte 0x000003FF
 _08088304: .4byte gCamera
-_08088308: .4byte sa2__gUnknown_030054B8
+_08088308: .4byte gOamMatrixIndex
 _0808830C:
-	ldr r2, _08088360 @ =sa2__gUnknown_030054B8
+	ldr r2, _08088360 @ =gOamMatrixIndex
 	ldrb r0, [r2]
 	adds r1, r0, #1
 	strb r1, [r2]
@@ -1393,7 +1393,7 @@ _08088350:
 	pop {r0}
 	bx r0
 	.align 2, 0
-_08088360: .4byte sa2__gUnknown_030054B8
+_08088360: .4byte gOamMatrixIndex
 _08088364: .4byte 0xFFFFFBFF
 
 .syntax divided

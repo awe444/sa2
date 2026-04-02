@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "sprite.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 #define DASH_RING__NUM_ORIENTATIONS 8
 

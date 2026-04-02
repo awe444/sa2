@@ -3,7 +3,7 @@
 #include "flags.h"
 #include "task.h"
 #include "animation_commands_bg.h"
-#include "game/title_screen.h"
+#include "game/sa1/title_screen.h"
 
 #include "data/tileset_debug_ascii.h"
 

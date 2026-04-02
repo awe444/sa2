@@ -2,9 +2,9 @@
 #include "sprite.h"
 #include "trig.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
-#include "game/stage/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/multiplayer/mp_player.h"
 
 #include "constants/animations.h"

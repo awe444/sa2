@@ -3,12 +3,12 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/player.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/ui.h" // for sub_80549FC
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/terrain_collision.h"
+#include "game/sa1/gfx/stage_ui.h" // for sub_80549FC
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -619,7 +619,7 @@ void Task_SkatingStoneDebris(void)
         tf->rotation = (tf->rotation - Q(42. / 256.)) & (SIN_PERIOD - 1);
 
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
         SA2_LABEL(sub_8004E14)(s, tf);
 
@@ -645,7 +645,7 @@ void Task_SkatingStoneDebris(void)
         tf->rotation = (tf->rotation + Q(42. / 256.)) & (SIN_PERIOD - 1);
 
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
         SA2_LABEL(sub_8004E14)(s, tf);
 
@@ -671,7 +671,7 @@ void Task_SkatingStoneDebris(void)
         tf->rotation = (tf->rotation + Q(14. / 256.)) & (SIN_PERIOD - 1);
 
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
         SA2_LABEL(sub_8004E14)(s, tf);
 
@@ -697,7 +697,7 @@ void Task_SkatingStoneDebris(void)
         tf->rotation = (tf->rotation - Q(14. / 256.)) & (SIN_PERIOD - 1);
 
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+        SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
         SA2_LABEL(sub_8004E14)(s, tf);
 

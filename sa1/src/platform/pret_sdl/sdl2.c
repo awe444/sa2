@@ -50,6 +50,9 @@ extern uint8_t VRAM[VRAM_SIZE];
 extern uint8_t OAM[OAM_SIZE];
 extern uint8_t FLASH_BASE[FLASH_ROM_SIZE_1M * SECTORS_PER_BANK];
 ALIGNED(256) uint16_t gameImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+#ifdef __ANDROID__
+static uint32_t gameImage32[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+#endif
 #if ENABLE_VRAM_VIEW
 #define VRAM_VIEW_WIDTH  (32 * TILE_WIDTH)
 #define VRAM_VIEW_HEIGHT (((VRAM_SIZE / TILE_SIZE_4BPP) / 32) * TILE_WIDTH)
@@ -92,6 +95,8 @@ bool paused = false;
 bool stepOneFrame = false;
 bool headless = false;
 
+static SDL_GameController *sdlGameController = NULL;
+
 double lastGameTime = 0;
 double curGameTime = 0;
 double fixedTimestep = 1.0 / 60.0; // 16.666667ms
@@ -111,7 +116,7 @@ static void ReadSaveFile(char *path);
 static void StoreSaveFile(void);
 static void CloseSaveFile(void);
 
-static void UpdateInternalClock(void);
+static uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count);
 
 u16 Platform_GetKeyInput(void);
 
@@ -144,7 +149,20 @@ int main(int argc, char **argv)
     freopen("CON", "w", stdout);
 #endif
 
+#ifdef __ANDROID__
+    {
+        const char *internalPath = SDL_AndroidGetInternalStoragePath();
+        if (internalPath) {
+            char savePath[512];
+            snprintf(savePath, sizeof(savePath), "%s/sa1.sav", internalPath);
+            ReadSaveFile(savePath);
+        } else {
+            ReadSaveFile("sa1.sav");
+        }
+    }
+#else
     ReadSaveFile("sa1.sav");
+#endif
 
     // Prevent the multiplayer screen from being drawn ( see core.c:EngineInit() )
     REG_RCNT = 0x8000;
@@ -157,9 +175,19 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0) {
-        fprintf(stderr, "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0) {
+        SDL_Log("SDL could not initialize! SDL_Error: %s", SDL_GetError());
         return 1;
+    }
+
+    // Open the first available game controller
+    for (int i = 0; i < SDL_NumJoysticks(); i++) {
+        if (SDL_IsGameController(i)) {
+            sdlGameController = SDL_GameControllerOpen(i);
+            if (sdlGameController) {
+                break;
+            }
+        }
     }
 
 #ifdef TITLE_BAR
@@ -171,7 +199,7 @@ int main(int argc, char **argv)
     sdlWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DISPLAY_WIDTH * videoScale,
                                  DISPLAY_HEIGHT * videoScale, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (sdlWindow == NULL) {
-        fprintf(stderr, "Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 
@@ -186,21 +214,21 @@ int main(int argc, char **argv)
     vramWindow = SDL_CreateWindow("VRAM View", vramWindowX, SDL_WINDOWPOS_CENTERED, vramWindowWidth, vramWindowHeight,
                                   SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (vramWindow == NULL) {
-        fprintf(stderr, "VRAM Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("VRAM Window could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 #endif
 
     sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
     if (sdlRenderer == NULL) {
-        fprintf(stderr, "Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("Renderer could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 
 #if ENABLE_VRAM_VIEW
     vramRenderer = SDL_CreateRenderer(vramWindow, -1, SDL_RENDERER_PRESENTVSYNC);
     if (vramRenderer == NULL) {
-        fprintf(stderr, "VRAM Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("VRAM Renderer could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 #endif
@@ -215,16 +243,21 @@ int main(int argc, char **argv)
     SDL_RenderSetLogicalSize(vramRenderer, vramWindowWidth, vramWindowHeight);
 #endif
 
+#ifdef __ANDROID__
+    sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+#else
     sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ABGR1555, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+#endif
     if (sdlTexture == NULL) {
-        fprintf(stderr, "Texture could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("Texture could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
+    SDL_SetTextureBlendMode(sdlTexture, SDL_BLENDMODE_NONE);
 
 #if ENABLE_VRAM_VIEW
     vramTexture = SDL_CreateTexture(vramRenderer, SDL_PIXELFORMAT_ABGR1555, SDL_TEXTUREACCESS_STREAMING, vramWindowWidth, vramWindowHeight);
     if (vramTexture == NULL) {
-        fprintf(stderr, "Texture could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_Log("Texture could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
     }
 #endif
@@ -252,6 +285,8 @@ int main(int argc, char **argv)
 #if ENABLE_VRAM_VIEW
     VramDraw(vramTexture);
 #endif
+    // Initialize timing so first VBlankIntrWait doesn't get a huge delta
+    lastGameTime = (double)SDL_GetPerformanceCounter();
     AgbMain();
 
     return 0;
@@ -269,7 +304,7 @@ void VBlankIntrWait(void)
     ({                                                                                                                                     \
         REG_DISPSTAT |= INTR_FLAG_VBLANK;                                                                                                  \
         RunDMAs(DMA_VBLANK);                                                                                                               \
-        if (REG_DISPSTAT & DISPSTAT_VBLANK_INTR)                                                                                           \
+        if ((REG_DISPSTAT & DISPSTAT_VBLANK_INTR) && gIntrTable[INTR_INDEX_VBLANK])                                                        \
             gIntrTable[INTR_INDEX_VBLANK]();                                                                                               \
         REG_DISPSTAT &= ~INTR_FLAG_VBLANK;                                                                                                 \
     })
@@ -350,6 +385,11 @@ void VBlankIntrWait(void)
 
     CloseSaveFile();
 
+    if (sdlGameController) {
+        SDL_GameControllerClose(sdlGameController);
+        sdlGameController = NULL;
+    }
+
     SDL_DestroyWindow(sdlWindow);
     SDL_Quit();
     exit(0);
@@ -362,6 +402,13 @@ static void ReadSaveFile(char *path)
     sSaveFile = fopen(path, "r+b");
     if (sSaveFile == NULL) {
         sSaveFile = fopen(path, "w+b");
+    }
+
+    if (sSaveFile == NULL) {
+        for (int i = 0; i < sizeof(FLASH_BASE); i++) {
+            FLASH_BASE[i] = 0xFF;
+        }
+        return;
     }
 
     fseek(sSaveFile, 0, SEEK_END);
@@ -523,6 +570,18 @@ void ProcessSDLEvents(void)
                             break;
                     }
                 break;
+            case SDL_CONTROLLERDEVICEADDED:
+                if (!sdlGameController) {
+                    sdlGameController = SDL_GameControllerOpen(event.cdevice.which);
+                }
+                break;
+            case SDL_CONTROLLERDEVICEREMOVED:
+                if (sdlGameController
+                    && event.cdevice.which == SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(sdlGameController))) {
+                    SDL_GameControllerClose(sdlGameController);
+                    sdlGameController = NULL;
+                }
+                break;
             case SDL_WINDOWEVENT:
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
                     unsigned int w = event.window.data1;
@@ -543,10 +602,67 @@ void ProcessSDLEvents(void)
     }
 }
 
+#define STICK_THRESHOLD_SDL 8000
+
+static SharedKeys GetSDLGameControllerKeys(void)
+{
+    if (!sdlGameController) {
+        return 0;
+    }
+
+    SharedKeys gcKeys = 0;
+
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_A))
+        gcKeys |= A_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_X))
+        gcKeys |= B_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_START))
+        gcKeys |= START_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_BACK))
+        gcKeys |= SELECT_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_LEFTSHOULDER))
+        gcKeys |= L_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER))
+        gcKeys |= R_BUTTON;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_DPAD_UP))
+        gcKeys |= DPAD_UP;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+        gcKeys |= DPAD_DOWN;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+        gcKeys |= DPAD_LEFT;
+    if (SDL_GameControllerGetButton(sdlGameController, SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+        gcKeys |= DPAD_RIGHT;
+
+    // Left analog stick
+    Sint16 xAxis = SDL_GameControllerGetAxis(sdlGameController, SDL_CONTROLLER_AXIS_LEFTX);
+    Sint16 yAxis = SDL_GameControllerGetAxis(sdlGameController, SDL_CONTROLLER_AXIS_LEFTY);
+
+    if (xAxis < -STICK_THRESHOLD_SDL)
+        gcKeys |= DPAD_LEFT;
+    else if (xAxis > STICK_THRESHOLD_SDL)
+        gcKeys |= DPAD_RIGHT;
+    if (yAxis < -STICK_THRESHOLD_SDL)
+        gcKeys |= DPAD_UP;
+    else if (yAxis > STICK_THRESHOLD_SDL)
+        gcKeys |= DPAD_DOWN;
+
+    // Right trigger for speed-up
+    Sint16 rightTrigger = SDL_GameControllerGetAxis(sdlGameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+    if (rightTrigger > 20000)
+        gcKeys |= KEY_SPEEDUP;
+
+    return gcKeys;
+}
+
 u16 Platform_GetKeyInput(void)
 {
+    SharedKeys gamepadKeys = GetSDLGameControllerKeys();
+
 #ifdef _WIN32
-    SharedKeys gamepadKeys = GetXInputKeys();
+    if (gamepadKeys == 0) {
+        gamepadKeys = GetXInputKeys();
+    }
+#endif
 
     speedUp = (gamepadKeys & KEY_SPEEDUP) ? true : false;
 
@@ -558,10 +674,7 @@ u16 Platform_GetKeyInput(void)
         SDL_PauseAudio(0);
     }
 
-    return (gamepadKeys != 0) ? gamepadKeys : keys;
-#endif
-
-    return keys;
+    return (gamepadKeys != 0) ? (u16)(gamepadKeys & 0xFFFF) : keys;
 }
 
 // BIOS function implementations are based on the VBA-M source code.
@@ -981,8 +1094,17 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
     unsigned int mapPixelWidth = mapWidth * TILE_WIDTH;
     unsigned int mapPixelHeight = mapHeight * TILE_WIDTH;
 
-    uint8_t *bgtiles = (uint8_t *)BG_CHAR_ADDR(charBaseBlock);
-    uint16_t *bgmap = (uint16_t *)BG_SCREEN_ADDR(screenBaseBlock);
+    // Use offsets relative to VRAM base for bounds safety.
+    // On real GBA, VRAM accesses wrap; on SDL port, out-of-bounds access crashes.
+    unsigned int charBaseOffset = charBaseBlock * 0x4000;
+    unsigned int screenBaseOffset = screenBaseBlock * 0x800;
+
+    // Bounds-check: if base offsets exceed VRAM, skip rendering this BG
+    if (charBaseOffset >= VRAM_SIZE || screenBaseOffset >= VRAM_SIZE)
+        return;
+
+    uint8_t *bgtiles = &VRAM[charBaseOffset];
+    uint16_t *bgmap = (uint16_t *)&VRAM[screenBaseOffset];
     uint16_t *pal = (uint16_t *)PLTT;
 
     // Apply vertical mosaic effect to the entire scanline if enabled
@@ -1018,6 +1140,11 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
         // as the original code used a hardcoded map width of 32 tiles.
         unsigned int mapIndex = mapY * mapWidth + mapX;
 
+        // Bounds-check map access: ensure we don't read outside VRAM
+        unsigned int mapByteOffset = screenBaseOffset + mapIndex * 2;
+        if (mapByteOffset + 1 >= VRAM_SIZE)
+            continue;
+
         uint16_t entry = bgmap[mapIndex];
         unsigned int tileNum = entry & 0x3FF;
         unsigned int paletteNum = (entry >> 12) & 0xF;
@@ -1040,6 +1167,9 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
         if (bitsPerPixel == 4) {
             uint32_t tileDataOffset = tileNum * TILE_SIZE_4BPP;
             uint32_t pixelByteOffset = (tileY * TILE_WIDTH + tileX) / 2;
+            // Bounds-check tile data access
+            if (charBaseOffset + tileDataOffset + pixelByteOffset >= VRAM_SIZE)
+                continue;
             uint8_t pixelPair = bgtiles[tileDataOffset + pixelByteOffset];
 
             uint8_t pixel;
@@ -1055,6 +1185,9 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
         } else { // 8 bits per pixel
             uint32_t tileDataOffset = tileNum * TILE_SIZE_8BPP;
             uint32_t pixelByteOffset = tileY * TILE_WIDTH + tileX;
+            // Bounds-check tile data access
+            if (charBaseOffset + tileDataOffset + pixelByteOffset >= VRAM_SIZE)
+                continue;
             uint8_t pixel = bgtiles[tileDataOffset + pixelByteOffset];
 
             if (pixel != 0) {
@@ -1138,8 +1271,14 @@ static void RenderRotScaleBGScanline(int bgNum, uint16_t control, uint16_t x, ui
     unsigned int screenBaseBlock = bgcnt->screenBaseBlock;
     unsigned int mapWidth = 1 << (4 + (bgcnt->screenSize)); // number of tiles
 
-    uint8_t *bgtiles = (uint8_t *)(VRAM + charBaseBlock * 0x4000);
-    uint8_t *bgmap = (uint8_t *)(VRAM + screenBaseBlock * 0x800);
+    // Use offsets relative to VRAM base for bounds safety
+    unsigned int charBaseOffset = charBaseBlock * 0x4000;
+    unsigned int screenBaseOffset = screenBaseBlock * 0x800;
+    if (charBaseOffset >= VRAM_SIZE || screenBaseOffset >= VRAM_SIZE)
+        return;
+
+    uint8_t *bgtiles = &VRAM[charBaseOffset];
+    uint8_t *bgmap = &VRAM[screenBaseOffset];
     uint16_t *pal = (uint16_t *)PLTT;
 
     if (control & BGCNT_MOSAIC)
@@ -1203,12 +1342,20 @@ static void RenderRotScaleBGScanline(int bgNum, uint16_t control, uint16_t x, ui
             int xxx = (realX >> 8) & maskX;
             int yyy = (realY >> 8) & maskY;
 
-            int tile = bgmap[(xxx >> 3) + ((yyy >> 3) << yshift)];
+            unsigned int mapOffset = (xxx >> 3) + ((yyy >> 3) << yshift);
+            if (screenBaseOffset + mapOffset >= VRAM_SIZE) {
+                realX += pa; realY += pc; continue;
+            }
+            int tile = bgmap[mapOffset];
 
             int tileX = xxx & 7;
             int tileY = yyy & 7;
 
-            uint8_t pixel = bgtiles[(tile << 6) + (tileY << 3) + tileX];
+            unsigned int tileOffset = (tile << 6) + (tileY << 3) + tileX;
+            if (charBaseOffset + tileOffset >= VRAM_SIZE) {
+                realX += pa; realY += pc; continue;
+            }
+            uint8_t pixel = bgtiles[tileOffset];
 
             if (pixel != 0) {
                 line[x] = pal[pixel] | 0x8000;
@@ -1225,12 +1372,20 @@ static void RenderRotScaleBGScanline(int bgNum, uint16_t control, uint16_t x, ui
             if (xxx < 0 || yyy < 0 || xxx >= sizeX || yyy >= sizeY) {
                 // line[x] = 0x80000000;
             } else {
-                int tile = bgmap[(xxx >> 3) + ((yyy >> 3) << yshift)];
+                unsigned int mapOffset = (xxx >> 3) + ((yyy >> 3) << yshift);
+                if (screenBaseOffset + mapOffset >= VRAM_SIZE) {
+                    realX += pa; realY += pc; continue;
+                }
+                int tile = bgmap[mapOffset];
 
                 int tileX = xxx & 7;
                 int tileY = yyy & 7;
 
-                uint8_t pixel = bgtiles[(tile << 6) + (tileY << 3) + tileX];
+                unsigned int tileOffset = (tile << 6) + (tileY << 3) + tileX;
+                if (charBaseOffset + tileOffset >= VRAM_SIZE) {
+                    realX += pa; realY += pc; continue;
+                }
+                uint8_t pixel = bgtiles[tileOffset];
 
                 if (pixel != 0) {
                     line[x] = pal[pixel] | 0x8000;
@@ -1571,6 +1726,18 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
 
 static void DrawScanline(uint16_t *pixels, uint16_t vcount)
 {
+    // On real GBA, forced blank displays white
+    if (REG_DISPCNT & DISPCNT_FORCED_BLANK) {
+        memsetu16(pixels, 0x7FFF, DISPLAY_WIDTH);
+        return;
+    }
+
+    // If no BGs and no OBJ are enabled, the scanline is just the backdrop color
+    // (already pre-filled by DrawFrame). Skip the expensive rendering path.
+    if (!(REG_DISPCNT & (DISPCNT_BG_ALL_ON | DISPCNT_OBJ_ON))) {
+        return;
+    }
+
     unsigned int mode = REG_DISPCNT & 3;
     unsigned char numOfBgs = (mode == 0 ? 4 : 3);
     int bgnum, prnum;
@@ -1693,13 +1860,14 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         }
     }
 
-    if (REG_DISPCNT & DISPCNT_OBJ_ON)
+    if (REG_DISPCNT & DISPCNT_OBJ_ON) {
         DrawOamSprites(&scanline, vcount, windowsEnabled);
+    }
 
     // iterate trough every priority in order
     for (prnum = 3; prnum >= 0; prnum--) {
-        for (char prsub = scanline.prioritySortedBgsCount[prnum] - 1; prsub >= 0; prsub--) {
-            char bgnum = scanline.prioritySortedBgs[prnum][prsub];
+        for (int prsub = scanline.prioritySortedBgsCount[prnum] - 1; prsub >= 0; prsub--) {
+            int bgnum = scanline.prioritySortedBgs[prnum][prsub];
             // if background is enabled then draw it
             if (isbgEnabled(bgnum)) {
                 uint16_t *src = scanline.layers[bgnum];
@@ -1758,7 +1926,7 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
     }
 }
 
-uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
+static uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
 {
     for (int i = 0; i < count; i++) {
         *dst++ = fill;
@@ -1772,27 +1940,29 @@ static void DrawFrame(uint16_t *pixels)
     int i;
     int j;
     static uint16_t scanlines[DISPLAY_HEIGHT][DISPLAY_WIDTH];
-    unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
 
     for (i = 0; i < DISPLAY_HEIGHT; i++) {
         REG_VCOUNT = i;
         if (((REG_DISPSTAT >> 8) & 0xFF) == REG_VCOUNT) {
             REG_DISPSTAT |= INTR_FLAG_VCOUNT;
-            if (REG_DISPSTAT & DISPSTAT_VCOUNT_INTR)
+            if ((REG_DISPSTAT & DISPSTAT_VCOUNT_INTR) && gIntrTable[INTR_INDEX_VCOUNT]) {
                 gIntrTable[INTR_INDEX_VCOUNT]();
+            }
         }
 
         // Render the backdrop color before the each individual scanline.
         // HBlank interrupt code could have changed it inbetween lines.
         memsetu16(scanlines[i], *(uint16_t *)PLTT, DISPLAY_WIDTH);
+
         DrawScanline(scanlines[i], i);
 
         REG_DISPSTAT |= INTR_FLAG_HBLANK;
 
         RunDMAs(DMA_HBLANK);
 
-        if (REG_DISPSTAT & DISPSTAT_HBLANK_INTR)
+        if ((REG_DISPSTAT & DISPSTAT_HBLANK_INTR) && gIntrTable[INTR_INDEX_HBLANK]) {
             gIntrTable[INTR_INDEX_HBLANK]();
+        }
 
         REG_DISPSTAT &= ~INTR_FLAG_HBLANK;
         REG_DISPSTAT &= ~INTR_FLAG_VCOUNT;
@@ -1847,7 +2017,26 @@ void VDraw(SDL_Texture *texture)
 {
     memset(gameImage, 0, sizeof(gameImage));
     DrawFrame(gameImage);
+#ifdef __ANDROID__
+    // Convert ABGR1555 (GBA native) to ARGB8888 for Android GPU compatibility.
+    // Many mobile OpenGL ES drivers don't natively support 16-bit ABGR1555 textures.
+    // Replicate upper bits into lower bits for accurate 5-bit to 8-bit expansion.
+    {
+        for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
+            uint16_t px = gameImage[i];
+            uint8_t r5 = (px & 0x001F);
+            uint8_t g5 = ((px >> 5) & 0x001F);
+            uint8_t b5 = ((px >> 10) & 0x001F);
+            uint8_t r = (r5 << 3) | (r5 >> 2);
+            uint8_t g = (g5 << 3) | (g5 >> 2);
+            uint8_t b = (b5 << 3) | (b5 >> 2);
+            gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+        }
+    }
+    SDL_UpdateTexture(texture, NULL, gameImage32, DISPLAY_WIDTH * sizeof(uint32_t));
+#else
     SDL_UpdateTexture(texture, NULL, gameImage, DISPLAY_WIDTH * sizeof(Uint16));
+#endif
     REG_VCOUNT = DISPLAY_HEIGHT + 1; // prep for being in VBlank period
 }
 

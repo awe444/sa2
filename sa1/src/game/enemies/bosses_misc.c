@@ -3,14 +3,14 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/enemies/bosses_shared.h"
 #include "game/nuts_and_bolts_task.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/player.h"
-#include "game/stage/screen_shake.h"
-#include "game/stage/results.h" // CreateStageResults
-#include "game/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/screen_shake.h"
+#include "game/sa1/ui/stage_results.h" // CreateStageResults
+#include "game/shared/stage/terrain_collision.h"
 
 #include "constants/animations.h"
 #include "constants/anim_sizes.h"
@@ -311,14 +311,14 @@ void Task_BossCapsuleUpdate(void)
 
             if (p->charState != CHARSTATE_15) {
                 CamCoord prevPlayerY = I(gPlayer.qWorldY);
-                sub_80096B0(s, capsule->worldX, capsule->worldY, p);
+                Coll_Player_Platform(s, capsule->worldX, capsule->worldY, p);
 
                 if (PLAYER_IS_ALIVE && ((prevPlayerY < I(gPlayer.qWorldY)) || (capsule->worldY < I(gPlayer.qWorldY)))) {
                     p->qWorldX = Q((capsule->worldX + s->hitboxes[0].b.left) - p->spriteOffsetX);
                     p->qWorldY = Q(capsule->worldY - p->spriteOffsetY);
                 }
 
-                if ((8 & sub_80096B0(s2, capsule->worldX, capsule->worldY, p))
+                if ((8 & Coll_Player_Platform(s2, capsule->worldX, capsule->worldY, p))
                     || (Coll_AmyHammer_Spring(s2, capsule->worldX, capsule->worldY, p) != 0)) {
                     sp4 = 1;
                 }
@@ -374,8 +374,8 @@ void Task_8016650(void)
 
             if (p->charState != CHARSTATE_15) {
                 CamCoord prevPlayerY = I(gPlayer.qWorldY);
-                sub_80096B0(s, capsule->worldX, capsule->worldY, p);
-                sub_80096B0(s2, capsule->worldX, capsule->worldY + 4, p);
+                Coll_Player_Platform(s, capsule->worldX, capsule->worldY, p);
+                Coll_Player_Platform(s2, capsule->worldX, capsule->worldY + 4, p);
             }
         } while (++i < gNumSingleplayerCharacters);
     }
@@ -436,7 +436,7 @@ void Task_801685C(void)
             Player *p = &PLAYER(i);
 
             if (p->charState != CHARSTATE_15) {
-                sub_80096B0(s, capsule->worldX, capsule->worldY, p);
+                Coll_Player_Platform(s, capsule->worldX, capsule->worldY, p);
             }
         } while (++i < gNumSingleplayerCharacters);
     }
@@ -529,7 +529,7 @@ void Task_8016A14()
 
     if (0x20 & strc->s.frameFlags) {
         strc->s.frameFlags = strc->s.frameFlags & ~0x1F;
-        strc->s.frameFlags |= sa2__gUnknown_030054B8++;
+        strc->s.frameFlags |= gOamMatrixIndex++;
         TransformSprite(&strc->s, tf);
     } else {
         strc->s.x = tf->x;
@@ -761,7 +761,7 @@ void sub_8017054()
     tf->x = (strc->unk44 + I(strc->unk3C)) - gCamera.x;
     tf->y = (strc->unk46 + I(strc->unk40)) - gCamera.y;
     s->frameFlags &= ~0x1F;
-    s->frameFlags |= sa2__gUnknown_030054B8++;
+    s->frameFlags |= gOamMatrixIndex++;
     UpdateSpriteAnimation(s);
     TransformSprite(s, tf);
     DisplaySprite(s);

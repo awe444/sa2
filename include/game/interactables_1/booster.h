@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_BOOSTER_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_Booster(MapEntity *, u16, u16, u8);
 

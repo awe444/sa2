@@ -4,15 +4,15 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/terrain_collision.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -145,10 +145,10 @@ void Task_DecorationMain(void)
             TaskDestroy(gCurTask);
             return;
         } else {
-            sub_80096B0(s, worldX, worldY, &gPlayer);
+            Coll_Player_Platform(s, worldX, worldY, &gPlayer);
 
             if (gNumSingleplayerCharacters == NUM_SINGLEPLAYER_CHARS_MAX) {
-                sub_80096B0(s, worldX, worldY, &gPartner);
+                Coll_Player_Platform(s, worldX, worldY, &gPartner);
             }
 
             if (IS_OUT_OF_CAM_RANGE(s->x, s->y)) {
@@ -281,7 +281,7 @@ void Task_DecorationDebrisMain(void)
     tf->rotation -= 42;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
     SA2_LABEL(sub_8004E14)(s, tf);
     DisplaySprite(s);
@@ -304,7 +304,7 @@ void Task_DecorationDebrisMain(void)
     tf->rotation += 42;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
     SA2_LABEL(sub_8004E14)(s, tf);
     DisplaySprite(s);
@@ -327,7 +327,7 @@ void Task_DecorationDebrisMain(void)
     tf->rotation += 14;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
     SA2_LABEL(sub_8004E14)(s, tf);
     DisplaySprite(s);
@@ -350,7 +350,7 @@ void Task_DecorationDebrisMain(void)
     tf->rotation -= 14;
 
     SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, SA2_LABEL(gUnknown_030054B8)++);
+    SPRITE_FLAG_SET_VALUE(s, ROT_SCALE, gOamMatrixIndex++);
 
     SA2_LABEL(sub_8004E14)(s, tf);
     DisplaySprite(s);

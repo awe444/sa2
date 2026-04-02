@@ -6,7 +6,7 @@
 #include "global.h"
 #include "core.h" // for MultiSioData
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
 // RoomEvent types
 #if (GAME == GAME_SA1)

@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_PIPE_HORN_H
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/interactables_2/music_plant/pipe_sequence.h"
 
 void CreateEntity_PipeInstrument_Entry(MapEntity *me, u16 spriteRegionX, u16 spriteRegionY, u8 spriteY);

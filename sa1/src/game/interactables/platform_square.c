@@ -3,10 +3,10 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/terrain_collision.h"
+#include "game/types/entity.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/terrain_collision.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "constants/animations.h"
@@ -281,7 +281,7 @@ void Task_Platform_Square(void)
             if (res2 < 0) {
                 sub_807E914(s, worldX + I(platform->qUnk40), worldY + I(platform->qUnk44), (Rect8 *)&arr, &PLAYER(i));
             } else {
-                sp28 = sub_80096B0(s, worldX + I(platform->qUnk40), worldY + I(platform->qUnk44), &PLAYER(i));
+                sp28 = Coll_Player_Platform(s, worldX + I(platform->qUnk40), worldY + I(platform->qUnk44), &PLAYER(i));
             }
             if (sp28 & 0x170000) {
                 SetBit(platform->unk4F, i);
@@ -414,7 +414,7 @@ void Task_Platform_Square(void)
 
                     qPrevWorldX = PLAYER(i).qWorldX;
 
-                    sp28 = sub_80096B0(s, worldX + I(platform->qUnk40), worldY + I(platform->qUnk44), &PLAYER(i));
+                    sp28 = Coll_Player_Platform(s, worldX + I(platform->qUnk40), worldY + I(platform->qUnk44), &PLAYER(i));
 
                     if (sp28 & 0x8) {
                         SetBit(platform->unk4E, i);

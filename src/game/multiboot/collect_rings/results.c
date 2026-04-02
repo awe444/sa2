@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 
-#include "game/stage/player.h"
+#include "game/shared/stage/player.h"
 #include "game/stage/stage.h"
 #include "game/stage/tilemap_table.h"
 
@@ -12,9 +12,9 @@
 #include "sprite.h"
 #include "data/sprite_data.h"
 #include "bg_triangles.h"
-#include "game/save.h"
-#include "game/title_screen.h"
-#include "game/stage/screen_fade.h"
+#include "game/sa2/save.h"
+#include "game/sa2/title_screen.h"
+#include "game/sa2/gfx/screen_fade.h"
 #include "lib/m4a/m4a.h"
 #include "multi_boot.h"
 #include "sio32_multi_load.h"
@@ -102,7 +102,7 @@ void CreateMultiplayerSinglePakResultsScreen(u32 a)
     gRefSpriteTables = (const struct SpriteTables *)(EWRAM_START + 0x20000);
     gMultiplayerLanguage = 0;
 #else
-    gMultiplayerLanguage = gLoadedSaveGame->language;
+    gMultiplayerLanguage = LOADED_SAVE->language;
 #endif
 
     sub_8081FB0();

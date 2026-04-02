@@ -4,20 +4,20 @@
 
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/sa1_sa2_shared/music_manager.h"
-#include "game/sa1_sa2_shared/palette_loader.h"
+#include "game/shared/palette_loader.h"
 #include "game/sa1_sa2_shared/pause_menu.h"
 #include "game/sa1_sa2_shared/rings_manager.h"
-#include "game/save.h"
-#include "game/game_over.h"
-#include "game/cheese.h"
-#include "game/stage/player_controls.h"
+#include "game/sa2/save.h"
+#include "game/sa2/ui/game_over.h"
+#include "game/sa2/cheese.h"
+#include "game/sa2/stage/player_controls.h"
 #include "game/stage/player_super_sonic.h"
-#include "game/race_progress.h"
-#include "game/stage/screen_shake.h"
+#include "game/sa2/race_progress.h"
+#include "game/shared/stage/screen_shake.h"
 #include "game/stage/stage.h"
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
-#include "game/time_attack/lobby.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/sa2/time_attack/lobby.h"
 #if (GAME == GAME_SA1)
 #include "game/time_over.h"
 #endif
@@ -140,13 +140,13 @@ void ApplyGameStageSettings(void)
         || (gStageFlags & STAGE_FLAG__DEMO_RUNNING)) {
         gDifficultyLevel = DIFFICULTY_NORMAL;
     } else {
-        gDifficultyLevel = gLoadedSaveGame->difficultyLevel;
+        gDifficultyLevel = LOADED_SAVE->difficultyLevel;
     }
 
     if ((gStageFlags & STAGE_FLAG__DEMO_RUNNING)) {
         SetPlayerControls(A_BUTTON, B_BUTTON, R_BUTTON);
     } else {
-        SetPlayerControls(gLoadedSaveGame->buttonConfig.jump, gLoadedSaveGame->buttonConfig.attack, gLoadedSaveGame->buttonConfig.trick);
+        SetPlayerControls(LOADED_SAVE->buttonConfig.jump, LOADED_SAVE->buttonConfig.attack, LOADED_SAVE->buttonConfig.trick);
     }
 }
 
@@ -316,7 +316,7 @@ void Task_GameStage(void)
 #ifndef COLLECT_RINGS_ROM
     if (IS_SINGLE_PLAYER) {
 #if DEBUG
-#include "game/character_select.h"
+#include "game/sa2/ui/character_select.h"
         if (gInput & SELECT_BUTTON) {
             const u32 initialCharacter = CHARACTER_TAILS;
             const bool32 allUnlocked = TRUE;
@@ -391,12 +391,12 @@ void Task_GameStage(void)
             gCamera.spectatorTarget = sioId;
         }
 
-        if (SA2_LABEL(gSpikesUnknownTimer) > 0) {
-            SA2_LABEL(gSpikesUnknownTimer)--;
+        if (gSpikesUnknownTimer > 0) {
+            gSpikesUnknownTimer--;
         }
     }
 
-    SA2_LABEL(gPrevStageFlags) = gStageFlags;
+    gPrevStageFlags = gStageFlags;
 
     if (gStageFlags & STAGE_FLAG__ACT_START) {
         return;
@@ -572,7 +572,7 @@ void HandleLifeLost(void)
 static inline void StageInit_SetMusic_inline(u16 level)
 {
     if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
-        if (gSelectedCharacter == CHARACTER_SONIC && gLoadedSaveGame->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel
+        if (gSelectedCharacter == CHARACTER_SONIC && LOADED_SAVE->unlockedLevels[CHARACTER_SONIC] <= gCurrentLevel
             && gCurrentLevel == LEVEL_INDEX(ZONE_5, ACT_BOSS)) {
             gMusicManagerState.unk1 = 0x10 | 0xE;
         } else {

@@ -3,10 +3,10 @@
 #include "flags.h"
 #include "lib/m4a/m4a.h"
 #include "malloc_vram.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/stage/player.h"
-#include "game/special_stage/main.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/special_stage/main.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -83,7 +83,7 @@ void Task_SpecialSpringMain(void)
     }
 
     if (gNumSingleplayerCharacters == NUM_SINGLEPLAYER_CHARS_MAX) {
-        if (sub_80096B0(s, worldX, worldY, &gPartner) & COLL_FLAG_8) {
+        if (Coll_Player_Platform(s, worldX, worldY, &gPartner) & COLL_FLAG_8) {
             SA2_LABEL(sub_8021BE0)(&gPartner);
             gPartner.moveState &= ~MOVESTATE_STOOD_ON_OBJ;
             gPartner.moveState |= MOVESTATE_IN_AIR;
@@ -99,7 +99,8 @@ void Task_SpecialSpringMain(void)
 
     if (PLAYER_IS_ALIVE) {
         // NOTE: The 'res =' assignment inside the if is correct!!!
-        if ((sub_80096B0(s, worldX, worldY, &gPlayer) & COLL_FLAG_8) || (res = Coll_AmyHammer_Spring(s, worldX, worldY, &gPlayer))) {
+        if ((Coll_Player_Platform(s, worldX, worldY, &gPlayer) & COLL_FLAG_8)
+            || (res = Coll_AmyHammer_Spring(s, worldX, worldY, &gPlayer))) {
             SA2_LABEL(sub_8021BE0)(&gPlayer);
             gPlayer.moveState &= ~MOVESTATE_STOOD_ON_OBJ;
             gPlayer.moveState |= MOVESTATE_IN_AIR;
@@ -160,7 +161,7 @@ void Task_TransitionSpStage(void)
     }
 
     if (gNumSingleplayerCharacters == NUM_SINGLEPLAYER_CHARS_MAX) {
-        if (sub_80096B0(s, worldX, worldY, &gPartner) & COLL_FLAG_8) {
+        if (Coll_Player_Platform(s, worldX, worldY, &gPartner) & COLL_FLAG_8) {
             SA2_LABEL(sub_8021BE0)(&gPartner);
             gPartner.moveState &= ~MOVESTATE_STOOD_ON_OBJ;
             gPartner.moveState |= MOVESTATE_IN_AIR;

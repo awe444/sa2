@@ -2,9 +2,9 @@
 #include "sprite.h"
 #include "trig.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
-#include "game/stage/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/multiplayer/mp_player.h"
 
 #include "constants/animations.h"
@@ -167,7 +167,7 @@ static void TaskDestructor_OpponentPositionIndicator(struct Task *);
         (transf)->y = tfy;                                                                                                                 \
                                                                                                                                            \
         (s)->frameFlags &= ~SPRITE_FLAG_MASK_ROT_SCALE;                                                                                    \
-        (s)->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;                                                                                 \
+        (s)->frameFlags |= gOamMatrixIndex++;                                                                                              \
         UpdateSpriteAnimation((s));                                                                                                        \
         TransformSprite((s), (transf));                                                                                                    \
         DisplaySprite((s));                                                                                                                \

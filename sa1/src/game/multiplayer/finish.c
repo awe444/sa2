@@ -2,10 +2,10 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "task.h"
-#include "game/save.h"
+#include "game/sa1/save.h"
 
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
 
 #include "game/multiplayer/finish.h"
 #include "game/multiplayer/mp_player.h"

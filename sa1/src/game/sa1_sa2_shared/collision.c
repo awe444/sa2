@@ -3,21 +3,21 @@
 #include "sprite.h"
 #include "lib/m4a/m4a.h"
 #include "game/multiplayer/mp_player.h"
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
-#include "game/sa1_sa2_shared/player.h"
+#include "game/types/player.h"
 
 #if (GAME == GAME_SA2)
 #include "game/cheese.h"
 #endif
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
 #include "game/parameters/characters.h"
-#include "game/stage/player.h"
-#include "game/stage/rings_scatter.h"
-#include "game/stage/trapped_animals.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/rings_scatter.h"
+#include "game/sa1/gfx/trapped_animals.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -796,7 +796,7 @@ NONMATCH("asm/non_matching/game/sa1_sa2_shared/collision__Coll_Player_Itembox.in
         if (HB_COLLISION(worldX, worldY, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectPlayerB))) {
             if ((!GRAVITY_IS_INVERTED && (I(p->qWorldY) <= middleY)) || (GRAVITY_IS_INVERTED && (I(p->qWorldY) >= middleY))) {
                 if ((p->character == 1) && (p->SA2_LABEL(unk61) != 0)) {
-                    sub_80096B0(s, worldX, worldY, p);
+                    Coll_Player_Platform(s, worldX, worldY, p);
                     return 0;
                 } else if (p->qSpeedAirY >= 0) {
                     result |= 8;

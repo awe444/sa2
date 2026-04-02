@@ -3,9 +3,9 @@
 #include "trig.h"
 #include "sprite.h"
 
-#include "game/entity.h"
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
+#include "game/types/entity.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
 #include "game/interactables_2/music_plant/pipe_sequence.h"
 
 #include "data/handlers_ia_pipe_horn_sequences.h"

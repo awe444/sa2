@@ -3,14 +3,14 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/sa1_sa2_shared/collision.h"
-#include "game/sa1_sa2_shared/player.h"
-#include "game/entity.h"
+#include "game/types/player.h"
+#include "game/types/entity.h"
 #include "game/enemies/bosses_shared.h"
 #include "game/nuts_and_bolts_task.h"
-#include "game/save.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/screen_shake.h"
-#include "game/stage/terrain_collision.h"
+#include "game/sa1/save.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/screen_shake.h"
+#include "game/shared/stage/terrain_collision.h"
 
 #include "constants/animations.h"
 #include "constants/anim_sizes.h"
@@ -933,9 +933,9 @@ void Task_PipeExtend()
     s->x = worldX - gCamera.x;
     s->y = worldY - gCamera.y;
     if (!(6 & pipe->unk44)) {
-        sub_80096B0(s, worldX, worldY, &gPlayer);
+        Coll_Player_Platform(s, worldX, worldY, &gPlayer);
         if (gNumSingleplayerCharacters == NUM_SINGLEPLAYER_CHARS_MAX) {
-            sub_80096B0(s, worldX, worldY, &gPartner);
+            Coll_Player_Platform(s, worldX, worldY, &gPartner);
         }
     }
     UpdateSpriteAnimation(s);

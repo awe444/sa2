@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "malloc_vram.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 
 #include "constants/animations.h"
@@ -98,10 +98,10 @@ void Task_ConveyorBeltObject(void)
     s->x = worldX - gCamera.x;
     s->y = worldY - gCamera.y;
 
-    sub_80096B0(s, worldX, worldY, &gPlayer);
+    Coll_Player_Platform(s, worldX, worldY, &gPlayer);
 
     if (gNumSingleplayerCharacters == 2) {
-        sub_80096B0(s, worldX, worldY, &gPartner);
+        Coll_Player_Platform(s, worldX, worldY, &gPartner);
     }
 
     if (IS_OUT_OF_CAM_RANGE(s->x, s->y)) {

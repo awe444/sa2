@@ -4,10 +4,10 @@ sa2/src/lib/m4a/m4a.o(.bss.code);
 
 . = 0x0000400;
 sa2/src/multi_boot.o(.bss);
-src/game/stage/terrain_collision.o(.bss);
+src/game/shared/stage/terrain_collision.o(.bss);
 
 . = 0x00000424;
-src/lib/agb_flash/agb_flash.o(.bss);
+sa2/src/lib/agb_flash/agb_flash.o(.bss);
 
 . = 0x00000440; 
 *libgcc.a:(.bss);
@@ -20,10 +20,10 @@ sa2/src/multi_sio.o(.data);
 sa2/src/sio32_multi_load.o(COMMON);
 
 . = 0x00004FE0;
-src/game/sa1_sa2_shared/globals.o(.data);
+sa2/src/game/globals.o(.data);
 
 . = 0x00005154; 
-src/game/special_stage/main.o(.data);
+src/game/sa1/special_stage/main.o(.data);
 
 . = 0x00005160; gLoadedSaveGame = .;
 
@@ -36,7 +36,7 @@ src/game/special_stage/main.o(.data);
 . = 0x000056F0; gUnknown_030056F0 = .;
 
 . = 0x00005730;
-src/game/special_stage/temporary_sound_play_task.o(.data);
+src/game/sa1/special_stage/temporary_sound_play_task.o(.data);
 
 . = 0x00005740; gUnknown_03005740 = .;
 . = 0x00005780; gUnknown_03005780 = .;
@@ -61,24 +61,23 @@ src/game/stage/stage.o(.data);
 . = 0x00005A18; gRingsScatterTask = .;
 
 . = 0x00005A20; 
-src/game/stage/player.o(.data);
+src/game/shared/stage/player.o(.data);
 src/game/stage/player_super_sonic.o(.data);
-src/game/stage/underwater_effects.o(.data);
+src/game/shared/stage/underwater_effects.o(.data);
 
 . = 0x00005C80;
 src/game/water_effects.o(.data);
 
 . = 0x000060D0;
 sa2/src/input_recorder.o(.data);
-src/game/stage/player_controls.o(.data);
-src/game/some_task_manager.o(.data);
+src/game/sa1/stage/player_controls.o(.data);
 src/game/enemies/boss_xtra_super_egg_robot.o(.data);
 
 . = 0x00006240; 
-src/game/stage/ui_rendering.o(.data);
+src/game/sa1/gfx/ui_rendering.o(.data);
 
-. = 0x00006408;
-src/lib/agb_flash/agb_flash.o(.data);
+. = 0x00006414;
+sa2/src/lib/agb_flash/agb_flash.o(.data);
 
 iwram_end = .;
 

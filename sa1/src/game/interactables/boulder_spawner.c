@@ -1,11 +1,11 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/stage/terrain_collision.h"
-#include "game/stage/player.h"
+#include "game/shared/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
 #include "game/water_effects.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
@@ -330,7 +330,7 @@ void Task_BoulderDebris(void)
         tf->qScaleY = scale;
         tf->rotation -= Q(42. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -352,7 +352,7 @@ void Task_BoulderDebris(void)
         tf->qScaleY = scale;
         tf->rotation += Q(42. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -374,7 +374,7 @@ void Task_BoulderDebris(void)
         tf->qScaleY = scale;
         tf->rotation += Q(14. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;
@@ -396,7 +396,7 @@ void Task_BoulderDebris(void)
         tf->qScaleY = scale;
         tf->rotation -= Q(14. / 256.);
         SPRITE_FLAG_CLEAR(s, ROT_SCALE);
-        s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++;
+        s->frameFlags |= gOamMatrixIndex++;
         SA2_LABEL(sub_8004E14)(s, tf);
         DisplaySprite(s);
         tf->x = prevTransformX;

@@ -1,9 +1,9 @@
 #include "global.h"
 #include "core.h"
-#include "game/entity.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/terrain_collision.h"
+#include "game/types/entity.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/terrain_collision.h"
 
 #include "constants/char_states.h"
 #include "constants/move_states.h"

@@ -3,10 +3,10 @@
 #include "task.h"
 #include "trig.h"
 
-#include "game/entity.h"
+#include "game/types/entity.h"
 
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
 
 #include "game/interactables_2/note_particle.h"
 #include "game/interactables_2/music_plant/german_flute.h"

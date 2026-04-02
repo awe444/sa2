@@ -4,15 +4,15 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 #include "game/sa1_sa2_shared/collision.h"
 #include "game/sa1_sa2_shared/dust_cloud.h"
 #include "game/sa1_sa2_shared/entities_manager.h"
 #include "game/multiplayer/mp_player.h"
 #include "game/multiplayer/multiplayer_event_mgr.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/terrain_collision.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/terrain_collision.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -220,7 +220,7 @@ void Task_PipeEntrance(void)
                         mask = 0x10000;
                     }
 
-                    if (sub_80096B0(s, worldX, worldY, p) & mask) {
+                    if (Coll_Player_Platform(s, worldX, worldY, p) & mask) {
                         collided = 1;
                     }
                 } else {
@@ -230,7 +230,7 @@ void Task_PipeEntrance(void)
                         mask = 0x100008;
                     }
 
-                    if (sub_80096B0(s, worldX, worldY, p) & mask) {
+                    if (Coll_Player_Platform(s, worldX, worldY, p) & mask) {
                         collided = 1;
                     }
                 }
@@ -242,7 +242,7 @@ void Task_PipeEntrance(void)
                         mask = 0x100008;
                     }
 
-                    if (sub_80096B0(s, worldX, worldY, p) & mask) {
+                    if (Coll_Player_Platform(s, worldX, worldY, p) & mask) {
                         collided = 1;
                     }
                 } else {
@@ -252,7 +252,7 @@ void Task_PipeEntrance(void)
                         mask = 0x10000;
                     }
 
-                    if (sub_80096B0(s, worldX, worldY, p) & mask) {
+                    if (Coll_Player_Platform(s, worldX, worldY, p) & mask) {
                         collided = 1;
                     }
                 }
@@ -285,7 +285,7 @@ void Task_PipeEntrance(void)
             qPlayerX = p->qWorldX;
             qPlayerY = p->qWorldY;
 
-            res = sub_80096B0(s, worldX, worldY, p);
+            res = Coll_Player_Platform(s, worldX, worldY, p);
 
             if (res & 0x60000) {
                 if ((res & 0x40000) && pipe->unk59 == 2) {
@@ -697,7 +697,7 @@ NONMATCH("asm/non_matching/game/interactables/pipe__Task_PipeExit.inc", void Tas
                 }
             }
         } else {
-            sub_80096B0(s, worldX, worldY, p);
+            Coll_Player_Platform(s, worldX, worldY, p);
         }
     } else {
         Player_TransitionCancelFlyingAndBoost(p);

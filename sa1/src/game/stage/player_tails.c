@@ -2,13 +2,13 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/sa1_sa2_shared/globals.h"
-#include "game/sa1_sa2_shared/camera.h"
-#include "game/sa1_sa2_shared/player.h"
-#include "game/stage/mp_sprite_task.h"
-#include "game/stage/player.h"
-#include "game/stage/player_controls.h"
-#include "game/stage/underwater_effects.h"
+#include "game/globals.h"
+#include "game/types/camera.h"
+#include "game/types/player.h"
+#include "game/shared/stage/mp_sprite_task.h"
+#include "game/shared/stage/player.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/shared/stage/underwater_effects.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -278,7 +278,7 @@ void Task_8047D04(void)
 
     s->frameFlags |= p->spriteInfoLimbs->s.frameFlags & 0x3000;
     s->frameFlags &= ~SPRITE_FLAG_MASK_ROT_SCALE;
-    s->frameFlags |= SA2_LABEL(gUnknown_030054B8)++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
+    s->frameFlags |= gOamMatrixIndex++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
 
     tf->rotation = (u8)p->w.tf.shift * 4;
     tf->qScaleX = Q(1.0);

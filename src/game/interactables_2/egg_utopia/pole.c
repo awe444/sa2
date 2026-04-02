@@ -2,10 +2,10 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/stage/player_controls.h"
-#include "game/entity.h"
-#include "game/stage/player.h"
-#include "game/stage/camera.h"
+#include "game/sa2/stage/player_controls.h"
+#include "game/types/entity.h"
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
 #include "game/interactables_2/egg_utopia/pole.h"
 
 #include "constants/char_states.h"

@@ -3,7 +3,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/sa1_sa2_shared/globals.h"
+#include "game/globals.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

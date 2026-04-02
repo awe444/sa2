@@ -1008,7 +1008,7 @@ _08013BD4:
 	rsbs r1, r1, #0
 	ands r0, r1
 	str r0, [r7, #0x10]
-	ldr r2, _08013C18 @ =sa2__gUnknown_030054B8
+	ldr r2, _08013C18 @ =gOamMatrixIndex
 	ldrb r1, [r2]
 	adds r0, r1, #1
 	strb r0, [r2]
@@ -1031,7 +1031,7 @@ _08013BD4:
 	strh r0, [r3, #2]
 	b _08013C24
 	.align 2, 0
-_08013C18: .4byte sa2__gUnknown_030054B8
+_08013C18: .4byte gOamMatrixIndex
 _08013C1C:
 	movs r0, #0x80
 	lsls r0, r0, #1

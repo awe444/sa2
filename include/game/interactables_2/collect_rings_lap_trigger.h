@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_COLLECT_RINGS_LAP_TRIGGER
 
 #include "global.h"
-#include "game/entity.h"
+#include "game/types/entity.h"
 
 void CreateEntity_CollectRingsLapTrigger(MapEntity *, u16, u16, u8);
 
