@@ -1397,14 +1397,18 @@ static void RenderRotScaleBGScanline(int bgNum, uint16_t control, uint16_t x, ui
             int yyy = (realY >> 8) & maskY;
 
             unsigned int mapOffset = (xxx >> 3) + ((yyy >> 3) << yshift);
-            if (screenBaseOffset + mapOffset >= VRAM_SIZE) { realX += pa; realY += pc; continue; }
+            if (screenBaseOffset + mapOffset >= VRAM_SIZE) {
+                realX += pa; realY += pc; continue;
+            }
             int tile = bgmap[mapOffset];
 
             int tileX = xxx & 7;
             int tileY = yyy & 7;
 
             unsigned int tileOffset = (tile << 6) + (tileY << 3) + tileX;
-            if (charBaseOffset + tileOffset >= VRAM_SIZE) { realX += pa; realY += pc; continue; }
+            if (charBaseOffset + tileOffset >= VRAM_SIZE) {
+                realX += pa; realY += pc; continue;
+            }
             uint8_t pixel = bgtiles[tileOffset];
 
             if (pixel != 0) {
@@ -1423,14 +1427,18 @@ static void RenderRotScaleBGScanline(int bgNum, uint16_t control, uint16_t x, ui
                 // line[x] = 0x80000000;
             } else {
                 unsigned int mapOffset = (xxx >> 3) + ((yyy >> 3) << yshift);
-                if (screenBaseOffset + mapOffset >= VRAM_SIZE) { realX += pa; realY += pc; continue; }
+                if (screenBaseOffset + mapOffset >= VRAM_SIZE) {
+                    realX += pa; realY += pc; continue;
+                }
                 int tile = bgmap[mapOffset];
 
                 int tileX = xxx & 7;
                 int tileY = yyy & 7;
 
                 unsigned int tileOffset = (tile << 6) + (tileY << 3) + tileX;
-                if (charBaseOffset + tileOffset >= VRAM_SIZE) { realX += pa; realY += pc; continue; }
+                if (charBaseOffset + tileOffset >= VRAM_SIZE) {
+                    realX += pa; realY += pc; continue;
+                }
                 uint8_t pixel = bgtiles[tileOffset];
 
                 if (pixel != 0) {
