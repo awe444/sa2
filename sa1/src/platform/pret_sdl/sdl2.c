@@ -12,32 +12,6 @@
 
 #include <SDL.h>
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#include <signal.h>
-#define SA1_DBG(...) __android_log_print(ANDROID_LOG_DEBUG, "SA1-DBG", __VA_ARGS__)
-static void sa1_sigaction_handler(int sig, siginfo_t *info, void *ucontext) {
-    __android_log_print(ANDROID_LOG_ERROR, "SA1-DBG",
-        "SIGNAL %d caught! si_addr=%p si_code=%d (SIGSEGV=11, SIGBUS=7, SIGABRT=6)",
-        sig, info ? info->si_addr : NULL, info ? info->si_code : -1);
-    // Log key global addresses for correlation
-    extern uint8_t EWRAM_START[], REG_BASE[], VRAM[], OAM[];
-    extern uint16_t PLTT[];
-    __android_log_print(ANDROID_LOG_ERROR, "SA1-DBG",
-        "Globals: EWRAM=%p REG_BASE=%p VRAM=%p OAM=%p PLTT=%p",
-        (void*)EWRAM_START, (void*)REG_BASE, (void*)VRAM, (void*)OAM, (void*)PLTT);
-    // Re-raise to get the default handler's tombstone
-    struct sigaction sa;
-    sa.sa_handler = SIG_DFL;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    sigaction(sig, &sa, NULL);
-    raise(sig);
-}
-#else
-#define SA1_DBG(...) ((void)0)
-#endif
-
 #include "global.h"
 #include "core.h"
 #include "multi_sio.h"
@@ -153,19 +127,6 @@ void Platform_free(void *ptr) { HeapFree(GetProcessHeap(), 0, ptr); }
 
 int main(int argc, char **argv)
 {
-#ifdef __ANDROID__
-    {
-        struct sigaction sa;
-        sa.sa_sigaction = sa1_sigaction_handler;
-        sigemptyset(&sa.sa_mask);
-        sa.sa_flags = SA_SIGINFO;
-        sigaction(SIGSEGV, &sa, NULL);
-        sigaction(SIGBUS, &sa, NULL);
-        sigaction(SIGABRT, &sa, NULL);
-        sigaction(SIGFPE, &sa, NULL);
-    }
-    SA1_DBG("main() entered, signal handlers installed");
-#endif
     const char *headlessEnv = getenv("HEADLESS");
 
     if (headlessEnv && strcmp(headlessEnv, "true") == 0) {
@@ -320,17 +281,13 @@ int main(int argc, char **argv)
     }
 #endif
 
-    SA1_DBG("STEP 1: calling initial VDraw");
     VDraw(sdlTexture);
-    SA1_DBG("STEP 2: initial VDraw complete");
 #if ENABLE_VRAM_VIEW
     VramDraw(vramTexture);
 #endif
     // Initialize timing so first VBlankIntrWait doesn't get a huge delta
     lastGameTime = (double)SDL_GetPerformanceCounter();
-    SA1_DBG("STEP 3: calling AgbMain");
     AgbMain();
-    SA1_DBG("STEP 4: AgbMain returned");
 
     return 0;
 }
@@ -342,7 +299,6 @@ bool newFrameRequested = FALSE;
 // the loop via a return
 void VBlankIntrWait(void)
 {
-    static int vbiCount = 0;
     // ((struct MultiSioPacket *)gMultiSioArea.nextSendBufp)
 #define HANDLE_VBLANK_INTRS()                                                                                                              \
     ({                                                                                                                                     \
@@ -352,10 +308,6 @@ void VBlankIntrWait(void)
             gIntrTable[INTR_INDEX_VBLANK]();                                                                                               \
         REG_DISPSTAT &= ~INTR_FLAG_VBLANK;                                                                                                 \
     })
-
-    if (vbiCount < 5 || vbiCount % 300 == 0)
-        SA1_DBG("VBlankIntrWait #%d: DISPCNT=0x%04X DISPSTAT=0x%04X", vbiCount, REG_DISPCNT, REG_DISPSTAT);
-    vbiCount++;
 
     if (headless) {
         REG_VCOUNT = DISPLAY_HEIGHT + 1;
@@ -426,12 +378,6 @@ void VBlankIntrWait(void)
         }
 
         SDL_RenderPresent(sdlRenderer);
-        {
-            static int presentCount = 0;
-            if (presentCount < 5 || presentCount % 300 == 0)
-                SA1_DBG("SDL_RenderPresent #%d", presentCount);
-            presentCount++;
-        }
 #if ENABLE_VRAM_VIEW
         SDL_RenderPresent(vramRenderer);
 #endif
@@ -1780,22 +1726,15 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
 
 static void DrawScanline(uint16_t *pixels, uint16_t vcount)
 {
-    static int dsCallCount = 0;
-
-    if (dsCallCount < 2)
-        SA1_DBG("DS[%d] v=%d: enter DISPCNT=0x%04X", dsCallCount, vcount, REG_DISPCNT);
-
     // On real GBA, forced blank displays white
     if (REG_DISPCNT & DISPCNT_FORCED_BLANK) {
         memsetu16(pixels, 0x7FFF, DISPLAY_WIDTH);
-        dsCallCount++;
         return;
     }
 
     // If no BGs and no OBJ are enabled, the scanline is just the backdrop color
     // (already pre-filled by DrawFrame). Skip the expensive rendering path.
     if (!(REG_DISPCNT & (DISPCNT_BG_ALL_ON | DISPCNT_OBJ_ON))) {
-        dsCallCount++;
         return;
     }
 
@@ -1985,8 +1924,6 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
             }
         }
     }
-
-    dsCallCount++;
 }
 
 static uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
@@ -2003,11 +1940,6 @@ static void DrawFrame(uint16_t *pixels)
     int i;
     int j;
     static uint16_t scanlines[DISPLAY_HEIGHT][DISPLAY_WIDTH];
-    static int drawFrameCount = 0;
-    unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
-
-    if (drawFrameCount < 5)
-        SA1_DBG("DrawFrame #%d: enter, BLDCNT=0x%04X DISPCNT=0x%04X", drawFrameCount, REG_BLDCNT, REG_DISPCNT);
 
     for (i = 0; i < DISPLAY_HEIGHT; i++) {
         REG_VCOUNT = i;
@@ -2036,9 +1968,6 @@ static void DrawFrame(uint16_t *pixels)
         REG_DISPSTAT &= ~INTR_FLAG_VCOUNT;
     }
 
-    if (drawFrameCount < 5)
-        SA1_DBG("DrawFrame #%d: scanline loop done, copying to screen", drawFrameCount);
-
     // Copy to screen
     for (i = 0; i < DISPLAY_HEIGHT; i++) {
         uint16_t *src = scanlines[i];
@@ -2046,10 +1975,6 @@ static void DrawFrame(uint16_t *pixels)
             pixels[i * DISPLAY_WIDTH + j] = src[j];
         }
     }
-
-    if (drawFrameCount < 5)
-        SA1_DBG("DrawFrame #%d: done", drawFrameCount);
-    drawFrameCount++;
 }
 
 #if ENABLE_VRAM_VIEW
@@ -2090,10 +2015,6 @@ void VramDraw(SDL_Texture *texture)
 
 void VDraw(SDL_Texture *texture)
 {
-    static int vdrawCount = 0;
-    if (vdrawCount < 5 || vdrawCount % 300 == 0)
-        SA1_DBG("VDraw #%d: DISPCNT=0x%04X PLTT[0]=0x%04X", vdrawCount, REG_DISPCNT, *(uint16_t *)PLTT);
-
     memset(gameImage, 0, sizeof(gameImage));
     DrawFrame(gameImage);
 #ifdef __ANDROID__
@@ -2101,10 +2022,8 @@ void VDraw(SDL_Texture *texture)
     // Many mobile OpenGL ES drivers don't natively support 16-bit ABGR1555 textures.
     // Replicate upper bits into lower bits for accurate 5-bit to 8-bit expansion.
     {
-        int nonzero = 0;
         for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
             uint16_t px = gameImage[i];
-            if (px) nonzero++;
             uint8_t r5 = (px & 0x001F);
             uint8_t g5 = ((px >> 5) & 0x001F);
             uint8_t b5 = ((px >> 10) & 0x001F);
@@ -2113,15 +2032,12 @@ void VDraw(SDL_Texture *texture)
             uint8_t b = (b5 << 3) | (b5 >> 2);
             gameImage32[i] = 0xFF000000u | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
         }
-        if (vdrawCount < 5 || vdrawCount % 300 == 0)
-            SA1_DBG("VDraw #%d: %d non-zero pixels", vdrawCount, nonzero);
     }
     SDL_UpdateTexture(texture, NULL, gameImage32, DISPLAY_WIDTH * sizeof(uint32_t));
 #else
     SDL_UpdateTexture(texture, NULL, gameImage, DISPLAY_WIDTH * sizeof(Uint16));
 #endif
     REG_VCOUNT = DISPLAY_HEIGHT + 1; // prep for being in VBlank period
-    vdrawCount++;
 }
 
 u8 BinToBcd(u8 bin)

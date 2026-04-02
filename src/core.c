@@ -10,13 +10,6 @@
 #include "lib/m4a/m4a.h"
 #include "lib/agb_flash/agb_flash.h"
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#define SA1_CORE_DBG(...) __android_log_print(ANDROID_LOG_DEBUG, "SA1-DBG", __VA_ARGS__)
-#else
-#define SA1_CORE_DBG(...) ((void)0)
-#endif
-
 // TODO: Better name
 #define VBLANK_FUNC_ID_NONE 0xFF
 
@@ -257,7 +250,6 @@ void EngineInit(void)
     s16 i;
     u16 errorIdentifying;
 
-    SA1_CORE_DBG("EngineInit: start");
 #if (ENGINE == ENGINE_3)
     REG_IME = 0;
 #endif
@@ -476,11 +468,9 @@ void EngineInit(void)
     DmaWait(3);
 #endif
 
-    SA1_CORE_DBG("EI-S: m4aSoundInit");
     m4aSoundInit();
     m4aSoundMode(DEFAULT_SOUND_MODE);
 
-    SA1_CORE_DBG("EI-T: TasksInit + EwramInitHeap");
     gExecSoundMain = TRUE;
 
     TasksInit();
@@ -488,7 +478,6 @@ void EngineInit(void)
     EwramInitHeap();
 #endif
 
-    SA1_CORE_DBG("EI-U: VRAM heap + flash");
 
     // VRAM_TILE_SEGMENTS / 256 max useable segments
     gVramHeapMaxTileSlots = VRAM_TILE_SEGMENTS * VRAM_TILE_SLOTS_PER_SEGMENT;
@@ -545,7 +534,6 @@ void EngineInit(void)
 
     MultiSioInit(0);
 
-    SA1_CORE_DBG("EngineInit: complete");
 
 #if (ENGINE == ENGINE_3)
     gUnknown_0300620C = 0;
@@ -559,7 +547,6 @@ END_NONMATCH
 
 void EngineMainLoop(void)
 {
-    SA1_CORE_DBG("EngineMainLoop: start");
 #if !PLATFORM_WIN32
     while (TRUE)
 #endif
