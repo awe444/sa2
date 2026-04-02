@@ -434,7 +434,6 @@ void EngineInit(void)
 #endif
     gFrameCount = 0;
 
-                  (void *)gIntrTableTemplate, (void *)gIntrTable);
 #ifdef BUG_FIX
     for (i = 0; i < ARRAY_COUNT(gIntrTableTemplate); i++)
 #else
