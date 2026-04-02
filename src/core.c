@@ -258,27 +258,19 @@ void EngineInit(void)
     u16 errorIdentifying;
 
     SA1_CORE_DBG("EngineInit: start");
-    SA1_CORE_DBG("EI-0: REG_BASE=%p EWRAM=%p VRAM=%p OAM=%p PLTT=%p gFlags=%p",
-                  (void *)REG_BASE, (void *)EWRAM_START, (void *)VRAM,
-                  (void *)OAM, (void *)PLTT, (void *)&gFlags);
-    SA1_CORE_DBG("EI-A: REG_WAITCNT write (addr=%p)", (void *)&REG_WAITCNT);
 #if (ENGINE == ENGINE_3)
     REG_IME = 0;
 #endif
     REG_WAITCNT = WAITCNT_PREFETCH_ENABLE | WAITCNT_WS0_S_1 | WAITCNT_WS0_N_3;
-    SA1_CORE_DBG("EI-B: gFlags");
     gFlags = 0;
     gFlagsPreVBlank = 0;
 #if (ENGINE >= ENGINE_3)
     gUnknown_030035A4 = ~0;
 #endif
-    SA1_CORE_DBG("EI-C: REG_RCNT check");
 
 #ifndef COLLECT_RINGS_ROM
     if ((REG_RCNT & 0xC000) != 0x8000) {
         gFlags = FLAGS_200;
-        SA1_CORE_DBG("EI-D: DmaCopy16 OBJ_VRAM0->EWRAM, src=%p dst=%p",
-                      (void *)OBJ_VRAM0, (void *)(EWRAM_START + 0x3B000));
 
 #if (ENGINE != ENGINE_3)
         DmaCopy16(3, (void *)OBJ_VRAM0, EWRAM_START + 0x3B000, 0x5000);
@@ -286,11 +278,9 @@ void EngineInit(void)
         DmaCopy16(3, (void *)BG_SCREEN_ADDR(24), gUnknown_02035000, sizeof(gUnknown_02035000));
         DmaWait(3);
 #endif
-        SA1_CORE_DBG("EI-E: DmaCopy16 done");
     }
 #endif
 
-    SA1_CORE_DBG("EI-F: input check");
     // Skip the intro if these
     // 4 buttons are pressed
     if (gInput == (START_BUTTON | SELECT_BUTTON | B_BUTTON | A_BUTTON)) {
@@ -303,7 +293,6 @@ void EngineInit(void)
 #endif
     }
 
-    SA1_CORE_DBG("EI-G: DmaFill32 VRAM, dest=%p size=0x%X", (void *)VRAM, (unsigned)VRAM_SIZE);
 #if COLLECT_RINGS_ROM
     DmaCopy16(3, (void *)OBJ_VRAM0, (void *)(EWRAM_START + 0x3b000), 0x5000);
 #else
@@ -312,18 +301,15 @@ void EngineInit(void)
     DmaWait(3);
 #endif
 #endif
-    SA1_CORE_DBG("EI-H: DmaFill32 OAM");
     DmaFill32(3, 0, (void *)OAM, OAM_SIZE);
 #if (ENGINE == ENGINE_3)
     DmaWait(3);
 #endif
-    SA1_CORE_DBG("EI-I: DmaFill32 PLTT");
     DmaFill32(3, 0, (void *)PLTT, PLTT_SIZE);
 #if (ENGINE == ENGINE_3)
     DmaWait(3);
 #endif
 
-    SA1_CORE_DBG("EI-J: vblank/queue init");
 #if (ENGINE != ENGINE_3)
     sLastCalledVblankFuncId = VBLANK_FUNC_ID_NONE;
     gBackgroundsCopyQueueCursor = 0;
@@ -339,7 +325,6 @@ void EngineInit(void)
     gVramGraphicsCopyCursor = 0;
     gVramGraphicsCopyQueueIndex = gVramGraphicsCopyCursor = 0;
 #endif
-    SA1_CORE_DBG("EI-K: DmaFill gBgSprites_Unknown2");
     DmaFill32(3, 0, gBgSprites_Unknown2, sizeof(gBgSprites_Unknown2));
 #if (ENGINE == ENGINE_3)
     DmaWait(3);
@@ -348,7 +333,6 @@ void EngineInit(void)
     // TODO: sort out this type
     *(u32 *)gBgSprites_Unknown1 = 0;
 
-    SA1_CORE_DBG("EI-L: DmaFill gBgScrollRegs");
     DmaFill32(3, 0, gBgScrollRegs, sizeof(gBgScrollRegs));
 #if (ENGINE == ENGINE_3)
     DmaWait(3);
@@ -359,7 +343,6 @@ void EngineInit(void)
 
     gDispCnt = DISPCNT_FORCED_BLANK;
 
-    SA1_CORE_DBG("EI-M: DmaFill gVramGraphicsCopyQueue");
     DmaFill32(3, 0, gVramGraphicsCopyQueue, sizeof(gVramGraphicsCopyQueue));
 #if (ENGINE == ENGINE_3)
     DmaWait(3);
@@ -368,7 +351,6 @@ void EngineInit(void)
     gOamFreeIndex = 0;
     gOamFirstPausedIndex = 0;
 
-    SA1_CORE_DBG("EI-N: DmaFill OAM buffers + palettes");
     DmaFill16(3, 0x200, gOamBuffer, sizeof(gOamBuffer));
 #if (ENGINE == ENGINE_3)
     DmaWait(3);
@@ -395,7 +377,6 @@ void EngineInit(void)
     sub_80C4B48();
 #endif
 
-    SA1_CORE_DBG("EI-O: BG affine regs");
     // BG2
     gBgAffineRegs[0].pa = 0x100;
     gBgAffineRegs[0].pb = 0;
@@ -441,7 +422,6 @@ void EngineInit(void)
 
     gPseudoRandom = 0;
 
-    SA1_CORE_DBG("EI-P: key repeat intervals");
     for (i = 0; i < 10; i++) {
         gKeysFirstRepeatIntervals[i] = 20;
         gKeysContinuedRepeatIntervals[i] = 8;
@@ -454,7 +434,6 @@ void EngineInit(void)
 #endif
     gFrameCount = 0;
 
-    SA1_CORE_DBG("EI-Q: gIntrTable setup, gIntrTableTemplate=%p gIntrTable=%p",
                   (void *)gIntrTableTemplate, (void *)gIntrTable);
 #ifdef BUG_FIX
     for (i = 0; i < ARRAY_COUNT(gIntrTableTemplate); i++)
@@ -465,7 +444,6 @@ void EngineInit(void)
         gIntrTable[i] = (IntrFunc)gIntrTableTemplate[i];
     }
 
-    SA1_CORE_DBG("EI-R: DmaFill gBgOffsetsBuffer, sizeof=%u", (unsigned)sizeof(gBgOffsetsBuffer));
     DmaFill32(3, 0, &gBgOffsetsBuffer, sizeof(gBgOffsetsBuffer));
 #if (ENGINE == ENGINE_3)
     DmaWait(3);

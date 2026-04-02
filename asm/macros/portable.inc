@@ -17,15 +17,15 @@
 #endif
 .endm
 
-// Used for cross platform aligning of labels
+// Used for cross platform aligning of labels.
+// Uses .balign (byte-count alignment) which is unambiguous across all
+// assemblers.  The earlier .align N form is interpreted as 2^N on ARM
+// targets, which produced 256-byte gaps instead of 8-byte gaps and
+// caused struct-layout mismatches with C code on AArch64.
 .macro mAlignWord
-#if defined(__APPLE__) && (defined(__aarch64__) || defined(__x86_64__))
-    .align 3       // Align to 8 bytes on macOS (2^3 = 8)
-#elif defined(__aarch64__) || defined(__x86_64__)
-    .align 8       // Align to 8 bytes on other platforms
-#elif defined(PLATFORM_GBA)
-    .align 2       // Align to 4 bytes on GBA
+#if defined(__aarch64__) || defined(__x86_64__)
+    .balign 8
 #else
-    .align 4       // Default alignment to 4 bytes
+    .balign 4
 #endif
 .endm

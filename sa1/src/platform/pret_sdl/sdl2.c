@@ -1753,8 +1753,6 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
     // If no BGs and no OBJ are enabled, the scanline is just the backdrop color
     // (already pre-filled by DrawFrame). Skip the expensive rendering path.
     if (!(REG_DISPCNT & (DISPCNT_BG_ALL_ON | DISPCNT_OBJ_ON))) {
-        if (dsCallCount < 2)
-            SA1_DBG("DS[%d]: no BGs/OBJ enabled (DISPCNT=0x%04X), early return", dsCallCount, REG_DISPCNT);
         dsCallCount++;
         return;
     }
@@ -1766,17 +1764,11 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
     unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
     unsigned int xpos;
 
-    if (dsCallCount < 2)
-        SA1_DBG("DS[%d]: mode=%u numBgs=%u sizeof(scanline)=%u, memset start", dsCallCount, mode, numOfBgs, (unsigned)sizeof(scanline));
-
     // initialize all priority bookkeeping data
     memset(scanline.layers, 0, sizeof(scanline.layers));
     memset(scanline.winMask, 0, sizeof(scanline.winMask));
     memset(scanline.spriteLayers, 0, sizeof(scanline.spriteLayers));
     memset(scanline.prioritySortedBgsCount, 0, sizeof(scanline.prioritySortedBgsCount));
-
-    if (dsCallCount < 2)
-        SA1_DBG("DS[%d]: memset done, BG bookkeeping", dsCallCount);
 
     for (bgnum = 0; bgnum < numOfBgs; bgnum++) {
         uint16_t bgcnt = *(uint16_t *)(REG_ADDR_BG0CNT + bgnum * 2);
@@ -1788,9 +1780,6 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         scanline.prioritySortedBgs[priority][priorityCount] = bgnum;
         scanline.prioritySortedBgsCount[priority]++;
     }
-
-    if (dsCallCount < 2)
-        SA1_DBG("DS[%d]: BG bookkeeping done, switch mode=%u", dsCallCount, mode);
 
     switch (mode) {
         case 0:
@@ -1825,9 +1814,6 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
             printf("Video mode %u is unsupported.\n", mode);
             break;
     }
-
-    if (dsCallCount < 2)
-        SA1_DBG("DS[%d]: switch done, windows check", dsCallCount);
 
     bool windowsEnabled = false;
     u16 WIN0bottom, WIN0top, WIN0right, WIN0left;
@@ -1893,14 +1879,8 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         }
     }
 
-    if (dsCallCount < 2)
-        SA1_DBG("DS[%d]: windows done (en=%d), OBJ check", dsCallCount, windowsEnabled);
-
     if (REG_DISPCNT & DISPCNT_OBJ_ON)
         DrawOamSprites(&scanline, vcount, windowsEnabled);
-
-    if (dsCallCount < 2)
-        SA1_DBG("DS[%d]: OBJ done, compositing prnum loop", dsCallCount);
 
     // iterate trough every priority in order
     for (prnum = 3; prnum >= 0; prnum--) {
@@ -1963,8 +1943,6 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
         }
     }
 
-    if (dsCallCount < 2)
-        SA1_DBG("DS[%d]: compositing done, returning", dsCallCount);
     dsCallCount++;
 }
 
@@ -1986,7 +1964,7 @@ static void DrawFrame(uint16_t *pixels)
     unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
 
     if (drawFrameCount < 5)
-        SA1_DBG("DrawFrame #%d: enter, BLDCNT=0x%04X DISPSTAT=0x%04X", drawFrameCount, REG_BLDCNT, REG_DISPSTAT);
+        SA1_DBG("DrawFrame #%d: enter, BLDCNT=0x%04X DISPCNT=0x%04X", drawFrameCount, REG_BLDCNT, REG_DISPCNT);
 
     for (i = 0; i < DISPLAY_HEIGHT; i++) {
         REG_VCOUNT = i;
@@ -2000,13 +1978,7 @@ static void DrawFrame(uint16_t *pixels)
         // HBlank interrupt code could have changed it inbetween lines.
         memsetu16(scanlines[i], *(uint16_t *)PLTT, DISPLAY_WIDTH);
 
-        if (drawFrameCount < 3 && (i == 0 || i == 79 || i == 159))
-            SA1_DBG("DrawFrame #%d: scanline %d before DrawScanline, DISPCNT=0x%04X", drawFrameCount, i, REG_DISPCNT);
-
         DrawScanline(scanlines[i], i);
-
-        if (drawFrameCount < 3 && (i == 0 || i == 79 || i == 159))
-            SA1_DBG("DrawFrame #%d: scanline %d after DrawScanline", drawFrameCount, i);
 
         REG_DISPSTAT |= INTR_FLAG_HBLANK;
 
@@ -2078,9 +2050,7 @@ void VDraw(SDL_Texture *texture)
         SA1_DBG("VDraw #%d: DISPCNT=0x%04X PLTT[0]=0x%04X", vdrawCount, REG_DISPCNT, *(uint16_t *)PLTT);
 
     memset(gameImage, 0, sizeof(gameImage));
-    SA1_DBG("VDraw #%d: before DrawFrame", vdrawCount);
     DrawFrame(gameImage);
-    SA1_DBG("VDraw #%d: after DrawFrame", vdrawCount);
 #ifdef __ANDROID__
     // Convert ABGR1555 (GBA native) to ARGB8888 for Android GPU compatibility.
     // Many mobile OpenGL ES drivers don't natively support 16-bit ABGR1555 textures.
