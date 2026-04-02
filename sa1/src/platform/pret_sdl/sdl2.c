@@ -16,10 +16,22 @@
 #include <android/log.h>
 #include <signal.h>
 #define SA1_DBG(...) __android_log_print(ANDROID_LOG_DEBUG, "SA1-DBG", __VA_ARGS__)
-static void sa1_signal_handler(int sig) {
-    __android_log_print(ANDROID_LOG_ERROR, "SA1-DBG", "SIGNAL %d caught! (SIGSEGV=11, SIGBUS=7, SIGABRT=6)", sig);
+static void sa1_sigaction_handler(int sig, siginfo_t *info, void *ucontext) {
+    __android_log_print(ANDROID_LOG_ERROR, "SA1-DBG",
+        "SIGNAL %d caught! si_addr=%p si_code=%d (SIGSEGV=11, SIGBUS=7, SIGABRT=6)",
+        sig, info ? info->si_addr : NULL, info ? info->si_code : -1);
+    // Log key global addresses for correlation
+    extern uint8_t EWRAM_START[], REG_BASE[], VRAM[], OAM[];
+    extern uint16_t PLTT[];
+    __android_log_print(ANDROID_LOG_ERROR, "SA1-DBG",
+        "Globals: EWRAM=%p REG_BASE=%p VRAM=%p OAM=%p PLTT=%p",
+        (void*)EWRAM_START, (void*)REG_BASE, (void*)VRAM, (void*)OAM, (void*)PLTT);
     // Re-raise to get the default handler's tombstone
-    signal(sig, SIG_DFL);
+    struct sigaction sa;
+    sa.sa_handler = SIG_DFL;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(sig, &sa, NULL);
     raise(sig);
 }
 #else
@@ -142,10 +154,16 @@ void Platform_free(void *ptr) { HeapFree(GetProcessHeap(), 0, ptr); }
 int main(int argc, char **argv)
 {
 #ifdef __ANDROID__
-    signal(SIGSEGV, sa1_signal_handler);
-    signal(SIGBUS, sa1_signal_handler);
-    signal(SIGABRT, sa1_signal_handler);
-    signal(SIGFPE, sa1_signal_handler);
+    {
+        struct sigaction sa;
+        sa.sa_sigaction = sa1_sigaction_handler;
+        sigemptyset(&sa.sa_mask);
+        sa.sa_flags = SA_SIGINFO;
+        sigaction(SIGSEGV, &sa, NULL);
+        sigaction(SIGBUS, &sa, NULL);
+        sigaction(SIGABRT, &sa, NULL);
+        sigaction(SIGFPE, &sa, NULL);
+    }
     SA1_DBG("main() entered, signal handlers installed");
 #endif
     const char *headlessEnv = getenv("HEADLESS");
