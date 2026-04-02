@@ -44,5 +44,5 @@ and triggers are mapped to GBA controls. No touch controls are provided.
 ## Notes
 
 - The native library is built as `libmain.so` (SDL2 convention).
-- The app targets `arm64-v8a`, `armeabi-v7a`, and `x86_64` ABIs.
+- The app targets the `arm64-v8a` ABI.
 - The SA1 save file (`sa1.sav`) is stored in the app's internal storage.
