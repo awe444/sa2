@@ -2,17 +2,10 @@
 #include "global.h"
 #include "platform/shared/dma.h"
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#endif
-
 struct DMATransfer DMAList[DMA_COUNT] = { 0 };
 
 void RunDMAs(DmaStartTypes type)
 {
-#ifdef __ANDROID__
-    static int dmaLogCount = 0;
-#endif
     for (int dmaNum = 0; dmaNum < DMA_COUNT; dmaNum++) {
         struct DMATransfer *dma = &DMAList[dmaNum];
 #if !USE_NEW_DMA
@@ -27,14 +20,6 @@ void RunDMAs(DmaStartTypes type)
         }
 
         if ((dma->control & DMA_ENABLE) && (((dma->control & DMA_START_MASK) >> 12) == type)) {
-#ifdef __ANDROID__
-            if (dmaLogCount < 10) {
-                __android_log_print(ANDROID_LOG_DEBUG, "SA1-DBG",
-                    "DMA%d type=%d src=%p dst=%p size=%d ctrl=0x%04X",
-                    dmaNum, type, dma->src, dma->dst, dma->size, dma->control);
-                dmaLogCount++;
-            }
-#endif
             // printf("DMA%d src=%p, dest=%p, control=%d\n", dmaNum, dma->src, dma->dst, dma->control);
             for (int i = 0; i < dma->size; i++) {
                 if ((dma->control) & DMA_32BIT)
