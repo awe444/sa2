@@ -1927,7 +1927,7 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
 
     // iterate trough every priority in order
     for (prnum = 3; prnum >= 0; prnum--) {
-        for (int prsub = (int)scanline.prioritySortedBgsCount[prnum] - 1; prsub >= 0; prsub--) {
+        for (int prsub = scanline.prioritySortedBgsCount[prnum] - 1; prsub >= 0; prsub--) {
             int bgnum = scanline.prioritySortedBgs[prnum][prsub];
             // if background is enabled then draw it
             if (isbgEnabled(bgnum)) {
