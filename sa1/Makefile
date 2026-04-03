@@ -73,7 +73,11 @@ ifeq ($(PLATFORM),gba)
 CC1       := ../tools/agbcc/bin/agbcc$(EXE)
 CC1_OLD   := ../tools/agbcc/bin/old_agbcc$(EXE)
 else
+ifneq ($(filter environment% command%,$(origin CC)),)
+CC1       := $(CC)
+else
 CC1       := $(PREFIX)gcc$(EXE)
+endif
 CC1_OLD   := $(CC1)
 endif
 
