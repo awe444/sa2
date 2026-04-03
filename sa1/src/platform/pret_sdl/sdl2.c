@@ -1668,7 +1668,7 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
                 int tile_y = tex_y % 8;
                 int block_x = tex_x / 8;
                 int block_y = tex_y / 8;
-                int block_offset = ((block_y * (REG_DISPCNT & 0x40 ? (width / 8) : 16)) + block_x);
+                int block_offset = ((block_y * (REG_DISPCNT & 0x40 ? (width / 8) : 32)) + block_x);
                 uint16_t pixel = 0;
 
                 if (!is8BPP) {
