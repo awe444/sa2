@@ -301,8 +301,10 @@ else
   CC1FLAGS += -x c -S
 
   # Clang emits .addrsig directives that GNU as does not understand.
+  # Clang's strict aliasing optimizations can miscompile type-punned pointer
+  # accesses common in GBA decompilation code (e.g. OamData accessed via u16*).
   ifneq ($(findstring clang,$(CC1)),)
-    CC1FLAGS += -fno-addrsig
+    CC1FLAGS += -fno-addrsig -fno-strict-aliasing
   endif
 endif
 
