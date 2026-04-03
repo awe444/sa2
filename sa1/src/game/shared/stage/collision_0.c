@@ -12,7 +12,7 @@
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/dust_cloud.h"
 #include "game/shared/stage/entities_manager.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 
 // TODO: Merge this with collision.c !
 u32 Coll_Player_Platform(Sprite *s, CamCoord x, CamCoord y, Player *p)

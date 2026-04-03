@@ -3,7 +3,7 @@
 #include "lib/m4a/m4a.h"
 #include "data/sa1/ui_graphics.h"
 #include "game/sa1/ui/course_select.h"
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/sa1/save.h"
 #include "game/sa1/stage/stage_ui.h"
 

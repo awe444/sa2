@@ -9,7 +9,7 @@
 #include "core.h"
 #include "sprite.h"
 #include "trig.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

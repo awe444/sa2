@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_SMALL_PROPELLER_H
 
 #include "global.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 void CreateEntity_Fan_Left(MapEntity *, u16, u16, u8);
 void CreateEntity_Fan_Right(MapEntity *, u16, u16, u8);

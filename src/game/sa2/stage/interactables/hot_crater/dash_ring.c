@@ -7,7 +7,7 @@
 #include "game/shared/stage/camera.h"
 #include "task.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/interactables/hot_crater/dash_ring.h"
 #include "sprite.h"
 

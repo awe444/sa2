@@ -1,5 +1,5 @@
 #include "global.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/gohla.h"
 
 #include "game/shared/stage/collision.h"

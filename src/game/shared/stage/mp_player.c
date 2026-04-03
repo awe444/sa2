@@ -21,7 +21,6 @@
 #include "game/sa2/stage/mp_attack_1_effect.h"
 #if (GAME == GAME_SA1)
 #include "game/sa2/multiplayer/chao.h"
-#include "constants/sa2_char_states.h"
 #elif (GAME == GAME_SA2)
 #include "game/sa2/stage/mp_attack_2_effect.h"
 #endif

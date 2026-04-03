@@ -7,7 +7,7 @@
 #include "game/globals.h"
 #include "game/sa1/ui/character_select.h"
 
-#include "game/credits.h"
+#include "data/sa1/credits.h"
 #include "game/sa1/stage/extra_stage.h"
 #include "game/shared/stage/stage.h"
 #include "game/shared/multiplayer/communication_outcome.h"

@@ -7,7 +7,7 @@
 #include "game/globals.h"
 #include "game/shared/stage/palette_loader.h"
 #include "game/shared/stage/pause_menu.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/sa1/save.h"
 #include "game/sa1/special_stage/main.h"
 #include "game/sa1/stage/player_controls.h"

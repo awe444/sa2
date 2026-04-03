@@ -7,7 +7,7 @@
 #include "game/sa1/stage/mp_chao.h"
 #include "game/shared/stage/mp_player.h"
 #include "game/shared/stage/terrain_collision.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 #include "constants/animations.h"
 #include "constants/zones.h"

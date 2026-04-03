@@ -2,9 +2,9 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "data/sa1/ui_graphics.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/globals.h"
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/shared/stage/mp_player.h"
 #include "game/sa1/stage/mp_hud.h" // CreateChaoHuntHUD
 #include "game/sa1/stage/stage_ui.h"

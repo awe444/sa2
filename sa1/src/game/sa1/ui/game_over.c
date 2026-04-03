@@ -5,9 +5,9 @@
 #include "lib/m4a/m4a.h"
 #include "malloc_vram.h"
 #include "game/sa1/ui/game_over.h"
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/globals.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #if DEBUG
 #include "game/shared/menus/unused_level_select.h"
 #endif

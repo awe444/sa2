@@ -4,7 +4,7 @@
 #include "trig.h"
 #include "game/sa1/parameters/stage.h"
 #include "game/globals.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/shared/stage/spot_light_beam_task.h"
 #include "game/shared/stage/spot_lights_manager.h"
 

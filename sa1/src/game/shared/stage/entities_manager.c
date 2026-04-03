@@ -6,8 +6,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "game/types/camera.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/entities_manager.h"
 #include "game/sa1/stage/itembox.h"
 

@@ -3,7 +3,7 @@
 #include "trig.h"
 #include "sprite.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/music_plant/pipe_sequence.h"

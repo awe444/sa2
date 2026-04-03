@@ -1,4 +1,4 @@
-#include "game/credits.h"
+#include "data/sa1/credits.h"
 
 const CreditsString sCreditsEntries[NUM_ENTRIES] = {
     { 0, 0, 0, "                         ", { 0, 0, 0 } },

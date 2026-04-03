@@ -1,6 +1,6 @@
 #include "global.h"
 #include "core.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa1/ui/game_over.h"
 #include "game/sa1/menus/title_screen.h"
 #include "game/sa1/save.h"

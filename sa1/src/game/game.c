@@ -10,7 +10,7 @@
 #include "game/sa1/menus/options_screen.h"
 
 #include "game/globals.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 //#include "game/shared/stage/entities_manager.h"
 
 #include "game/sa1/ui/character_select.h"
@@ -26,7 +26,7 @@
 #include "game/shared/stage/water_effects.h"
 
 #if (GAME == GAME_SA1)
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/sa1/menus/mp_mode_select_2.h"
 #elif (GAME == GAME_SA2)
 #include "game/sa2/collect_rings/singlepak_connection.h"

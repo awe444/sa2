@@ -6,18 +6,17 @@
 #include "sprite.h"
 
 #include "game/globals.h"
-//#include "game/shared/stage/collision.h"
-#include "game/types/player.h"
 
-//#include "game/shared/stage/terrain_collision.h"
-//#include "game/sa2/stage/player_callbacks.h"
-//#include "game/shared/stage/player.h"
+#include "game/shared/stage/collision.h"
+#include "game/shared/stage/terrain_collision.h"
+#include "game/sa2/stage/player_callbacks.h"
+#include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
 #define ENTITY_DATA_SIZE_SA1 4
 #define ENTITY_DATA_SIZE_SA2 4
 #define ENTITY_DATA_SIZE_SA3 5
-#define ENTITY_DATA_SIZE     ENTITY_DATA_SIZE_SA1
+#define ENTITY_DATA_SIZE     ENTITY_DATA_SIZE_SA2
 
 PACKED(MapEntity, {
     /* 0x00 */ u8 x; // While an enemy is active, x gets repurposed as a "state"
@@ -59,18 +58,12 @@ typedef struct {
     Sprite s;
 } EnemyBase;
 
-u32 sub_800CDBC(Sprite *, s32, s32, Player *);
-
-u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p);
-
 // After a MapEntity is initialized, its x-value in the layout-data gets set to -2.
 // TODO:
 // Find out whether casting these to u8 can work while still matching!
 #define MAP_ENTITY_STATE_ARRAY_END   (-1)
 #define MAP_ENTITY_STATE_INITIALIZED (-2)
 #define MAP_ENTITY_STATE_MINUS_THREE (-3)
-
-#define SET_MAP_ENTITY_INITIALIZED_SIMPLE(mapEnt) (mapEnt)->x = MAP_ENTITY_STATE_INITIALIZED;
 
 // TODO: Find a way to simplify/remove this macro!
 #define SET_MAP_ENTITY_INITIALIZED(mapEnt)                                                                                                 \
@@ -110,18 +103,11 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p
     _enemy->offsetX = 0;                                                                                                                   \
     _enemy->offsetY = Q(sub_801F07C(I(_enemy->spawnY), I(_enemy->spawnX), _enemy->clampParam, 8, NULL, sub_801EE64));
 
-#if (GAME == GAME_SA1)
-#define ENEMY_UPDATE_EX_RAW(_s, _posX, _posY, code_insert)                                                                                 \
-    { code_insert };                                                                                                                       \
-    UpdateSpriteAnimation(_s);                                                                                                             \
-    DisplaySprite(_s);
-#else
 #define ENEMY_UPDATE_EX_RAW(_s, _posX, _posY, code_insert)                                                                                 \
     Player_UpdateHomingPosition(_posX, _posY);                                                                                             \
     { code_insert };                                                                                                                       \
     UpdateSpriteAnimation(_s);                                                                                                             \
     DisplaySprite(_s);
-#endif
 
 #define ENEMY_UPDATE_EX(_s, _posX, _posY, code_insert) ENEMY_UPDATE_EX_RAW(_s, QS(_posX), QS(_posY), code_insert);
 
@@ -139,7 +125,7 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p
 #define ENEMY_UPDATE_POSITION_STATIC(_enemy, _sprite, _posX, _posY) ENEMY_UPDATE_POSITION_RAW(_enemy, _sprite, _posX, _posY, 0, 0)
 
 #define ENEMY_TURN_TO_PLAYER(_posX, s)                                                                                                     \
-    if (gPlayer.x < _posX) {                                                                                                               \
+    if (gPlayer.qWorldX < _posX) {                                                                                                         \
         SPRITE_FLAG_CLEAR(s, X_FLIP);                                                                                                      \
     } else {                                                                                                                               \
         SPRITE_FLAG_SET(s, X_FLIP);                                                                                                        \
@@ -167,10 +153,11 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p
 #define ENEMY_CROSSED_BOTTOM_BORDER(_enemy, _mapEntity) ENEMY_CROSSED_BOTTOM_BORDER_RAW(_enemy, _mapEntity, I(_enemy->offsetY))
 
 #define ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, _task)                                                                           \
-    sub_801F100(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, 8, _task);
+    SA2_LABEL(sub_801F100)(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, 8, _task);
 
 #define ENEMY_CLAMP_TO_GROUND_INNER_X_FIRST(_enemy, _unknownBool)                                                                          \
-    sub_801F100(I(_enemy->spawnX + _enemy->offsetX), I(_enemy->spawnY + _enemy->offsetY), _unknownBool, 8, sub_801EC3C);
+    SA2_LABEL(sub_801F100)                                                                                                                 \
+    (I(_enemy->spawnX + _enemy->offsetX), I(_enemy->spawnY + _enemy->offsetY), _unknownBool, 8, SA2_LABEL(sub_801EC3C));
 
 #define ENEMY_CLAMP_TO_GROUND_RAW(_enemy, _unknownBool, _p)                                                                                \
     {                                                                                                                                      \
@@ -179,7 +166,7 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p
                                                                                                                                            \
         if (delta < 0) {                                                                                                                   \
             _enemy->offsetY += Q(delta);                                                                                                   \
-            delta = ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, sub_801EC3C);                                                        \
+            delta = ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, SA2_LABEL(sub_801EC3C));                                             \
         }                                                                                                                                  \
                                                                                                                                            \
         if (delta > 0) {                                                                                                                   \
@@ -196,7 +183,7 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p
                                                                                                                                            \
         if (delta < 0) {                                                                                                                   \
             _enemy->offsetY -= Q(delta);                                                                                                   \
-            delta = ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, sub_801EC3C);                                                        \
+            delta = ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, SA2_LABEL(sub_801EC3C));                                             \
         }                                                                                                                                  \
                                                                                                                                            \
         if (delta > 0) {                                                                                                                   \

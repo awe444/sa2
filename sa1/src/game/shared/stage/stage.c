@@ -13,7 +13,7 @@
 #include "game/shared/stage/music_manager.h"
 #include "game/shared/stage/palette_loader.h"
 #include "game/shared/stage/pause_menu.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/shared/stage/rings_manager.h"
 #include "game/shared/stage/spot_light_beam_task.h"
 #include "game/sa1/parameters/stage.h"

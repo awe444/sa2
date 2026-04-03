@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_FRENCH_HORN_H
 
 #include "global.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/interactables/music_plant/pipe_sequence.h"
 
 void CreateEntity_FrenchHorn_Entry(MapEntity *me, u16 spriteRegionX, u16 spriteRegionY, u8 spriteY);

@@ -9,6 +9,7 @@ typedef struct CreditsString {
     char padding[3];
 } CreditsString;
 
+// TODO: move to staff_credits.h
 extern void CreateStaffCredits();
 extern void CreateCongratulationsAnimation();
 

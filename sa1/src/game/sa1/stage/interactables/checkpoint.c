@@ -2,8 +2,8 @@
 #include "core.h"
 #include "flags.h"
 #include "malloc_vram.h"
-#include "game/types/entity.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/entity.h"
+#include "game/shared/stage/camera.h"
 #include "game/shared/stage/entities_manager.h"
 #include "game/sa1/stage/egg_rocket_transitions.h"
 

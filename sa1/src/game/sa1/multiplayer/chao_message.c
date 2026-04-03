@@ -5,7 +5,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "data/sa1/ui_graphics.h"
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/shared/multiplayer/communication_outcome.h"
 #include "game/globals.h"
 #include "game/sa1/save.h"

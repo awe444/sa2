@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "lib/m4a/m4a.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/parameters/characters.h"
 #include "game/shared/stage/grind_effect_1.h"
 #include "game/shared/stage/player.h"

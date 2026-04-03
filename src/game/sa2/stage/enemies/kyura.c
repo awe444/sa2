@@ -4,7 +4,7 @@
 #include "malloc_vram.h"
 #include "trig.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/kyura.h"
 #include "game/sa2/stage/enemies/projectiles.h"
 

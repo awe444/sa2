@@ -4,12 +4,12 @@
 #include "malloc_ewram.h"
 #include "rect.h"
 
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/shared/stage/collect_ring_effect.h"
 #include "game/shared/stage/magnetic_ring.h"
 #include "game/shared/stage/rings_manager.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #if (GAME == GAME_SA2)
 #include "game/sa2/stage/player_super_sonic.h"
 #endif

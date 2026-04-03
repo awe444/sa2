@@ -13,8 +13,8 @@
 #include "game/sa2/stage/stage_ui.h"
 #include "game/sa2/stage/screen_mask.h"
 #include "game/globals.h"
-#include "game/types/camera.h"
-#include "game/types/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/player.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

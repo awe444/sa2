@@ -1,6 +1,6 @@
 #include "global.h"
 #include "malloc_vram.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/madillo.h"
 #include "game/shared/stage/entities_manager.h"
 

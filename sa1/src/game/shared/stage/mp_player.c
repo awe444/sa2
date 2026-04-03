@@ -20,7 +20,6 @@
 #include "game/shared/stage/mp_event_mgr.h"
 #if (GAME == GAME_SA1)
 #include "game/sa1/stage/mp_chao.h"
-#include "constants/sa2_char_states.h"
 #elif (GAME == GAME_SA2)
 #include "game/multiplayer/mp_attack_2_effect.h"
 #endif

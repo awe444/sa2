@@ -4,7 +4,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/shared/stage/collision.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/bosses/boss_3.h"
 #include "game/sa2/stage/bosses/eggmobile_escape_sequence.h"

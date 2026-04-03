@@ -2,7 +2,7 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 #include "game/sa1/ui/game_over.h"
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/globals.h"
 #include "game/sa1/special_stage/main.h"
 #include "game/sa1/stage/stage_ui.h"

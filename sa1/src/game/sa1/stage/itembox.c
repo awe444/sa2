@@ -9,7 +9,7 @@
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/dust_cloud.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/parameters/characters.h"
 #include "game/shared/stage/item_tasks.h"
 #include "game/shared/stage/player.h"

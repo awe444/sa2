@@ -11,9 +11,9 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/globals.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/shared/stage/collision.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/player_callbacks.h" // UpdateHomingPosition
 #include "game/sa2/stage/cheese.h"

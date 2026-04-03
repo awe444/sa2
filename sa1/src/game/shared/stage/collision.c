@@ -7,12 +7,12 @@
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/dust_cloud.h"
 #include "game/shared/stage/entities_manager.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 
 #if (GAME == GAME_SA2)
 #include "game/cheese.h"
 #endif
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/mp_event_mgr.h"
 #include "game/shared/parameters/characters.h"
 #include "game/shared/stage/player.h"

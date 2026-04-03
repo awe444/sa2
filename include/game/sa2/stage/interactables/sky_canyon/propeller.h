@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_PROPELLER_H
 
 #include "global.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 void CreateEntity_Propeller(MapEntity *, u16, u16, u8);
 
