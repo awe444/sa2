@@ -4,7 +4,6 @@
 #include "sprite.h"
 #include "task.h"
 #include "lib/m4a/m4a.h"
-#include "mb_programs.h"
 #include "multi_boot.h"
 #include "sio32_multi_load.h"
 #include "game/shared/stage/stage.h"
@@ -125,6 +124,9 @@ static const u16 gUnknown_080E01B6[7][3] = {
     [LANG_SPANISH] = { SA2_ANIM_PRESS_START_MSG_IT, 0, 30 },
     [LANG_ITALIAN] = { SA2_ANIM_PRESS_START_MSG_ES, 0, 30 },
 };
+
+extern const u8 gMultiBootProgram_SubgameLoader[];
+extern void *gMultiBootProgram_SubgameLoaderEnd;
 
 void *const gUnknown_080E01E0[7][2] = {
     { NULL, NULL },

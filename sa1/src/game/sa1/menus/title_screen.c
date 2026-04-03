@@ -22,7 +22,7 @@
 
 // LoadTinyChaoGarden
 #include "../chao_garden/include/program_params.h"
-#include "game/assets/compressed/roms.h"
+#include "game/sa1/assets/compressed/roms.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

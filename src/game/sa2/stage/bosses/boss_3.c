@@ -9,7 +9,7 @@
 #include "game/sa2/stage/bosses/boss_3.h"
 #include "game/sa2/stage/bosses/eggmobile_escape_sequence.h"
 #include "game/sa2/stage/boss_results_transition.h"
-#include "game/parameters/bosses.h"
+#include "game/shared/parameters/bosses.h"
 #include "game/sa2/stage/player_callbacks.h"
 
 #include "game/shared/stage/terrain_collision.h"

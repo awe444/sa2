@@ -14,7 +14,7 @@
 #endif
 #include "game/types/entity.h"
 #include "game/shared/stage/mp_event_mgr.h"
-#include "game/parameters/characters.h"
+#include "game/shared/parameters/characters.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/rings_scatter.h"
 #include "game/sa1/stage/trapped_animals.h"
@@ -318,7 +318,7 @@ void Collision_AdjustPlayerSpeed(Player *p)
     if (p->moveState & MOVESTATE_BOOST_EFFECT_ON) {
         // Also triggered on homing-attack.
         // Slight boost upwards for the player.
-        p->transition = PLTRANS_PT8;
+        p->transition = PLTRANS_HOMING_ATTACK_RECOIL;
         p->speedAirX = 0;
         p->speedAirY = 0;
     } else if (IS_BOSS_STAGE(gCurrentLevel)) {

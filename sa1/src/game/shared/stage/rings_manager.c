@@ -16,7 +16,7 @@
 
 #include "game/shared/stage/mp_player.h"
 
-#include "game/assets/compressed/entities.h"
+#include "game/sa1/assets/compressed/entities.h"
 
 #include "constants/animations.h"
 

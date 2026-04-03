@@ -6,7 +6,7 @@
 #include "lib/m4a/m4a.h"
 #include "game/shared/stage/amy_attack_heart_effect.h"
 #include "game/shared/stage/mp_player.h"
-#include "game/parameters/characters.h"
+#include "game/shared/parameters/characters.h"
 #include "game/globals.h"
 #include "game/types/camera.h"
 #include "game/shared/stage/collision.h"

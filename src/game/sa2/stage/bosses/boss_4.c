@@ -16,7 +16,7 @@
 #include "game/types/entity.h" // Coll_Player_Entity_Intersection
 #include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/bosses/eggmobile_escape_sequence.h"
-#include "game/parameters/bosses.h"
+#include "game/shared/parameters/bosses.h"
 
 #include "game/shared/stage/screen_shake.h"
 #include "game/sa2/stage/boss_results_transition.h"

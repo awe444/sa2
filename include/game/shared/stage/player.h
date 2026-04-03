@@ -6,7 +6,7 @@
 
 // TODO: merge these
 #include "constants/characters.h"
-#include "game/parameters/characters.h"
+#include "game/shared/parameters/characters.h"
 
 // In SA2 tricks stop all characters when the buttons are pressed.
 // Set this to TRUE to behave more like SA3.

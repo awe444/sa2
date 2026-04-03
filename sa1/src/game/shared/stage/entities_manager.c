@@ -110,7 +110,7 @@
 #include "game/sa1/stage/enemies/buzzer.h"
 #include "game/sa1/stage/enemies/spinner.h"
 
-#include "game/assets/compressed/entities.h"
+#include "game/sa1/assets/compressed/entities.h"
 #endif
 
 #include "constants/songs.h"

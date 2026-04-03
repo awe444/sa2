@@ -15,7 +15,7 @@
 #include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/bosses/eggmobile_escape_sequence.h"
 #include "game/sa2/cutscenes/level_endings.h"
-#include "game/parameters/bosses.h"
+#include "game/shared/parameters/bosses.h"
 #include "game/sa2/stage/boss_results_transition.h"
 #include "game/shared/stage/terrain_collision.h"
 #include "game/shared/stage/player.h"
