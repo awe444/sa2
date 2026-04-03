@@ -394,6 +394,12 @@ if(CMAKE_C_COMPILER_ID MATCHES "Clang")
     )
 endif()
 
+# On ARM64 (Android), disable strict-aliasing optimizations to prevent
+# miscompilation of type-punned OAM data accesses (sprite tiling bug).
+if(ANDROID)
+    target_compile_options(${SA1_TARGET} PRIVATE -fno-strict-aliasing)
+endif()
+
 # ── Link SDL2 ────────────────────────────────────────────────────────────────
 if(ANDROID)
     target_link_libraries(${SA1_TARGET} PRIVATE
