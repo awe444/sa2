@@ -204,11 +204,15 @@ SA2_C_FILES := \
 	src/background.c \
 	src/game/globals.c \
 
+ifeq ($(PLATFORM),gba)
 SA2_C_ASM_FILES := \
 	src/rom_header.s \
 	src/lib/m4a/m4a0.s \
 	src/crt0.s \
 	src/multi_sio_asm.s
+else
+SA2_C_ASM_FILES :=
+endif
 
 SA2_C_SRCS = $(patsubst %.c,$(OBJ_DIR)/sa2/%.c,$(SA2_C_FILES))
 SA2_C_OBJS = $(patsubst %.c,%.o,$(SA2_C_SRCS))
