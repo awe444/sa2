@@ -299,6 +299,11 @@ else
   endif
   # Allow file input through stdin on modern GCC and set it to "compile only"
   CC1FLAGS += -x c -S
+
+  # Clang emits .addrsig directives that GNU as does not understand.
+  ifneq ($(findstring clang,$(CC1)),)
+    CC1FLAGS += -fno-addrsig
+  endif
 endif
 
 ifeq ($(DEBUG),1)
