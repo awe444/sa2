@@ -87,7 +87,11 @@ sudo apt update
 sudo apt install build-essential libpng-dev libsdl2-dev
 ```
 
-These are the same packages already listed in the system requirements above, so if you've already installed those you should be good to go.
+These are a subset of the packages already listed in the [system requirements](#install-system-requirements) above, so if you've already installed those you should be good to go.
+
+#### Provide assets
+
+You must provide a copy of the [Sonic Advance (Europe)](https://datomatic.no-intro.org/index.php?page=show_record&s=23&n=0330) ROM (`sha1: eb00f101af23d728075ac2117e27ecd8a4b4c3e9`) named `baserom_sa1.gba` in the `sa1/` directory. The build extracts game assets from this file.
 
 #### Build
 
