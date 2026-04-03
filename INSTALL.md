@@ -76,6 +76,33 @@ Tip: On Linux and MacOS this can be opened with `wine sa2.sdl_win32.exe`
 1. Run `make ps2`
 1. `sa2.ps2.iso` will be created
 
+### SA1 (Sonic Advance) SDL port for Linux
+
+The repository includes a decompilation of Sonic Advance (SA1) under the `sa1/` directory, which can also be built as an x64 native SDL port on Ubuntu.
+
+#### Install dependencies
+
+```bash
+sudo apt update
+sudo apt install build-essential libpng-dev libsdl2-dev
+```
+
+These are the same packages already listed in the system requirements above, so if you've already installed those you should be good to go.
+
+#### Build
+
+1. Run `make -C sa1 sdl -j$(nproc)` from the root of the repo
+1. `sa1/sa1.sdl` will be created
+1. Launch the game from the terminal with `./sa1/sa1.sdl`
+
+You can also build from inside the `sa1/` directory:
+
+```bash
+cd sa1
+make sdl -j$(nproc)
+./sa1.sdl
+```
+
 ### GBA rom
 
 1. Clone [agbcc](https://github.com/SAT-R/agbcc) repo into another folder
