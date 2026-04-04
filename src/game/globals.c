@@ -151,11 +151,7 @@ s8 ALIGNED(4) gMultiplayerCurrentLevel = 0;
 u8 ALIGNED(4) gMultiplayerUnlockedCharacters = 0;
 #endif
 
-#ifndef NON_MATCHING
 struct Task *ALIGNED(16) gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] = {};
-#else
-struct Task *ALIGNED(4) gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] = {};
-#endif
 
 #if (GAME == GAME_SA1)
 u8 ALIGNED(4) gUnknown_03005140 = 0;
