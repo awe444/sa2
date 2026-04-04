@@ -380,10 +380,17 @@ if(NOT ANDROID)
 endif()
 
 # ── Compiler flags ───────────────────────────────────────────────────────────
+string(TOUPPER "${CMAKE_BUILD_TYPE}" _BUILD_TYPE_UPPER)
+if(_BUILD_TYPE_UPPER STREQUAL "DEBUG")
+    set(SA1_OPT_FLAG -O0)
+else()
+    set(SA1_OPT_FLAG -O2)
+endif()
+
 target_compile_options(${SA1_TARGET} PRIVATE
     -Wimplicit
     -Wparentheses
-    -O2
+    ${SA1_OPT_FLAG}
 )
 
 # Clang-specific warnings (GCC does not recognise these)
