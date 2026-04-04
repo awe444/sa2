@@ -4,7 +4,7 @@
 #include "sprite.h"
 #include "malloc_vram.h"
 #include "trig.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/sky_canyon/small_windmill.h"

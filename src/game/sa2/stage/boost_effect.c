@@ -5,7 +5,7 @@
 
 #include "game/globals.h"
 
-#include "data/sprite_data.h"
+#include "data/sa2/sprite_data.h"
 
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"

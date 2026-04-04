@@ -8,7 +8,7 @@
 
 #include "game/shared/stage/collision.h"
 #include "game/sa2/stage/interactables/platform_square.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 

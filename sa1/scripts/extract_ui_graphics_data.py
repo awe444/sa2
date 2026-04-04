@@ -179,7 +179,7 @@ def fill_graphic_names_table_with_unnamed():
             graphic_names.append(Graphic(i, "", f"_0{address:X}", "gfx", 8))
         i += 1
         
-header_path = "data/ui_graphics.h";
+header_path = "data/sa1/ui_graphics.h";
 def write_header(ui_graphics_h):
     header_guard = "SA1_UI_GRAPHICS_H";
     ui_graphics_h.write(f"#ifndef {header_guard}\n")
@@ -200,7 +200,7 @@ def write_graphic_data(rom, graphic_data_c):
     graphic_data_c.write(f"\n/* {autogen_disclaimer} */\n\n")
 
     i = 0
-    base_export_path = "graphics/ui/"
+    base_export_path = "graphics/sa1/ui/"
     try:
         os.mkdir(base_export_path)
     except FileExistsError:
@@ -277,8 +277,8 @@ def write_graphic_table(rom, graphic_table_c):
     
 with open("baserom_sa1.gba", "rb") as rom,                       \
      open("include/" + header_path, "w") as ui_graphics_h,     \
-     open("src/data/ui_graphics_data.c", "w") as graphic_data_c, \
-     open("src/data/ui_graphics_table.c", "w") as graphic_table_c:
+     open("src/data/sa1/ui_graphics_data.c", "w") as graphic_data_c, \
+     open("src/data/sa1/ui_graphics_table.c", "w") as graphic_table_c:
     graphic_table_end, table_entry_count = find_table_end_ptr(rom)
 
     graphic_table_c.write("#include \"global.h\"\n")

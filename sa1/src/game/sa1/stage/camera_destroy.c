@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "flags.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/globals.h"
 #include "game/shared/stage/camera.h"
 #include "constants/zones.h"

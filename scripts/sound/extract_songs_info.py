@@ -374,7 +374,7 @@ def extract_from_song_table(rom: BufferedReader):
 
                     if track_count != 0:
                         f_songs_config.write(extract_song_compiler_config(rom, song_name))
-                        song_files.append(f"build/sa2/sound/songs/midi/{song_name}.o(.rodata);")
+                        song_files.append(f"build/sa2/sound/sa2/songs/midi/{song_name}.o(.rodata);")
                     else:
                         song_addr_to_name[song_addr] = "dummy_song_header"
 

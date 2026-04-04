@@ -8,7 +8,7 @@
 #include "game/sa2/ui/course_select.h"
 #include "game/sa2/multiplayer/results.h"
 #include "game/sa2/multiplayer/multipak_connection.h"
-#include "game/sa2/multiplayer_lobby.h"
+#include "game/sa2/ui/multiplayer_lobby.h"
 #include "game/sa2/save.h"
 
 #ifdef TEAMPLAY_AVAILABLE

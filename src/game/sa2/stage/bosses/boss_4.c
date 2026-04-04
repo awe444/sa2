@@ -4,7 +4,7 @@
 #include "task.h"
 #include "trig.h"
 #include "lib/m4a/m4a.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/shared/stage/collision.h"
 
 #include "game/game.h" // sub_801E4E4
@@ -13,10 +13,10 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "game/types/entity.h" // Coll_Player_Entity_Intersection
+#include "game/shared/stage/entity.h" // Coll_Player_Entity_Intersection
 #include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/bosses/eggmobile_escape_sequence.h"
-#include "game/parameters/bosses.h"
+#include "game/shared/parameters/bosses.h"
 
 #include "game/shared/stage/screen_shake.h"
 #include "game/sa2/stage/boss_results_transition.h"
@@ -43,8 +43,8 @@
 #define PAL_BOSS_4_DEF 1
 
 static const ColorRaw sBoss4Palettes[2][PALETTE_LEN_4BPP] = {
-    [PAL_BOSS_4_HIT] = INCPAL("graphics/boss_4_hit.pal"),
-    [PAL_BOSS_4_DEF] = INCPAL("graphics/boss_4_normal.pal"),
+    [PAL_BOSS_4_HIT] = INCPAL("graphics/sa2/boss_4_hit.pal"),
+    [PAL_BOSS_4_DEF] = INCPAL("graphics/sa2/boss_4_normal.pal"),
 };
 
 typedef struct {

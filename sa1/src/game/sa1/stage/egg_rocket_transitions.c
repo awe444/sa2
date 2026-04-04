@@ -7,7 +7,7 @@
 #include "bg_triangles.h"
 #include "game/sa1/stage/nuts_and_bolts_task.h"
 #include "game/globals.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/screen_shake.h"
 #include "lib/m4a/m4a.h"

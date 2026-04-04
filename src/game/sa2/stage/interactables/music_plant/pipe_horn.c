@@ -3,13 +3,13 @@
 #include "trig.h"
 #include "sprite.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/music_plant/pipe_horn.h"
 #include "game/sa2/stage/interactables/music_plant/pipe_sequence.h"
 
-#include "data/handlers_ia_pipe_horn_sequences.h"
+#include "data/sa2/handlers_ia_pipe_horn_sequences.h"
 
 #include "constants/char_states.h"
 #include "constants/player_transitions.h"

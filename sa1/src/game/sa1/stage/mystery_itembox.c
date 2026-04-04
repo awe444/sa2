@@ -2,7 +2,7 @@
 #include "malloc_vram.h"
 #include "game/shared/stage/collision.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa1/stage/mystery_itembox.h"
 #include "game/shared/stage/mp_event_mgr.h"
 #include "game/shared/stage/mp_player.h"

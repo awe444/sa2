@@ -3,7 +3,7 @@
 #include "sprite.h"
 #include "malloc_vram.h"
 #include "game/globals.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/sa1/stage/some_task_manager.h"
 
 #include "constants/move_states.h"

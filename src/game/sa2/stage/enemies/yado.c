@@ -3,7 +3,7 @@
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/dust_cloud.h"
 #include "game/shared/stage/entities_manager.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/cheese.h"
 #include "game/sa2/stage/enemies/projectiles.h"
 #include "game/sa2/stage/trapped_animals.h"

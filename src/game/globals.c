@@ -154,7 +154,10 @@ u8 ALIGNED(4) gMultiplayerUnlockedCharacters = 0;
 #ifndef NON_MATCHING
 struct Task *ALIGNED(16) gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] = {};
 #else
-struct Task *ALIGNED(4) gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] = {};
+// ALIGNED(16) must be on the variable (not the element type) so the array's
+// start address is 16-byte aligned.  Clang -O2 vectorises the zeroing in
+// GameInit into movaps, which requires this alignment.
+struct Task *gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] ALIGNED(16) = {};
 #endif
 
 #if (GAME == GAME_SA1)

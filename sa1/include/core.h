@@ -11,8 +11,16 @@
 #include "task.h"
 #include "tilemap.h"
 #include "input_recorder.h"
-#include "data/sprite_data.h"
 #include "animation_commands.h"
+
+struct SpriteTables {
+    /* 0x00 */ const ACmd **const *animations;
+    /* 0x04 */ const SpriteOffset *const *dimensions;
+    /* 0x08 */ const u16 **const oamData;
+    /* 0x0C */ const u16 *const palettes;
+    /* 0x10 */ const u8 *const tiles_4bpp;
+    /* 0x14 */ const u8 *const tiles_8bpp;
+};
 
 struct MultiSioData_0_0 {
     // id

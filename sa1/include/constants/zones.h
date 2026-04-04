@@ -60,7 +60,11 @@
 #define NUM_LEVEL_IDS_MP 4
 #define NUM_LEVEL_IDS    18
 #elif (GAME == GAME_SA2)
+#ifndef COLLECT_RINGS_ROM
 #define NUM_LEVEL_IDS 34
+#else
+#define NUM_LEVEL_IDS 1
+#endif
 #endif
 
 #if (GAME == GAME_SA1)
@@ -83,10 +87,19 @@
 
 #define CHAOS_EMERALDS_COMPLETED CHAOS_EMERALD(7)
 
-#define IS_BOSS_STAGE(lvl) ((ACT_INDEX(lvl) == ACT_BOSS) || (IS_FINAL_STAGE(lvl) && (gFinalBossActive == 0)) || (IS_EXTRA_STAGE(lvl)))
+#if (GAME == GAME_SA1)
+#define IS_BOSS_STAGE(lvl)  ((ACT_INDEX(lvl) == ACT_BOSS) || (IS_FINAL_STAGE(lvl) && (gFinalBossActive == 0)) || (IS_EXTRA_STAGE(lvl)))
+#define IS_FINAL_STAGE(lvl) ((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_X_ZONE))
+#define IS_EXTRA_STAGE(lvl) ((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_THE_MOON))
+#elif (GAME == GAME_SA2)
+#define IS_BOSS_STAGE(lvl)                                                                                                                 \
+    ((ACT_INDEX(lvl) == ACT_BOSS) || (((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE)) && !gFinalBossActive)                          \
+     || (((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53))))
 
-#define IS_FINAL_STAGE(lvl)          ((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_X_ZONE))
-#define IS_EXTRA_STAGE(lvl)          ((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_THE_MOON))
+#define IS_FINAL_STAGE(lvl) ((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE))
+#define IS_EXTRA_STAGE(lvl) ((lvl) == LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53))
+#endif
+
 #define IS_FINAL_OR_EXTRA_STAGE(lvl) ((IS_FINAL_STAGE(lvl)) || (IS_EXTRA_STAGE(lvl)))
 
 #define TIME(minutes, seconds) (int)(((minutes * 60.) + seconds) * GBA_FRAMES_PER_SECOND)

@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_GAPPED_LOOP_H
 
 #include "global.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 void CreateEntity_GappedLoop_Start(MapEntity *, u16, u16, u8);
 void CreateEntity_GappedLoop_End(MapEntity *, u16, u16, u8);

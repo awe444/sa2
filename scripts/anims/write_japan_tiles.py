@@ -3,15 +3,15 @@ import os
 
 content = ""
 
-with open("graphics/obj_tiles_4bpp.inc") as tiles_file:
+with open("graphics/sa2/obj_tiles_4bpp.inc") as tiles_file:
     content = tiles_file.read()
 
-for folder in sorted(os.listdir("graphics/obj_tiles/4bpp/")):
+for folder in sorted(os.listdir("graphics/sa2/obj_tiles/4bpp/")):
     if folder.endswith("_japan"):
         anim_number = int(folder.replace("_japan", "").replace("anim_", ""))
-        path = "graphics/obj_tiles/4bpp/" + folder
+        path = "graphics/sa2/obj_tiles/4bpp/" + folder
         base_path = path.replace("_japan", "")
-        next_path = f"graphics/obj_tiles/4bpp/anim_{anim_number + 1:04}"
+        next_path = f"graphics/sa2/obj_tiles/4bpp/anim_{anim_number + 1:04}"
         
         
         start_offset = content.find(f'.incbin "{base_path}/f000.4bpp"')

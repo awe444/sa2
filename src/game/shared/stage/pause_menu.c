@@ -7,7 +7,7 @@
 #include "game/globals.h"
 
 #include "game/sa2/save.h"
-#include "game/sa2/time_attack/lobby.h"
+#include "game/sa2/ui/time_attack_lobby.h"
 #include "game/sa2/title_screen.h"
 #include "game/shared/stage/water_effects.h"
 

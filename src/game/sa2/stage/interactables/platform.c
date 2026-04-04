@@ -9,7 +9,7 @@
 #include "game/sa2/stage/interactables/platform.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/mp_event_mgr.h"
 
 #include "constants/animations.h"

@@ -2,7 +2,7 @@
 #include "task.h"
 #include "lib/m4a/m4a.h"
 #include "game/sa1/special_stage/main.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 
 #include "constants/songs.h"
 

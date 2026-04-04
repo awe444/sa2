@@ -10,12 +10,12 @@
 #include "game/globals.h"
 #include "game/shared/stage/palette_loader.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/spawn_positions.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "data/sprite_data.h"
+#include "data/sa2/sprite_data.h"
 
 #include "constants/animations.h"
 #include "constants/anim_commands.h"

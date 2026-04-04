@@ -2,7 +2,7 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 #include "malloc_vram.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/mp_event_mgr.h"
 #include "game/shared/stage/player.h"

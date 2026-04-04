@@ -4,7 +4,7 @@
 // TEMP - Move everything below here into boss_3.c, once it is completely decompiled.
 
 // TODO: Should this stay here for better readability or go in
-//       game/parameters/bosses.h ?
+//       game/shared/parameters/bosses.h ?
 #define EGGTOTEM_NUM_PLATFORMS 3
 
 extern void CreateEggTotem(void);

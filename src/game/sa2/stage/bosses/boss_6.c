@@ -172,8 +172,8 @@ static const u16 gUnknown_080D809E[][10] = {
 #define PAL_BOSS_6_DEF 1
 
 static const ColorRaw sPalettes[][PALETTE_LEN_4BPP] = {
-    [PAL_BOSS_6_HIT] = INCPAL("graphics/boss_6_hit.pal"),
-    [PAL_BOSS_6_DEF] = INCPAL("graphics/boss_6_normal.pal"),
+    [PAL_BOSS_6_HIT] = INCPAL("graphics/sa2/boss_6_hit.pal"),
+    [PAL_BOSS_6_DEF] = INCPAL("graphics/sa2/boss_6_normal.pal"),
 };
 
 void CreateEggGoRound(void)

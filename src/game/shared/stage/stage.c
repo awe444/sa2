@@ -17,7 +17,7 @@
 #include "game/shared/stage/stage.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
-#include "game/sa2/time_attack/lobby.h"
+#include "game/sa2/ui/time_attack_lobby.h"
 #if (GAME == GAME_SA1)
 #include "game/time_over.h"
 #endif

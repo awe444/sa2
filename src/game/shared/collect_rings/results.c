@@ -10,7 +10,7 @@
 #include "game/shared/collect_rings/results.h"
 #include "task.h"
 #include "sprite.h"
-#include "data/sprite_data.h"
+#include "data/sa2/sprite_data.h"
 #include "bg_triangles.h"
 #include "game/sa2/save.h"
 #include "game/sa2/title_screen.h"
@@ -23,7 +23,7 @@
 #include "game/shared/stage/mp_player.h"
 #endif
 
-#include "data/collect_rings.h"
+#include "data/sa2/collect_rings.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"
@@ -80,12 +80,12 @@ void CreateMultiplayerSinglePakResultsScreen(u32 a)
     gMultiplayerMissingHeartbeats[2] = 0;
     gMultiplayerMissingHeartbeats[1] = 0;
     gMultiplayerMissingHeartbeats[0] = 0;
-    gWinRegs[4] = 0;
-    gWinRegs[5] = 0;
-    gWinRegs[0] = 0;
-    gWinRegs[2] = 0;
-    gWinRegs[1] = 0;
-    gWinRegs[3] = 0;
+    gWinRegs[WINREG_WININ] = 0;
+    gWinRegs[WINREG_WINOUT] = 0;
+    gWinRegs[WINREG_WIN0H] = 0;
+    gWinRegs[WINREG_WIN0V] = 0;
+    gWinRegs[WINREG_WIN1H] = 0;
+    gWinRegs[WINREG_WIN1V] = 0;
     gStageFlags = 0;
     gMultiSioEnabled = TRUE;
     gFlags &= ~0x4000;

@@ -5,7 +5,7 @@
 #include "trig.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/player_controls.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"

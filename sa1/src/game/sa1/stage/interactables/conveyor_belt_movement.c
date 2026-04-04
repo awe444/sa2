@@ -1,6 +1,6 @@
 #include "global.h"
 #include "core.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/terrain_collision.h"
 
 #include "constants/zones.h"

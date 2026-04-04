@@ -8,7 +8,7 @@
 .ifdef MULTI_SIO_DI_FUNC_FAST
 
 @--------------------------------------------------------------------
-@-              Update Receive Data/Check Buffer Routine            -
+@-              Update Receive data/sa2/Check Buffer Routine            -
 @--------------------------------------------------------------------
 
 	arm_func_start MultiSioRecvBufChange

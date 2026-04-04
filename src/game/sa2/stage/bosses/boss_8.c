@@ -11,9 +11,9 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/globals.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/shared/stage/collision.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/player_callbacks.h" // UpdateHomingPosition
 #include "game/sa2/stage/cheese.h"
@@ -178,8 +178,8 @@ static const EggRoboFn sArmFuncs[8]
 #define PAL_BOSS_8_HIT 1
 
 const ColorRaw sArmPalettes[2][PALETTE_LEN_4BPP] = {
-    [PAL_BOSS_8_DEF] = INCPAL("graphics/boss_8_normal.pal"),
-    [PAL_BOSS_8_HIT] = INCPAL("graphics/boss_8_hit.pal"),
+    [PAL_BOSS_8_DEF] = INCPAL("graphics/sa2/boss_8_normal.pal"),
+    [PAL_BOSS_8_HIT] = INCPAL("graphics/sa2/boss_8_hit.pal"),
 };
 
 #define SWITCH_ARM_VARIANT(boss, arm, vNum)                                                                                                \

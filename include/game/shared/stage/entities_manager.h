@@ -4,7 +4,7 @@
 #include "global.h"
 #include "sprite.h"
 #include "task.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

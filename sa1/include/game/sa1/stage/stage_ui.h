@@ -3,7 +3,7 @@
 
 #include "gba/types.h" // for bool32
 #include "game/sa1/ui/game_over.h"
-#include "game/gTask_03006240.h" // Strc_8052C84 *
+#include "game/sa1/stage/ui_rendering.h" // Strc_8052C84 *
 
 /* NOTE: This header is much more complicated than it needs to be.
          It originated from splitting a "UI" module,

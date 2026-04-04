@@ -5,7 +5,7 @@
 #include "multi_sio.h"
 #include "sio32_multi_load.h" // for SIO32ML_BLOCK_SIZE
 #include "lib/m4a/m4a.h"
-#include "data/sprite_tables.h"
+#include "data/sa1/sprite_tables.h"
 #if (GAME == GAME_SA1)
 #include "game/sa1/menus/mp_mode_select_2.h"
 #elif (GAME == GAME_SA2)
@@ -13,7 +13,7 @@
 #endif
 #include "game/shared/multiplayer/communication_outcome.h"
 #include "game/globals.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/sa1/save.h"
 #include "game/sa1/stage/tilemap_table.h"
 
@@ -96,7 +96,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/results_2__CreateMultiplayerSinglePakR
     gWinRegs[WINREG_WIN1V] = 0;
     gStageFlags = 0;
     gMultiSioEnabled = 1;
-    gFlags &= 0xFFFFBFFF;
+    gFlags &= ~0x4000;
     m4aSoundVSyncOn();
     gGameMode = GAME_MODE_MULTI_PLAYER_COLLECT_RINGS;
     gFlags &= ~0x8000;
