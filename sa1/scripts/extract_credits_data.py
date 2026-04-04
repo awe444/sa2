@@ -54,13 +54,13 @@ def convert_entries(rom, lines):
     return lines
 
 with open("baserom_sa1.gba", "rb")       as rom,      \
-     open("src/data/credits.c", "w") as credits_c:
+     open("src/data/sa1/credits.c", "w") as credits_c:
     rom.seek(credits_start - rom_start)
     
     print("Printing ", num_entries, " entries")
 
     lines = []
-    lines.append("#include \"game/credits.h\"\n")
+    lines.append("#include \"data/sa1/credits.h\"\n")
     lines.append("\n")
     lines.append(f"#define NUM_ENTRIES {num_entries}\n")
     lines.append("\n")

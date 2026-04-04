@@ -13,7 +13,7 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/mp_sprite_task.h"
-#include "data/sprite_data.h"
+#include "data/sa1/sprite_data.h"
 #include "game/shared/stage/water_effects.h"
 
 #include "constants/animations.h"

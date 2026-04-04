@@ -6,7 +6,7 @@ with open("src/game/sa2/assets/compressed/entities.c") as entities_file:
     content = "".join(entities_file.readlines())
 
 
-for zone in os.listdir("data/maps"):
+for zone in os.listdir("data/sa2/maps"):
     zone_num = zone.split("zone")[1]
     
     if zone_num == "8":
@@ -14,9 +14,9 @@ for zone in os.listdir("data/maps"):
     
     new_zone = "zone_" + zone_num
     
-    os.makedirs("data/maps/" + new_zone, exist_ok=True)
+    os.makedirs("data/sa2/maps/" + new_zone, exist_ok=True)
     
-    for act in os.listdir("data/maps/" + zone):
+    for act in os.listdir("data/sa2/maps/" + zone):
         act_num = act.split("act")[1] if "act" in act else act        
         
         if zone_num == "final":
@@ -30,9 +30,9 @@ for zone in os.listdir("data/maps"):
         
         new_act = "act_" + act_num
         
-        old = "data/maps/" + zone + "/" + act + "/"
-        new = "data/maps/" + new_zone + "/" + new_act
-        # new = "data/maps/" + new_zone + "/" + new_act + "/"
+        old = "data/sa2/maps/" + zone + "/" + act + "/"
+        new = "data/sa2/maps/" + new_zone + "/" + new_act
+        # new = "data/sa2/maps/" + new_zone + "/" + new_act + "/"
         
         print(old, new)
         shutil.move(old, new)

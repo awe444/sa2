@@ -1,7 +1,7 @@
 import shutil
 new_file_names = {}
 
-base_folder = "graphics/obj_tiles/4bpp"
+base_folder = "graphics/sa2/obj_tiles/4bpp"
 
 with open("graphics.mk", "r") as graphics_file:
     content = "".join(graphics_file.readlines())
@@ -10,12 +10,12 @@ with open("graphics.mk", "r") as graphics_file:
         file = segment.split(":")[0]
         new_file_names[file] = file.replace(".4bpp", f"_tiles_{segment.split('-num_tiles ')[1].strip()}.4bpp")
 
-with open("graphics/obj_tiles_4bpp.inc", "r") as tiles_inc:
+with open("graphics/sa2/obj_tiles_4bpp.inc", "r") as tiles_inc:
     content = "".join(tiles_inc.readlines())
     for file in new_file_names:
         content = content.replace(file, new_file_names[file])
     
-    with open("graphics/obj_tiles_4bpp_new.inc", "w") as tiles_inc_new:
+    with open("graphics/sa2/obj_tiles_4bpp_new.inc", "w") as tiles_inc_new:
         tiles_inc_new.write(content)
 
 for file in new_file_names:

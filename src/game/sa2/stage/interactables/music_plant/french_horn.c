@@ -10,7 +10,7 @@
 #include "constants/char_states.h"
 #include "constants/songs.h"
 
-#include "data/handlers_ia_pipe_horn_sequences.h"
+#include "data/sa2/handlers_ia_pipe_horn_sequences.h"
 
 typedef struct {
     /* 0x00 */ PipeSequence pipeSequence;

@@ -6,8 +6,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "game/types/camera.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/entities_manager.h"
 #include "game/sa1/stage/itembox.h"
 
@@ -110,7 +110,7 @@
 #include "game/sa1/stage/enemies/buzzer.h"
 #include "game/sa1/stage/enemies/spinner.h"
 
-#include "game/assets/compressed/entities.h"
+#include "game/sa1/assets/compressed/entities.h"
 #endif
 
 #include "constants/songs.h"

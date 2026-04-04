@@ -2,7 +2,7 @@
 #include "core.h"
 
 #include "game/globals.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/shared/stage/music_manager.h"
 
 #include "lib/m4a/m4a.h"

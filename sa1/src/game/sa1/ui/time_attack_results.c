@@ -2,13 +2,13 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa1/ui/game_over.h"
 #include "game/sa1/menus/title_screen.h"
 #include "game/sa1/save.h"
 #include "game/shared/stage/stage.h"
 #include "game/sa1/stage/stage_ui.h"
-#include "data/ui_graphics.h"
+#include "data/sa1/ui_graphics.h"
 
 #include "constants/animations.h"
 

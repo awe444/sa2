@@ -32,9 +32,9 @@ It can also build:
 
 - :tada: The build is 100% from C files with [~60 functions which currently don't match](./asm/non_matching)
 - All assembly code extracted, disassembled, and decompiled by hand to their C equivilent
-- All songs have been extracted, and documented as [matching MIDI files](./sound/songs/midi)
-- All sprite animation frames have been [extracted to PNGs and are used to build the matching rom](./graphics/obj_tiles)
-- All tilemaps (backgrounds) have been documented and [had their tiles extracted](./data/tilemaps)
+- All songs have been extracted, and documented as [matching MIDI files](./sound/sa2/songs/midi)
+- All sprite animation frames have been [extracted to PNGs and are used to build the matching rom](./graphics/sa2/obj_tiles)
+- All tilemaps (backgrounds) have been documented and [had their tiles extracted](./data/sa2/tilemaps)
 - Most aspects of core game play have been documented, but >600 functions are still unnamed
 - The game compiles to a widescreen port (*426x240*) for multiple platforms
 

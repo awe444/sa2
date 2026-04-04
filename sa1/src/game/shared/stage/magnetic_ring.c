@@ -7,8 +7,8 @@
 #include "game/globals.h"
 #include "game/shared/stage/collect_ring_effect.h"
 #include "game/shared/stage/rings_manager.h"
-#include "game/types/camera.h"
-#include "game/types/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/player.h"
 
 #include "constants/animations.h"
 #include "constants/zones.h"

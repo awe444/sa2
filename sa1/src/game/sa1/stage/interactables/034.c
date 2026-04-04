@@ -1,9 +1,9 @@
 #include "global.h"
 #include "task.h"
 #include "lib/m4a/m4a.h"
-#include "game/types/camera.h"
+#include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 #include "constants/char_states.h"
 #include "constants/songs.h"

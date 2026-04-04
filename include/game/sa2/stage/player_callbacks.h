@@ -2,7 +2,7 @@
 #define GUARD_player_callbacks_H
 
 #include "core.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 
 struct Task *CreateSonicAmySkidAttackEffect(s32 x, s32 y, u16 p2);
 void Player_SonicAmy_InitSkidAttack(Player *);

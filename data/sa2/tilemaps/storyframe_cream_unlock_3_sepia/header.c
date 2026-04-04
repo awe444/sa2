@@ -1,0 +1,20 @@
+#include "global.h"
+#include "core.h"
+
+const ColorRaw Palette_storyframe_cream_unlock_3_sepia[] = INCPAL("data/sa2/tilemaps/storyframe_cream_unlock_3_sepia/palette.pal");
+const u8 Tiles_storyframe_cream_unlock_3_sepia[] = INCBIN_U8("data/sa2/tilemaps/storyframe_cream_unlock_3_sepia/tiles.4bpp");
+const u16 Tilemap_storyframe_cream_unlock_3_sepia[] = INCBIN_U16("data/sa2/tilemaps/storyframe_cream_unlock_3_sepia/tilemap.tilemap2");
+
+const Tilemap storyframe_cream_unlock_3_sepia = {
+    .xTiles = 30,
+    .yTiles = 20,
+    .animTileSize = 0,
+    .animFrameCount = 0,
+    .animDelay = 0,
+    .tiles = Tiles_storyframe_cream_unlock_3_sepia,
+    .tilesSize = sizeof(Tiles_storyframe_cream_unlock_3_sepia),
+    .palette = Palette_storyframe_cream_unlock_3_sepia,
+    .palOffset = 0,
+    .palLength = ARRAY_COUNT(Palette_storyframe_cream_unlock_3_sepia),
+    .map = Tilemap_storyframe_cream_unlock_3_sepia,
+};

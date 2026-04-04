@@ -7,7 +7,7 @@
 
 #include "game/shared/stage/collision.h"
 #include "game/sa2/stage/interactables/platform_thin.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 #include "game/shared/stage/mp_event_mgr.h"
 #include "game/shared/stage/player.h"

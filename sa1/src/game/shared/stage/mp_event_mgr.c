@@ -9,7 +9,7 @@
 #include "game/shared/stage/mp_finish.h"
 #include "game/shared/stage/mp_player.h"
 #include "game/globals.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 
 #include "lib/m4a/m4a.h"
 

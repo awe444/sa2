@@ -67,7 +67,8 @@ Temporary Items
 *.dump
 build
 tools/agbcc
-**/sound/songs/midi/*.s
+# **/sound/*/songs/midi/*.s
+**/songs/midi/*.s
 **/ctx.c
 **/ctx.h
 reports
@@ -81,7 +82,7 @@ reports
 *.8bpp
 libagbsyscall/*.s
 
-!data/maps/*/*/tilemaps/*/*.bin
+!data/*/maps/*/*/tilemaps/*/*.bin
 *.exe
 *.dll
 *.sdl

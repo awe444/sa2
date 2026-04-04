@@ -12,7 +12,7 @@
 #include "game/sa2/stage/heart_particles_effect.h"
 #include "game/sa2/stage/mp_attack_2_effect.h"
 #include "game/shared/stage/mp_player.h"
-#include "game/parameters/bosses.h"
+#include "game/shared/parameters/bosses.h"
 #include "game/sa2/stage/player_callbacks.h"
 #include "game/sa2/stage/input_buffer.h"
 #include "game/shared/stage/music_manager.h"
@@ -31,7 +31,7 @@
 #include "game/sa2/stage/spawn_positions.h"
 #include "game/shared/stage/stage.h"
 #include "game/shared/stage/underwater_effects.h"
-#include "game/sa2/time_attack/results.h" // for Player_VictoryPose
+#include "game/sa2/ui/time_attack_results.h" // for Player_VictoryPose
 #include "game/sa2/stage/mp_attack_1_effect.h"
 #include "game/shared/stage/water_effects.h"
 

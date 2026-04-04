@@ -25,9 +25,9 @@ const u8 gUnknown_080E0234[] = {
 };
 
 #ifndef COLLECT_RINGS_ROM
-const ColorRaw sTimeoutPalette[PALETTE_LEN_4BPP] = INCPAL("graphics/time_display_timeout.pal");
+const ColorRaw sTimeoutPalette[PALETTE_LEN_4BPP] = INCPAL("graphics/sa2/time_display_timeout.pal");
 #else
-const ColorRaw sTimeoutPalette[PALETTE_LEN_4BPP] = INCPAL("../../../graphics/time_display_timeout.pal");
+const ColorRaw sTimeoutPalette[PALETTE_LEN_4BPP] = INCPAL("../../../graphics/sa2/time_display_timeout.pal");
 #endif
 
 #ifndef COLLECT_RINGS_ROM

@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "trig.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/terrain_collision.h"
 #include "game/shared/stage/player.h"

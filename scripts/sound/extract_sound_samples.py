@@ -1,6 +1,6 @@
 import os
 
-directory = "sound/direct_sound_samples"
+directory = "sound/sa2/direct_sound_samples"
 for filename in os.listdir(directory):
     if filename.endswith('.bin'):
         filepath = directory + "/" + filename

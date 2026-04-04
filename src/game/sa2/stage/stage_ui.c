@@ -43,7 +43,7 @@ const u16 sAnims1UpIcons[][3]
         [CHARACTER_KNUCKLES] = { ONE_UP_ICON_TILE_COUNT, SA2_ANIM_LIFE_COUNTER, SA2_ANIM_VARIANT_LIFE_COUNTER_KNUCKLES },
         [CHARACTER_AMY] = { ONE_UP_ICON_TILE_COUNT, SA2_ANIM_LIFE_COUNTER, SA2_ANIM_VARIANT_LIFE_COUNTER_AMY } };
 
-const ColorRaw sPalette1UpIcons[PALETTE_LEN_4BPP] = INCPAL("graphics/ui_icon_1_up.pal");
+const ColorRaw sPalette1UpIcons[PALETTE_LEN_4BPP] = INCPAL("graphics/sa2/ui_icon_1_up.pal");
 
 const u32 sOrdersOfMagnitude[6] = {
     100000, 10000, 1000, 100, 10, 1,

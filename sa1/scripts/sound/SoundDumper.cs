@@ -370,15 +370,15 @@ namespace dump_sound
 
             var sb = new StringBuilder();
             var filename = String.Format("{0:X8}.pcm", ofs);
-            var outfilename = String.Format("sound/programmable_wave_samples/{0}", filename);
+            var outfilename = String.Format("sound/sa1/programmable_wave_samples/{0}", filename);
 
             sb.Append("\t.align 2\n");
             sb.AppendFormat("\t.global ProgrammableWaveData_{0:X7}\n", ofs);
             sb.AppendFormat("ProgrammableWaveData_{0:X7}:\n", ofs);
-            sb.AppendFormat("\t.incbin \"sound/programmable_wave_samples/{0}\"\n", filename);
+            sb.AppendFormat("\t.incbin \"sound/sa1/programmable_wave_samples/{0}\"\n", filename);
             soundInfo.Add(ofs, sb.ToString());
 
-            Directory.CreateDirectory("sound/programmable_wave_samples/");
+            Directory.CreateDirectory("sound/sa1/programmable_wave_samples/");
 
             byte[] data = new byte[len];
 
@@ -398,15 +398,15 @@ namespace dump_sound
 
             var sb = new StringBuilder();
             var filename = String.Format("{0:X8}.bin", ofs);
-            var outfilename = String.Format("sound/direct_sound_samples/{0}", filename);
+            var outfilename = String.Format("sound/sa1/direct_sound_samples/{0}", filename);
 
             sb.Append("\t.align 2\n");
             sb.AppendFormat("\t.global gUnknown_{0:X8}\n", ofs);
             sb.AppendFormat("gUnknown_{0:X8}:\n", ofs);
-            sb.AppendFormat("\t.incbin \"sound/direct_sound_samples/{0}\"\n", filename);
+            sb.AppendFormat("\t.incbin \"sound/sa1/direct_sound_samples/{0}\"\n", filename);
             soundInfo.Add(ofs, sb.ToString());
 
-            Directory.CreateDirectory("sound/direct_sound_samples/");
+            Directory.CreateDirectory("sound/sa1/direct_sound_samples/");
 
             var type = ReadU16(ofs + 0);
             var status = ReadU16(ofs + 2);
@@ -428,7 +428,7 @@ namespace dump_sound
 
             var sb = new StringBuilder();
             var filename = String.Format("voicegroup{0:d3}.inc", id);
-            var outfilename = String.Format("sound/voicegroups/{0}", filename);
+            var outfilename = String.Format("sound/sa1/voicegroups/{0}", filename);
 
             sb.Append("\t.align 2\n");
             sb.AppendFormat("\t@********************** Voicegroup **********************@\n\n");
@@ -630,7 +630,7 @@ namespace dump_sound
             }
 
 
-            Directory.CreateDirectory("sound/voicegroups/");
+            Directory.CreateDirectory("sound/sa1/voicegroups/");
             File.WriteAllText(outfilename, sb.ToString());
 
             return sb.ToString();
@@ -965,7 +965,7 @@ namespace dump_sound
                 realName = soundInfo[ofs].Substring(pos + 8, 7);
             }
             var filename = String.Format("{0}.s", realName);
-            var outfilename = String.Format("sound/songs/{0}", filename);
+            var outfilename = String.Format("sound/sa1/songs/{0}", filename);
 
             sbt.Append("\t.include \"MPlayDef.s\"\n\n");
             sbt.Append("\t.section .rodata\n");
@@ -1038,7 +1038,7 @@ namespace dump_sound
                 };
 
                 if (goodSongs.Contains(id) || true) {
-                    Directory.CreateDirectory("sound/songs/");
+                    Directory.CreateDirectory("sound/sa1/songs/");
                     File.WriteAllText(outfilename, sbt.ToString() + sb.ToString());
                 }
             }
@@ -1153,7 +1153,7 @@ namespace dump_sound
                 if (adr.Value.Contains(".global voicegroup"))
                 {
                     int pos = adr.Value.IndexOf(".global voicegroup");
-                    sb.AppendFormat(".include \"sound/voicegroups/{0}.inc\"\n", adr.Value.Substring(pos + 8, 13));
+                    sb.AppendFormat(".include \"sound/sa1/voicegroups/{0}.inc\"\n", adr.Value.Substring(pos + 8, 13));
                     continue;
                 }
                 
@@ -1162,7 +1162,7 @@ namespace dump_sound
                     int pos = adr.Value.IndexOf(".global song");
                     string curr = adr.Value.Substring(pos + 8, 7);
                     if (String.Compare(curr, prev) != 0) {
-                        sb.AppendFormat(".include \"sound/songs/{0}.inc\"\n", curr);
+                        sb.AppendFormat(".include \"sound/sa1/songs/{0}.inc\"\n", curr);
                         prev = curr;
                     }
                     continue;

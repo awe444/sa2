@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "lib/m4a/m4a.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa1/stage/mp_chao.h"
 #include "game/shared/stage/mp_player.h"
 #include "game/shared/stage/mp_event_mgr.h"

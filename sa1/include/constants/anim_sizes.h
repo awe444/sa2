@@ -2,11 +2,21 @@
 #define GUARD_ANIM_SIZES_H
 
 // TODO: Auto-generate this file
+#if (GAME == GAME_SA2)
+// TODO: fix the defines for sa1 and sa3 so this macro works
+// on them too
+#define MAX_TILES(_animName)                   ((_animName##_WIDTH / 8) * (_animName##_HEIGHT / 8))
+#define MAX_TILES_VARIANT(_animName, _variant) ((_animName##_VAR##_variant##_WIDTH / 8) * (_animName##_VAR##_##_variant##_HEIGHT / 8))
+#define ALLOC_TILES(_animName)                 VramMalloc(((_animName##_WIDTH / 8) * (_animName##_HEIGHT / 8)))
+#define ALLOC_TILES_VARIANT(_animName, _variant)                                                                                           \
+    VramMalloc(((_animName##_VAR##_##_variant##_WIDTH / 8) * (_animName##_VAR##_##_variant##_HEIGHT / 8)))
+#else
 #define MAX_TILES(_animName)                   ((_animName##_WIDTH / 8) * (_animName##_HEIGHT / 8))
 #define MAX_TILES_VARIANT(_animName, _variant) ((_animName##_VAR##_variant##_WIDTH / 8) * (_animName##_VAR##_variant##_HEIGHT / 8))
 #define ALLOC_TILES(_animName)                 VramMalloc(((_animName##_WIDTH / 8) * (_animName##_HEIGHT / 8)))
 #define ALLOC_TILES_VARIANT(_animName, _variant)                                                                                           \
     VramMalloc(((_animName##_VAR##_variant##_WIDTH / 8) * (_animName##_VAR##_variant##_HEIGHT / 8)))
+#endif
 
 #if (GAME == GAME_SA1)
 // 005
@@ -919,6 +929,22 @@
 #define SA1_ANIM_CRUMBLE_PLATFORM_HEIGHT 32
 
 #elif (GAME == GAME_SA2)
+// 849
+#define SA2_ANIM_GAME_OVER_WIDTH           64
+#define SA2_ANIM_GAME_OVER_HEIGHT          64
+#define SA2_ANIM_GAME_OVER_VAR_GAME_WIDTH  64
+#define SA2_ANIM_GAME_OVER_VAR_GAME_HEIGHT 64
+#define SA2_ANIM_GAME_OVER_VAR_OVER_WIDTH  64
+#define SA2_ANIM_GAME_OVER_VAR_OVER_HEIGHT 64
+
+// 849
+#define SA2_ANIM_GRIND_EFFECT_WIDTH        32
+#define SA2_ANIM_GRIND_EFFECT_HEIGHT       40
+
+// 1044
+#define ANIM_DEMO_PLAY_WIDTH               112
+#define ANIM_DEMO_PLAY_HEIGHT              16
+
 #elif (GAME == GAME_SA3)
 // 858
 #define ANIM_CHAOMAP_EMERALD_WIDTH                  24

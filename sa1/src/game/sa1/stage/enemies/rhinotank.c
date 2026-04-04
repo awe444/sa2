@@ -2,7 +2,7 @@
 #include "core.h"
 #include "trig.h"
 #include "malloc_vram.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/entities_manager.h"
 #include "game/shared/stage/terrain_collision.h"

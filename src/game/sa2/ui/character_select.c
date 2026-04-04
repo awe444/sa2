@@ -15,8 +15,8 @@
 #include "game/sa2/options_screen.h"
 #include "game/sa2/ui/course_select.h"
 #include "game/sa2/title_screen.h"
-#include "game/sa2/time_attack/lobby.h"
-#include "game/sa2/time_attack/mode_select.h"
+#include "game/sa2/ui/time_attack_lobby.h"
+#include "game/sa2/ui/time_attack_mode_select.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

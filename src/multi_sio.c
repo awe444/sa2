@@ -15,7 +15,7 @@ UNUSED u32 gUnusedMultiSioSpace[2] = {};
 #endif
 
 #ifdef MULTI_SIO_DI_FUNC_FAST
-u32 gMultiSioRecvFuncBuf[0x40 / 4] = {}; // Receive Data/Check Buffer Change Routine RAM Execution Buffer
+u32 gMultiSioRecvFuncBuf[0x40 / 4] = {}; // Receive data/sa2/Check Buffer Change Routine RAM Execution Buffer
 #endif
 
 /*------------------------------------------------------------------*/
@@ -135,12 +135,12 @@ u32 MultiSioRecvDataCheck(void *recvp)
     u8 syncRecvFlagBak[4];
     s32 i, ii;
 
-#ifdef MULTI_SIO_DI_FUNC_FAST // Update Receive Data/Check Buffer
+#ifdef MULTI_SIO_DI_FUNC_FAST // Update Receive data/sa2/Check Buffer
     *(u32 *)syncRecvFlagBak = multiSioRecvBufChangeOnRam();
 #else
     REG_IME = 0; // Disable Interrupt (Approx. 80 Clocks)
     for (i = 0; i < 4; ++i) {
-        u16 *bufpTmp = gMultiSioArea.recvCheckBufp[i]; // Update Receive Data/Check Buffer
+        u16 *bufpTmp = gMultiSioArea.recvCheckBufp[i]; // Update Receive data/sa2/Check Buffer
         gMultiSioArea.recvCheckBufp[i] = gMultiSioArea.lastRecvBufp[i];
         gMultiSioArea.lastRecvBufp[i] = bufpTmp;
     }

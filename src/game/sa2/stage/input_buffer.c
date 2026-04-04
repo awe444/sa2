@@ -3,7 +3,7 @@
 #include "game/sa2/stage/input_buffer.h"
 #include "game/shared/stage/player.h"
 
-#include "data/input_combos.h"
+#include "data/sa2/input_combos.h"
 
 typedef struct {
     u8 unk0, unk1, unk2, unk3;

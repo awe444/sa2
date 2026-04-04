@@ -6,7 +6,7 @@
 
 #include "game/shared/stage/entities_manager.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/kura_kura.h"
 
 #include "game/shared/stage/player.h"

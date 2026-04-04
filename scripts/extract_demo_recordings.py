@@ -36,7 +36,7 @@ with open('baserom.gba', 'rb') as rom:
 
         rom.seek(start_addr)
         print(length)
-        recording_file_uncompressed = f"data/recordings/demo_{i + 1}.bin"
+        recording_file_uncompressed = f"data/sa2/recordings/demo_{i + 1}.bin"
         recording_file_compressed = f"{recording_file_uncompressed}.lz"
         with open(recording_file_compressed, "wb") as recording:
             recording.write(rom.read(length))

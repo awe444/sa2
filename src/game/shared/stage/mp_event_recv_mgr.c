@@ -1,6 +1,6 @@
 #include "global.h"
 #include "core.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/mp_event_mgr.h"
 #include "game/shared/stage/rings_scatter.h"
 #include "game/shared/stage/entities_manager.h"

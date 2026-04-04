@@ -153,22 +153,22 @@ ASM_BUILDDIR = $(OBJ_DIR)/$(ASM_SUBDIR)
 C_SUBDIR = src
 C_BUILDDIR = $(OBJ_DIR)/$(C_SUBDIR)
 
-DATA_ASM_SUBDIR = data
+DATA_ASM_SUBDIR = data/sa2
 DATA_ASM_BUILDDIR = $(OBJ_DIR)/$(DATA_ASM_SUBDIR)
 
-SONG_SUBDIR = sound/songs
+SONG_SUBDIR = sound/sa2/songs
 SONG_BUILDDIR = $(OBJ_DIR)/$(SONG_SUBDIR)
 
 SOUND_ASM_SUBDIR = sound
 SOUND_ASM_BUILDDIR = $(OBJ_DIR)/$(SOUND_ASM_SUBDIR)
 
-MID_SUBDIR = sound/songs/midi
+MID_SUBDIR = sound/sa2/songs/midi
 MID_BUILDDIR = $(OBJ_DIR)/$(MID_SUBDIR)
 
-SAMPLE_SUBDIR = sound/direct_sound_samples
+SAMPLE_SUBDIR = sound/sa2/direct_sound_samples
 
-OBJ_TILES_4BPP_SUBDIR = graphics/obj_tiles/4bpp
-TILESETS_SUBDIR = graphics/tilesets/
+OBJ_TILES_4BPP_SUBDIR = graphics/sa2/obj_tiles/4bpp
+TILESETS_SUBDIR = graphics/sa2/tilesets/
 
 ifeq ($(PLATFORM),gba)
 C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/platform/*")
@@ -452,7 +452,7 @@ clean: tidy clean-tools
 	@$(MAKE) clean -C libagbsyscall PLATFORM=$(PLATFORM) CPU_ARCH=$(CPU_ARCH)
 
 	$(RM) $(SAMPLE_SUBDIR)/*.bin $(MID_SUBDIR)/*.s
-	find . \( -iwholename './data/maps/*/*/entities/*.bin' -o -iname '*.1bpp' -o -iname '*.4bpp' -o -iname '*.8bpp' -o -iname '*.gbapal' -o -iname '*.lz' -o -iname '*.rl' -o -iname '*.latfont' -o -iname '*.hwjpnfont' -o -iname '*.fwjpnfont' \) -exec $(RM) {} +
+	find . \( -iwholename './data/*/maps/*/*/entities/*.bin' -o -iname '*.1bpp' -o -iname '*.4bpp' -o -iname '*.8bpp' -o -iname '*.gbapal' -o -iname '*.lz' -o -iname '*.rl' -o -iname '*.latfont' -o -iname '*.hwjpnfont' -o -iname '*.fwjpnfont' \) -exec $(RM) {} +
 
 clean-tools:
 	@$(foreach tooldir,$(TOOLDIRS),$(MAKE) clean -C $(tooldir);)
@@ -502,7 +502,7 @@ include graphics.mk
 chao_garden/mb_chao_garden.gba.lz: chao_garden/mb_chao_garden.gba 
 	$(GFX) $< $@ -search 1
     
-data/mb_chao_garden_japan.gba.lz: data/mb_chao_garden_japan.gba
+data/sa2/mb_chao_garden_japan.gba.lz: data/sa2/mb_chao_garden_japan.gba
 	$(GFX) $< $@ -search 1
 
 %interactables.bin: %interactables.csv
@@ -558,7 +558,7 @@ else ifeq ($(PLATFORM),sdl_psp)
 	@-rm -f $(BUILD_NAME).psp_strip.elf
 else ifeq ($(PLATFORM),ps2)
 	@echo Creating $(ROM) from $(ELF)
-	@cp -r ps2/ntsc $(OBJ_DIR)/iso
+	@cp -r ps2/$(BUILD_NAME)/ntsc $(OBJ_DIR)/iso
 	@cp $< $(OBJ_DIR)/iso/$(PS2_GAME_CODE)
 	@mkisofs -o $(ROM) $(OBJ_DIR)/iso/
 else

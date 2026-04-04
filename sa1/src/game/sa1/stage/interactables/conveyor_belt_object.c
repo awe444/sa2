@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "malloc_vram.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/collision.h"
 
 #include "constants/animations.h"

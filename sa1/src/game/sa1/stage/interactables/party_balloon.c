@@ -2,10 +2,10 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa1/stage/interactables/party_balloon.h"
 #include "game/shared/stage/mp_event_mgr.h"
-#include "game/types/player.h"
+#include "game/shared/stage/player.h"
 #include "game/shared/stage/player.h"
 
 #include "constants/animations.h"

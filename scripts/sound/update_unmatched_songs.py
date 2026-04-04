@@ -32,7 +32,7 @@ for song_file in os.listdir('songs'):
     if not song_file.endswith('.s'):
         continue
 
-    print("sound/songs/" + song_file)
+    print("sound/sa2/songs/" + song_file)
     
     data = ""
     with open('songs/' + song_file) as f_song:

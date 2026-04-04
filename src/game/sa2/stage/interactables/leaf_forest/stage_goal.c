@@ -5,7 +5,7 @@
 #include "malloc_vram.h"
 
 #include "game/shared/stage/collision.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/mp_sprite_task.h"
 #include "game/shared/stage/player.h"

@@ -29,10 +29,10 @@
 #include "game/dummy_task.h"
 
 #if TAS_TESTING
-#include "data/recordings.h"
+#include "data/sa2/recordings.h"
 #endif
 
-#include "data/sprite_tables.h"
+#include "data/sa2/sprite_tables.h"
 
 #ifndef COLLECT_RINGS_ROM
 void GameInit(void)

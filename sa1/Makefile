@@ -143,22 +143,22 @@ ASM_BUILDDIR = $(OBJ_DIR)/$(ASM_SUBDIR)
 C_SUBDIR = src
 C_BUILDDIR = $(OBJ_DIR)/$(C_SUBDIR)
 
-DATA_ASM_SUBDIR = data
+DATA_ASM_SUBDIR = data/sa1
 DATA_ASM_BUILDDIR = $(OBJ_DIR)/$(DATA_ASM_SUBDIR)
 
-SONG_SUBDIR = sound/songs
+SONG_SUBDIR = sound/sa1/songs
 SONG_BUILDDIR = $(OBJ_DIR)/$(SONG_SUBDIR)
 
 SOUND_ASM_SUBDIR = sound
 SOUND_ASM_BUILDDIR = $(OBJ_DIR)/$(SOUND_ASM_SUBDIR)
 
-MID_SUBDIR = sound/songs/midi
+MID_SUBDIR = sound/sa1/songs/midi
 MID_BUILDDIR = $(OBJ_DIR)/$(MID_SUBDIR)
 
-SAMPLE_SUBDIR = sound/direct_sound_samples
+SAMPLE_SUBDIR = sound/sa1/direct_sound_samples
 
-OBJ_TILES_4BPP_SUBDIR = graphics/obj_tiles/4bpp
-TILESETS_SUBDIR = graphics/tilesets/
+OBJ_TILES_4BPP_SUBDIR = graphics/sa1/obj_tiles/4bpp
+TILESETS_SUBDIR = graphics/sa1/tilesets/
 
 ifeq ($(PLATFORM),gba)
 C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/platform/*")
@@ -481,7 +481,7 @@ include ../graphics.mk
 chao_garden/mb_chao_garden.gba.lz: chao_garden/mb_chao_garden.gba 
 	$(GFX) $< $@ -search 1
     
-data/mb_chao_garden_japan.gba.lz: data/mb_chao_garden_japan.gba
+data/sa1/mb_chao_garden_japan.gba.lz: data/sa1/mb_chao_garden_japan.gba
 	$(GFX) $< $@ -search 1
 
 %interactables.bin: %interactables.csv

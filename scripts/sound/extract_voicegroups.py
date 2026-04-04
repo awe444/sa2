@@ -52,5 +52,5 @@ for vg in new_vgs:
         new_file.write(replace_ids(vg, vg_map))
 
 with open('new_voicegroups.inc', 'w') as vgs_file:
-    new_content = "".join(map(lambda val: f".include \"sound/voicegroups/{val}.inc\"\n", vg_map.values()))
+    new_content = "".join(map(lambda val: f".include \"sound/sa2/voicegroups/{val}.inc\"\n", vg_map.values()))
     vgs_file.write(new_content)

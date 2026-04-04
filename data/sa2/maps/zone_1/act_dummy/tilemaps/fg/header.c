@@ -1,0 +1,64 @@
+#include "global.h"
+#include "core.h"
+
+const ColorRaw Palette_zone_1_act_dummy_fg[] = INCPAL("data/sa2/maps/zone_1/act_dummy/tilemaps/fg/palette.pal");
+const u8 Tileset_zone_1_act_dummy_fg[] = INCBIN_U8("data/sa2/maps/zone_1/act_dummy/tilemaps/fg/tileset.4bpp");
+const s8 CollHeightMap_zone_1_act_dummy_fg[] = INCBIN_U8("data/sa2/maps/zone_1/act_dummy/tilemaps/fg/height_map.coll");
+const u8 CollTileRot_zone_1_act_dummy_fg[] = INCBIN_U8("data/sa2/maps/zone_1/act_dummy/tilemaps/fg/tile_rot.coll");
+const u16 CollFlags_zone_1_act_dummy_fg[] = INCBIN_U16("data/sa2/maps/zone_1/act_dummy/tilemaps/fg/flags.coll");
+const u16 Metatiles_zone_1_act_dummy_fg[] = INCBIN_U16("data/sa2/maps/zone_1/act_dummy/tilemaps/fg/metatiles.tilemap2");
+
+const u16 Map_zone_1_act_dummy_fg0[] = INCBIN_U16("data/sa2/maps/zone_1/act_dummy/tilemaps/fg/map_front.bin");
+
+const u16 Map_zone_1_act_dummy_fg1[] = INCBIN_U16("data/sa2/maps/zone_1/act_dummy/tilemaps/fg/map_back.bin");
+
+ALIGNED(4) const struct MapHeader MapHeader_zone_1_act_dummy_fg0 = 
+{
+    .tileset = {
+        .xTiles = 12,
+        .yTiles = 12,
+        .animTileSize = 0,
+        .animFrameCount = 0,
+        .animDelay = 0,
+        .tiles = Tileset_zone_1_act_dummy_fg,
+        .tilesSize = sizeof(Tileset_zone_1_act_dummy_fg),
+        .palette = Palette_zone_1_act_dummy_fg,
+        .palOffset = 0,
+        .palLength = ARRAY_COUNT(Palette_zone_1_act_dummy_fg),
+        .map = Metatiles_zone_1_act_dummy_fg,
+    },
+    .metatileMap = Map_zone_1_act_dummy_fg0,
+    .mapWidth = 6,
+    .mapHeight = 3,
+};
+
+ALIGNED(4) const struct MapHeader MapHeader_zone_1_act_dummy_fg1 = 
+{
+    .tileset = {
+        .xTiles = 12,
+        .yTiles = 12,
+        .animTileSize = 0,
+        .animFrameCount = 0,
+        .animDelay = 0,
+        .tiles = Tileset_zone_1_act_dummy_fg,
+        .tilesSize = sizeof(Tileset_zone_1_act_dummy_fg),
+        .palette = Palette_zone_1_act_dummy_fg,
+        .palOffset = 0,
+        .palLength = ARRAY_COUNT(Palette_zone_1_act_dummy_fg),
+        .map = Metatiles_zone_1_act_dummy_fg,
+    },
+    .metatileMap = Map_zone_1_act_dummy_fg1,
+    .mapWidth = 6,
+    .mapHeight = 3,
+};
+
+const Collision CollHeader_zone_1_act_dummy_fg = { CollHeightMap_zone_1_act_dummy_fg,
+                                                   CollTileRot_zone_1_act_dummy_fg,
+                                                   Metatiles_zone_1_act_dummy_fg,
+                                                   Map_zone_1_act_dummy_fg0,
+                                                   Map_zone_1_act_dummy_fg1,
+                                                   CollFlags_zone_1_act_dummy_fg,
+                                                   6,
+                                                   3,
+                                                   576,
+                                                   288 };

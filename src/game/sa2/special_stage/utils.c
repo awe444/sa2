@@ -4,7 +4,7 @@
 #include "game/sa2/special_stage/utils.h"
 #include "game/sa2/special_stage/data.h"
 #include "sprite.h"
-#include "data/sprite_data.h"
+#include "data/sa2/sprite_data.h"
 #include "trig.h"
 
 void *gSpecialStageSubMenuVramPointer = NULL;

@@ -3,7 +3,7 @@
 #include "lib/m4a/m4a.h"
 #include "game/sa1/ui/character_select.h"
 #include "game/sa1/ui/game_over.h"
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/sa1/save.h"
 #include "game/sa1/menus/title_screen.h" // CreateMainMenu
 #include "game/sa1/stage/stage_ui.h" // sub_805423C

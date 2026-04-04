@@ -10,7 +10,7 @@
 #include "core.h"
 
 #include "flags.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "sprite.h"
 
 #include "constants/animations.h"

@@ -4,12 +4,12 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/shared/stage/collision.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/bosses/boss_3.h"
 #include "game/sa2/stage/bosses/eggmobile_escape_sequence.h"
 #include "game/sa2/stage/boss_results_transition.h"
-#include "game/parameters/bosses.h"
+#include "game/shared/parameters/bosses.h"
 #include "game/sa2/stage/player_callbacks.h"
 
 #include "game/shared/stage/terrain_collision.h"
@@ -189,8 +189,8 @@ const s8 gUnknown_080D7F10[EGGTOTEM_NUM_PLATFORMS] = { 14, 14, 8 };
 #define PAL_BOSS_3_DEF 1
 
 const ColorRaw sBoss3Palettes[2][PALETTE_LEN_4BPP] = {
-    [PAL_BOSS_3_HIT] = INCPAL("graphics/boss_3_hit.pal"),
-    [PAL_BOSS_3_DEF] = INCPAL("graphics/boss_3_normal.pal"),
+    [PAL_BOSS_3_HIT] = INCPAL("graphics/sa2/boss_3_hit.pal"),
+    [PAL_BOSS_3_DEF] = INCPAL("graphics/sa2/boss_3_normal.pal"),
 };
 
 void CreateEggTotem(void)

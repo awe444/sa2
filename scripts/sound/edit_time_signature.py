@@ -7,7 +7,7 @@ matched_signatures = {
 }
 
 
-data = pm.midi_to_csv(f'sound/songs/midi/{sys.argv[1]}.mid')
+data = pm.midi_to_csv(f'sound/sa2/songs/midi/{sys.argv[1]}.mid')
 
 for i in range(len(data)):
     line = data[i]
@@ -24,6 +24,6 @@ for i in range(len(data)):
 
 midi_object = pm.csv_to_midi(data)
 
-with open(f'sound/songs/midi/{sys.argv[1]}.mid', "wb") as output_file:
+with open(f'sound/sa2/songs/midi/{sys.argv[1]}.mid', "wb") as output_file:
     midi_writer = pm.FileWriter(output_file)
     midi_writer.write(midi_object)

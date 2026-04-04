@@ -4,7 +4,7 @@
 
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "sprite.h"
 #include "task.h"
 #include "trig.h"
