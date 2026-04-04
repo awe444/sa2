@@ -9,7 +9,6 @@
 @@ 
 @@ 	@ These will be set by gbafix
 @@ 	
-    mAlignData
 @@ 	.global RomHeaderNintendoLogo_old
 @@ RomHeaderNintendoLogo_old:
 @@ 	.space 0x9c
