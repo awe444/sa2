@@ -371,8 +371,8 @@ Matches until
                 0x08acdedc                gCgb3Vol
                 0x08acdeec                gClockTable
                 0x08acdf20                gXcmdTable
- data/sound_data.o(.rodata)
- .rodata        0x08acdf50   0x18564b data/sound_data.o
+ data/sa2/sound_data.o(.rodata)
+ .rodata        0x08acdf50   0x18564b data/sa2/sound_data.o
                 0x08acdf50                voicegroup000
                 0x08ace3a0                voicegroup001
                 0x08ace550                voicegroup002
@@ -452,7 +452,7 @@ Matches until
 ```
                 0x08af2584                DirectSoundWaveData_17
  *fill*         0x08c5359b        0x1 00000000
- .rodata        0x08c5359c      0x8d0 sound/songs/midi/mus_intro.o
+ .rodata        0x08c5359c      0x8d0 sound/sa2/songs/midi/mus_intro.o
                 0x08c53e40                mus_intro
 ```
 To 0x8BD...

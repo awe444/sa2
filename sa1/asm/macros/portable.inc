@@ -26,6 +26,19 @@
 // assemblers.  The earlier .align N form is interpreted as 2^N on ARM
 // targets, which produced 256-byte gaps instead of 8-byte gaps and
 // caused struct-layout mismatches with C code on AArch64.
+// The System V AMD64 ABI (and AAPCS64) requires global arrays of 16+
+// bytes to be 16-byte aligned.  Clang -O2 relies on this and emits
+// movaps (x86-64) / LDP with aligned hint (AArch64) when inlining
+// memcpy from such symbols.  Assembly data files pack symbols with no
+// padding, violating the ABI; this macro inserts the required
+// alignment before each .global on 64-bit targets while leaving
+// 32-bit (GBA) builds untouched.
+.macro mAlignData
+#if defined(__aarch64__) || defined(__x86_64__)
+    .balign 16
+#endif
+.endm
+
 .macro mAlignWord
 #if defined(__aarch64__) || defined(__x86_64__)
     .balign 8

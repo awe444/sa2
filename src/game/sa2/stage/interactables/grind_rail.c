@@ -2,7 +2,7 @@
 #include "core.h"
 
 #include "game/sa2/stage/player_controls.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/interactables/grind_rail.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"

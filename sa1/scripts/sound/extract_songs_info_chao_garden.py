@@ -122,7 +122,7 @@ def extract_from_song_table(rom: BufferedReader):
 
                     if track_count != 0:
                         f_songs_config.write(extract_song_compiler_config(rom, song_name))
-                        song_files.append(f"build/mb_chao_garden/sound/songs/midi/{song_name}.o(.rodata);")
+                        song_files.append(f"build/mb_chao_garden/sound/sa1/songs/midi/{song_name}.o(.rodata);")
                     else:
                         song_addr_to_name[song_addr] = "dummy_song_header"
 
@@ -138,6 +138,6 @@ def extract_from_song_table(rom: BufferedReader):
     print(song_addr_to_name)
     print("\n".join(song_files))
 
-with open('data/rom_data.bin', 'rb') as rom:
+with open('data/sa1/rom_data.bin', 'rb') as rom:
     rom.seek(addr_to_offset(song_table_addr))
     extract_from_song_table(rom)

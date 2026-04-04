@@ -7,7 +7,7 @@
 #include "game/shared/stage/mp_finish.h"
 #include "game/shared/stage/mp_player.h"
 #include "game/shared/stage/mp_event_mgr.h"
-#include "game/parameters/characters.h"
+#include "game/shared/parameters/characters.h"
 #include "game/shared/stage/player.h"
 #include "game/sa1/ui/stage_results.h"
 

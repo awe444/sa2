@@ -1,4 +1,4 @@
 graphics/*.pal
 src/sa2
-sound/songs/midi
-sound/programmable_wave_samples
+sound/sa2/songs/midi
+sound/sa2/programmable_wave_samples

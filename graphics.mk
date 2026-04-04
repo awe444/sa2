@@ -11,8 +11,14 @@ else
     GFX_CVT_FLAGS := -split_into_oam_shapes
 endif
 
-graphics/obj_tiles/4bpp/%.4bpp: graphics/obj_tiles/4bpp/%.png
+graphics/sa2/obj_tiles/4bpp/%.4bpp: graphics/sa2/obj_tiles/4bpp/%.png
 	$(GFX) $< $@ $(GFX_CVT_FLAGS)
 
-graphics/obj_tiles/8bpp/%.8bpp: graphics/obj_tiles/8bpp/%.png
+graphics/sa2/obj_tiles/8bpp/%.8bpp: graphics/sa2/obj_tiles/8bpp/%.png
+	$(GFX) $< $@ $(GFX_CVT_FLAGS)
+
+graphics/sa1/obj_tiles/4bpp/%.4bpp: graphics/sa1/obj_tiles/4bpp/%.png
+	$(GFX) $< $@ $(GFX_CVT_FLAGS)
+
+graphics/sa1/obj_tiles/8bpp/%.8bpp: graphics/sa1/obj_tiles/8bpp/%.png
 	$(GFX) $< $@ $(GFX_CVT_FLAGS)

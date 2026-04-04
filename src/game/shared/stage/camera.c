@@ -1840,7 +1840,7 @@ const s16 gUnknown_080D5C62[8][2] = {
     { -Q_8_8(0.75), -Q_8_8(0.125) }, //
 };
 
-static const ColorRaw sPalette_Zone7BgCeiling[] = INCPAL("graphics/zone_7_bg_ceiling.pal");
+static const ColorRaw sPalette_Zone7BgCeiling[] = INCPAL("graphics/sa2/zone_7_bg_ceiling.pal");
 
 void CreateStageBg_Zone7(void)
 {
@@ -2142,7 +2142,7 @@ const u16 sZone7BgTransitionRegions[2][NUM_ZONE7_BG_TRANSITION_POSITIONS] = {
     { 1344, 2616, 9432, 15192, 18552, 19892, 23158, 25848 }, // ACT 2
 };
 
-const ColorRaw sExtraBossPalette[PALETTE_LEN_4BPP] = INCPAL("graphics/boss_9_normal.pal");
+const ColorRaw sExtraBossPalette[PALETTE_LEN_4BPP] = INCPAL("graphics/sa2/boss_9_normal.pal");
 
 void CreateStageBg_ZoneFinal_0(void)
 {

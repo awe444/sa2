@@ -11,7 +11,7 @@
 #define BRIDGE_TYPE_CURVED   1
 
 #include "global.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 void CreateEntity_LightBridge(MapEntity *ia, u16 spriteRegionX, u16 spriteRegionY, u8 spriteY);
 

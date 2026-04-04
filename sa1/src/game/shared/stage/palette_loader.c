@@ -1,6 +1,6 @@
 #include "global.h"
 #include "task.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 #include "game/shared/stage/palette_loader.h"
 

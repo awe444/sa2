@@ -6,7 +6,7 @@
 
 #include "game/sa2/collect_rings/time_display.h"
 #include "game/sa2/stage/interactables/collect_rings_lap_trigger.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "sprite.h"
 #include "task.h"
 

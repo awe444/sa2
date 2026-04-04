@@ -13,8 +13,8 @@
 #include "game/sa2/stage/stage_ui.h"
 #include "game/sa2/stage/screen_mask.h"
 #include "game/globals.h"
-#include "game/types/camera.h"
-#include "game/types/player.h"
+#include "game/shared/stage/camera.h"
+#include "game/shared/stage/player.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"
@@ -402,8 +402,8 @@ const u8 gUnknown_080D8EE0[16] = { 0, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 1, 2, 
 #define PAL_BOSS_9_DEF 1
 
 const ColorRaw gUnknown_080D8EF0[2][PALETTE_LEN_4BPP] = {
-    [PAL_BOSS_9_HIT] = INCPAL("graphics/boss_9_hit.pal"),
-    [PAL_BOSS_9_DEF] = INCPAL("graphics/boss_9_normal.pal"),
+    [PAL_BOSS_9_HIT] = INCPAL("graphics/sa2/boss_9_hit.pal"),
+    [PAL_BOSS_9_DEF] = INCPAL("graphics/sa2/boss_9_normal.pal"),
 };
 
 // Used when Vanilla gets captured

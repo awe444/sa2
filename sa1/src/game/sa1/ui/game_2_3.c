@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "lib/m4a/m4a.h"
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/sa1/stage/mp_chao.h"
 #include "game/shared/multiplayer/communication_outcome.h"
 #include "game/globals.h"

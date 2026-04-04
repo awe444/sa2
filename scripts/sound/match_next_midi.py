@@ -3,9 +3,9 @@ import sys
 
 skipped = []
 
-SONGS_DIR = 'sound/songs'
-NON_MATCHED_MIDIS = 'sound/songs/midi/non_matching'
-MATCHED_MIDIS = 'sound/songs/midi'
+SONGS_DIR = 'sound/sa2/songs'
+NON_MATCHED_MIDIS = 'sound/sa2/songs/midi/non_matching'
+MATCHED_MIDIS = 'sound/sa2/songs/midi'
 LDSCRIPT = 'ldscript.txt'
 
 to_match = reversed(sorted(map(lambda s: s.split('.s')[0], filter(lambda f: f.endswith('.s') , os.listdir(SONGS_DIR)))))
@@ -27,7 +27,7 @@ for next_song in to_match:
     with open(LDSCRIPT) as ldscript:
         ldscript_data = "".join(ldscript.readlines())
 
-    ldscript_data = ldscript_data.replace("build/sa2/sound/songs/" + next_song + ".o", "build/sa2/sound/songs/midi/" + next_song + ".o")
+    ldscript_data = ldscript_data.replace("build/sa2/sound/sa2/songs/" + next_song + ".o", "build/sa2/sound/sa2/songs/midi/" + next_song + ".o")
 
     with open(LDSCRIPT, "w") as ldscript:
         ldscript.write(ldscript_data)

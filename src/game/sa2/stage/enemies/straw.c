@@ -4,7 +4,7 @@
 #include "sprite.h"
 #include "trig.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/straw.h"
 
 #include "game/shared/stage/collision.h"

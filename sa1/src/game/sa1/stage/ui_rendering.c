@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "flags.h"
-#include "game/gTask_03006240.h"
+#include "game/sa1/stage/ui_rendering.h"
 #include "game/sa1/stage/stage_ui.h"
 
 /* TODO: I guess this can be called ui_rendering.c or something like that? */

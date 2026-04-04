@@ -5,7 +5,7 @@
 #include "animation_commands_bg.h"
 #include "game/sa2/title_screen.h"
 
-#include "data/tileset_debug_ascii.h"
+#include "data/sa2/tileset_debug_ascii.h"
 
 static const char ALIGNED(4) sTxtFlash[]
     = { 'F', 'L', 'A', 'S', 'H', 0xC5, 0xB2, 0xC4, 0x2C, 0xBE, 0xB0, 0xCC, 0xDE, 0xC3, 0xDE, 0xB7, 0xC5, 0xB2, 0xC3, 0xDE, 0xBD };

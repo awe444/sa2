@@ -2,7 +2,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/koura.h"
 
 #include "game/shared/stage/entities_manager.h"

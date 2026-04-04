@@ -9,7 +9,7 @@
 #include "game/globals.h"
 
 #include "game/sa2/ui/game_over.h"
-#include "game/sa2/time_attack/lobby.h"
+#include "game/sa2/ui/time_attack_lobby.h"
 #include "game/sa2/title_screen.h"
 
 #include "game/sa2/stage/screen_fade.h"

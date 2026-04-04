@@ -81,17 +81,17 @@ ASM_BUILDDIR = $(OBJ_DIR)/$(ASM_SUBDIR)
 DATA_ASM_SUBDIR = data
 DATA_ASM_BUILDDIR = $(OBJ_DIR)/$(DATA_ASM_SUBDIR)
 
-MID_SUBDIR = sound/songs/midi
+MID_SUBDIR = sound/sa2/songs/midi
 MID_BUILDDIR = $(OBJ_DIR)/$(MID_SUBDIR)
 
-SONG_SUBDIR = sound/songs
+SONG_SUBDIR = sound/sa2/songs
 SONG_BUILDDIR = $(OBJ_DIR)/$(SONG_SUBDIR)
 
 SOUND_ASM_SUBDIR = sound
 SOUND_ASM_BUILDDIR = $(OBJ_DIR)/$(SOUND_ASM_SUBDIR)
 
 SAMPLE_SUBDIR = sound/direct_sound_samples
-WAVE_SAMPLES_SUBDIR = sound/programmable_wave_samples
+WAVE_SAMPLES_SUBDIR = sound/sa2/programmable_wave_samples
 
 C_SUBDIR = src
 C_BUILDDIR = $(OBJ_DIR)/$(C_SUBDIR)
@@ -295,7 +295,7 @@ $(C_BUILDDIR)/sa2/%.s: ../../../src/%.s
 	$(shell mkdir -p $(shell dirname '$@'))
 	cp $< $@
 
-$(MID_SUBDIR)/%.mid: ../../../sound/songs/midi/%.mid
+$(MID_SUBDIR)/%.mid: ../../../sound/sa2/songs/midi/%.mid
 	$(shell mkdir -p $(shell dirname '$@'))
 	cp $< $@
 

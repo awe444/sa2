@@ -15,7 +15,7 @@
 #include "game/sa2/stage/bosses/common.h"
 #include "game/sa2/stage/bosses/eggmobile_escape_sequence.h"
 #include "game/sa2/cutscenes/level_endings.h"
-#include "game/parameters/bosses.h"
+#include "game/shared/parameters/bosses.h"
 #include "game/sa2/stage/boss_results_transition.h"
 #include "game/shared/stage/terrain_collision.h"
 #include "game/shared/stage/player.h"
@@ -23,7 +23,7 @@
 #include "game/sa2/ui/stage_results.h"
 #include "game/sa2/stage/screen_fade.h"
 #include "game/shared/stage/screen_shake.h"
-#include "game/sa2/time_attack/results.h"
+#include "game/sa2/ui/time_attack_results.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"
@@ -188,8 +188,8 @@ static const HammertankFunc sBossStateHandlers[] = {
 #define PAL_BOSS_1_DEF 1
 
 static const ColorRaw sBoss1Palettes[][PALETTE_LEN_4BPP] = {
-    [PAL_BOSS_1_HIT] = INCPAL("graphics/boss_1_hit.pal"),
-    [PAL_BOSS_1_DEF] = INCPAL("graphics/boss_1_normal.pal"),
+    [PAL_BOSS_1_HIT] = INCPAL("graphics/sa2/boss_1_hit.pal"),
+    [PAL_BOSS_1_DEF] = INCPAL("graphics/sa2/boss_1_normal.pal"),
 };
 
 void CreateEggHammerTankII(void)

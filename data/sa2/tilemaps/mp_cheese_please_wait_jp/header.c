@@ -1,0 +1,20 @@
+#include "global.h"
+#include "core.h"
+
+const ColorRaw Palette_mp_cheese_please_wait_jp[] = INCPAL("data/sa2/tilemaps/mp_cheese_please_wait_jp/palette.pal");
+const u8 Tiles_mp_cheese_please_wait_jp[] = INCBIN_U8("data/sa2/tilemaps/mp_cheese_please_wait_jp/tiles.4bpp");
+const u16 Tilemap_mp_cheese_please_wait_jp[] = INCBIN_U16("data/sa2/tilemaps/mp_cheese_please_wait_jp/tilemap.tilemap2");
+
+const Tilemap mp_cheese_please_wait_jp = {
+    .xTiles = 30,
+    .yTiles = 20,
+    .animTileSize = 0,
+    .animFrameCount = 0,
+    .animDelay = 0,
+    .tiles = Tiles_mp_cheese_please_wait_jp,
+    .tilesSize = sizeof(Tiles_mp_cheese_please_wait_jp),
+    .palette = Palette_mp_cheese_please_wait_jp,
+    .palOffset = 0,
+    .palLength = ARRAY_COUNT(Palette_mp_cheese_please_wait_jp),
+    .map = Tilemap_mp_cheese_please_wait_jp,
+};

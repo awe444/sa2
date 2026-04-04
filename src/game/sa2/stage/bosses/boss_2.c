@@ -156,8 +156,8 @@ static const BossFunction sBossModeTasks[] = { HandleCannonBombTrigger, HandleCa
 #define PAL_BOSS_2_DEF 1
 
 static const ColorRaw sBoss2Palettes[][PALETTE_LEN_4BPP] = {
-    [PAL_BOSS_2_HIT] = INCPAL("graphics/boss_2_hit.pal"),
-    [PAL_BOSS_2_DEF] = INCPAL("graphics/boss_2_normal.pal"),
+    [PAL_BOSS_2_HIT] = INCPAL("graphics/sa2/boss_2_hit.pal"),
+    [PAL_BOSS_2_DEF] = INCPAL("graphics/sa2/boss_2_normal.pal"),
 };
 
 void CreateEggBomberTank(void)

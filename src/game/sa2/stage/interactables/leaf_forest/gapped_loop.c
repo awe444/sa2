@@ -1,7 +1,7 @@
 #include "global.h"
 #include "core.h"
 #include "task.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/leaf_forest/gapped_loop.h"

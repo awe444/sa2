@@ -3,7 +3,7 @@
 #include "lib/m4a/m4a.h"
 #include "sprite.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "task.h"
 
 #include "game/shared/stage/player.h"

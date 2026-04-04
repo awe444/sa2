@@ -1,6 +1,6 @@
 #include "global.h"
 #include "malloc_vram.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 #include "constants/animations.h"
 #include "constants/zones.h"

@@ -64,7 +64,7 @@ with open("test.vbm", "rb") as vbm:
     
     vbm.seek(controller_data_offset)
     controller_data = vbm.read()
-    with open("data/recordings/test.bin", "wb") as output:
+    with open("data/sa2/recordings/test.bin", "wb") as output:
         output.write(controller_data)
     
         

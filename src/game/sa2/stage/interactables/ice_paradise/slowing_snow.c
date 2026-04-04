@@ -5,7 +5,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/ice_paradise/slowing_snow.h"
 
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "sprite.h"
 
 typedef struct {

@@ -3,7 +3,7 @@
 #include "trig.h"
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa1/stage/enemies/bosses_shared.h"
 #include "game/sa1/stage/nuts_and_bolts_task.h"
 #include "game/shared/stage/collision.h"

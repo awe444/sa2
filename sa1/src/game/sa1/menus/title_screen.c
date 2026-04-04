@@ -6,7 +6,7 @@
 #include "bg_triangles.h"
 #include "lib/m4a/m4a.h"
 #include "game/sa1/ui/character_select.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 #include "game/sa1/menus/mp_mode_select.h"
 #include "game/sa1/menus/options_screen.h"
 #include "game/shared/stage/collision.h"
@@ -22,7 +22,7 @@
 
 // LoadTinyChaoGarden
 #include "../chao_garden/include/program_params.h"
-#include "game/assets/compressed/roms.h"
+#include "game/sa1/assets/compressed/roms.h"
 
 #include "constants/animations.h"
 #include "constants/char_states.h"

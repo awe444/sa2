@@ -5,7 +5,7 @@
 #include "sprite.h"
 #include "trig.h"
 #include "lib/m4a/m4a.h"
-#include "data/sprite_data.h"
+
 #include "animation_commands.h"
 #include "platform/platform.h"
 

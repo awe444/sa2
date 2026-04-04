@@ -2,7 +2,7 @@
 #define GUARD_INTERACTABLE_HALF_PIPE_H
 
 #include "global.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 void CreateEntity_HalfPipe_End(MapEntity *, u16, u16, u8);
 void CreateEntity_HalfPipe_Start(MapEntity *, u16, u16, u8);

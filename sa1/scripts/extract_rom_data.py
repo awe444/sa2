@@ -37,7 +37,7 @@ for i in range(len(sorted_addresses)):
 
 summed = 0
 
-with open("data/new_data.s", "w") as data_file:
+with open("data/sa1/new_data.s", "w") as data_file:
     data_file.write('	.section .rodata\n')
     data_file.write('\n')
     for raw_addr, addr, size in addresses_with_size:
@@ -45,7 +45,7 @@ with open("data/new_data.s", "w") as data_file:
         var = to_var_name(addr)
         data_file.write(f"""    .global {var}
 {var}:
-    .incbin "data/baserom_sa1.gba", 0x{f"{(raw_addr - rom_start):08x}".upper()}, {size}
+    .incbin "data/sa1/baserom_sa1.gba", 0x{f"{(raw_addr - rom_start):08x}".upper()}, {size}
 
 """)
 

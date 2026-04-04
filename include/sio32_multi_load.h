@@ -96,7 +96,7 @@ extern void Sio32MultiLoadInit(u32 type, void *datap);
 //
 //* Arguments:
 //    u32   type    Connection (Master = Not 0/ Slave = 0)
-//    void *datap   Data Pointer (Master = Send Data/ Slave= Receive
+//    void *datap   Data Pointer (Master = Send data/sa2/ Slave= Receive
 //    Buffer)
 
 /*------------------------------------------------------------------*/

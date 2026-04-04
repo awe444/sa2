@@ -1,0 +1,20 @@
+#include "global.h"
+#include "core.h"
+
+const ColorRaw Palette_zone_7_act_1_bg[] = INCPAL("data/sa2/maps/zone_7/act_1/tilemaps/bg/palette.pal");
+const u8 Tiles_zone_7_act_1_bg[] = INCBIN_U8("data/sa2/maps/zone_7/act_1/tilemaps/bg/tiles.4bpp");
+const u16 Tilemap_zone_7_act_1_bg[] = INCBIN_U16("data/sa2/maps/zone_7/act_1/tilemaps/bg/tilemap.tilemap2");
+
+const Tilemap zone_7_act_1_bg = {
+    .xTiles = 32,
+    .yTiles = 32,
+    .animTileSize = 0,
+    .animFrameCount = 0,
+    .animDelay = 0,
+    .tiles = Tiles_zone_7_act_1_bg,
+    .tilesSize = sizeof(Tiles_zone_7_act_1_bg),
+    .palette = Palette_zone_7_act_1_bg,
+    .palOffset = 0,
+    .palLength = ARRAY_COUNT(Palette_zone_7_act_1_bg),
+    .map = Tilemap_zone_7_act_1_bg,
+};

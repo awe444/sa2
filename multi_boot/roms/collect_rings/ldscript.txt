@@ -108,29 +108,29 @@ SECTIONS {
         build/collect_rings/data/sound_data.o(.rodata);
 
         /* Songs */
-        build/collect_rings/sound/songs/midi/mus_vs_select_pak_mode.o(.rodata);
-        build/collect_rings/sound/songs/midi/mus_vs_2.o(.rodata);
-        build/collect_rings/sound/songs/midi/mus_vs_lobby.o(.rodata);
-        build/collect_rings/sound/songs/midi/mus_fanfare.o(.rodata);
-        build/collect_rings/sound/songs/midi/mus_vs_3.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_select.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_spin_attack__collect_rings.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_spin_dash_release.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_brake__collect_rings.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_jump__collect_rings.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_ring_copy.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_rings_lost__collect_rings.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_life_lost.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_time_up.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_itembox_2.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_spring__collect_rings.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_spikes.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_alarm_1.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_216__collect_rings.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_springy_spring__collect_rings.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/mus_vs_select_pak_mode.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/mus_vs_2.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/mus_vs_lobby.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/mus_fanfare.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/mus_vs_3.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_select.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_spin_attack__collect_rings.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_spin_dash_release.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_brake__collect_rings.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_jump__collect_rings.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_ring_copy.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_rings_lost__collect_rings.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_life_lost.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_time_up.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_itembox_2.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_spring__collect_rings.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_spikes.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_alarm_1.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_216__collect_rings.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_springy_spring__collect_rings.o(.rodata);
 
-        build/collect_rings/sound/songs/midi/se_276.o(.rodata);
-        build/collect_rings/sound/songs/midi/se_grinding.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_276.o(.rodata);
+        build/collect_rings/sound/sa2/songs/midi/se_grinding.o(.rodata);
     }
 
     . = 0x0201cd30;

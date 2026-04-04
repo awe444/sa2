@@ -8,7 +8,7 @@
 #include "game/shared/multiplayer/communication_outcome.h"
 #include "game/sa2/multiplayer/mode_select.h"
 
-#include "data/sprite_data.h"
+#include "data/sa2/sprite_data.h"
 #include "game/sa2/save.h"
 #include "game/sa2/title_screen.h"
 
@@ -20,7 +20,7 @@
 
 #include "game/sa2/ui/character_select.h"
 
-#include "data/sprite_tables.h"
+#include "data/sa2/sprite_tables.h"
 
 #include "constants/animations.h"
 #include "constants/songs.h"

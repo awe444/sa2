@@ -9,7 +9,7 @@ with open("ldscript.txt") as ldscript:
 with open("songs.mk") as songs_mk:
     songs_mk_contents = "".join(songs_mk.readlines())
 
-with open("sound/song_table.inc") as song_table:
+with open("sound/sa1/song_table.inc") as song_table:
     song_table_contents = "".join(song_table.readlines())
 
 with open("include/constants/songs.h") as songs_header:
@@ -32,13 +32,13 @@ with open("include/constants/songs.h") as songs_header:
         old_midi_name = f"song{number:04}.mid"
 
         matched = False
-        if old_midi_name in os.listdir('sound/songs/midi/'):
+        if old_midi_name in os.listdir('sound/sa1/songs/midi/'):
             matched = True
-            os.rename(f"sound/songs/midi/{old_midi_name}", f"sound/songs/midi/{new_midi_name}")
+            os.rename(f"sound/sa1/songs/midi/{old_midi_name}", f"sound/sa1/songs/midi/{new_midi_name}")
         
-        if old_midi_name.replace('.mid', ".s") in os.listdir('sound/songs/'):
+        if old_midi_name.replace('.mid', ".s") in os.listdir('sound/sa1/songs/'):
             matched = True
-            os.rename(f"sound/songs/{old_midi_name.replace('.mid', '.s')}", f"sound/songs/{new_midi_name.replace('.mid', '.s')}")
+            os.rename(f"sound/sa1/songs/{old_midi_name.replace('.mid', '.s')}", f"sound/sa1/songs/{new_midi_name.replace('.mid', '.s')}")
         
         if matched:
             ldscript_contents = ldscript_contents.replace(old_midi_name.replace('.mid', ".o"), new_midi_name.replace('.mid', ".o"))
@@ -53,5 +53,5 @@ with open("ldscript.txt", "w") as ldscript:
 with open("songs.mk", "w") as songs_mk:
      songs_mk.write(songs_mk_contents)
 
-with open("sound/song_table.inc", "w") as song_table:
+with open("sound/sa1/song_table.inc", "w") as song_table:
      song_table.write(song_table_contents)

@@ -2,7 +2,7 @@
 #define GUARD_ENEMY_GEJI_GEJI_H
 
 #include "global.h"
-#include "game/types/entity.h"
+#include "game/shared/stage/entity.h"
 
 void CreateEntity_GejiGeji(MapEntity *me, u16 spriteRegionX, u16 spriteRegionY, u8 spriteY);
 
