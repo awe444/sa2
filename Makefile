@@ -332,6 +332,15 @@ else
   # Allow file input through stdin on modern gcc/g++ and set it to "compile only"
   CC1FLAGS += -x c -S
   CXXFLAGS += -x c++ -S
+
+  # Strict aliasing optimizations can miscompile type-punned pointer accesses
+  # common in GBA decompilation code (e.g. OamData accessed via u16*).
+  CC1FLAGS += -fno-strict-aliasing
+
+  # Clang emits .addrsig directives that GNU as does not understand.
+  ifneq ($(findstring clang,$(CC1)),)
+    CC1FLAGS += -fno-addrsig
+  endif
 endif
 
 ### LINKER FLAGS ###
