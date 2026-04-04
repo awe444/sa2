@@ -3,10 +3,12 @@
 
 	mSectionRodata
 
+    mAlignData
     .global C_DECL(gObjTiles_4bpp)
 C_DECL(gObjTiles_4bpp):
     .include "graphics/obj_tiles_4bpp.inc"
 
+    mAlignData
     .global C_DECL(gObjTiles_8bpp)
 C_DECL(gObjTiles_8bpp):
     .include "graphics/obj_tiles_8bpp.inc"

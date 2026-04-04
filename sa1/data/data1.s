@@ -5,6 +5,7 @@
 
     .space 0x100
 
+    mAlignData
     .global C_DECL(gDemoRecordings)
 C_DECL(gDemoRecordings):
     mPtr demo1
@@ -12,6 +13,7 @@ C_DECL(gDemoRecordings):
     mPtr demo3
     mPtr demo4
 
+    mAlignData
     .global C_DECL(gUnknown_087BF8DC)
 C_DECL(gUnknown_087BF8DC):
     mPtr C_DECL(gUnknown_08487358)
@@ -30,22 +32,26 @@ C_DECL(gUnknown_087BF8DC):
 @@@ Compressed Input-recordings for Demo playback
 @@@
     @ src/data/recordings.c:static const u8 demo1[]
+    mAlignData
     .global demo1
 demo1:
     .incbin "baserom_sa1.gba", 0x007BF918, 0x1F8
 
     @ src/data/recordings.c:static const u8 demo2[]
+    mAlignData
     .global demo2
 demo2:
     .incbin "baserom_sa1.gba", 0x007BFB10, 0x200
 
     @ src/data/recordings.c:static const u8 demo4[]
     @ NOTE: Ice Mountain data comes before Casino Paradise!
+    mAlignData
     .global demo4
 demo4:
     .incbin "baserom_sa1.gba", 0x007BFD10, 0x208
 
     @ src/data/recordings.c:static const u8 demo3[]
+    mAlignData
     .global demo3
 demo3:
     .incbin "baserom_sa1.gba", 0x007BFF18, 0x200

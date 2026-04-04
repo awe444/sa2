@@ -460,6 +460,7 @@ gUnknown_08C877E8:
     mPtr C_DECL(gUnknown_080DA270) + (2477 * 8)
     mPtr C_DECL(gUnknown_080DA270) + (2481 * 8)
 
+    mAlignData
     .global C_DECL(gUnknown_08C878E8)
 C_DECL(gUnknown_08C878E8):
     mPtr gUnknown_08C871E8
@@ -471,6 +472,7 @@ C_DECL(gUnknown_08C878E8):
     mPtr gUnknown_08C877E8
 
 
+    mAlignData
     .global C_DECL(gUnknown_08C87904)
 C_DECL(gUnknown_08C87904):
     mPtr C_DECL(gUnknown_080DF040) + (0 * 12)
@@ -481,6 +483,7 @@ C_DECL(gUnknown_08C87904):
     mPtr C_DECL(gUnknown_080DF040) + (36 * 12)
     mPtr C_DECL(gUnknown_080DF040) + (49 * 12)
 
+    mAlignData
     .global C_DECL(gUnknown_08C87920)
 C_DECL(gUnknown_08C87920):
     mPtr C_DECL(gUnknown_080DF6EC) + (0 * 4)

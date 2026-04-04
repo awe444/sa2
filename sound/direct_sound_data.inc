@@ -1,84 +1,101 @@
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_1
 DirectSoundWaveData_1:
 	.incbin "sound/direct_sound_samples/roland_jv2080__organ_3_charselect_1.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_2
 DirectSoundWaveData_2:
 	.incbin "sound/direct_sound_samples/roland_jv2080__organ_3_charselect_2.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_3
 DirectSoundWaveData_3:
 	.incbin "sound/direct_sound_samples/roland_jv2080__pr_d__019_organ_3__1.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_4
 DirectSoundWaveData_4:
 	.incbin "sound/direct_sound_samples/roland_jv2080__pr_d__019_organ_3__2.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_5
 DirectSoundWaveData_5:
 	.incbin "sound/direct_sound_samples/korg_trinity__stereo_brass_1.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_6
 DirectSoundWaveData_6:
 	.incbin "sound/direct_sound_samples/korg_trinity__synth_brass2_1.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_7
 DirectSoundWaveData_7:
 	.incbin "sound/direct_sound_samples/roland_jv2080__pr_d__019_organ_3__3.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_8
 DirectSoundWaveData_8:
 	.incbin "sound/direct_sound_samples/unknown_8ade918.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_9
 DirectSoundWaveData_9:
 	.incbin "sound/direct_sound_samples/korg_trinity__stereo_brass_2.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_10
 DirectSoundWaveData_10:
 	.incbin "sound/direct_sound_samples/korg_trinity__synth_brass2_2.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_11
 DirectSoundWaveData_11:
 	.incbin "sound/direct_sound_samples/roland_jv2080__pr_d__019_organ_3__4.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_12
 DirectSoundWaveData_12:
 	 .incbin "sound/direct_sound_samples/roland_sr_jv80_02__bassoon_1.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_13
 DirectSoundWaveData_13:
 	.incbin "sound/direct_sound_samples/unknown_8ae9bb4.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_14
 DirectSoundWaveData_14:
 	.incbin "sound/direct_sound_samples/unknown_8aea788.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_15
 DirectSoundWaveData_15:
 	.incbin "sound/direct_sound_samples/korg_trinity__30303_mega_bass_1.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_16
 DirectSoundWaveData_16:
 	.incbin "sound/direct_sound_samples/korg_trinity__30303_mega_bass_2.bin"
 
 	mAlignWord
+    mAlignData
     .global DirectSoundWaveData_17
 DirectSoundWaveData_17:
 	.incbin "sound/direct_sound_samples/roland_jv2080__pr_d__019_organ_3__5.bin"
