@@ -112,7 +112,7 @@ foreach(PNG ${PNG_FILES})
 endforeach()
 
 # ── Step 4: Convert entity .csv → .bin → .bin.rl ──────────────────────────
-file(GLOB_RECURSE CSV_FILES "${SA1_DIR}/data/maps/*/*/entities/*.csv")
+file(GLOB_RECURSE CSV_FILES "${SA1_DIR}/data/sa1/maps/*/*/entities/*.csv")
 foreach(CSV ${CSV_FILES})
     get_filename_component(CSV_NAME "${CSV}" NAME_WE)
     string(REGEX REPLACE "\\.csv$" ".bin" BIN "${CSV}")
