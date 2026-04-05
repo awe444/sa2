@@ -393,11 +393,17 @@ target_compile_options(${SA1_TARGET} PRIVATE
     ${SA1_OPT_FLAG}
 )
 
-# Clang-specific warnings (GCC does not recognise these)
+# Clang-specific flags (GCC does not recognise these)
 if(CMAKE_C_COMPILER_ID MATCHES "Clang")
     target_compile_options(${SA1_TARGET} PRIVATE
         -Wno-parentheses-equality
         -Wno-unused-value
+        # Clang emits .addrsig directives that GNU as does not understand.
+        -fno-addrsig
+        # Clang's strict aliasing optimizations can miscompile type-punned
+        # pointer accesses common in GBA decompilation code (e.g. OamData
+        # union accessed via u16* attr writes and u32 bitfield reads).
+        -fno-strict-aliasing
     )
 endif()
 
