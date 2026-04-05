@@ -284,15 +284,15 @@ sa1_preprocess(PP_SRCS
 #   preproc file.s sdl ""  →  expand .include / .string / .braille
 #   cc -x assembler-with-cpp -c  →  preprocess #ifdef macros, then assemble
 
-file(GLOB SA1_DATA_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/data/*.s")
+file(GLOB SA1_DATA_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/data/sa1/*.s")
 
 # Song assembly files (hand-written .s files in sound/songs/)
-file(GLOB SA1_SONG_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/songs/*.s")
+file(GLOB SA1_SONG_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/sa1/songs/*.s")
 
 # MIDI songs: mid2agb converts .mid → .s during asset generation.
 # Derive the expected .s paths from the .mid files so CMake knows about them
 # at configure time, even though they're generated at build time.
-file(GLOB SA1_MID_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/songs/midi/*.mid")
+file(GLOB SA1_MID_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/sa1/songs/midi/*.mid")
 set(SA1_MID_ASM_SRCS "")
 foreach(MID ${SA1_MID_FILES})
     string(REGEX REPLACE "\\.mid$" ".s" MID_S "${MID}")
