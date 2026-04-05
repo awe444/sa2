@@ -35,6 +35,15 @@ From the `sa1/android/` directory:
 
 The APK will be at `app/build/outputs/apk/debug/app-debug.apk`.
 
+### Building without optimizations
+
+To build with `-O0` (useful for debugging), pass `Debug` as the CMake build
+type:
+
+```sh
+./gradlew assembleDebug -Pandroid.injected.cmake.build.type=Debug
+```
+
 ## Gamepad Support
 
 The build supports standard Android-compatible gamepads via SDL2's

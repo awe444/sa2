@@ -112,7 +112,7 @@ foreach(PNG ${PNG_FILES})
 endforeach()
 
 # ── Step 4: Convert entity .csv → .bin → .bin.rl ──────────────────────────
-file(GLOB_RECURSE CSV_FILES "${SA1_DIR}/data/maps/*/*/entities/*.csv")
+file(GLOB_RECURSE CSV_FILES "${SA1_DIR}/data/sa1/maps/*/*/entities/*.csv")
 foreach(CSV ${CSV_FILES})
     get_filename_component(CSV_NAME "${CSV}" NAME_WE)
     string(REGEX REPLACE "\\.csv$" ".bin" BIN "${CSV}")
@@ -158,7 +158,7 @@ foreach(CSV ${CSV_FILES})
 endforeach()
 
 # ── Step 5: Convert .aif → .bin (sound samples) ───────────────────────────
-file(GLOB AIF_FILES "${SA1_DIR}/sound/direct_sound_samples/*.aif")
+file(GLOB AIF_FILES "${SA1_DIR}/sound/sa1/direct_sound_samples/*.aif")
 foreach(AIF ${AIF_FILES})
     string(REGEX REPLACE "\\.aif$" ".bin" BIN "${AIF}")
     if("${AIF}" IS_NEWER_THAN "${BIN}")
@@ -174,7 +174,7 @@ foreach(AIF ${AIF_FILES})
 endforeach()
 
 # ── Step 6: Convert .mid → .s (MIDI songs) ────────────────────────────────
-file(GLOB MID_FILES "${SA1_DIR}/sound/songs/midi/*.mid")
+file(GLOB MID_FILES "${SA1_DIR}/sound/sa1/songs/midi/*.mid")
 foreach(MID ${MID_FILES})
     string(REGEX REPLACE "\\.mid$" ".s" MID_S "${MID}")
     if("${MID}" IS_NEWER_THAN "${MID_S}")
