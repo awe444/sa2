@@ -25,12 +25,12 @@
 #include "game/sa2/stage/screen_fade.h"
 #include "game/shared/stage/screen_shake.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/move_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/move_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 #define ARM_LEFT   0
 #define ARM_RIGHT  1

@@ -12,9 +12,9 @@
 #include "game/sa2/ui/stage_results.h"
 #include "game/sa2/ui/time_attack_lobby.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     StageResultsBase base;

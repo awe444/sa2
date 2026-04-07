@@ -11,9 +11,9 @@
 #include "game/sa1/ui/stage_results.h"
 #include "game/sa1/save.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/anim_sizes.h"
+#include "constants/sa1/songs.h"
 
 #define NUM_SEGMENTS 9
 

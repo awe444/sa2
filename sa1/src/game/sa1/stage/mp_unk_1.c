@@ -15,9 +15,9 @@
 #include "game/shared/stage/stage.h"
 #include "game/sa1/save.h"
 
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
-#include "constants/ui_graphics.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/ui_graphics.h"
 
 typedef struct SpriteStrc {
     Sprite s;

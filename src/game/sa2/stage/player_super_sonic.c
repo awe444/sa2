@@ -15,11 +15,11 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/characters.h"
-#include "constants/move_states.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/characters.h"
+#include "constants/sa2/move_states.h"
+#include "constants/sa2/songs.h"
 
 static void Task_802BC10(void);
 static void sub_802BE1C(struct SuperSonic *sonic);

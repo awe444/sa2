@@ -11,10 +11,10 @@
 #include "game/sa2/title_screen.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 #include "flags.h"
-#include "constants/songs.h"
-#include "constants/text.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
 
 typedef struct {
     /* 0x00 */ Sprite s;

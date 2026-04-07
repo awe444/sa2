@@ -7,10 +7,10 @@
 #include "game/sa1/special_stage/main.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/animations.h"
-#include "constants/characters.h"
-#include "constants/ui_graphics.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/characters.h"
+#include "constants/sa1/ui_graphics.h"
+#include "constants/sa1/zones.h"
 
 #define FRAME_RELAY_A 90
 #define FRAME_RELAY_B 150

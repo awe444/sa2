@@ -5,8 +5,8 @@
 #include "game/sa2/special_stage/tables.h"
 #include "game/sa2/special_stage/data.h"
 
-#include "constants/animations.h"
-#include "constants/characters.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/characters.h"
 
 void sub_806D788(void);
 void sub_806D2C8(void);

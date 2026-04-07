@@ -17,10 +17,10 @@
 
 #include "data/sa2/sprite_data.h"
 
-#include "constants/animations.h"
-#include "constants/anim_commands.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/anim_commands.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

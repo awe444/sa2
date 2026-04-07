@@ -9,10 +9,10 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/hot_crater/floating_spring.h"
 
-#include "constants/animations.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 typedef struct {
     SpriteBase base;

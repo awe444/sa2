@@ -12,10 +12,10 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
-#include "constants/interactables.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/interactables.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 #ifndef COLLECT_RINGS_ROM
 #define SPIKES_VRAM_ADDRESS (void *)(OBJ_VRAM0 + 204 * TILE_SIZE_4BPP);

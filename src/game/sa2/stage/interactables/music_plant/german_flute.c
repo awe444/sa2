@@ -11,9 +11,9 @@
 #include "game/sa2/stage/interactables/note_particle.h"
 #include "game/sa2/stage/interactables/music_plant/german_flute.h"
 
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     /* 0x00 */ s32 posX;

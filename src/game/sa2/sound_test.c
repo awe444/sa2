@@ -10,9 +10,9 @@
 #include "game/sa2/stage/screen_fade.h"
 #include "data/sa2/palettes.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 #define MAX_SOUND_NAME_LENGTH     16
 #define NUM_SPEAKER_CONE_SECTIONS 4

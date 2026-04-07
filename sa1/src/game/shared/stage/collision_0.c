@@ -6,7 +6,7 @@
 #include "game/shared/stage/mp_player.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/terrain_collision.h"
-#include "constants/char_states.h"
+#include "constants/sa1/char_states.h"
 #endif
 #include "game/globals.h"
 #include "game/shared/stage/collision.h"

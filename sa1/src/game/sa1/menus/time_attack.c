@@ -8,8 +8,8 @@
 #include "game/sa1/menus/title_screen.h" // CreateMainMenu
 #include "game/sa1/stage/stage_ui.h" // sub_805423C
 
-#include "constants/songs.h"
-#include "constants/text.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h"
 
 typedef struct TimeAttackMenu {
     StrcUi_805423C unk0;

@@ -30,11 +30,11 @@
 #include "game/shared/stage/underwater_effects.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/zones.h"
 
 Player ALIGNED(8) gPlayer = {};
 #if (GAME == GAME_SA1)

@@ -8,9 +8,9 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
 
 void Task_PartyBalloon(void);
 void Task_PartyBalloonPopped(void);

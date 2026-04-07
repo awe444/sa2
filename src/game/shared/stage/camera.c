@@ -14,9 +14,9 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/tilemaps.h"
-#include "constants/zones.h"
-#include "constants/characters.h"
+#include "constants/sa2/tilemaps.h"
+#include "constants/sa2/zones.h"
+#include "constants/sa2/characters.h"
 
 #define BOSS_CAM_FRAME_DELTA_PIXELS 5
 

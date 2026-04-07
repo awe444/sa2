@@ -7,8 +7,8 @@
 #include "game/shared/stage/stage.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/zones.h"
 
 typedef struct TimeOverState {
     StrcUi_805423C strc0;

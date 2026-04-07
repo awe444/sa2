@@ -3,7 +3,7 @@
 #include "task.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 static void Task_DustCloud(void);
 

@@ -19,8 +19,8 @@
 #include "sprite.h"
 #include "task.h"
 
-#include "constants/animations.h"
-#include "constants/player_transitions.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/player_transitions.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

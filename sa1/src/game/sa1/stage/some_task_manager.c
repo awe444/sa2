@@ -6,7 +6,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa1/stage/some_task_manager.h"
 
-#include "constants/move_states.h"
+#include "constants/sa1/move_states.h"
 
 void sub_804CD80(SomeTaskManager_60 *taskData, GfxInfo *gfx);
 void sub_804CF5C(SomeTaskManager_7C *taskData, GfxInfo *gfx);

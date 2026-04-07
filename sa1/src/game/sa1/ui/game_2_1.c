@@ -10,10 +10,10 @@
 #include "game/sa1/special_stage/main.h"
 #include "game/shared/stage/stage.h"
 
-#include "constants/ui_graphics.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/ui_graphics.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 typedef struct Game_2_1_2C {
     u8 filler0[0xC];

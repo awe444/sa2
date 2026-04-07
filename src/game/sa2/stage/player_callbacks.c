@@ -16,10 +16,10 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 // NOTE: It seems like this was supposed to store 5 positions for displaying/storing bound motion frames
 //       but actually none of the positions are used.

@@ -6,7 +6,7 @@
 #include "game/sa1/ui/game_over.h"
 #include "game/sa1/save.h"
 #include "sprite.h"
-#include "constants/text.h"
+#include "constants/sa1/text.h"
 
 #define NUM_LANGSCRN_SPRITES_TYPE_1 6
 #define NUM_LANGSCRN_SPRITES_TYPE_2 3

@@ -9,7 +9,7 @@
 #include "game/sa1/save.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/text.h"
+#include "constants/sa1/text.h"
 
 typedef struct ContinueScreen {
     Background bg;

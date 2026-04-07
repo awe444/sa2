@@ -13,8 +13,8 @@
 #include "game/sa1/menus/time_attack.h"
 #include "game/sa1/menus/title_screen.h"
 
-#include "constants/characters.h"
-#include "constants/songs.h"
+#include "constants/sa1/characters.h"
+#include "constants/sa1/songs.h"
 
 // Character Indices
 #define CIDX_LEFT   0

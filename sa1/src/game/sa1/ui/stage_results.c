@@ -13,9 +13,9 @@
 #include "game/sa1/stage/stage_ui.h"
 #include "data/sa1/ui_graphics.h"
 
-#include "constants/ui_graphics.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/ui_graphics.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 typedef struct VramPtrs {
     /* 0x00 */ void *vram0;

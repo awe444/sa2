@@ -8,10 +8,10 @@
 #include "game/sa1/save.h"
 #include "game/sa1/menus/title_screen.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
-#include "constants/text.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/text.h"
 
 /* NOTE:
    This module was split into two, because Task_800F9BC() would compile

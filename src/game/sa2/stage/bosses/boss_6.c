@@ -18,9 +18,9 @@
 #include "game/shared/stage/terrain_collision.h"
 #include "game/sa2/stage/player_callbacks.h"
 
-#include "constants/move_states.h"
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa2/move_states.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 #define NUM_PLATFORMS      4
 #define NUM_LINKS          3

@@ -9,8 +9,8 @@
 #include "game/sa1/stage/stage_ui.h"
 #include "game/sa1/menus/title_screen.h"
 
-#include "constants/songs.h"
-#include "constants/text.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h"
 
 typedef struct TimeAttackLobby {
     /* 0x000 */ Sprite sprites[4];

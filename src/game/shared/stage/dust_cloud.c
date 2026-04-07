@@ -3,7 +3,7 @@
 #include "task.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 #ifndef COLLECT_RINGS_ROM
 #define DUST_CLOUD_VRAM_ADDRESS (void *)(OBJ_VRAM0 + 0x1000);

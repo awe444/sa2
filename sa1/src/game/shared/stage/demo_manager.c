@@ -16,7 +16,7 @@
 #include "game/sa1/save.h"
 #include "game/sa1/menus/title_screen.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 #if (GAME == GAME_SA1)
 #define DEMO_SPRITE_PRIO   1

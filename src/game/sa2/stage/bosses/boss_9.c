@@ -16,9 +16,9 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 typedef struct {
     /* 0x00 */ s32 unk0;

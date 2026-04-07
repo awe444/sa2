@@ -8,9 +8,9 @@
 #include "game/globals.h"
 #include "game/sa1/save.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h"
 
 typedef struct MPResultsB {
     /* 0x00 */ Background bg;

@@ -11,8 +11,8 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/entity.h"
 #include "game/sa2/stage/interactables/techno_base/spike_platform.h"
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     SpriteBase base;

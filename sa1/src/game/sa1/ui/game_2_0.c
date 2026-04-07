@@ -12,7 +12,7 @@
 #include "game/sa1/stage/stage_ui.h"
 #include "data/sa1/ui_graphics.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 typedef struct Game_2_0_Sub {
     union {

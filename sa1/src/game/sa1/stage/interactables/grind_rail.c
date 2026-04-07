@@ -7,8 +7,8 @@
 #include "game/shared/stage/player.h"
 #include "game/sa1/stage/player_controls.h"
 
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
 
 typedef struct {
     u16 frameCount;

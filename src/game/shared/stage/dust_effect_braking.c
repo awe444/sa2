@@ -5,7 +5,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/dust_effect_braking.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 DustEffectBraking ALIGNED(8) gDustEffectBrakingTask = {};
 

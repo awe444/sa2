@@ -14,9 +14,9 @@
 #include "game/shared/stage/rings_scatter.h"
 #include "game/sa2/stage/trapped_animals.h"
 
-#include "constants/animations.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 #ifndef COLLECT_RINGS_ROM
 u32 Coll_Player_Entity_RectIntersection(Sprite *s, s32 sx, s32 sy, Player *p, Rect8 *rectPlayer)

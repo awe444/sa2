@@ -17,10 +17,10 @@
 #include "game/shared/stage/stage.h"
 #include "game/sa1/menus/title_screen.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
-#include "constants/text.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/text.h"
 
 /* NOTE:
    This module was split into two, because sa2__sub_80818B8() would compile

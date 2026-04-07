@@ -9,7 +9,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 typedef struct {
     Sprite s;

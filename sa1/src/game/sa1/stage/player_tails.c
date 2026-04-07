@@ -10,10 +10,10 @@
 #include "game/sa1/stage/player_controls.h"
 #include "game/shared/stage/underwater_effects.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 /* Tails Start */
 void Player_Tails_8047A3C(Player *p);

@@ -8,8 +8,8 @@
 #include "game/sa1/save.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
 
 #ifndef BUG_FIX
 #define DoSpriteTransformAndDisplay(s, tf)                                                                                                 \

@@ -12,8 +12,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
 
 void ReceiveRoomEvent_ReachedStageGoal(union MultiSioData *recv, u8 i);
 void ReceiveRoomEvent_ItemEffect(union MultiSioData *recv, u8 i);

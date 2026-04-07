@@ -9,10 +9,10 @@
 #include "game/sa1/save.h"
 #include "game/sa1/menus/title_screen.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
-#include "constants/songs.h"
-#include "constants/vram_hardcoded.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/anim_sizes.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/vram_hardcoded.h"
 
 extern const u8 gUnknown_0868483C[0x500];
 

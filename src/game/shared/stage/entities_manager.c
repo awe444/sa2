@@ -112,8 +112,8 @@
 
 #include "game/sa2/assets/compressed/entities.h"
 
-#include "constants/zones.h"
-#include "constants/songs.h"
+#include "constants/sa2/zones.h"
+#include "constants/sa2/songs.h"
 
 #define NUM_ENEMY_DEFEAT_SCORES          5
 #define READ_START_INDEX(p, hrc, rx, ry) (*((u32 *)((((u8 *)(p)) + (((hrc) * (ry)) * (sizeof(u32)))) + ((rx) * (sizeof(u32))))))

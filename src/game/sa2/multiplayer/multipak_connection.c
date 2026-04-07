@@ -15,16 +15,16 @@
 #include "game/sa2/stage/screen_fade.h"
 #include "game/sa2/stage/tilemap_table.h"
 #include "lib/m4a/m4a.h"
-#include "constants/text.h"
+#include "constants/sa2/text.h"
 #include "flags.h"
 
 #include "game/sa2/ui/character_select.h"
 
 #include "data/sa2/sprite_tables.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 struct MultiPakConnectScreen {
     ScreenFade fade;

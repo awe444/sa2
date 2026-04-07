@@ -9,10 +9,10 @@
 #include "game/shared/stage/entity.h"
 #include "game/sa2/stage/interactables/ice_paradise/big_snowball.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 struct Test {
     s16 unk0;

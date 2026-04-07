@@ -13,9 +13,9 @@
 #include "game/sa2/stage/interactables/note_particle.h"
 #include "game/sa2/stage/interactables/music_plant/note_sphere.h"
 
-#include "constants/animations.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

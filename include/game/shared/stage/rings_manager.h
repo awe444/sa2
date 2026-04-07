@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "rect.h"
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 
 #define MP_COLLECT_RINGS_COMPRESSED_POS_DATA ((u8 **)(EWRAM_START + 0x33008))
 #define MP_COLLECT_RINGS_COMPRESSED_SIZE     (u8 **)(EWRAM_START + 0x3300C)

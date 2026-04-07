@@ -10,9 +10,9 @@
 #include "game/sa1/stage/player_controls.h"
 #include "game/sa1/stage/player_sonic.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
 
 /* Sonic */
 

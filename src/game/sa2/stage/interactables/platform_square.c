@@ -12,10 +12,10 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
-#include "constants/interactables.h"
-#include "constants/player_transitions.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/interactables.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

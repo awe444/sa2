@@ -12,9 +12,9 @@
 #include "game/shared/stage/screen_shake.h"
 #include "lib/m4a/m4a.h"
 
-#include "constants/move_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/move_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     /* 0x00 */ struct Task *t;

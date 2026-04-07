@@ -19,12 +19,12 @@
 #include "game/shared/stage/mp_event_mgr.h"
 #include "game/shared/stage/mp_player.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/items.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/items.h"
+#include "constants/sa1/player_transitions.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 #define ITEM_DURATION_INVINCIBILITY TIME(0, 20)
 #define ITEM_DURATION_SPEED_UP      TIME(0, 20)

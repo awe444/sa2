@@ -1,5 +1,5 @@
 #include "global.h"
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 
 ALIGNED(4)
 const s16 gSpawnPositions[][2] = {

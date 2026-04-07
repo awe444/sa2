@@ -5,11 +5,11 @@
 
 #include "game/globals.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/zones.h"
 
 /*   Used by Chao Hunt and Collect Rings as HUD task   */
 

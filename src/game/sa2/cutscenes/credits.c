@@ -9,7 +9,7 @@
 #include "lib/m4a/m4a.h"
 #include "game/sa2/save.h"
 
-#include "constants/tilemaps.h"
+#include "constants/sa2/tilemaps.h"
 
 struct CreditsCutScene {
     Background unk0;

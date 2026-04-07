@@ -25,7 +25,7 @@
 #include "animation_commands_bg.h"
 #include "data/sa1/tileset_debug_ascii.h"
 
-#include "constants/songs.h"
+#include "constants/sa1/songs.h"
 
 #if (GAME == GAME_SA1)
 #define LEFT_INPUT(value)  (value)++

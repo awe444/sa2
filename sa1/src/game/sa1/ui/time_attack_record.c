@@ -7,9 +7,9 @@
 #include "game/sa1/save.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/ui_graphics.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/ui_graphics.h"
 
 typedef struct TimeAttackRecord_58 {
     /* 0x00 */ Sprite s;

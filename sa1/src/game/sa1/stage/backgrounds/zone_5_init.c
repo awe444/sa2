@@ -5,7 +5,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa1/stage/backgrounds/zone_5.h"
 
-#include "constants/tilemaps.h"
+#include "constants/sa1/tilemaps.h"
 
 void CreateStageBg_Zone5(void)
 {

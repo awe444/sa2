@@ -17,9 +17,9 @@
 #include "game/sa1/menus/title_screen.h"
 #include "data/sa1/ui_graphics.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 void Task_GameOverScreenInit(void);
 void Task_8056100(void);

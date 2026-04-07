@@ -15,10 +15,10 @@
 #include "game/shared/stage/terrain_collision.h"
 #include "game/sa1/stage/enemies/boss_xtra_super_egg_robo.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
-#include "constants/songs.h"
-#include "constants/vram_hardcoded.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/anim_sizes.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/vram_hardcoded.h"
 
 /* Extra Zone Boss - Super Egg Robot */
 

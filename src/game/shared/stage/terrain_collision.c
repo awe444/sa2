@@ -4,7 +4,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 
 const Collision *gRefCollision = NULL;
 

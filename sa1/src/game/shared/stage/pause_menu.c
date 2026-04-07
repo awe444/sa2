@@ -7,8 +7,8 @@
 #include "game/sa1/save.h"
 #include "game/sa1/ui/time_attack_lobby.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
 
 typedef struct {
     /* 0x00 */ Sprite s;

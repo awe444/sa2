@@ -4,7 +4,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/globals.h"
 #include "game/shared/stage/camera.h"
-#include "constants/zones.h"
+#include "constants/sa1/zones.h"
 
 static void Task_CallUpdateCameraInternal(void);
 

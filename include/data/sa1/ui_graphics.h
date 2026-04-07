@@ -2,7 +2,7 @@
 #define SA1_UI_GRAPHICS_H
 #include "global.h"
 
-#include "constants/ui_graphics.h"
+#include "constants/sa1/ui_graphics.h"
 
 /* This file was created using './scripts/extract_ui_graphics_data.py'.
    If you want to change a name or some other property,

@@ -8,7 +8,7 @@
 #include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/star.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     SpriteBase base;

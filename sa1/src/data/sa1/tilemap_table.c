@@ -91,10 +91,10 @@ extern struct MapHeader *tilemap_89;
 #include "global.h"
 #include "tilemap.h"
 
-#include "constants/tilemaps.h"
+#include "constants/sa1/tilemaps.h"
 
 // 0x084ADD40
-const Tilemap * const gTilemaps[] = {
+const Tilemap *const gTilemaps[] = {
     [0] = (Tilemap *)&zone_1_act_1_fg0,
     [1] = (Tilemap *)&zone_1_act_1_fg1,
     [2] = (Tilemap *)&zone_1_act_1_bg,

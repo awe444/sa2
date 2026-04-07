@@ -35,11 +35,11 @@
 #include "game/sa2/stage/mp_attack_1_effect.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 // >> acceleration = (sin(angle) * 3) / 32
 #define GET_ROTATED_ACCEL(angle)   ((SIN_24_8((angle)*4) * 3) >> 5)

@@ -17,9 +17,9 @@
 #include "game/sa2/stage/bosses/boss_8.h"
 #include "game/sa2/stage/bosses/boss_9.h"
 
-#include "constants/animations.h"
-#include "constants/player_transitions.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/zones.h"
 
 struct Task *gActiveBossTask = NULL;
 

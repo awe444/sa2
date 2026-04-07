@@ -5,8 +5,8 @@
 #include "flags.h"
 #include "game/sa1/menus/title_screen.h"
 
-#include "constants/animations.h"
-#include "constants/vram_hardcoded.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/vram_hardcoded.h"
 
 typedef struct {
     /* 0x00 */ Sprite s;

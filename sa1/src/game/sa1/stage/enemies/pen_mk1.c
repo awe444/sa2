@@ -7,9 +7,9 @@
 #include "game/shared/stage/terrain_collision.h"
 #include "game/sa1/save.h"
 
-#include "constants/animations.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/zones.h"
 
 // NOTE: Not the same jet-powered Pen enemy as in SA2.
 //       This one shoots ice balls that slide on the ground.

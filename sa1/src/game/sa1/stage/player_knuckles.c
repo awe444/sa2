@@ -14,9 +14,9 @@
 #include "game/shared/stage/underwater_effects.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
 
 /* Knuckles Start */
 extern void SA2_LABEL(sub_8022318)(Player *p);

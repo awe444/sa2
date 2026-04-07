@@ -25,10 +25,10 @@
 #include "game/sa1/stage/background/zone_final.h"
 #endif
 
-#include "constants/animations.h"
-#include "constants/characters.h"
-#include "constants/tilemaps.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/characters.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/zones.h"
 
 // Probably a array (as it's aligned 16)
 struct Backgrounds ALIGNED(16) gStageBackgroundsRam = {};

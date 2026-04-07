@@ -4,8 +4,8 @@
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/entities_manager.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     // NOTE: EntityShared HAS to be the first element,

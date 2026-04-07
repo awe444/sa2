@@ -20,8 +20,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     u32 unk0;

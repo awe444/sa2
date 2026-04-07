@@ -3,7 +3,7 @@
 #include "game/shared/stage/entity.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/zones.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

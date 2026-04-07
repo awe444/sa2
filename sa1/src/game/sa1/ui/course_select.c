@@ -11,9 +11,9 @@
 #include "game/sa1/stage/stage_ui.h"
 #include "game/sa1/menus/time_attack.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/ui_graphics.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/ui_graphics.h"
 
 typedef struct CourseSelectState {
     StrcUi_805423C strc0;

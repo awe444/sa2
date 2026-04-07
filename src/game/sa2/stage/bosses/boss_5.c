@@ -21,9 +21,9 @@
 #include "game/sa2/stage/screen_fade.h"
 
 #include "lib/m4a/m4a.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
-#include "constants/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
+#include "constants/sa2/animations.h"
 #include "flags.h"
 
 typedef struct {

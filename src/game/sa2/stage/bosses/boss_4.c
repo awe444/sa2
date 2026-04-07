@@ -21,10 +21,10 @@
 #include "game/shared/stage/screen_shake.h"
 #include "game/sa2/stage/boss_results_transition.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 #define NUM_TAIL_SEGMENTS 3
 

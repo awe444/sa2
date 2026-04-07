@@ -13,8 +13,8 @@
 #include "game/sa2/ui/time_attack_results.h"
 #include "game/sa2/stage/boss_results_transition.h"
 
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 // Seven unknown x/y positions
 const u16 gUnknown_080D6DE4[][2] = {

@@ -229,7 +229,7 @@ FORMAT_H_PATHS   := $(shell find . -name "*.h" ! -path '*/build/*' ! -path '*/ex
 # -P disables line markers (don't EVER use this, if you want proper debug info!)
 # -I sets an include path
 # -D defines a symbol
-CPPFLAGS ?= $(INCLUDE_CPP_ARGS) -D $(GAME_REGION)
+CPPFLAGS ?= $(INCLUDE_CPP_ARGS) -D $(GAME_REGION) -D GAME=$(GAME)
 CC1FLAGS ?= -Wimplicit -Wparentheses -Werror
 
 ifneq ($(GAME_VARIANT), DEFAULT)
@@ -497,13 +497,13 @@ data/sa2/mb_chao_garden_japan.gba.lz: data/sa2/mb_chao_garden_japan.gba
 	$(GFX) $< $@ -search 1
 
 %interactables.bin: %interactables.csv
-	$(ENT_POS) $< $@ -entities INTERACTABLES -header "./include/constants/interactables.h"
+	$(ENT_POS) $< $@ -entities INTERACTABLES -header "./include/constants/sa2/interactables.h"
 
 %itemboxes.bin: %itemboxes.csv
-	$(ENT_POS) $< $@ -entities ITEMS -header "./include/constants/items.h"
+	$(ENT_POS) $< $@ -entities ITEMS -header "./include/constants/sa2/items.h"
 
 %enemies.bin: %enemies.csv
-	$(ENT_POS) $< $@ -entities ENEMIES -header "./include/constants/enemies.h"
+	$(ENT_POS) $< $@ -entities ENEMIES -header "./include/constants/sa2/enemies.h"
 
 %rings.bin: %rings.csv
 	$(ENT_POS) $< $@ -entities RINGS

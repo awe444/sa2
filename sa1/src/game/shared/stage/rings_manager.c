@@ -18,7 +18,7 @@
 
 #include "game/sa1/assets/compressed/entities.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 typedef struct {
     Sprite s;

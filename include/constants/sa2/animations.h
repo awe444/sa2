@@ -4,7 +4,7 @@
 /* Collection of animation indices for Sonic Advance 1.
  * - By JaceCear
  */
-#include "constants/anim_sizes.h"
+#include "constants/sa2/anim_sizes.h"
 
 /**************************** SA1 ****************************/
 

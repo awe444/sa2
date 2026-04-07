@@ -2,10 +2,10 @@
 #define GUARD_STAGE_PLAYER_H
 
 #include "core.h"
-#include "constants/move_states.h"
+#include "constants/sa2/move_states.h"
 
 // TODO: merge these
-#include "constants/characters.h"
+#include "constants/sa2/characters.h"
 #include "game/shared/parameters/characters.h"
 
 #define PLAYER_IS_ALIVE  (!(gPlayer.moveState & MOVESTATE_DEAD))
@@ -216,6 +216,11 @@ typedef struct Player_ {
 } Player;
 
 extern Player gPlayer;
+
+#if (GAME == GAME_SA1)
+// "Cheat Code" Tails
+extern Player gPartner;
+#endif
 
 // In SA2 tricks stop all characters when the buttons are pressed.
 // Set this to TRUE to behave more like SA3.

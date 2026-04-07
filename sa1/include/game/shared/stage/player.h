@@ -2,12 +2,12 @@
 #define GUARD_STAGE_PLAYER_H
 
 // TODO: merge these
-#include "constants/characters.h"
+#include "constants/sa1/characters.h"
 //#include "game/shared/parameters/characters.h"
 
 #include "core.h"
-#include "constants/characters.h" // for NUM_CHARACTERS
-#include "constants/move_states.h"
+#include "constants/sa1/characters.h" // for NUM_CHARACTERS
+#include "constants/sa1/move_states.h"
 
 #define PLAYER_IS_ALIVE  (!(gPlayer.moveState & MOVESTATE_DEAD))
 #define IS_ALIVE(player) (!((player)->moveState & MOVESTATE_DEAD))

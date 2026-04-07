@@ -1,7 +1,7 @@
 #ifndef GUARD_PARAMETERS_CHARACTERS_H
 #define GUARD_PARAMETERS_CHARACTERS_H
 
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 
 /* NOTE: Copied from SA2! */
 

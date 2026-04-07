@@ -11,9 +11,9 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/boost_effect.h"
 
-#include "constants/animations.h"
-#include "constants/anim_commands.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/anim_commands.h"
+#include "constants/sa2/zones.h"
 
 // TODO: Rename struct!
 typedef struct {

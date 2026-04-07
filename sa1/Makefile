@@ -132,6 +132,7 @@ INCLUDE_SCANINC_ARGS := $(INCLUDE_DIRS:%=-I %)
 
 SA2_INCLUDE_DIRS = ../include
 SA2_INCLUDE_CPP_ARGS := $(SA2_INCLUDE_DIRS:%=-iquote %)
+SA2_INCLUDE_SCANINC_ARGS := $(INCLUDE_DIRS:%=-I %)
 
 ASM_SUBDIR = asm
 ASM_BUILDDIR = $(OBJ_DIR)/$(ASM_SUBDIR)
@@ -239,7 +240,7 @@ FORMAT_H_PATHS   := $(shell find . -name "*.h" ! -path '*/build/*' ! -path '*/ex
 # -P disables line markers (don't EVER use this, if you want proper debug info!)
 # -I sets an include path
 # -D defines a symbol
-CPPFLAGS ?= $(INCLUDE_CPP_ARGS) -D $(GAME_REGION)
+CPPFLAGS ?= -D $(GAME_REGION) -D GAME=$(GAME)
 CC1FLAGS ?= -Wimplicit -Wparentheses -Werror
 
 ifneq ($(GAME_VARIANT), DEFAULT)
@@ -470,13 +471,13 @@ data/sa1/mb_chao_garden_japan.gba.lz: data/sa1/mb_chao_garden_japan.gba
 	$(GFX) $< $@ -search 1
 
 %interactables.bin: %interactables.csv
-	$(ENT_POS) $< $@ -entities INTERACTABLES -header "./include/constants/interactables.h"
+	$(ENT_POS) $< $@ -entities INTERACTABLES -header "./include/constants/sa1/interactables.h"
 
 %itemboxes.bin: %itemboxes.csv
-	$(ENT_POS) $< $@ -entities ITEMS -header "./include/constants/items.h"
+	$(ENT_POS) $< $@ -entities ITEMS -header "./include/constants/sa1/items.h"
 
 %enemies.bin: %enemies.csv
-	$(ENT_POS) $< $@ -entities ENEMIES -header "./include/constants/enemies.h"
+	$(ENT_POS) $< $@ -entities ENEMIES -header "./include/constants/sa1/enemies.h"
 
 %rings.bin: %rings.csv
 	$(ENT_POS) $< $@ -entities RINGS
@@ -526,14 +527,14 @@ $(OBJ_DIR)/sa2/%.s: ../%.s
 $(OBJ_DIR)/sa2/%.o: $(OBJ_DIR)/sa2/%.c
 	@echo "$(CC1) <flags> -o $@ $<"
 	@$(shell mkdir -p $(shell dirname '$(OBJ_DIR)/sa2/$*.i'))
-	@$(CPP) $(CPPFLAGS) $< -o $(OBJ_DIR)/sa2/$*.i
+	@$(CPP) $(CPPFLAGS) $(SA2_INCLUDE_CPP_ARGS) $< -o $(OBJ_DIR)/sa2/$*.i
 	@$(PREPROC) $(OBJ_DIR)/sa2/$*.i $(PLATFORM) "" | $(CC1) $(PROLOGUE_FIX) $(CC1FLAGS) -o $(OBJ_DIR)/sa2/$*.s -
 	@printf ".text\n\t.align\t2, 0\n" >> $(OBJ_DIR)/sa2/$*.s
 	@$(AS) $(ASFLAGS) $(OBJ_DIR)/sa2/$*.s -o $@
 
 $(OBJ_DIR)/sa2/%.d: $(OBJ_DIR)/sa2/%.c
 	@$(shell mkdir -p $(shell dirname '$(OBJ_DIR)/sa2/$*.d'))
-	$(SCANINC) -M $@ $(INCLUDE_SCANINC_ARGS) $<
+	$(SCANINC) -M $@ $(SA2_INCLUDE_SCANINC_ARGS) $<
 
 $(OBJ_DIR)/sa2/%.o: $(OBJ_DIR)/sa2/%.s
 	@echo "$(AS) <flags> -o $@ $<"
@@ -544,7 +545,7 @@ $(OBJ_DIR)/sa2/%.o: $(OBJ_DIR)/sa2/%.s
 $(C_BUILDDIR)/%.o: $(C_SUBDIR)/%.c
 	@echo "$(CC1) <flags> -o $@ $<"
 	@$(shell mkdir -p $(shell dirname '$(C_BUILDDIR)/$*.i'))
-	@$(CPP) $(CPPFLAGS) $< -o $(C_BUILDDIR)/$*.i
+	@$(CPP) $(CPPFLAGS) $(INCLUDE_CPP_ARGS) $(SA2_INCLUDE_CPP_ARGS) $< -o $(C_BUILDDIR)/$*.i
 	@$(PREPROC) $(C_BUILDDIR)/$*.i $(PLATFORM) "" | $(CC1) $(PROLOGUE_FIX) $(CC1FLAGS) -o $(C_BUILDDIR)/$*.s -
 ifeq ($(PLATFORM), gba)
 	@printf ".text\n\t.align\t2, 0\n" >> $(C_BUILDDIR)/$*.s
@@ -564,7 +565,7 @@ $(C_BUILDDIR)/%.o: $(C_SUBDIR)/%.s
 
 $(DATA_ASM_BUILDDIR)/%.o: $(DATA_ASM_SUBDIR)/%.s
 	@echo "$(AS) <flags> -o $@ $<"
-	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) - | $(AS) $(ASFLAGS) -o $@ -
+	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) $(INCLUDE_CPP_ARGS) - | $(AS) $(ASFLAGS) -o $@ -
 
 # Scan the ASM data dependencies to determine if any .inc files have changed
 $(DATA_ASM_BUILDDIR)/%.d: $(DATA_ASM_SUBDIR)/%.s
@@ -572,12 +573,13 @@ $(DATA_ASM_BUILDDIR)/%.d: $(DATA_ASM_SUBDIR)/%.s
     
 ifneq ($(NODEP),1)
 -include $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.d))
+-include $(SA2_C_SRCS:.c=.d)
 -include $(addprefix $(OBJ_DIR)/,$(DATA_ASM_SRCS:.s=.d))
 endif
 
 $(SONG_BUILDDIR)/%.o: $(SONG_SUBDIR)/%.s
 	@echo "$(AS) <flags> -o $@ $<"
-	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) - | $(AS) $(ASFLAGS) -o $@ -
+	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) $(INCLUDE_CPP_ARGS) - | $(AS) $(ASFLAGS) -o $@ -
 
 ### SUB-PROGRAMS ###
 

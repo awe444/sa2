@@ -6,9 +6,9 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/animations.h"
-#include "constants/move_states.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/move_states.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     // NOTE: EntityShared HAS to be the first element,

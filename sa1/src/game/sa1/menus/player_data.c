@@ -8,10 +8,10 @@
 #include "game/sa1/save.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
-#include "constants/songs.h"
-#include "constants/text.h" // for UILANG_COUNT
+#include "constants/sa1/animations.h"
+#include "constants/sa1/anim_sizes.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h" // for UILANG_COUNT
 
 typedef enum EPDM_Options {
     PDM_OPTION_SELECT_NAME,

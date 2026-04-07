@@ -10,7 +10,7 @@
 #include "game/sa1/menus/mp_mode_select.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/songs.h"
+#include "constants/sa1/songs.h"
 
 /* NOTE(Jace): This whole module needs to be considered to be redone. */
 

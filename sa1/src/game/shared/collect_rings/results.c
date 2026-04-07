@@ -17,11 +17,11 @@
 #include "game/sa1/save.h"
 #include "game/sa1/stage/tilemap_table.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/zones.h"
 
 extern u8 gUnknown_087D7E80[0x3400];
 extern u8 gUnknown_087E3610[0x2000];

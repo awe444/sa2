@@ -24,12 +24,12 @@
 #include "../chao_garden/include/program_params.h"
 #include "game/sa1/assets/compressed/roms.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/move_states.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/move_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/zones.h"
 
 #define MENU_ITEMS_TOP_Y    93
 #define MENU_ITEMS_SPACE    14

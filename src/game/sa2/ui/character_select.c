@@ -18,10 +18,10 @@
 #include "game/sa2/ui/time_attack_lobby.h"
 #include "game/sa2/ui/time_attack_mode_select.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 struct CharacterSelectionScreen {
     /* 0x00 */ ScreenFade fade;

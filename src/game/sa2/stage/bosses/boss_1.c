@@ -25,10 +25,10 @@
 #include "game/shared/stage/screen_shake.h"
 #include "game/sa2/ui/time_attack_results.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 #define EGG_HAMMER_TANK_II_STATE_RESET   0
 #define EGG_HAMMER_TANK_II_STATE_EXTEND  1

@@ -90,6 +90,12 @@ typedef void (*VoidFn)(void);
 #define INCBIN_S32 INCBIN
 #endif // IDE support
 
+#if (GAME == GAME_SA1)
+#define INCBIN_MAP INCBIN_U8
+#else
+#define INCBIN_MAP INCBIN_U16
+#endif
+
 // Use STR(<macro>) to turn the macro's *content* into a string
 #define STR_(x) #x
 #define STR(x)  STR_(x)
@@ -146,6 +152,7 @@ typedef void (*VoidFn)(void);
 
 // Multiplies two Q values
 #define Q_MUL(qValA, qValB)         ((qValA * qValB) >> 8)
+#define Q_MUL_NEG(qValA, qValB)     (-(qValA * qValB) >> 8)
 #define Q_SQUARE(qVal)              Q_MUL(qVal, qVal)
 #define Q_DIV(qValA, qValB)         Div((qValA << 8), qValB)
 #define Q_DIV2(qValA, qValB)        ((qValA << 8) / qValB)
@@ -221,7 +228,8 @@ typedef void (*VoidFn)(void);
         }                                                                                                                                  \
     })
 
-#define ABS(aValue) ((aValue) >= 0 ? (aValue) : -(aValue))
+#define ABS(aValue)  ((aValue) >= 0 ? (aValue) : -(aValue))
+#define ABS2(aValue) ((aValue) < 0 ? -(aValue) : (aValue))
 
 #define RECT_DISTANCE(aXA, aYA, aXB, aYB) (ABS((aXA) - (aXB)) + ABS((aYA) - (aYB)))
 
@@ -286,6 +294,11 @@ typedef void (*VoidFn)(void);
         b = y;                                                                                                                             \
         a = x ^ y;                                                                                                                         \
     })
+
+#define XOR_SWAP_WORD(a, b)                                                                                                                \
+    a ^= b;                                                                                                                                \
+    b ^= a;                                                                                                                                \
+    a = (b ^ a);
 
 // TODO: fix casts here
 #define SWAP_AND_NEGATE(a, b)                                                                                                              \

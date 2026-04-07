@@ -19,11 +19,11 @@
 #include "game/shared/stage/rings_scatter.h"
 #include "game/sa1/stage/trapped_animals.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/player_transitions.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 bool32 Coll_DamageSuperSonic(Player *p);
 

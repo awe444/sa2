@@ -113,8 +113,8 @@
 #include "game/sa1/assets/compressed/entities.h"
 #endif
 
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 // Unknown task
 extern void CreateEnemyDefeatScore(s16, s16);

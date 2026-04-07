@@ -9,11 +9,11 @@
 #include "game/shared/stage/stage.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/animations.h"
-#include "constants/characters.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/characters.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h"
+#include "constants/sa1/zones.h"
 
 /* These are the records appearing after selecting / before starting to play a stage */
 

@@ -23,8 +23,8 @@
 #define BRIDGE_TYPE_CURVED   1
 
 
-#include "../../../include/constants/interactables.h"
-#include "../../../include/constants/zones.h"
+#include "../../../include/constants/sa2/interactables.h"
+#include "../../../include/constants/sa2/zones.h"
 
 static void DrawEntInteractableSA2(AppState *state, int x, int y, int kind, char data[4]);
 static inline bool DrawOnOffButton(UiContext *ui, UiIdent *id, Rectangle rec, char *text, bool cond);

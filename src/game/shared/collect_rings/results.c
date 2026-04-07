@@ -25,10 +25,10 @@
 
 #include "data/sa2/collect_rings.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 struct MultiplayerSinglePakResultsScreen_UNK80 {
     Sprite unk0;

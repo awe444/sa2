@@ -4,7 +4,7 @@
 #include "game/sa1/special_stage/main.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/songs.h"
+#include "constants/sa1/songs.h"
 
 typedef struct {
     struct MP2KPlayerState *songInfo;
