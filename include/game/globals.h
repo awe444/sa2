@@ -233,7 +233,7 @@ extern struct Task *gChaoTasks[3];
 #define EXTRACT_REGISTERED_CONNECTIONS(statusFlags) ((statusFlags & MULTI_SIO_ALL_CONNECTED) >> 8)
 
 // I wonder if this was stubbed and you had to provide your own implementation
-void LinkCommunicationError(void);
+extern void LinkCommunicationError(void);
 
 #define LINK_HEARTBEAT()                                                                                                                   \
     ({                                                                                                                                     \

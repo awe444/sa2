@@ -236,7 +236,7 @@ void SA2_LABEL(Task_808207C)(void)
     struct MultiplayerSinglePakResultsScreen *resultsScreen;
     gDispCnt |= 0x1800;
     gMultiplayerConnections = ((gMultiSioStatusFlags & MULTI_SIO_ALL_CONNECTED) >> 8);
-    MultiPakHeartbeat();
+    LINK_HEARTBEAT();
 
     gMultiSioSend.pat0.unk0 = COMM_DATA(0x10);
 
@@ -609,7 +609,7 @@ void SA2_LABEL(sub_8082788)(void)
     Sprite *s;
     struct MultiplayerSinglePakResultsScreen *resultsScreen;
 
-    MultiPakHeartbeat();
+    LINK_HEARTBEAT();
     resultsScreen = TASK_DATA(gCurTask);
 
     for (i = 0; i < 4; i++) {

@@ -105,7 +105,7 @@ void sa2__sub_80818B8(void)
     }
 
     unkR6 = ((u32)(gMultiSioStatusFlags & 0xF00) >> 8);
-    // NOTE: Similar to macro: MultiPakHeartbeat()
+    // NOTE: Similar to macro: LINK_HEARTBEAT()
     for (var_r3 = 1; var_r3 < 4; var_r3++) {
         if (gMultiSioStatusFlags & (1 << (var_r3 + 8))) {
             if (!((1 << var_r3) & gMultiSioStatusFlags)) {

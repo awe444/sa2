@@ -514,7 +514,7 @@ void Task_ChaoMessageInit(void)
     ChaoMessage *message;
     ChaoMsgSprite *msgSprite;
 
-    MultiPakHeartbeat();
+    LINK_HEARTBEAT();
 
     message = TASK_DATA(gCurTask);
     for (i = 0; i < message->unk54; i++) {
@@ -572,7 +572,7 @@ void Task_803B7AC()
     ChaoMessage *message;
     u8 var_r6 = 0;
 
-    MultiPakHeartbeat();
+    LINK_HEARTBEAT();
 
     message = TASK_DATA(gCurTask);
     message->unk52++;
@@ -630,7 +630,7 @@ void sub_803B944()
     u8 var_r6 = 0;
     u32 i;
 
-    MultiPakHeartbeat();
+    LINK_HEARTBEAT();
 
     message = TASK_DATA(gCurTask);
 
@@ -682,7 +682,7 @@ void sub_803BAD4()
     ChaoMessage *message;
     u8 var_r6 = 0;
 
-    MultiPakHeartbeat();
+    LINK_HEARTBEAT();
 
     message = TASK_DATA(gCurTask);
     message->unk52++;
