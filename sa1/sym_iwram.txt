@@ -4,7 +4,7 @@ sa2/src/lib/m4a/m4a.o(.bss.code);
 
 . = 0x0000400;
 sa2/src/multi_boot.o(.bss);
-src/game/shared/stage/terrain_collision.o(.bss);
+sa2/src/game/shared/stage/terrain_collision.o(.bss);
 
 . = 0x00000424;
 sa2/src/lib/agb_flash/agb_flash.o(.bss);
@@ -48,7 +48,7 @@ src/game/sa1/stage/temporary_sound_play_task.o(.data);
 src/game/sa1/stage/enemies/boss_6_egg_snake.o(COMMON);
 . = 0x00005890; gUnknown_03005890 = .;
 . = 0x000058A8;
-src/game/sa1/multiplayer/chao_message.o(.bss);
+sa2/src/game/sa1/multiplayer/chao_message.o(.bss);
 src/game/dummy_task.o(.data);
 
 . = 0x000058C0;
@@ -70,11 +70,11 @@ src/game/shared/stage/water_effects.o(.data);
 
 . = 0x000060D0;
 sa2/src/input_recorder.o(.data);
-src/game/sa1/stage/player_controls.o(.data);
+sa2/src/game/sa1/stage/player_controls.o(.data);
 src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.o(.data);
 
 . = 0x00006240; 
-src/game/sa1/stage/ui_rendering.o(.data);
+sa2/src/game/sa1/stage/ui_rendering.o(.data);
 
 . = 0x00006414;
 sa2/src/lib/agb_flash/agb_flash.o(.data);

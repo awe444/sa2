@@ -10,8 +10,13 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
+#if (GAME == GAME_SA1)
 #include "constants/sa1/animations.h"
 #include "constants/sa1/zones.h"
+#elif (GAME == GAME_SA2)
+#include "constants/sa2/animations.h"
+#include "constants/sa2/zones.h"
+#endif
 
 #define PLAYER_TOUCHING_RING_HB(p, hb, ringIntX, ringIntY)                                                                                 \
     ((((ringIntX - TILE_WIDTH) <= HB_LEFT(I(p.qWorldX), hb) && (ringIntX + TILE_WIDTH) >= HB_LEFT(I(p.qWorldX), hb))                       \

@@ -4,7 +4,11 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
+#if (GAME == GAME_SA1)
+#include "constants/sa1/zones.h"
+#else
 #include "constants/sa2/zones.h"
+#endif
 
 const Collision *gRefCollision = NULL;
 
