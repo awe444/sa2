@@ -109,7 +109,7 @@ make sdl -j$(nproc)
 
 ### SA1 (Sonic Advance) SDL port via CMake (Linux)
 
-The SA1 port can alternatively be built with CMake instead of the Makefile.  This
+The SA1 port can alternatively be built with CMake instead of the Makefile. This
 uses the same source code and the same preproc pipeline, but a different build
 driver — useful for testing whether a bug is build-system-specific.
 
@@ -161,7 +161,7 @@ cmake --build sa1/build-clang -j$(nproc)
 
 #### Region
 
-The default region is Europe.  To build the USA version:
+The default region is Europe. To build the USA version:
 
 ```bash
 cmake -S sa1 -B sa1/build -DCMAKE_BUILD_TYPE=Release -DSA1_GAME_REGION=USA
