@@ -88,6 +88,12 @@ foreach(PAL ${PAL_FILES})
 endforeach()
 
 # ── Step 3: Convert .png → .4bpp (or .8bpp for 8bpp tiles) ───────────────
+# The Makefile (graphics.mk) uses special flags for certain graphics:
+#   - obj_tiles (sprite tiles) need -split_into_oam_shapes so that gbagfx
+#     rearranges the image into OAM-compatible tile blocks.  Without this
+#     flag the tile layout in VRAM won't match the OAM data tables,
+#     causing sprite tiling glitches.
+#   - tileset images need -ignore_trailing.
 file(GLOB_RECURSE PNG_FILES
     "${SA1_DIR}/graphics/*.png"
     "${SA1_DIR}/data/*.png"
@@ -99,9 +105,21 @@ foreach(PNG ${PNG_FILES})
     else()
         string(REGEX REPLACE "\\.png$" ".4bpp" OUT "${PNG}")
     endif()
+
+    # Determine per-file conversion flags (matching graphics.mk rules)
+    set(GFX_EXTRA_FLAGS "")
+    if(PNG MATCHES "/obj_tiles/")
+        # graphics.mk: graphics/sa1/obj_tiles/{4bpp,8bpp}/%.{4bpp,8bpp}
+        #   → $(GFX) $< $@ -split_into_oam_shapes
+        set(GFX_EXTRA_FLAGS -split_into_oam_shapes)
+    elseif(PNG MATCHES "/tileset_[^/]*\\.png$" OR OUT MATCHES "/tiles\\.8bpp$")
+        # graphics.mk: tileset_%.4bpp / tiles.8bpp → -ignore_trailing
+        set(GFX_EXTRA_FLAGS -ignore_trailing)
+    endif()
+
     if("${PNG}" IS_NEWER_THAN "${OUT}")
         execute_process(
-            COMMAND "${GFX}" "${PNG}" "${OUT}"
+            COMMAND "${GFX}" "${PNG}" "${OUT}" ${GFX_EXTRA_FLAGS}
             WORKING_DIRECTORY "${SA1_DIR}"
             RESULT_VARIABLE RC
         )

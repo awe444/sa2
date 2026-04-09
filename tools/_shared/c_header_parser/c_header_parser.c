@@ -153,6 +153,8 @@ static void find_token_types(TokenList *tokens)
                 token->type = POUND_ENDIF;
             } else if(!strcmp(token->text+1, "include")) {
                 token->type = POUND_INCLUDE;
+            } else if(!strcmp(token->text+1, "elif")) {
+                token->type = POUND_ELIF;
             } else {
                 fprintf(stderr, "ERROR: Unknown #-def: '%s'\n", token->text+1);
                 return;
