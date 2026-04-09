@@ -67,6 +67,7 @@ Temporary Items
 *.rdi 
 *.dump
 build
+build-*/
 tools/agbcc
 **/sound/*/songs/midi/*.s
 /ctx.c

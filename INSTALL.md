@@ -107,6 +107,67 @@ make sdl -j$(nproc)
 ./sa1.sdl
 ```
 
+### SA1 (Sonic Advance) SDL port via CMake (Linux)
+
+The SA1 port can alternatively be built with CMake instead of the Makefile. This
+uses the same source code and the same preproc pipeline, but a different build
+driver — useful for testing whether a bug is build-system-specific.
+
+#### Install dependencies
+
+```bash
+sudo apt update
+sudo apt install build-essential cmake pkg-config libpng-dev libsdl2-dev
+```
+
+#### Provide assets
+
+Same as the Makefile build: place a copy of the
+[Sonic Advance (Europe)](https://datomatic.no-intro.org/index.php?page=show_record&s=23&n=0330)
+ROM (`sha1: eb00f101af23d728075ac2117e27ecd8a4b4c3e9`) named `baserom_sa1.gba`
+in the `sa1/` directory.
+
+#### Build (Release, -O2)
+
+```bash
+cmake -S sa1 -B sa1/build -DCMAKE_BUILD_TYPE=Release
+cmake --build sa1/build -j$(nproc)
+```
+
+The executable will be at `sa1/build/sa1_sdl`.  Launch it from the repo root so
+it can find the asset files:
+
+```bash
+cd sa1 && ./build/sa1_sdl
+```
+
+#### Build (Debug, -O0)
+
+```bash
+cmake -S sa1 -B sa1/build-debug -DCMAKE_BUILD_TYPE=Debug
+cmake --build sa1/build-debug -j$(nproc)
+cd sa1 && ./build-debug/sa1_sdl
+```
+
+#### Switching compiler
+
+To build with Clang instead of GCC (or vice-versa):
+
+```bash
+cmake -S sa1 -B sa1/build-clang -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+cmake --build sa1/build-clang -j$(nproc)
+```
+
+#### Region
+
+The default region is Europe. To build the USA version:
+
+```bash
+cmake -S sa1 -B sa1/build -DCMAKE_BUILD_TYPE=Release -DSA1_GAME_REGION=USA
+cmake --build sa1/build -j$(nproc)
+```
+
 ### GBA rom
 
 1. Clone [agbcc](https://github.com/SAT-R/agbcc) repo into another folder
