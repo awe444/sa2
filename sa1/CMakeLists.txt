@@ -163,15 +163,8 @@ function(sa1_preprocess OUTPUT_VAR)
             COMMENT "preproc ${REL}"
             VERBATIM
         )
-        # The .pp.c file is already fully preprocessed (cc -E + preproc).
-        # Strip the target's compile definitions and include directories so the
-        # compiler does not re-preprocess it — matching the Makefile pipeline
-        # where CC1 receives no -D or -I flags for already-preprocessed code.
-        set_source_files_properties("${PP_C}" PROPERTIES
-            LANGUAGE C
-            COMPILE_DEFINITIONS ""
-            INCLUDE_DIRECTORIES ""
-        )
+        # Tell CMake this generated file is C (it has no extension CMake recognises).
+        set_source_files_properties("${PP_C}" PROPERTIES LANGUAGE C)
         list(APPEND PP_OUTPUTS "${PP_C}")
     endforeach()
 
@@ -376,15 +369,19 @@ else()
     set(SA1_TARGET sa1_sdl)
 endif()
 
-# ── Include paths ────────────────────────────────────────────────────────────
-target_include_directories(${SA1_TARGET} PRIVATE ${SA1_INCLUDE_DIRS})
-
-# ── Preprocessor defines ────────────────────────────────────────────────────
-target_compile_definitions(${SA1_TARGET} PRIVATE ${SA1_DEFINITIONS})
-
-if(NOT ANDROID)
-    target_compile_definitions(${SA1_TARGET} PRIVATE SDL_MAIN_HANDLED)
-endif()
+# ── Include paths & preprocessor defines ─────────────────────────────────────
+# Intentionally absent: target_include_directories / target_compile_definitions.
+#
+# Every C source is compiled from its .pp.c form, which has already been
+# fully preprocessed (cc -E with all -D and -iquote flags, then preproc).
+# The Makefile pipeline works the same way — CC1 receives NO -D or -I
+# flags when compiling the preproc output:
+#
+#   $(PREPROC) file.i sdl "" | $(CC1) $(CC1FLAGS) -o file.s -
+#
+# Adding target-level -D / -I flags to the .pp.c compilation is harmless
+# but unnecessary, and keeping them out makes the CMake pipeline an exact
+# match of the Makefile pipeline.
 
 # ── Compiler flags ───────────────────────────────────────────────────────────
 string(TOUPPER "${CMAKE_BUILD_TYPE}" _BUILD_TYPE_UPPER)
@@ -426,7 +423,9 @@ if(ANDROID)
         android
     )
 else()
-    target_include_directories(${SA1_TARGET} PRIVATE ${SDL2_INCLUDE_DIRS})
+    # SDL2 include dirs are not needed here — .pp.c files are already
+    # preprocessed with SDL2 headers expanded (via SYSTEM_INCLUDE_DIRS
+    # in the sa1_preprocess() call above).
     target_link_libraries(${SA1_TARGET} PRIVATE ${SDL2_LIBRARIES})
 endif()
 
