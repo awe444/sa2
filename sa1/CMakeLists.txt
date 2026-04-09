@@ -391,6 +391,11 @@ target_compile_options(${SA1_TARGET} PRIVATE
     -Wimplicit
     -Wparentheses
     ${SA1_OPT_FLAG}
+    # Strict aliasing optimizations can miscompile type-punned pointer accesses
+    # common in GBA decompilation code (e.g. OamData union accessed via u16*
+    # attr writes and u32 bitfield reads).  Applies to both GCC and Clang,
+    # matching the sa2 root Makefile which adds this for all non-GBA compilers.
+    -fno-strict-aliasing
 )
 
 # Clang-specific flags (GCC does not recognise these)
@@ -400,10 +405,6 @@ if(CMAKE_C_COMPILER_ID MATCHES "Clang")
         -Wno-unused-value
         # Clang emits .addrsig directives that GNU as does not understand.
         -fno-addrsig
-        # Clang's strict aliasing optimizations can miscompile type-punned
-        # pointer accesses common in GBA decompilation code (e.g. OamData
-        # union accessed via u16* attr writes and u32 bitfield reads).
-        -fno-strict-aliasing
     )
 endif()
 
