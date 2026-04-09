@@ -14,7 +14,7 @@
 #include "game/shared/stage/water_effects.h"
 #include "game/shared/stage/mp_player.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 #if (GAME == GAME_SA2)
 const u16 sAnimData_StageGoalScoreBonus[][3] = {

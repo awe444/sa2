@@ -3,9 +3,9 @@
 #include "game/shared/stage/entity.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/vram_hardcoded.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/vram_hardcoded.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

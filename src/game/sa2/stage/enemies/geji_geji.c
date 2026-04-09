@@ -1,7 +1,5 @@
 #include "global.h"
 
-#include "game/shared/stage/collision.h"
-
 #include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/geji_geji.h"
 #include "game/shared/stage/player.h"
@@ -9,7 +7,7 @@
 #include "malloc_vram.h"
 #include "sprite.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

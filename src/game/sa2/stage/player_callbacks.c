@@ -16,10 +16,10 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 // NOTE: It seems like this was supposed to store 5 positions for displaying/storing bound motion frames
 //       but actually none of the positions are used.
@@ -68,9 +68,9 @@ void Player_Knuckles_Climb(Player *p);
 void Player_Knuckles_InitClimbPullUpEdge(Player *p);
 void sub_8013CA0(Player *p);
 
-void sub_8022318(Player *p);
+void SA2_LABEL(sub_8022318)(Player *p);
 void sub_8022838(Player *p);
-void sub_80232D0(Player *p);
+void SA2_LABEL(sub_80232D0)(Player *p);
 
 void Player_AirInputControls(Player *p);
 void Player_UpdatePosition(Player *p);
@@ -231,7 +231,7 @@ void Player_SonicAmy_WindupSkidAttack(Player *p)
                 CreateSonicAmySkidAttackEffect(I(p->qWorldX), I(p->qWorldY), 0);
             }
 
-            p->unk72 = 32;
+            p->SA2_LABEL(unk72) = 32;
             m4aSongNumStart(SE_SONIC_SKID_ATTACK);
         }
     }
@@ -253,7 +253,7 @@ void Player_SonicAmy_SkidAttack(Player *p)
 
     sub_8029C84(p);
 
-    if (--p->unk72 == -1) {
+    if (--p->SA2_LABEL(unk72) == -1) {
         if (p->moveState & MOVESTATE_IN_AIR) {
             p->charState = CHARSTATE_CURLED_IN_AIR;
             p->transition = PLTRANS_UNCURL;
@@ -268,7 +268,7 @@ void Player_SonicAmy_SkidAttack(Player *p)
     Player_HandlePhysicsWithAirInput(p);
 
     if (!(p->moveState & MOVESTATE_IN_AIR)) {
-        sub_8029FA4(p);
+        SA2_LABEL(sub_8029FA4)(p);
     }
 }
 
@@ -305,7 +305,7 @@ void Player_SonicAmy_StopNSlam(Player *p)
 {
     p->qSpeedAirY += TRICK__STOP_N_SLAM__DROP_SPEED;
 
-    sub_80283C4(p);
+    SA2_LABEL(sub_80283C4)(p);
 
     if ((p->moveState & (MOVESTATE_4000 | MOVESTATE_IN_AIR)) != MOVESTATE_IN_AIR) {
         s32 bounceSpeed;
@@ -424,7 +424,7 @@ void Player_Sonic_InitHomingAttack(Player *p)
     p->unk6E = 0;
     p->spriteInfoBody->s.frameFlags &= ~SPRITE_FLAG_MASK_ANIM_OVER;
     p->rotation = 0;
-    p->unk72 = GBA_FRAMES_PER_SECOND;
+    p->SA2_LABEL(unk72) = GBA_FRAMES_PER_SECOND;
 
     m4aSongNumStart(SE_SONIC_MIDAIR_SOMERSAULT);
 
@@ -512,7 +512,7 @@ void Player_80123D0(Player *p)
 
 void Player_SonicAmy_WindupStopNSlam(Player *p)
 {
-    sub_80283C4(p);
+    SA2_LABEL(sub_80283C4)(p);
 
     if (p->spriteInfoBody->s.frameFlags & SPRITE_FLAG_MASK_ANIM_OVER) {
         p->variant++;
@@ -538,7 +538,7 @@ void Player_SonicAmy_StopNSlam_AfterGroundCollision(Player *p)
         PLAYERFN_SET(Player_SonicAmy_StopNSlam_FallAfterCollision);
     }
 
-    sub_80283C4(p);
+    SA2_LABEL(sub_80283C4)(p);
 }
 
 void Player_SonicAmy_StopNSlam_FallAfterCollision(Player *p)
@@ -559,7 +559,7 @@ void TaskDestructor_SonicBoundMotionFrames(struct Task *t)
 
 void Player_Sonic_HomingAttack(Player *p)
 {
-    if (--p->unk72 == -1) {
+    if (--p->SA2_LABEL(unk72) == -1) {
         p->charState = CHARSTATE_FALLING_VULNERABLE_B;
         p->moveState &= ~MOVESTATE_BOOST_EFFECT_ON;
     }
@@ -640,7 +640,7 @@ void Player_Cream_InitFlying(Player *p)
     }
 
     p->w.cf.flyingDuration = CREAM_FLYING_DURATION;
-    p->unk61 = 1;
+    p->SA2_LABEL(unk61) = 1;
     p->isBoosting = FALSE;
     p->boostSpeed = 0;
     gPlayer.moveState |= MOVESTATE_10000000;
@@ -661,19 +661,19 @@ void Player_Cream_Flying(Player *p)
         }
     }
 
-    if (p->unk61 != 1) {
+    if (p->SA2_LABEL(unk61) != 1) {
         if (p->qSpeedAirY >= -Q(0.75)) {
             p->qSpeedAirY -= Q(0.09375);
 
-            if (++p->unk61 == 32) {
-                p->unk61 = 1;
+            if (++p->SA2_LABEL(unk61) == 32) {
+                p->SA2_LABEL(unk61) = 1;
             }
         } else {
-            p->unk61 = 1;
+            p->SA2_LABEL(unk61) = 1;
         }
     } else {
         if ((p->frameInput & gPlayerControls.jump) && (p->qSpeedAirY >= -Q(0.75)) && (p->w.cf.flyingDuration != 0)) {
-            p->unk61 = 2;
+            p->SA2_LABEL(unk61) = 2;
         }
 
         p->qSpeedAirY += Q(PLAYER_FLYING_END_GRAVITY);
@@ -698,7 +698,7 @@ void Player_Cream_Flying(Player *p)
         }
     }
 
-    sub_80282EC(p);
+    SA2_LABEL(sub_80282EC)(p);
 
     if (!(p->moveState & MOVESTATE_IN_AIR)) {
         p->transition = PLTRANS_TOUCH_GROUND;
@@ -901,7 +901,7 @@ void Player_Tails_InitFlying(Player *p)
     }
 
     p->w.tf.flyingDuration = TAILS_FLYING_DURATION;
-    p->unk61 = 1;
+    p->SA2_LABEL(unk61) = 1;
     p->isBoosting = FALSE;
     p->boostSpeed = 0;
 
@@ -917,19 +917,19 @@ void Player_Tails_8012C2C(Player *p)
         p->w.tf.flyingDuration--;
     }
 
-    if (p->unk61 != 1) {
+    if (p->SA2_LABEL(unk61) != 1) {
         if (p->qSpeedAirY >= -Q(0.75)) {
             p->qSpeedAirY -= Q(0.09375);
 
-            if (++p->unk61 == 32) {
-                p->unk61 = 1;
+            if (++p->SA2_LABEL(unk61) == 32) {
+                p->SA2_LABEL(unk61) = 1;
             }
         } else {
-            p->unk61 = 1;
+            p->SA2_LABEL(unk61) = 1;
         }
     } else {
         if ((p->frameInput & gPlayerControls.jump) && (p->qSpeedAirY >= -Q(0.75)) && (p->w.tf.flyingDuration != 0)) {
-            p->unk61 = 2;
+            p->SA2_LABEL(unk61) = 2;
         }
 
         p->qSpeedAirY += Q(PLAYER_FLYING_END_GRAVITY);
@@ -947,7 +947,7 @@ void Player_Tails_8012C2C(Player *p)
     p->maxSpeed = Q(6.0);
     p->acceleration = 0x10;
 
-    sub_80282EC(p);
+    SA2_LABEL(sub_80282EC)(p);
 
     if (!(p->moveState & MOVESTATE_IN_AIR)) {
         p->transition = PLTRANS_TOUCH_GROUND;
@@ -963,7 +963,7 @@ void Player_8012D1C(Player *p)
         p->transition = PLTRANS_TOUCH_GROUND;
     }
 
-    sub_8028204(p);
+    SA2_LABEL(sub_8028204)(p);
 }
 
 void Player_Tails_InitTailSwipe(Player *p)
@@ -1147,7 +1147,7 @@ void Player_Knuckles_InitSpiralAttack(Player *p)
 
     CreateKnucklesFireEffect(I(p->qWorldX), I(p->qWorldY), 0);
 
-    p->unk72 = 32;
+    p->SA2_LABEL(unk72) = 32;
 
     m4aSongNumStart(SE_SPIRAL_ATTACK);
 
@@ -1172,7 +1172,7 @@ void Player_Knuckles_SpiralAttack(Player *p)
 
     sub_8029C84(p);
 
-    if (--p->unk72 == -1) {
+    if (--p->SA2_LABEL(unk72) == -1) {
         p->variant++;
         p->unk6C = TRUE;
         PLAYERFN_SET(Player_8013B6C);
@@ -1228,7 +1228,7 @@ void Player_Knuckles_Glide_MainUpdate(Player *p)
 
             p->qSpeedAirY = 0;
 
-            sub_8022318(p);
+            SA2_LABEL(sub_8022318)(p);
 
             p->transition = PLTRANS_TOUCH_GROUND;
         } else {
@@ -1242,11 +1242,11 @@ void Player_Knuckles_Glide_MainUpdate(Player *p)
         if (temp) {
             type8029A28 sp08;
 
-            if (p->w.kf.unkAE >= 0) {
+            if (p->w.kf.SA2_LABEL(unkAE) >= 0) {
                 s8 temp = p->w.kf.shift + Q(0.25);
                 if (temp <= 0) {
                     p->moveState |= MOVESTATE_FACING_LEFT;
-                    result = sub_8029A28(p, NULL, &sp08);
+                    result = SA2_LABEL(sub_8029A28)(p, NULL, &sp08);
 
                     if (result != sp08) {
                         PLAYERFN_SET(Player_Knuckles_FallAfterGlide);
@@ -1269,7 +1269,7 @@ void Player_Knuckles_Glide_MainUpdate(Player *p)
                             playerBottomX -= 1;
                             playerBottomX -= p->spriteOffsetX;
 
-                            if (sub_801E4E4(playerBottomY, playerBottomX, p->layer, -8, NULL, sub_801EE64) < 0) {
+                            if (SA2_LABEL(sub_801E4E4)(playerBottomY, playerBottomX, p->layer, -8, NULL, SA2_LABEL(sub_801EE64)) < 0) {
                                 PLAYERFN_SET(Player_Knuckles_FallAfterGlide);
                                 p->charState = CHARSTATE_KNUCKLES_GLIDE_FALL;
                                 p->spriteOffsetX = 6;
@@ -1287,7 +1287,7 @@ void Player_Knuckles_Glide_MainUpdate(Player *p)
                             playerBottomX -= 1;
                             playerBottomX -= p->spriteOffsetX;
 
-                            if (sub_801E4E4(playerBottomY, playerBottomX, p->layer, +8, NULL, sub_801EE64) < 0) {
+                            if (SA2_LABEL(sub_801E4E4)(playerBottomY, playerBottomX, p->layer, +8, NULL, SA2_LABEL(sub_801EE64)) < 0) {
                                 PLAYERFN_SET(Player_Knuckles_FallAfterGlide);
                                 p->charState = CHARSTATE_KNUCKLES_GLIDE_FALL;
                                 p->spriteOffsetX = 6;
@@ -1302,7 +1302,7 @@ void Player_Knuckles_Glide_MainUpdate(Player *p)
                 } else {
                     p->moveState &= ~MOVESTATE_FACING_LEFT;
 
-                    result = sub_8029A74(p, 0, &sp08);
+                    result = SA2_LABEL(sub_8029A74)(p, 0, &sp08);
                     if (result != sp08) {
                         PLAYERFN_SET(Player_Knuckles_FallAfterGlide);
                         p->charState = CHARSTATE_KNUCKLES_GLIDE_FALL;
@@ -1321,7 +1321,7 @@ void Player_Knuckles_Glide_MainUpdate(Player *p)
                             playerBottomX += 1;
                             playerBottomX += p->spriteOffsetX;
 
-                            if (sub_801E4E4(playerBottomY, playerBottomX, p->layer, +8, NULL, sub_801EE64) < 0) {
+                            if (SA2_LABEL(sub_801E4E4)(playerBottomY, playerBottomX, p->layer, +8, NULL, SA2_LABEL(sub_801EE64)) < 0) {
                                 PLAYERFN_SET(Player_Knuckles_FallAfterGlide);
                                 p->charState = CHARSTATE_KNUCKLES_GLIDE_FALL;
                                 p->spriteOffsetX = 6;
@@ -1392,12 +1392,12 @@ void Player_Knuckles_GlideSoftFall(Player *p)
         p->spriteOffsetX = 6;
         p->spriteOffsetY = 14;
 
-        sub_8022318(p);
+        SA2_LABEL(sub_8022318)(p);
 
         if ((p->rotation + Q(0.125)) & Q(0.75)) {
             p->transition = PLTRANS_TOUCH_GROUND;
         } else {
-            p->unk2A = 15;
+            p->SA2_LABEL(unk2A) = 15;
             p->charState = CHARSTATE_KNUCKLES_GLIDE_FALL_HIT;
             PLAYERFN_SET(Player_Knuckles_GlideSoftLanding);
         }
@@ -1421,7 +1421,7 @@ void Player_Knuckles_GlideHardLandingUpdateAnim(Player *p)
 
     sub_8022838(p);
 
-    res = sub_8029B88(p, &rot, &p2);
+    res = SA2_LABEL(sub_8029B88)(p, &rot, &p2);
 
     if (res < 12) {
         if (GRAVITY_IS_INVERTED) {
@@ -1473,9 +1473,9 @@ void sub_80135BC(Player *p)
         p->qWorldY += Q(offsetY);
     }
 
-    sub_8022318(p);
+    SA2_LABEL(sub_8022318)(p);
 
-    p->unk2A = 15;
+    p->SA2_LABEL(unk2A) = 15;
     p->transition = PLTRANS_TOUCH_GROUND;
 }
 
@@ -1494,7 +1494,7 @@ s32 sub_8013644(Player *p)
 
         pY = I(p->qWorldY);
 
-        result = sub_801E4E4(pX, pY, p->layer, -8, &rot, sub_801ED24);
+        result = SA2_LABEL(sub_801E4E4)(pX, pY, p->layer, -8, &rot, sub_801ED24);
 
         if (rot & 0x1) {
             p->rotation = Q(0.25);
@@ -1510,7 +1510,7 @@ s32 sub_8013644(Player *p)
 
         pY = I(p->qWorldY);
 
-        result = sub_801E4E4(pX, pY, p->layer, +8, &rot, sub_801ED24);
+        result = SA2_LABEL(sub_801E4E4)(pX, pY, p->layer, +8, &rot, sub_801ED24);
 
         if (!(rot & 0x1)) {
             p->rotation = rot;
@@ -1527,7 +1527,7 @@ void Player_Knuckles_Climb_80136E8(Player *p)
     u8 rot;
     s32 r2;
 
-    if (p->w.tf.unkAE >= 0) {
+    if (p->w.tf.SA2_LABEL(unkAE) >= 0) {
         if (p->moveState & MOVESTATE_STOOD_ON_OBJ) {
             sub_8013CA0(p);
             return;
@@ -1566,7 +1566,7 @@ void Player_Knuckles_Climb_80136E8(Player *p)
                 p->qSpeedAirX = 0;
                 p->qSpeedAirY = 0;
 
-                sub_8022318(p);
+                SA2_LABEL(sub_8022318)(p);
                 PLAYERFN_SET(Player_Knuckles_FallAfterGlide);
 
                 p->charState = CHARSTATE_KNUCKLES_GLIDE_FALL;
@@ -1581,7 +1581,7 @@ void Player_Knuckles_Climb_80136E8(Player *p)
                 }
 
                 p->qWorldY -= offsetY;
-                r2 = sub_8029AC0(p, &rot, NULL);
+                r2 = SA2_LABEL(sub_8029AC0)(p, &rot, NULL);
                 p->qWorldY += offsetY;
 
                 if (r2 < 0) {
@@ -1614,9 +1614,9 @@ void Player_Knuckles_Climb_80136E8(Player *p)
             }
 
             if (GRAVITY_IS_INVERTED) {
-                r2 = sub_8029AC0(p, &rot, NULL);
+                r2 = SA2_LABEL(sub_8029AC0)(p, &rot, NULL);
             } else {
-                r2 = sub_8029B0C(p, &rot, NULL);
+                r2 = SA2_LABEL(sub_8029B0C)(p, &rot, NULL);
             }
 
             if (r2 < 0) {
@@ -1632,7 +1632,7 @@ void Player_Knuckles_Climb_80136E8(Player *p)
                 p->qSpeedAirX = 0;
                 p->qSpeedAirY = 0;
 
-                sub_8022318(p);
+                SA2_LABEL(sub_8022318)(p);
                 PLAYERFN_SET(Player_Knuckles_FallAfterGlide);
                 p->charState = CHARSTATE_KNUCKLES_GLIDE_FALL;
                 return;
@@ -1654,7 +1654,7 @@ void Player_Knuckles_Climb_80136E8(Player *p)
 
         r2 = 1;
         if (!(p->heldInput & (DPAD_DOWN | DPAD_UP))) {
-            r2 = sub_8029B0C(p, &rot, NULL);
+            r2 = SA2_LABEL(sub_8029B0C)(p, &rot, NULL);
             if (r2 < 0) {
                 p->qWorldY += Q(r2);
                 p->rotation = rot;
@@ -1663,7 +1663,7 @@ void Player_Knuckles_Climb_80136E8(Player *p)
                 p->qSpeedAirX = 0;
                 p->qSpeedAirY = 0;
 
-                sub_8022318(p);
+                SA2_LABEL(sub_8022318)(p);
 
                 p->charState = CHARSTATE_KNUCKLES_GLIDE_FALL;
                 return;
@@ -1827,14 +1827,14 @@ void Player_8013B6C(Player *p)
 void Player_Knuckles_Glide(Player *p)
 {
     Knuckles_Glide_UpdateSpeed(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
     Player_UpdatePosition(p);
     Player_Knuckles_Glide_MainUpdate(p);
 }
 
 void Player_Knuckles_FallAfterGlide(Player *p)
 {
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
     Player_UpdatePosition(p);
     Player_Knuckles_GlideSoftFall(p);
 }
@@ -1851,14 +1851,14 @@ void Player_Knuckles_GlideSoftLanding(Player *p)
 void Player_Knuckles_GlideHardLanding(Player *p)
 {
     sub_80135BC(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
     Player_UpdatePosition(p);
 }
 
 void Player_Knuckles_Climb(Player *p)
 {
     Player_Knuckles_Climb_80136E8(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
     Player_UpdatePosition(p);
 }
 
@@ -1964,7 +1964,7 @@ void Player_Knuckles_DrillClaw(Player *p);
 
 void Player_Knuckles_WindupDrillClaw(Player *p)
 {
-    sub_80283C4(p);
+    SA2_LABEL(sub_80283C4)(p);
 
     if (p->spriteInfoBody->s.frameFlags & SPRITE_FLAG_MASK_ANIM_OVER) {
         p->charState = CHARSTATE_KNUCKLES_DRILL_CLAW_MAIN;
@@ -1983,7 +1983,7 @@ void Player_Knuckles_DrillClaw(Player *p)
 {
     p->qSpeedAirY += Q(42.0 / 256.0);
 
-    sub_80283C4(p);
+    SA2_LABEL(sub_80283C4)(p);
 
     if (!(p->moveState & MOVESTATE_IN_AIR)) {
         PLAYERFN_SET(Player_Knuckles_DrillClawLanding);
@@ -2025,7 +2025,7 @@ void Player_Knuckles_ClimbPullUpEdge(Player *p)
 
         PLAYERFN_CALL(Player_TouchGround, p);
     } else {
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
         Player_UpdatePosition(p);
     }
 }

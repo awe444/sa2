@@ -7,8 +7,8 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/mp_player.h"
 
-#include "constants/animations.h"
-#include "constants/vram_hardcoded.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/vram_hardcoded.h"
 
 typedef struct {
     /* 0x00 */ u8 playerId;

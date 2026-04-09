@@ -13,8 +13,9 @@
 #define ENGINE_3 3
 #define ENGINE_4 4
 
-// TODO: Define this in Makefile through a compiler macro?
-#define GAME GAME_SA2
+#ifndef GAME
+#error GAME must be defined to compile
+#endif
 
 // TODO: Do SA1 and SA2 use the same engine ver?
 // TODO: Do SA3 and KATAM use the same engine ver?

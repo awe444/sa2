@@ -14,16 +14,8 @@
 #include "game/shared/stage/collect_ring_effect.h"
 #include "game/shared/stage/rings_manager.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-
-#if (GAME == GAME_SA1)
-#define MAX_SCATTERING_RINGS_COUNT_SP 48
-#define MAX_SCATTERING_RINGS_COUNT_MP 32
-#elif (GAME == GAME_SA2)
-#define MAX_SCATTERING_RINGS_COUNT_SP 32
-#define MAX_SCATTERING_RINGS_COUNT_MP 16
-#endif
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 #if (GAME == GAME_SA1)
 #define UNK10_CONDITION 1
@@ -40,26 +32,6 @@
 #define HB_ALT_TOP(p, hb)    (I((p)->qWorldY) + (hb)->top)
 #define HB_ALT_HEIGHT(hb)    ((hb)->bottom - (hb)->top)
 #define HB_ALT_BOTTOM(p, hb) (I((p)->qWorldY) + HB_ALT_HEIGHT(hb))
-
-typedef struct {
-    /* 0x00 */ s32 x;
-    /* 0x04 */ s32 y;
-    /* 0x08 */ s16 velX;
-    /* 0x0A */ s16 velY;
-    /* 0x0C */ u16 unkC;
-    /* 0x0E */ s16 unkE;
-#if (GAME == GAME_SA2)
-    /* 0x10 */ u16 unk10;
-#endif
-} ScatterRing; /* size: 0x14 */
-
-typedef struct {
-    /* 0x000 */ Sprite sprRing;
-    /* 0x030 */ ScatterRing rings[MAX_SCATTERING_RINGS_COUNT_SP];
-    /* 0x2B0 */ u32 unk2B0;
-    /* 0x2B4 */ u16 unk2B4;
-    /* 0x2B6 */ u16 unk2B6;
-} RingsScatter; /* size: 0x2B8 */
 
 struct Task *gRingsScatterTask = NULL;
 

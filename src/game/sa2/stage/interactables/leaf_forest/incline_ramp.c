@@ -8,9 +8,9 @@
 #include "sprite.h"
 #include "task.h"
 
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -46,7 +46,7 @@ static void Task_InclineRamp(void)
                 gPlayer.qSpeedGround = Q_8_8(17);
                 gPlayer.qSpeedAirX += Q_8_8(17);
 
-                sub_8023260(&gPlayer);
+                SA2_LABEL(sub_8023260)(&gPlayer);
                 Player_TransitionCancelFlyingAndBoost(&gPlayer);
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(&gPlayer, 6, 14);
 
@@ -68,7 +68,7 @@ static void Task_InclineRamp(void)
                 gPlayer.qSpeedGround = Q_8_8(-17);
                 gPlayer.qSpeedAirX += Q_8_8(-17);
 
-                sub_8023260(&gPlayer);
+                SA2_LABEL(sub_8023260)(&gPlayer);
                 Player_TransitionCancelFlyingAndBoost(&gPlayer);
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(&gPlayer, 6, 14);
 

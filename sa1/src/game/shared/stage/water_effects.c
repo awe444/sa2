@@ -16,9 +16,9 @@
 #include "data/sa1/sprite_data.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
-#include "constants/vram_hardcoded.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/zones.h"
+#include "constants/sa1/vram_hardcoded.h"
 
 typedef struct {
     /* 0x00 */ s32 x;

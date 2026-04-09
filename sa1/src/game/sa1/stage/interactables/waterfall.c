@@ -7,10 +7,10 @@
 #include "game/sa1/stage/player_controls.h" // for gPlayerControls
 #include "game/sa1/stage/stage_ui.h" // sub_80549FC
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     /* 0x00 */ MapEntity *me;

@@ -10,7 +10,7 @@
 #include "malloc_vram.h"
 #include "sprite.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -58,9 +58,9 @@ void CreateEntity_Mouse(MapEntity *me, u16 spriteRegionX, u16 spriteRegionY, u8 
         }
 
         if (mouse->unk51) {
-            mouse->offsetY = Q(sub_801F07C(I(mouse->spawnY), I(mouse->spawnX), mouse->unk50, 8, 0, sub_801EE64));
+            mouse->offsetY = Q(SA2_LABEL(sub_801F07C)(I(mouse->spawnY), I(mouse->spawnX), mouse->unk50, 8, 0, SA2_LABEL(sub_801EE64)));
         } else {
-            mouse->offsetY = Q(sub_801F07C(I(mouse->spawnY), I(mouse->spawnX), mouse->unk50, 8, 0, sub_801EE64));
+            mouse->offsetY = Q(SA2_LABEL(sub_801F07C)(I(mouse->spawnY), I(mouse->spawnX), mouse->unk50, 8, 0, SA2_LABEL(sub_801EE64)));
         }
         mouse->unk4C = 0;
         mouse->unk52 = 0;

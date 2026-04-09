@@ -18,10 +18,10 @@
 #include "game/sa2/ui/time_attack_lobby.h"
 #include "game/sa2/ui/time_attack_mode_select.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 struct CharacterSelectionScreen {
     /* 0x00 */ ScreenFade fade;
@@ -1634,7 +1634,7 @@ static void Task_MultiplayerWaitForSelections(void)
     recv = &gMultiSioRecv[0];
     if (recv->pat0.unk0 == 0x4022) {
         for (i = 0; i < MULTI_SIO_PLAYERS_MAX; i++) {
-            if CONNECTION_REGISTERED (i) {
+            if (CONNECTION_REGISTERED(i)) {
                 recv = &gMultiSioRecv[i];
                 gMultiplayerCharacters[i] = recv->pat0.unk2;
             }
@@ -1687,7 +1687,7 @@ static void Task_MultiplayerWaitForSelections(void)
         send->pat0.unk2 = characterScreen->selectedCharacter;
 
         for (i = 0; i < MULTI_SIO_PLAYERS_MAX; i++) {
-            if CONNECTION_REGISTERED (i) {
+            if (CONNECTION_REGISTERED(i)) {
                 recv = &gMultiSioRecv[i];
                 if (recv->pat0.unk0 != 0x4021) {
                     send->pat0.unk0 = 0x4021;
@@ -1746,7 +1746,7 @@ static void Task_MultiplayerVerifySelections(void)
     recv = &gMultiSioRecv[0];
     if (recv->pat0.unk0 == 0x4023) {
         for (i = 0; i < MULTI_SIO_PLAYERS_MAX; i++) {
-            if CONNECTION_REGISTERED (i) {
+            if (CONNECTION_REGISTERED(i)) {
                 recv = &gMultiSioRecv[i];
                 if (!(gMultiSioStatusFlags & MULTI_SIO_PARENT)) {
                     gMultiplayerCharacters[i] = recv->pat0.unk2;

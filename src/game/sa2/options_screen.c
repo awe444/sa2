@@ -8,8 +8,8 @@
 #include "game/math.h"
 #include "sprite.h"
 #include "game/sa2/stage/screen_fade.h"
-#include "constants/songs.h"
-#include "constants/text.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
 #include "game/sa2/title_screen.h"
 #include "game/sa2/sound_test.h"
 #include "game/shared/stage/stage.h"
@@ -17,7 +17,7 @@
 #include "game/sa2/multiplayer/mode_select.h"
 #include "game/sa2/ui/character_select.h"
 
-#include "constants/tilemaps.h"
+#include "constants/sa2/tilemaps.h"
 
 #define NUM_PLAYER_DATA_MENU_ITEMS 4
 

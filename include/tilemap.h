@@ -8,10 +8,15 @@
 
 // TODO: This should be the type of Collision::metatiles, if that matches anywhere...
 typedef struct {
+#ifdef M2C
+    // M2C: Empty structs are not supported.
+    u16 tile;
+#else
     u16 index : 10;
     u16 xFlip : 1;
     u16 yFlip : 1;
     u16 pal : 4;
+#endif
 } Tile;
 
 typedef struct {
@@ -22,7 +27,11 @@ typedef struct {
     /* 0x07 */ u8 animDelay;
     /* 0x08 */ const u8 *tiles;
     /* 0x0C */ u32 tilesSize;
+#if (GAME == GAME_SA1)
+    /* 0x10 */ const u16 *palette;
+#else
     /* 0x10 */ const ColorRaw *palette;
+#endif
     /* 0x14 */ u16 palOffset;
     /* 0x16 */ u16 palLength;
 
@@ -33,7 +42,7 @@ typedef struct {
 
 struct MapHeader {
     /* 0x00 */ Tilemap tileset;
-    /* 0x1C */ const u16 *metatileMap;
+    /* 0x1C */ const MetatileIndexType *metatileMap;
     /* 0x20 */ u16 mapWidth; // in Metatiles
     /* 0x22 */ u16 mapHeight; // in Metatiles
 };

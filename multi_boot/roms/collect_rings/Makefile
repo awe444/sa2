@@ -209,7 +209,7 @@ OBJS_REL := $(patsubst $(OBJ_DIR)/%,%,$(OBJS))
 # -P disables line markers (don't EVER use this, if you want proper debug info!)
 # -I sets an include path
 # -D defines a symbol
-CPPFLAGS ?= -D $(GAME_REGION) -D COLLECT_RINGS_ROM
+CPPFLAGS ?= -D $(GAME_REGION) -D COLLECT_RINGS_ROM -D GAME=$(GAME)
 CC1FLAGS ?= -Wimplicit -Wparentheses -Werror
 
 INCLUDE_SCANINC_ARGS += -I ../../../tools/agbcc/include

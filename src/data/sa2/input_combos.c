@@ -1,4 +1,4 @@
-#include "constants/characters.h"
+#include "constants/sa2/characters.h"
 #include "game/sa2/stage/input_buffer.h"
 
 // Unsure if this spacing is applied here

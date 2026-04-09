@@ -17,9 +17,9 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/zones.h"
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa2/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 #define NUM_WHEELS              6
 #define CANNON_MOVE_SPEED       82
@@ -502,7 +502,7 @@ static void UpdatePosition(EggBomberTank *boss)
     boss->qWorldX += boss->qSpeedX;
     boss->qWorldY += boss->qSpeedY;
 
-    ground = sub_801E4E4(I(boss->qWorldY), I(boss->qWorldX), 1, 8, NULL, sub_801EE64);
+    ground = SA2_LABEL(sub_801E4E4)(I(boss->qWorldY), I(boss->qWorldX), 1, 8, NULL, SA2_LABEL(sub_801EE64));
 
     if (ground < 0) {
         boss->qWorldY += QS(ground);
@@ -520,7 +520,8 @@ static void UpdatePosition(EggBomberTank *boss)
             boss->qWheelPositions[idx][0] += boss->unk3C[idx][0];
             boss->qWheelPositions[idx][1] += boss->unk3C[idx][1];
 
-            ground = sub_801E4E4(I(boss->qWheelPositions[idx][1]) - 8, I(boss->qWheelPositions[idx][0]), 1, 8, 0, sub_801EE64);
+            ground = SA2_LABEL(sub_801E4E4)(I(boss->qWheelPositions[idx][1]) - 8, I(boss->qWheelPositions[idx][0]), 1, 8, 0,
+                                            SA2_LABEL(sub_801EE64));
             if (ground < 0) {
                 boss->qWheelPositions[idx][1] += QS(ground);
                 boss->unk3C[idx][0] -= 0x20;
@@ -652,7 +653,7 @@ static bool8 RenderCannon(EggBomberTank *boss)
     boss->unk54 += boss->unk5C;
     boss->unk58 += boss->unk5E;
 
-    ground = sub_801F100(I(boss->unk58) + 0x18, I(boss->unk54), 1, 8, sub_801EC3C);
+    ground = SA2_LABEL(sub_801F100)(I(boss->unk58) + 0x18, I(boss->unk54), 1, 8, SA2_LABEL(sub_801EC3C));
 
     if (ground < 0) {
         m4aSongNumStart(SE_143);
@@ -1045,7 +1046,7 @@ static void UpdateWheelPositions(EggBomberTank *boss)
         s32 y = I(boss->qWheelPositions[i][1]) + 0x12;
         val += y;
 
-        boss->qWheelPositions[i][1] += QS(sub_801F100(y, x, 1, 8, sub_801EC3C));
+        boss->qWheelPositions[i][1] += QS(SA2_LABEL(sub_801F100)(y, x, 1, 8, SA2_LABEL(sub_801EC3C)));
     }
 
     boss->qWorldY = QS(Div(val, 3)) - 0x1200;
@@ -1141,7 +1142,7 @@ static void Task_EggBomberTankBombExplosion(void)
         bomb->y += bomb->speedY + QS(gCamera.dy);
     }
 
-    ground = sub_801E4E4(I(bomb->y) + 0xC + gCamera.y, I(bomb->x) + gCamera.x, 1, 8, &unusedByte, sub_801EE64);
+    ground = SA2_LABEL(sub_801E4E4)(I(bomb->y) + 0xC + gCamera.y, I(bomb->x) + gCamera.x, 1, 8, &unusedByte, SA2_LABEL(sub_801EE64));
     if (ground < 0) {
         bomb->y += QS(ground);
         bomb->speedY = Div(-(bomb->speedY * 8), 10);

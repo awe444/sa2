@@ -8,9 +8,9 @@
 #include "game/sa2/save.h"
 #include "game/sa2/title_screen.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 void Task_8094360(void);
 void TaskDestructor_80945A0(struct Task *);

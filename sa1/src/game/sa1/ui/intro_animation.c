@@ -3,7 +3,7 @@
 #include "flags.h"
 #include "trig.h"
 #include "lib/m4a/m4a.h"
-#include "constants/ui_graphics.h"
+#include "constants/sa1/ui_graphics.h"
 #include "game/shared/stage/entity.h"
 #include "game/sa1/ui/game_over.h"
 #include "game/sa1/stage/ui_rendering.h"
@@ -11,8 +11,8 @@
 #include "game/sa1/stage/stage_ui.h"
 #include "game/sa1/menus/title_screen.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
 
 #define INTRO_SPOTLIGHT_COUNT 2
 

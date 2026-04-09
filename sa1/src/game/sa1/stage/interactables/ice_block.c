@@ -12,11 +12,11 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/move_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/move_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     /* 0x00 */ EntityShared shared;

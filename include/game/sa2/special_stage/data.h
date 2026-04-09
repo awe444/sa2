@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "sprite.h" // for the 'AnimId' type
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 
 #define SPRITE_ARRAY_END                                                                                                                   \
     {                                                                                                                                      \

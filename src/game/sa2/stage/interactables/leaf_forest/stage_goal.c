@@ -4,7 +4,6 @@
 
 #include "malloc_vram.h"
 
-#include "game/shared/stage/collision.h"
 #include "game/shared/stage/entity.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/mp_sprite_task.h"
@@ -19,8 +18,8 @@
 #include "sprite.h"
 #include "task.h"
 
-#include "constants/animations.h"
-#include "constants/player_transitions.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/player_transitions.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -187,7 +186,7 @@ static void StageGoalToggle_HandleMultiplayerFinish(void)
     u32 count = 0;
     MultiplayerPlayer *player = TASK_DATA(gMultiplayerPlayerTasks[SIO_MULTI_CNT->id]);
     gPlayer.itemEffect &= ~PLAYER_ITEM_EFFECT__CONFUSION;
-    gPlayer.confusionTimer = 0;
+    gPlayer.timerConfusion = 0;
 
     if (!(player->unk5C & 1)) {
         u32 j;
@@ -225,7 +224,7 @@ static UNUSED void StageGoalToggle_ForceMultiplayerFinish(void)
     u32 id = SIO_MULTI_CNT->id;
 
     gPlayer.itemEffect &= ~PLAYER_ITEM_EFFECT__CONFUSION;
-    gPlayer.confusionTimer = 0;
+    gPlayer.timerConfusion = 0;
 
     for (j = 0; j < ARRAY_COUNT(gMultiplayerPlayerTasks) && mpTasks[j] != NULL; j++) {
         if (!IS_SAME_TEAM(j, SIO_MULTI_CNT->id) && gMultiplayerRanks[j] == 0) {

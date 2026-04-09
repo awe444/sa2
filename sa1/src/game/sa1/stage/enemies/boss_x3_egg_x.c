@@ -16,11 +16,11 @@
 #include "game/shared/stage/stage.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h" // for ALL_ZONE_CHAOS_EMERALDS
+#include "constants/sa1/animations.h"
+#include "constants/sa1/anim_sizes.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h" // for ALL_ZONE_CHAOS_EMERALDS
 
 /* X-Zone Final Boss */
 

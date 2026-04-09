@@ -10,9 +10,9 @@
 
 #include "data/sa2/handlers_ia_pipe_horn_sequences.h"
 
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 static void PipeSegmentHandler_Translate(PipeSequence *, const PipeSegment *);
 static void Handler_MusicPlant_Pipe_1(PipeSequence *, const PipeSegment *);

@@ -19,15 +19,7 @@
 #define GAME_MODE_MULTI_PLAYER_COLLECT_RINGS 5
 #endif
 
-// TODO: not verfied yet but all instances of this condition
-// seem to be compiled out in collect rings
-#ifndef COLLECT_RINGS_ROM
-#define IS_COLLECT_RINGS_MINIGAME (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS)
-#else
-#define IS_COLLECT_RINGS_MINIGAME TRUE
-#endif
-
-// TODO: Improve this name; SA1 only?
+// TODO: Improve this name
 #define IS_MP_OR_TEAM_PLAY ((gGameMode == GAME_MODE_MULTI_PLAYER) || (gGameMode == GAME_MODE_TEAM_PLAY))
 
 #if (GAME == GAME_SA1)
@@ -106,16 +98,26 @@ typedef struct {
 
 // Incomplete
 extern u8 gDemoPlayCounter;
+
+#if (GAME == GAME_SA1)
+extern u16 ALIGNED(4) gSpecialStageReturnX;
+#endif
+
 extern u8 gGameMode;
 
 extern s8 gCurrentLevel;
 extern s8 gSelectedCharacter;
 #if (GAME == GAME_SA1)
-extern bool8 gTailsEnabled;
+// NOTE: Treat gTailsEnabled as bool8, it just does not match unsigned
+extern s8 gTailsEnabled;
 extern s8 gNumSingleplayerCharacters;
+#define NUM_SINGLEPLAYER_CHARS_MAX 2
+#elif (GAME == GAME_SA2)
+extern u8 gNumSingleplayerCharacters;
 #endif
 
 extern u8 gMultiplayerLanguage;
+extern s8 gMultiplayerCurrentLevel;
 
 // Sometimes loaded as s16, but as u16 most of the time.
 // If you encounter it being loaded as s16, please cast it.
@@ -131,14 +133,20 @@ extern u8 gSpecialRingCount;
 
 // TODO: Types not checked yet!
 extern s32 gWorldSpeedY;
+#if (GAME == GAME_SA2)
 extern s32 gWorldSpeedX;
+#endif
 
 extern u16 gBossCameraClampYLower;
 extern u16 gBossCameraClampYUpper;
 extern u8 gRandomItemBox;
+#if (GAME == GAME_SA1)
+extern u16 gSpecialStageCollectedRings;
+extern u16 gUnknown_0300507C;
+#endif
 extern u8 gSpikesUnknownTimer;
 
-extern s8 gUnknown_0300543C;
+extern s8 SA2_LABEL(gUnknown_0300543C);
 extern struct Task *gEntitiesManagerTask;
 
 extern u8 gDestroySpotlights;
@@ -154,8 +162,7 @@ extern u8 gDifficultyLevel;
 
 extern s8 gTrappedAnimalVariant;
 
-extern u8 gBossIndex; // TODO: Boss ID in XX-Stage? But it's used in checkpointc.c ...
-extern u8 gNumSingleplayerCharacters;
+extern u8 gBossIndex; // TODO: Rename to gLastCheckpointIndex? (SA1 AND SA2!)
 
 // Incremented by 1 every frame if the game is not paused.
 // Starts before the stage-timer that is used for scores does.
@@ -179,7 +186,13 @@ extern u8 gMultiplayerMissingHeartbeats[4];
 extern u8 gActiveCollectRingEffectCount;
 
 extern u8 gMultiplayerUnlockedCharacters;
+
+#if (GAME == GAME_SA1)
+extern u16 gSpecialStageReturnY;
+#elif (GAME == GAME_SA2)
 extern u8 gMultiplayerUnlockedLevels;
+#endif
+
 extern u32 gMultiplayerIds[MULTI_SIO_PLAYERS_MAX];
 extern u16 gMultiplayerNames[MULTI_SIO_PLAYERS_MAX][MAX_PLAYER_NAME_LENGTH];
 
@@ -220,7 +233,7 @@ extern struct Task *gChaoTasks[3];
 #define EXTRACT_REGISTERED_CONNECTIONS(statusFlags) ((statusFlags & MULTI_SIO_ALL_CONNECTED) >> 8)
 
 // I wonder if this was stubbed and you had to provide your own implementation
-void LinkCommunicationError(void);
+extern void LinkCommunicationError(void);
 
 #define LINK_HEARTBEAT()                                                                                                                   \
     ({                                                                                                                                     \
@@ -244,6 +257,9 @@ void LinkCommunicationError(void);
     })
 
 #if (GAME == GAME_SA1) && !defined(BUG_FIX)
+// NOTE: gNumLives is u8, so without the bounds-check,
+//       which SA1 did not have, 255 would overflow to 0.
+//       During regular gameplay you would not get that many 1UPs, though.
 #define LIVES_BOUND_CHECK_A(lives)            (lives)
 #define LIVES_BOUND_CHECK_B(lives)            (lives)
 #define NEW_LIVE_COUNT(_type, _varname, _inc) (gNumLives += 1)

@@ -54,6 +54,7 @@ endif
 GAME_REVISION ?= 0
 GAME_REGION   ?= USA
 GAME_VARIANT  ?= DEFAULT
+GAME          ?= GAME_SA2
 DEBUG         ?= 0
 
 # For gbafix
@@ -63,8 +64,8 @@ MAKER_CODE := 78
 BUILD_NAME := sa2
 TITLE      := SONICADVANC2
 GAME_CODE  := A2N
-PS2_GAME_CODE := SLUS_054.02
 
+PS2_GAME_CODE := SLUS_054.02
 
 # Revision
 ifeq ($(GAME_REVISION), 0)

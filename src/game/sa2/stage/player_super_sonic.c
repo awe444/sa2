@@ -15,11 +15,11 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/characters.h"
-#include "constants/move_states.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/characters.h"
+#include "constants/sa2/move_states.h"
+#include "constants/sa2/songs.h"
 
 static void Task_802BC10(void);
 static void sub_802BE1C(struct SuperSonic *sonic);
@@ -71,15 +71,15 @@ static void SuperSonicInitPlayer(void)
     // /* 0x18 */ u8 filler18[8]; // no idea what this data is and why it's not set
     p->moveState = 0;
     p->rotation = 0;
-    p->unk25 = 0;
-    p->spindashAccel = 0;
+    p->SA2_LABEL(unk25) = 0;
+    p->qSpindashAccel = 0;
     // /* 0x28 */ u8 unk28;
     // /* 0x29 */ u8 unk29;
-    p->unk2A = 0;
+    p->SA2_LABEL(unk2A) = 0;
     p->timerInvulnerability = 0;
     p->timerInvincibility = 0;
     p->timerSpeedup = 0;
-    p->confusionTimer = 0;
+    p->timerConfusion = 0;
     p->itemEffect20Timer = 0;
     p->disableTrickTimer = 0;
     p->itemEffect = 0;
@@ -99,9 +99,9 @@ static void SuperSonicInitPlayer(void)
     p->heldInput = 0;
     p->frameInput = 0;
     p->playerID = 0;
-    p->unk61 = 0;
-    p->unk62 = 0;
-    p->unk63 = 0;
+    p->SA2_LABEL(unk61) = 0;
+    p->SA2_LABEL(unk62) = 0;
+    p->SA2_LABEL(unk63) = 0;
     p->charState = CHARSTATE_IDLE;
     p->prevCharState = CHARSTATE_IDLE;
     p->anim = 0;
@@ -112,14 +112,14 @@ static void SuperSonicInitPlayer(void)
     p->prevTransition = 0;
     p->unk70 = FALSE;
     p->unk71 = 0;
-    p->unk72 = 0;
+    p->SA2_LABEL(unk72) = 0;
     p->checkPointX = 0;
     p->checkPointY = 0;
     p->checkpointTime = 0;
-    p->unk7C = 0;
-    p->unk7E = 0;
-    p->unk80 = 0;
-    p->unk82 = 0;
+    p->SA2_LABEL(unk7C) = 0;
+    p->SA2_LABEL(unk7E) = 0;
+    p->SA2_LABEL(unk80) = 0;
+    p->SA2_LABEL(unk82) = 0;
     p->defeatScoreIndex = 0;
     p->character = CHARACTER_SONIC;
     p->secondsUntilDrown = 0;

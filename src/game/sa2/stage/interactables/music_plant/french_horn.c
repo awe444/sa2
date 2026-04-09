@@ -5,10 +5,10 @@
 #include "game/sa2/stage/interactables/music_plant/french_horn.h"
 #include "game/sa2/stage/interactables/music_plant/pipe_sequence.h"
 
-#include "constants/move_states.h"
-#include "constants/player_transitions.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa2/move_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
 
 #include "data/sa2/handlers_ia_pipe_horn_sequences.h"
 

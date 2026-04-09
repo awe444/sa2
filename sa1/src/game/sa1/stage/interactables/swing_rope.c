@@ -5,8 +5,8 @@
 #include "game/sa1/stage/player_controls.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/char_states.h"
-#include "constants/move_states.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/move_states.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

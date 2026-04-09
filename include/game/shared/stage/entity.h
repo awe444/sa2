@@ -6,17 +6,21 @@
 #include "sprite.h"
 
 #include "game/globals.h"
-
 #include "game/shared/stage/collision.h"
+#include "game/shared/stage/player.h"
 #include "game/shared/stage/terrain_collision.h"
+
+#if (GAME == GAME_SA2)
 #include "game/sa2/stage/player_callbacks.h"
+#endif
+
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
 #define ENTITY_DATA_SIZE_SA1 4
 #define ENTITY_DATA_SIZE_SA2 4
 #define ENTITY_DATA_SIZE_SA3 5
-#define ENTITY_DATA_SIZE     ENTITY_DATA_SIZE_SA2
+#define ENTITY_DATA_SIZE     ENTITY_DATA_SIZE_SA1
 
 PACKED(MapEntity, {
     /* 0x00 */ u8 x; // While an enemy is active, x gets repurposed as a "state"
@@ -58,12 +62,18 @@ typedef struct {
     Sprite s;
 } EnemyBase;
 
+u32 sub_800CDBC(Sprite *, s32, s32, Player *);
+
+u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p);
+
 // After a MapEntity is initialized, its x-value in the layout-data gets set to -2.
 // TODO:
 // Find out whether casting these to u8 can work while still matching!
 #define MAP_ENTITY_STATE_ARRAY_END   (-1)
 #define MAP_ENTITY_STATE_INITIALIZED (-2)
 #define MAP_ENTITY_STATE_MINUS_THREE (-3)
+
+#define SET_MAP_ENTITY_INITIALIZED_SIMPLE(mapEnt) (mapEnt)->x = MAP_ENTITY_STATE_INITIALIZED;
 
 // TODO: Find a way to simplify/remove this macro!
 #define SET_MAP_ENTITY_INITIALIZED(mapEnt)                                                                                                 \
@@ -101,13 +111,20 @@ typedef struct {
 #define ENEMY_SET_SPAWN_POS_GROUND(_enemy, _mapEntity)                                                                                     \
     ENEMY_SET_SPAWN_POS_STATIC(_enemy, _mapEntity);                                                                                        \
     _enemy->offsetX = 0;                                                                                                                   \
-    _enemy->offsetY = Q(sub_801F07C(I(_enemy->spawnY), I(_enemy->spawnX), _enemy->clampParam, 8, NULL, sub_801EE64));
+    _enemy->offsetY = Q(SA2_LABEL(sub_801F07C)(I(_enemy->spawnY), I(_enemy->spawnX), _enemy->clampParam, 8, NULL, SA2_LABEL(sub_801EE64)));
 
+#if (GAME == GAME_SA1)
+#define ENEMY_UPDATE_EX_RAW(_s, _posX, _posY, code_insert)                                                                                 \
+    { code_insert };                                                                                                                       \
+    UpdateSpriteAnimation(_s);                                                                                                             \
+    DisplaySprite(_s);
+#else
 #define ENEMY_UPDATE_EX_RAW(_s, _posX, _posY, code_insert)                                                                                 \
     Player_UpdateHomingPosition(_posX, _posY);                                                                                             \
     { code_insert };                                                                                                                       \
     UpdateSpriteAnimation(_s);                                                                                                             \
     DisplaySprite(_s);
+#endif
 
 #define ENEMY_UPDATE_EX(_s, _posX, _posY, code_insert) ENEMY_UPDATE_EX_RAW(_s, QS(_posX), QS(_posY), code_insert);
 
@@ -161,8 +178,8 @@ typedef struct {
 
 #define ENEMY_CLAMP_TO_GROUND_RAW(_enemy, _unknownBool, _p)                                                                                \
     {                                                                                                                                      \
-        s32 delta                                                                                                                          \
-            = sub_801F07C(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, 8, _p, sub_801EE64);     \
+        s32 delta = SA2_LABEL(sub_801F07C)(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, 8, _p,  \
+                                           sub_801EE64);                                                                                   \
                                                                                                                                            \
         if (delta < 0) {                                                                                                                   \
             _enemy->offsetY += Q(delta);                                                                                                   \
@@ -178,8 +195,8 @@ typedef struct {
 
 #define ENEMY_CLAMP_TO_GROUND_2(_enemy, _unknownBool)                                                                                      \
     {                                                                                                                                      \
-        s32 delta                                                                                                                          \
-            = sub_801F07C(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, -8, NULL, sub_801EE64);  \
+        s32 delta = SA2_LABEL(sub_801F07C)(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, -8,     \
+                                           NULL, SA2_LABEL(sub_801EE64));                                                                  \
                                                                                                                                            \
         if (delta < 0) {                                                                                                                   \
             _enemy->offsetY -= Q(delta);                                                                                                   \

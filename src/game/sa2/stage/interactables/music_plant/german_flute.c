@@ -11,9 +11,9 @@
 #include "game/sa2/stage/interactables/note_particle.h"
 #include "game/sa2/stage/interactables/music_plant/german_flute.h"
 
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     /* 0x00 */ s32 posX;
@@ -128,7 +128,7 @@ static void sub_80769E0(void)
     gPlayer.qSpeedAirY += Q(1. / 6.);
 
     // NOTE/BUG(?): Are the first 2 parameters swapped?
-    res = sub_801F100(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, -8, sub_801EC3C);
+    res = SA2_LABEL(sub_801F100)(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, -8, SA2_LABEL(sub_801EC3C));
 
     if (res < 0) {
         gPlayer.qWorldY -= Q(res);
@@ -162,7 +162,7 @@ static void Task_8076A6C(void)
     gPlayer.qWorldY += flute->unkA;
 
     // NOTE/BUG(?): Are the first 2 parameters swapped?
-    res = sub_801F100(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(r1), gPlayer.layer, -8, sub_801EC3C);
+    res = SA2_LABEL(sub_801F100)(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(r1), gPlayer.layer, -8, SA2_LABEL(sub_801EC3C));
     if (res < 0) {
         gPlayer.qWorldY -= Q(res);
     }

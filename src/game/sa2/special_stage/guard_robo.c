@@ -10,7 +10,7 @@
 #include "game/sa2/special_stage/data.h"
 #include "trig.h"
 #include "lib/m4a/m4a.h"
-#include "constants/songs.h"
+#include "constants/sa2/songs.h"
 
 void sub_80714C4(void);
 void sub_80710B0(void);

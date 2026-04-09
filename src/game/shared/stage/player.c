@@ -35,11 +35,11 @@
 #include "game/sa2/stage/mp_attack_1_effect.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 // >> acceleration = (sin(angle) * 3) / 32
 #define GET_ROTATED_ACCEL(angle)   ((SIN_24_8((angle)*4) * 3) >> 5)
@@ -92,14 +92,14 @@
 
 #define PLAYERFN_UPDATE_UNK2A(player)                                                                                                      \
     {                                                                                                                                      \
-        if (player->unk2A != 0) {                                                                                                          \
-            player->unk2A -= 1;                                                                                                            \
+        if (player->SA2_LABEL(unk2A) != 0) {                                                                                               \
+            player->SA2_LABEL(unk2A) -= 1;                                                                                                 \
         } else if ((player->rotation + Q(0.125)) & 0xC0) {                                                                                 \
             if (ABS(player->qSpeedGround) < Q(1.875)) {                                                                                    \
                 player->qSpeedGround = 0;                                                                                                  \
                                                                                                                                            \
                 player->moveState |= MOVESTATE_IN_AIR;                                                                                     \
-                player->unk2A = GBA_FRAMES_PER_SECOND / 2;                                                                                 \
+                player->SA2_LABEL(unk2A) = GBA_FRAMES_PER_SECOND / 2;                                                                      \
             }                                                                                                                              \
         }                                                                                                                                  \
     }
@@ -151,7 +151,7 @@
 // TODO(Jace): This name is speculative right now, check for accuracy!
 #define PLAYERFN_MAYBE_TRANSITION_TO_GROUND(player)                                                                                        \
     {                                                                                                                                      \
-        sub_8022190(player);                                                                                                               \
+        SA2_LABEL(sub_8022190)(player);                                                                                                    \
         PLAYERFN_MAYBE_TRANSITION_TO_GROUND_BASE(player);                                                                                  \
     }
 
@@ -209,8 +209,8 @@
             psi->transform.qScaleY = Q(1.0);                                                                                               \
         }                                                                                                                                  \
                                                                                                                                            \
-        x = I(psi->transform.qScaleX * p->unk80);                                                                                          \
-        y = I(psi->transform.qScaleY * p->unk82);                                                                                          \
+        x = I(psi->transform.qScaleX * p->SA2_LABEL(unk80));                                                                               \
+        y = I(psi->transform.qScaleY * p->SA2_LABEL(unk82));                                                                               \
         psi->transform.qScaleX = x;                                                                                                        \
         psi->transform.qScaleY = y;                                                                                                        \
         UpdateSpriteAnimation(s);                                                                                                          \
@@ -229,8 +229,8 @@
             psi->transform.x--;                                                                                                            \
         }                                                                                                                                  \
                                                                                                                                            \
-        x = I(psi->transform.qScaleX * p->unk80);                                                                                          \
-        y = I(psi->transform.qScaleY * p->unk82);                                                                                          \
+        x = I(psi->transform.qScaleX * p->SA2_LABEL(unk80));                                                                               \
+        y = I(psi->transform.qScaleY * p->SA2_LABEL(unk82));                                                                               \
         psi->transform.qScaleX = x;                                                                                                        \
         psi->transform.qScaleY = y;                                                                                                        \
         UpdateSpriteAnimation(s);                                                                                                          \
@@ -799,7 +799,7 @@ void SetStageSpawnPos(u32 character, u32 level, u32 playerID, Player *p)
         p->qWorldY = -1;
     }
 
-    p->unk98 = 0;
+    p->SA2_LABEL(unk98) = 0;
     p->checkpointTime = 0;
     p->spriteInfoBody = &gPlayerBodyPSI;
     p->spriteInfoLimbs = &gPlayerLimbsPSI;
@@ -830,10 +830,10 @@ void InitializePlayer(Player *p)
     p->moveState = MOVESTATE_IGNORE_INPUT;
     p->rotation = 0;
     PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 14);
-    p->unk25 = 120;
-    p->spindashAccel = 0;
+    p->SA2_LABEL(unk25) = 120;
+    p->qSpindashAccel = 0;
     p->unk29 = 0;
-    p->unk28 = 0;
+    p->SA2_LABEL(unk28) = 0;
     p->layer = PLAYER_LAYER__BACK;
 #if (GAME == GAME_SA1)
     p->maxSpeed = Q(4.5);
@@ -860,7 +860,7 @@ void InitializePlayer(Player *p)
     p->timerInvulnerability = 0;
     p->timerInvincibility = 0;
     p->timerSpeedup = 0;
-    p->confusionTimer = 0;
+    p->timerConfusion = 0;
     p->stoodObj = NULL;
     p->itemEffect = PLAYER_ITEM_EFFECT__NONE;
     p->SA2_LABEL(unk2A) = 0;
@@ -929,15 +929,15 @@ void InitializePlayer(Player *p)
     switch (p->character) {
         case CHARACTER_SONIC: {
             p->w.sf.flags = 0;
-            p->w.sf.unkAE = 0;
-            p->w.sf.unkB0 = 0;
+            p->w.sf.SA2_LABEL(unkAE) = 0;
+            p->w.sf.SA2_LABEL(unkB0) = 0;
         } break;
 
 #if (GAME == GAME_SA2)
         case CHARACTER_CREAM: {
-            p->w.cf.unkAE = 0;
+            p->w.cf.SA2_LABEL(unkAE) = 0;
             p->w.cf.flyingDuration = 0;
-            p->w.cf.unkB0 = 0;
+            p->w.cf.SA2_LABEL(unkB0) = 0;
         } break;
 #endif
 
@@ -950,11 +950,11 @@ void InitializePlayer(Player *p)
         case CHARACTER_KNUCKLES: {
             p->w.kf.flags = 0;
             p->w.kf.shift = 0;
-            p->w.kf.unkAE = 0;
+            p->w.kf.SA2_LABEL(unkAE) = 0;
         } break;
 
         case CHARACTER_AMY: {
-            p->w.af.unkAC = 0;
+            p->w.af.flags = 0;
         } break;
     }
 
@@ -979,9 +979,9 @@ void Player_TransitionCancelFlyingAndBoost(Player *p)
                       | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
-    p->unk61 = 0;
-    p->unk62 = 0;
-    p->unk63 = 0;
+    p->SA2_LABEL(unk61) = 0;
+    p->SA2_LABEL(unk62) = 0;
+    p->SA2_LABEL(unk63) = 0;
     p->unk71 = 0;
     p->unk70 = FALSE;
 
@@ -1004,9 +1004,9 @@ static inline void Player_TransitionCancelBoost(Player *p)
                       | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
-    p->unk61 = 0;
-    p->unk62 = 0;
-    p->unk63 = 0;
+    p->SA2_LABEL(unk61) = 0;
+    p->SA2_LABEL(unk62) = 0;
+    p->SA2_LABEL(unk63) = 0;
     p->unk71 = 0;
     p->unk70 = FALSE;
 }
@@ -1037,7 +1037,7 @@ s32 sub_802195C(Player *p, u8 *rot, s32 *out)
         mask |= 0x80;
     }
 
-    r5 = sub_801E4E4(playerX2, playerY2, mask, -8, &anotherByte, sub_801ED24);
+    r5 = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask, -8, &anotherByte, sub_801ED24);
 
     playerX = I(p->qWorldX) - (2 + p->spriteOffsetX);
     playerY = I(p->qWorldY) + (p->spriteOffsetY);
@@ -1047,7 +1047,7 @@ s32 sub_802195C(Player *p, u8 *rot, s32 *out)
         mask |= 0x80;
     }
 
-    r1 = sub_801E4E4(playerX, playerY, mask, -8, &anotherByte2, sub_801ED24);
+    r1 = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, -8, &anotherByte2, sub_801ED24);
 
     if (r5 < r1) {
         result = r5;
@@ -1087,7 +1087,7 @@ s32 sub_8021A34(Player *p, u8 *rot, s32 *out)
         mask |= 0x80;
     }
 
-    r5 = sub_801E4E4(playerX2, playerY2, mask, +8, &anotherByte, sub_801ED24);
+    r5 = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask, +8, &anotherByte, sub_801ED24);
 
     playerX = I(p->qWorldX) + (2 + p->spriteOffsetX);
     playerY = I(p->qWorldY) + (p->spriteOffsetY);
@@ -1097,7 +1097,7 @@ s32 sub_8021A34(Player *p, u8 *rot, s32 *out)
         mask |= 0x80;
     }
 
-    r1 = sub_801E4E4(playerX, playerY, mask, +8, &anotherByte2, sub_801ED24);
+    r1 = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, +8, &anotherByte2, sub_801ED24);
 
     if (r5 < r1) {
         result = r5;
@@ -1137,7 +1137,7 @@ s32 sub_8021B08(Player *p, u8 *rot, s32 *out)
         mask |= 0x80;
     }
 
-    r5 = sub_801E4E4(playerY2, playerX2, mask, -8, &anotherByte, sub_801EE64);
+    r5 = SA2_LABEL(sub_801E4E4)(playerY2, playerX2, mask, -8, &anotherByte, SA2_LABEL(sub_801EE64));
 
     playerY = I(p->qWorldY) - (p->spriteOffsetY);
     playerX = I(p->qWorldX) + (2 + p->spriteOffsetX);
@@ -1147,7 +1147,7 @@ s32 sub_8021B08(Player *p, u8 *rot, s32 *out)
         mask |= 0x80;
     }
 
-    r1 = sub_801E4E4(playerY, playerX, mask, -8, &anotherByte2, sub_801EE64);
+    r1 = SA2_LABEL(sub_801E4E4)(playerY, playerX, mask, -8, &anotherByte2, SA2_LABEL(sub_801EE64));
 
     if (r5 < r1) {
         result = r5;
@@ -1162,7 +1162,7 @@ s32 sub_8021B08(Player *p, u8 *rot, s32 *out)
     return result;
 }
 
-void sub_8021BE0(Player *p)
+void SA2_LABEL(sub_8021BE0)(Player *p)
 {
     if (!(p->moveState & MOVESTATE_200)) {
         if (!(p->moveState & MOVESTATE_800000)) {
@@ -1203,7 +1203,7 @@ void sub_8021C4C(Player *p)
         mask |= mask2;
     }
 
-    result = sub_801E4E4(playerX, playerY, mask, -8, 0, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, -8, 0, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX -= Q(result);
@@ -1218,7 +1218,7 @@ void sub_8021C4C(Player *p)
         mask |= 0x80;
     }
 
-    result = sub_801E4E4(playerX2, playerY2, mask, +8, 0, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask, +8, 0, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX += Q(result);
@@ -1228,11 +1228,11 @@ void sub_8021C4C(Player *p)
     ptr = &fnOut;
 #ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
-        result = sub_8029AC0(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     } else
 #endif
     {
-        result = sub_8029B0C(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     }
 
     if (result < 0) {
@@ -1253,7 +1253,7 @@ void sub_8021C4C(Player *p)
 
             p->qWorldY += result << 8;
 
-            sub_8021BE0(p);
+            SA2_LABEL(sub_8021BE0)(p);
 
             if ((rotation + 32) & 0x40) {
                 p->qSpeedAirX = 0;
@@ -1304,7 +1304,7 @@ void sub_8021DB8(Player *p)
         mask |= mask2;
     }
 
-    result = sub_801E4E4(playerX, playerY, mask, -8, 0, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, -8, 0, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX -= Q(result);
@@ -1319,7 +1319,7 @@ void sub_8021DB8(Player *p)
         mask |= 0x80;
     }
 
-    result = sub_801E4E4(playerX2, playerY2, mask, +8, 0, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask, +8, 0, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX += Q(result);
@@ -1329,11 +1329,11 @@ void sub_8021DB8(Player *p)
     ptr = &fnOut;
 #ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
-        result = sub_8029B0C(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     } else
 #endif
     {
-        result = sub_8029AC0(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
@@ -1351,7 +1351,7 @@ void sub_8021DB8(Player *p)
                 s32 speed;
                 p->rotation = rotation;
 
-                sub_8021BE0(p);
+                SA2_LABEL(sub_8021BE0)(p);
 
                 speed = p->qSpeedAirY;
                 if (speed < 0) {
@@ -1383,7 +1383,7 @@ void sub_8021EE4(Player *p)
     if (gravity) {
         playerX = I(p->qWorldX) - (3 + p->spriteOffsetX);
         playerY = I(p->qWorldY);
-        result = sub_801E4E4(playerX, playerY, mask2, -8, NULL, sub_801ED24);
+        result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask2, -8, NULL, sub_801ED24);
     } else
 #endif
     {
@@ -1394,7 +1394,7 @@ void sub_8021EE4(Player *p)
         if (p->qSpeedAirY < Q(3.0)) {
             mask |= 0x80;
         }
-        result = sub_801E4E4(playerX2, playerY2, mask, -8, NULL, sub_801ED24);
+        result = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask, -8, NULL, sub_801ED24);
     }
 
     if (result <= 0) {
@@ -1406,11 +1406,11 @@ void sub_8021EE4(Player *p)
     ptr = &fnOut;
 #ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
-        result = sub_8029B0C(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     } else
 #endif
     {
-        result = sub_8029AC0(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
@@ -1428,11 +1428,11 @@ void sub_8021EE4(Player *p)
     } else if (p->qSpeedAirY >= 0) {
 #ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
-            result = sub_8029AC0(p, &rotation, &fnOut);
+            result = SA2_LABEL(sub_8029AC0)(p, &rotation, &fnOut);
         } else
 #endif
         {
-            result = sub_8029B0C(p, &rotation, &fnOut);
+            result = SA2_LABEL(sub_8029B0C)(p, &rotation, &fnOut);
         }
 
         if (result <= 0) {
@@ -1445,7 +1445,7 @@ void sub_8021EE4(Player *p)
             p->qWorldY += Q(result);
 
             p->rotation = rotation;
-            sub_8021BE0(p);
+            SA2_LABEL(sub_8021BE0)(p);
 
             p->qSpeedAirY = 0;
             p->qSpeedGround = p->qSpeedAirX;
@@ -1470,7 +1470,7 @@ void sub_802203C(Player *p)
     if (gravity) {
         playerX = I(p->qWorldX) + (3 + p->spriteOffsetX);
         playerY = I(p->qWorldY);
-        result = sub_801E4E4(playerX, playerY, mask2, +8, NULL, sub_801ED24);
+        result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask2, +8, NULL, sub_801ED24);
     } else
 #endif
     {
@@ -1481,7 +1481,7 @@ void sub_802203C(Player *p)
         if (p->qSpeedAirY < Q(3.0)) {
             mask |= 0x80;
         }
-        result = sub_801E4E4(playerX2, playerY2, mask, +8, NULL, sub_801ED24);
+        result = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask, +8, NULL, sub_801ED24);
     }
 
     if (result <= 0) {
@@ -1493,11 +1493,11 @@ void sub_802203C(Player *p)
     ptr = &fnOut;
 #ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
-        result = sub_8029B0C(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     } else
 #endif
     {
-        result = sub_8029AC0(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
@@ -1515,11 +1515,11 @@ void sub_802203C(Player *p)
     } else if (p->qSpeedAirY >= 0) {
 #ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
-            result = sub_8029AC0(p, &rotation, &fnOut);
+            result = SA2_LABEL(sub_8029AC0)(p, &rotation, &fnOut);
         } else
 #endif
         {
-            result = sub_8029B0C(p, &rotation, &fnOut);
+            result = SA2_LABEL(sub_8029B0C)(p, &rotation, &fnOut);
         }
 
         if (result <= 0) {
@@ -1531,7 +1531,7 @@ void sub_802203C(Player *p)
             p->qWorldY += Q(result);
 
             p->rotation = rotation;
-            sub_8021BE0(p);
+            SA2_LABEL(sub_8021BE0)(p);
 
             p->qSpeedAirY = 0;
             p->qSpeedGround = p->qSpeedAirX;
@@ -1543,7 +1543,7 @@ void sub_802203C(Player *p)
 static inline
 #endif
     void
-    sub_8022190(Player *p)
+    SA2_LABEL(sub_8022190)(Player *p)
 {
     s16 airY = p->qSpeedAirY;
 #ifndef COLLECT_RINGS_ROM
@@ -1589,9 +1589,9 @@ void sub_8022218(Player *p)
     s32 *pSp04 = &sp04;
 
     if (GRAVITY_IS_INVERTED) {
-        res = sub_8029AC0(p, &rotation, pSp04);
+        res = SA2_LABEL(sub_8029AC0)(p, &rotation, pSp04);
     } else {
-        res = sub_8029B0C(p, &rotation, pSp04);
+        res = SA2_LABEL(sub_8029B0C)(p, &rotation, pSp04);
     }
 
     if (res <= 0) {
@@ -1601,7 +1601,7 @@ void sub_8022218(Player *p)
 
         p->qWorldY += Q(res);
         p->rotation = rotation;
-        sub_8021BE0(p);
+        SA2_LABEL(sub_8021BE0)(p);
 
         p->qSpeedAirY = 0;
         p->qSpeedGround = p->qSpeedAirX;
@@ -1620,11 +1620,11 @@ void sub_8022284(Player *p)
     s32 *pSp04 = &sp04;
 #ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
-        res = sub_8029B0C(p, &rotation, pSp04);
+        res = SA2_LABEL(sub_8029B0C)(p, &rotation, pSp04);
     } else
 #endif
     {
-        res = sub_8029AC0(p, &rotation, pSp04);
+        res = SA2_LABEL(sub_8029AC0)(p, &rotation, pSp04);
     }
 
     if (res <= 0) {
@@ -1636,7 +1636,7 @@ void sub_8022284(Player *p)
 
         p->qWorldY -= Q(res);
         p->rotation = rotation;
-        sub_8021BE0(p);
+        SA2_LABEL(sub_8021BE0)(p);
 
         airY = p->qSpeedAirY;
         if (airY < 0) {
@@ -1662,22 +1662,22 @@ void sub_0200DBE0(Player *p)
     s32 sp08;
     s32 res;
     if (p->qSpeedAirY >= 0) {
-        res = sub_8029B0C(p, &rotation, &sp04);
+        res = SA2_LABEL(sub_8029B0C)(p, &rotation, &sp04);
         if (res <= 0) {
             p->qWorldY += Q(res);
             p->rotation = rotation;
-            sub_8021BE0(p);
+            SA2_LABEL(sub_8021BE0)(p);
             p->qSpeedAirY = 0;
             p->qSpeedGround = p->qSpeedAirX;
         }
         sub_8022284(p);
     } else {
         sub_8022284(p);
-        res = sub_8029B0C(p, &rotation, &sp08);
+        res = SA2_LABEL(sub_8029B0C)(p, &rotation, &sp08);
         if (res <= 0) {
             p->qWorldY += Q(res);
             p->rotation = rotation;
-            sub_8021BE0(p);
+            SA2_LABEL(sub_8021BE0)(p);
             p->qSpeedAirY = 0;
             p->qSpeedGround = p->qSpeedAirX;
         }
@@ -1686,7 +1686,7 @@ void sub_0200DBE0(Player *p)
 #endif
 
 #ifndef COLLECT_RINGS_ROM
-void sub_8022318(Player *p)
+void SA2_LABEL(sub_8022318)(Player *p)
 {
     s32 offsetY;
 
@@ -1719,8 +1719,8 @@ void sub_8022318(Player *p)
     p->moveState &= ~MOVESTATE_100;
 
     p->defeatScoreIndex = 0;
-    p->unk25 = 120;
-    p->unk61 = 0;
+    p->SA2_LABEL(unk25) = 120;
+    p->SA2_LABEL(unk61) = 0;
 
     if (p->charState >= CHARSTATE_KNUCKLES_GLIDE) {
         p->charState = CHARSTATE_IDLE;
@@ -1747,7 +1747,7 @@ void sub_80223BC(Player *p)
         mask = 0x80;
         mask |= mask2;
     }
-    result = sub_801E4E4(playerX, playerY, mask, -8, NULL, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, -8, NULL, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX -= Q(result);
@@ -1763,7 +1763,7 @@ void sub_80223BC(Player *p)
     if (p->qSpeedAirY < Q(3.0)) {
         mask |= 0x80;
     }
-    result = sub_801E4E4(playerX2, playerY2, mask, +8, NULL, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask, +8, NULL, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX += Q(result);
@@ -1773,9 +1773,9 @@ void sub_80223BC(Player *p)
 
     ptr = &fnOut;
     if (GRAVITY_IS_INVERTED) {
-        result = sub_8029AC0(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     } else {
-        result = sub_8029B0C(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
@@ -1812,7 +1812,7 @@ void sub_80224DC(Player *p)
         mask = 0x80;
         mask |= mask2;
     }
-    result = sub_801E4E4(playerX, playerY, mask, -8, NULL, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, -8, NULL, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX -= Q(result);
@@ -1828,7 +1828,7 @@ void sub_80224DC(Player *p)
     if (p->qSpeedAirY < Q(3.0)) {
         mask |= 0x80;
     }
-    result = sub_801E4E4(playerX2, playerY2, mask, +8, NULL, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask, +8, NULL, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX += Q(result);
@@ -1838,9 +1838,9 @@ void sub_80224DC(Player *p)
 
     ptr = &fnOut;
     if (GRAVITY_IS_INVERTED) {
-        result = sub_8029B0C(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     } else {
-        result = sub_8029AC0(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
@@ -1873,7 +1873,7 @@ void sub_80225E8(Player *p)
     if (p->qSpeedAirY < Q(3.0)) {
         mask |= 0x80;
     }
-    result = sub_801E4E4(playerX, playerY, mask, -8, NULL, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, -8, NULL, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX -= Q(result);
@@ -1885,9 +1885,9 @@ void sub_80225E8(Player *p)
     gravity = GRAVITY_IS_INVERTED;
     ptr = &fnOut;
     if (gravity) {
-        result = sub_8029B0C(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     } else {
-        result = sub_8029AC0(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
@@ -1902,9 +1902,9 @@ void sub_80225E8(Player *p)
     } else if (p->qSpeedAirY >= 0) {
 
         if (GRAVITY_IS_INVERTED) {
-            result = sub_8029AC0(p, &rotation, ptr);
+            result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
         } else {
-            result = sub_8029B0C(p, &rotation, ptr);
+            result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
         }
 
         if (result <= 0) {
@@ -1941,7 +1941,7 @@ void sub_8022710(Player *p)
     if (p->qSpeedAirY < Q(3.0)) {
         mask |= 0x80;
     }
-    result = sub_801E4E4(playerX, playerY, mask, +8, NULL, sub_801ED24);
+    result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, +8, NULL, sub_801ED24);
 
     if (result <= 0) {
         p->qWorldX += Q(result);
@@ -1953,9 +1953,9 @@ void sub_8022710(Player *p)
     gravity = GRAVITY_IS_INVERTED;
     ptr = &fnOut;
     if (gravity) {
-        result = sub_8029B0C(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     } else {
-        result = sub_8029AC0(p, &rotation, ptr);
+        result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
@@ -1970,9 +1970,9 @@ void sub_8022710(Player *p)
     } else if (p->qSpeedAirY >= 0) {
 
         if (GRAVITY_IS_INVERTED) {
-            result = sub_8029AC0(p, &rotation, ptr);
+            result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
         } else {
-            result = sub_8029B0C(p, &rotation, ptr);
+            result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
         }
 
         if (result <= 0) {
@@ -1998,7 +1998,7 @@ void sub_8022838(Player *p)
     if (p->moveState & MOVESTATE_STOOD_ON_OBJ) {
         p->w.sf.flags &= ~0x2;
         p->unk29 = 0;
-        p->unk28 = 0;
+        p->SA2_LABEL(unk28) = 0;
     } else {
         arcResult = I(ArcTan2(airX, airY));
 
@@ -2046,13 +2046,14 @@ void sub_80228C0(Player *p)
     u32 mask = p->layer;
     s32 py = I(playerY);
 
-    resultA = sub_801E4E4(py + p->spriteOffsetY, (playerX = I(playerX)) - (2 + p->spriteOffsetX), mask, 8, &p->unk28, sub_801EE64);
+    resultA = SA2_LABEL(sub_801E4E4)(py + p->spriteOffsetY, (playerX = I(playerX)) - (2 + p->spriteOffsetX), mask, 8, &p->SA2_LABEL(unk28),
+                                     SA2_LABEL(sub_801EE64));
 
     py = py + (p->spriteOffsetY);
     playerX += 2;
     playerX += p->spriteOffsetX;
     p29 = &p->unk29;
-    resultB = sub_801E4E4(py, playerX, mask, 8, p29, sub_801EE64);
+    resultB = SA2_LABEL(sub_801E4E4)(py, playerX, mask, 8, p29, SA2_LABEL(sub_801EE64));
 
     val = resultB;
     if (resultB > resultA) {
@@ -2068,7 +2069,7 @@ void sub_80228C0(Player *p)
             playerY += Q(val);
 
             if (resultA < resultB) {
-                r0 = p->unk28;
+                r0 = p->SA2_LABEL(unk28);
             } else {
                 r0 = *p29;
             }
@@ -2089,7 +2090,7 @@ void sub_80228C0(Player *p)
                 playerY += Q(val);
 
                 if (resultA < resultB) {
-                    r0 = p->unk28;
+                    r0 = p->SA2_LABEL(unk28);
                 } else {
                     r0 = *p29;
                 }
@@ -2101,7 +2102,7 @@ void sub_80228C0(Player *p)
         }
     } else {
         if (resultA < resultB) {
-            r0 = p->unk28;
+            r0 = p->SA2_LABEL(unk28);
         } else {
             r0 = p->unk29;
         }
@@ -2159,13 +2160,14 @@ void sub_80229EC(Player *p)
     mask = p->layer;
     py = I(playerY);
 
-    resultA = sub_801E4E4(py - p->spriteOffsetY, (playerX = I(playerX)) + (2 + p->spriteOffsetX), mask, -8, &p->unk28, sub_801EE64);
+    resultA = SA2_LABEL(sub_801E4E4)(py - p->spriteOffsetY, (playerX = I(playerX)) + (2 + p->spriteOffsetX), mask, -8, &p->SA2_LABEL(unk28),
+                                     SA2_LABEL(sub_801EE64));
 
     py = py - (p->spriteOffsetY);
     playerX -= 2;
     playerX -= p->spriteOffsetX;
     p29 = &p->unk29;
-    resultB = sub_801E4E4(py, playerX, mask, -8, p29, sub_801EE64);
+    resultB = SA2_LABEL(sub_801E4E4)(py, playerX, mask, -8, p29, SA2_LABEL(sub_801EE64));
 
     val = resultB;
     if (resultB > resultA) {
@@ -2181,7 +2183,7 @@ void sub_80229EC(Player *p)
             playerY -= Q(val);
 
             if (resultA < resultB) {
-                r0 = p->unk28;
+                r0 = p->SA2_LABEL(unk28);
             } else {
                 r0 = *p29;
             }
@@ -2202,7 +2204,7 @@ void sub_80229EC(Player *p)
                 playerY -= Q(val);
 
                 if (resultA < resultB) {
-                    r0 = p->unk28;
+                    r0 = p->SA2_LABEL(unk28);
                 } else {
                     r0 = *p29;
                 }
@@ -2214,7 +2216,7 @@ void sub_80229EC(Player *p)
         }
     } else {
         if (resultA < resultB) {
-            r0 = p->unk28;
+            r0 = p->SA2_LABEL(unk28);
         } else {
             r0 = p->unk29;
         }
@@ -2272,13 +2274,14 @@ void sub_8022B18(Player *p)
     mask = p->layer;
     py = I(playerX);
 
-    resultA = sub_801E4E4(py - p->spriteOffsetY, (playerY = I(playerY)) - (2 + p->spriteOffsetX), mask, -8, &p->unk28, sub_801ED24);
+    resultA = SA2_LABEL(sub_801E4E4)(py - p->spriteOffsetY, (playerY = I(playerY)) - (2 + p->spriteOffsetX), mask, -8, &p->SA2_LABEL(unk28),
+                                     sub_801ED24);
 
     py = py - (p->spriteOffsetY);
     playerY += 2;
     playerY += p->spriteOffsetX;
     p29 = &p->unk29;
-    resultB = sub_801E4E4(py, playerY, mask, -8, p29, sub_801ED24);
+    resultB = SA2_LABEL(sub_801E4E4)(py, playerY, mask, -8, p29, sub_801ED24);
 
     val = resultB;
     if (resultB > resultA) {
@@ -2294,7 +2297,7 @@ void sub_8022B18(Player *p)
             playerX -= Q(val);
 
             if (resultA < resultB) {
-                r0 = p->unk28;
+                r0 = p->SA2_LABEL(unk28);
             } else {
                 r0 = *p29;
             }
@@ -2315,7 +2318,7 @@ void sub_8022B18(Player *p)
                 playerX -= Q(val);
 
                 if (resultA < resultB) {
-                    r0 = p->unk28;
+                    r0 = p->SA2_LABEL(unk28);
                 } else {
                     r0 = *p29;
                 }
@@ -2327,7 +2330,7 @@ void sub_8022B18(Player *p)
         }
     } else {
         if (resultA < resultB) {
-            r0 = p->unk28;
+            r0 = p->SA2_LABEL(unk28);
         } else {
             r0 = p->unk29;
         }
@@ -2384,12 +2387,13 @@ void sub_8022C44(Player *p)
     mask = p->layer;
     py = I(playerX);
 
-    resultA = sub_801E4E4(py + p->spriteOffsetY, (playerY = I(playerY)) + (2 + p->spriteOffsetX), mask, +8, &p->unk28, sub_801ED24);
+    resultA = SA2_LABEL(sub_801E4E4)(py + p->spriteOffsetY, (playerY = I(playerY)) + (2 + p->spriteOffsetX), mask, +8, &p->SA2_LABEL(unk28),
+                                     sub_801ED24);
 
     py = py + (p->spriteOffsetY);
     playerY -= 2;
     playerY -= p->spriteOffsetX;
-    resultB = sub_801E4E4(py, playerY, mask, +8, &p->unk29, sub_801ED24);
+    resultB = SA2_LABEL(sub_801E4E4)(py, playerY, mask, +8, &p->unk29, sub_801ED24);
 
     val = resultB;
     if (resultB > resultA) {
@@ -2405,7 +2409,7 @@ void sub_8022C44(Player *p)
             playerX += Q(val);
 
             if (resultA < resultB) {
-                r0 = p->unk28;
+                r0 = p->SA2_LABEL(unk28);
             } else {
                 r0 = p->unk29;
             }
@@ -2426,7 +2430,7 @@ void sub_8022C44(Player *p)
                 playerX += Q(val);
 
                 if (resultA < resultB) {
-                    r0 = p->unk28;
+                    r0 = p->SA2_LABEL(unk28);
                 } else {
                     r0 = p->unk29;
                 }
@@ -2438,7 +2442,7 @@ void sub_8022C44(Player *p)
         }
     } else {
         if (resultA < resultB) {
-            r0 = p->unk28;
+            r0 = p->SA2_LABEL(unk28);
         } else {
             r0 = p->unk29;
         }
@@ -2478,7 +2482,7 @@ void sub_8022D6C(Player *p)
     u8 r1 = 0;
     if (p->moveState & MOVESTATE_STOOD_ON_OBJ) {
         p->unk29 = 0;
-        p->unk28 = 0;
+        p->SA2_LABEL(unk28) = 0;
         return;
     }
 
@@ -2601,7 +2605,7 @@ void sub_8022D6C(Player *p)
 }
 
 // (100.00%) https://decomp.me/scratch/U0r54
-s32 sub_8022F58(u8 param0, Player *p)
+s32 SA2_LABEL(sub_8022F58)(u8 param0, Player *p)
 {
     u32 p0;
     s32 result = 0; // maybe u8?
@@ -2615,7 +2619,7 @@ s32 sub_8022F58(u8 param0, Player *p)
 #endif
 
     p->unk29 = param0;
-    p->unk28 = param0;
+    p->SA2_LABEL(unk28) = param0;
 
     p0 = (param0 + Q(0.125)) & 0xC0;
 
@@ -2715,9 +2719,9 @@ s32 sub_802302C(u8 param0, Player *p)
     p->unk29 = param0;
     r3 = (s8)param0;
 #ifndef NON_MATCHING
-    p->unk28 = ((u32)param0 << 0x18) >> 0x18;
+    p->SA2_LABEL(unk28) = ((u32)param0 << 0x18) >> 0x18;
 #else
-    p->unk28 = param0;
+    p->SA2_LABEL(unk28) = param0;
 #endif
 
     if (((param0 + Q(0.125)) << 24) > 0) {
@@ -2740,22 +2744,22 @@ s32 sub_802302C(u8 param0, Player *p)
     switch (param0 >> 6) {
         case 0: {
             s32 y = py + 2;
-            result = sub_801E4E4(y + p->spriteOffsetX, px, p->layer, +8, NULL, sub_801EE64);
+            result = SA2_LABEL(sub_801E4E4)(y + p->spriteOffsetX, px, p->layer, +8, NULL, SA2_LABEL(sub_801EE64));
         } break;
 
         case 2: {
             s32 y = py - 2;
-            result = sub_801E4E4(y - p->spriteOffsetX, px, p->layer, -8, NULL, sub_801EE64);
+            result = SA2_LABEL(sub_801E4E4)(y - p->spriteOffsetX, px, p->layer, -8, NULL, SA2_LABEL(sub_801EE64));
         } break;
 
         case 1: {
             s32 x = (px - 2);
-            result = sub_801E4E4(x - p->spriteOffsetX, py, p->layer, -8, NULL, sub_801ED24);
+            result = SA2_LABEL(sub_801E4E4)(x - p->spriteOffsetX, py, p->layer, -8, NULL, sub_801ED24);
         } break;
 
         case 3: {
             s32 x = (px + 2);
-            result = sub_801E4E4(x + p->spriteOffsetX, py, p->layer, +8, NULL, sub_801ED24);
+            result = SA2_LABEL(sub_801E4E4)(x + p->spriteOffsetX, py, p->layer, +8, NULL, sub_801ED24);
         } break;
 
         default: {
@@ -2819,8 +2823,8 @@ void sub_8023128(Player *p)
             } break;
         }
 
-        p->unk62 = 0;
-        p->unk63 = 0;
+        p->SA2_LABEL(unk62) = 0;
+        p->SA2_LABEL(unk63) = 0;
     }
 }
 
@@ -2881,7 +2885,7 @@ void sub_80231C0(Player *p)
     }
 }
 
-void sub_8023260(Player *p)
+void SA2_LABEL(sub_8023260)(Player *p)
 {
     s32 maxSpeed = p->maxSpeed;
 
@@ -2909,7 +2913,7 @@ void sub_8023260(Player *p)
     }
 }
 
-void sub_80232D0(Player *p)
+void SA2_LABEL(sub_80232D0)(Player *p)
 {
     struct Camera *cam = &gCamera;
     s32 qPX = p->qWorldX;
@@ -3460,7 +3464,7 @@ void Player_Debug_TestRingScatter(Player *p)
         }
 
         PLAYERFN_UPDATE_POSITION(p);
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
 
         if (gPressedKeys & B_BUTTON) {
             InitScatteringRings(I(p->qWorldX), I(p->qWorldY), 1);
@@ -3596,7 +3600,7 @@ void Task_PlayerMain(void)
     if (!(p->moveState & MOVESTATE_IA_OVERRIDE)) {
         p->callback(p);
     } else if (IS_BOSS_STAGE(gCurrentLevel)) {
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
     }
 
     sub_802486C(p, p->spriteInfoBody);
@@ -3654,8 +3658,8 @@ void Task_PlayerMain(void)
 
         p->spriteInfoBody->s.frameFlags &= ~SPRITE_FLAG_MASK_PRIORITY;
         p->spriteInfoBody->s.frameFlags |= SPRITE_FLAG(PRIORITY, 1);
-        p->unk80 = 0x100;
-        p->unk82 = 0x100;
+        p->SA2_LABEL(unk80) = 0x100;
+        p->SA2_LABEL(unk82) = 0x100;
 #ifndef COLLECT_RINGS_ROM
         // TODO: macro IS_SONG_PLAYING(...)
         if (gMPlayTable[0].info->songHeader == gSongTable[MUS_DROWNING].header) {
@@ -3879,7 +3883,7 @@ void Player_HandleInputs(Player *p)
                 u8 dpad = (p->heldInput & DPAD_ANY) >> 4;
                 u32 r1 = gStageTime;
 
-                r1 = ((p->confusionTimer + r1) & 0x3);
+                r1 = ((p->timerConfusion + r1) & 0x3);
                 if (!r1) {
                     r1 = 1;
                 }
@@ -3890,7 +3894,7 @@ void Player_HandleInputs(Player *p)
 
                 p->heldInput = (p->heldInput & ~DPAD_ANY) | dpad;
 
-                if (--p->confusionTimer == 0) {
+                if (--p->timerConfusion == 0) {
                     p->itemEffect &= ~PLAYER_ITEM_EFFECT__CONFUSION;
                 }
             }
@@ -3934,7 +3938,7 @@ void sub_80246DC(Player *p)
             PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
         } else {
             if ((p->qSpeedAirY > 0) && (p->variant == 1) && ((((u16)anim - 10) == 0) || (((u16)anim - 10) == 1))) {
-                s32 newY = sub_801E6D4(I(p->qWorldY) + p->spriteOffsetY, I(p->qWorldX), p->layer, 8, NULL, sub_801EE64);
+                s32 newY = sub_801E6D4(I(p->qWorldY) + p->spriteOffsetY, I(p->qWorldX), p->layer, 8, NULL, SA2_LABEL(sub_801EE64));
 
                 if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
                     if (newY <= 32) {
@@ -4097,7 +4101,7 @@ void sub_802486C(Player *p, PlayerSpriteInfo *p2)
 #endif
     {
 
-        p->unk98 = 0;
+        p->SA2_LABEL(unk98) = 0;
     }
 
     if (p->unk6C || (s->graphics.anim != p->anim) || (s->variant != p->variant)) {
@@ -4112,7 +4116,7 @@ void sub_802486C(Player *p, PlayerSpriteInfo *p2)
         if (IS_MULTI_PLAYER)
 #endif
         {
-            p->unk98 = 1;
+            p->SA2_LABEL(unk98) = 1;
         }
     }
 
@@ -4201,7 +4205,7 @@ void sub_8024B10(Player *p, PlayerSpriteInfo *inPsi)
     send = &gMultiSioSend.pat4;
     mpp = TASK_DATA(gMultiplayerPlayerTasks[SIO_MULTI_CNT->id]);
     send->unk0 = 0x5000;
-    send->x = I(p->qWorldX) + p->unk7C;
+    send->x = I(p->qWorldX) + p->SA2_LABEL(unk7C);
     send->y = I(p->qWorldY);
     send->unk6 = s->graphics.anim;
     send->unkA = p->itemEffect;
@@ -4334,7 +4338,7 @@ void sub_8024F74(Player *p, PlayerSpriteInfo *inPsi)
             anim = anim - gPlayerCharacterIdleAnims[p->character];
             if (MACRO_8024F74_ANIM_CHECK(anim, variant)) {
                 u8 rotation = p->rotation;
-                p->w.cf.unkB0 = rotation;
+                p->w.cf.SA2_LABEL(unkB0) = rotation;
                 psi->transform.rotation = rotation << 2;
                 s->frameFlags &= ~SPRITE_FLAG_MASK_ROT_SCALE;
                 s->frameFlags |= gOamMatrixIndex++ | SPRITE_FLAG_MASK_ROT_SCALE_ENABLE;
@@ -4408,9 +4412,9 @@ void Player_TouchGround(Player *p)
                           | MOVESTATE_20000 | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200
                           | MOVESTATE_100 | MOVESTATE_20 | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
-        p->unk61 = 0;
-        p->unk62 = 0;
-        p->unk63 = 0;
+        p->SA2_LABEL(unk61) = 0;
+        p->SA2_LABEL(unk62) = 0;
+        p->SA2_LABEL(unk63) = 0;
         p->unk71 = 0;
         p->unk70 = FALSE;
 
@@ -4461,8 +4465,8 @@ void Player_Idle(Player *p)
             }
         }
 
-        sub_80232D0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_80232D0)(p);
+        SA2_LABEL(sub_8023260)(p);
 
         PLAYERFN_UPDATE_POSITION(p);
 
@@ -4498,8 +4502,8 @@ void Player_8025548(Player *p)
                 p->qSpeedGround += acceleration;
         }
 
-        sub_80232D0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_80232D0)(p);
+        SA2_LABEL(sub_8023260)(p);
 
         PLAYERFN_UPDATE_POSITION(p);
 
@@ -4544,8 +4548,8 @@ void Player_Taunt(Player *p)
                 p->qSpeedGround += acceleration;
         }
 
-        sub_80232D0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_80232D0)(p);
+        SA2_LABEL(sub_8023260)(p);
 
         PLAYERFN_UPDATE_POSITION(p);
 
@@ -4590,8 +4594,8 @@ void Player_Crouch(Player *p)
                 p->qSpeedGround += acceleration;
         }
 
-        sub_80232D0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_80232D0)(p);
+        SA2_LABEL(sub_8023260)(p);
 
         PLAYERFN_UPDATE_POSITION(p);
 
@@ -4624,7 +4628,7 @@ void Player_SpinAttack(Player *p)
         PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
 
         p->moveState |= MOVESTATE_SPIN_ATTACK;
-        p->unk99[0] = 0;
+        p->SA2_LABEL(unk99)[0] = 0;
         PLAYERFN_SET_AND_CALL(Player_Rolling, p);
     }
 }
@@ -4643,10 +4647,10 @@ void Player_Rolling(Player *p)
     }
 #endif
 
-    if (p->unk99[0] != 0) {
-        p->unk99[0]--;
+    if (p->SA2_LABEL(unk99)[0] != 0) {
+        p->SA2_LABEL(unk99)[0]--;
     } else if (!Player_TryJump(p)) {
-        if (p->unk2A == 0) {
+        if (p->SA2_LABEL(unk2A) == 0) {
             u16 dpadSideways = (p->heldInput & (DPAD_LEFT | DPAD_RIGHT));
             if (dpadSideways != DPAD_RIGHT) {
                 if (dpadSideways == DPAD_LEFT) {
@@ -4712,8 +4716,8 @@ void Player_Rolling(Player *p)
             p->qSpeedGround = speedX;
         }
 
-        sub_80232D0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_80232D0)(p);
+        SA2_LABEL(sub_8023260)(p);
         sub_8023128(p);
 
         if (p->moveState & MOVESTATE_IN_AIR) {
@@ -4750,9 +4754,9 @@ void Player_InitJump(Player *p)
                       | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
-    p->unk61 = r3;
-    p->unk62 = r3;
-    p->unk63 = r3;
+    p->SA2_LABEL(unk61) = r3;
+    p->SA2_LABEL(unk62) = r3;
+    p->SA2_LABEL(unk63) = r3;
     p->unk71 = r3;
     p->unk70 = r3;
 
@@ -4832,7 +4836,7 @@ void Player_Jumping(Player *p)
         sub_80236C8(p);
     }
 
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
     PLAYERFN_UPDATE_POSITION(p);
@@ -4911,9 +4915,9 @@ void Player_InitUncurl(Player *p)
                       | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
-    p->unk61 = 0;
-    p->unk62 = 0;
-    p->unk63 = 0;
+    p->SA2_LABEL(unk61) = 0;
+    p->SA2_LABEL(unk62) = 0;
+    p->SA2_LABEL(unk63) = 0;
     p->unk71 = 0;
     p->unk70 = FALSE;
 #endif
@@ -4970,7 +4974,7 @@ void Player_Uncurl(Player *p)
         sub_80236C8(p);
     }
 
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
     PLAYERFN_UPDATE_POSITION(p);
@@ -4988,7 +4992,7 @@ void Player_InitSpindash(Player *p)
 
     PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
 
-    p->spindashAccel = 0;
+    p->qSpindashAccel = 0;
     p->qSpeedAirX = 0;
     p->qSpeedAirY = 0;
     p->qSpeedGround = 0;
@@ -5010,7 +5014,7 @@ void Player_Spindash(Player *p)
         s32 speed;
         p->moveState &= ~MOVESTATE_400;
 
-        index = I(p->spindashAccel);
+        index = I(p->qSpindashAccel);
         if (index > 8)
             index = 8;
 
@@ -5024,7 +5028,7 @@ void Player_Spindash(Player *p)
 
         m4aSongNumStart(SE_SPIN_DASH_RELEASE);
     } else {
-        s16 pitch = p->spindashAccel;
+        s16 pitch = p->qSpindashAccel;
 
         s16 pitch2 = pitch;
         if (pitch2 != 0) {
@@ -5047,7 +5051,7 @@ void Player_Spindash(Player *p)
             p->variant = 1;
             p->unk6C = TRUE;
         }
-        p->spindashAccel = pitch;
+        p->qSpindashAccel = pitch;
 
         if ((cAnim == SA2_CHAR_ANIM_SPIN_DASH) && (p->variant == 1) && (s->frameFlags & SPRITE_FLAG_MASK_ANIM_OVER)) {
             p->variant = 0;
@@ -5056,7 +5060,7 @@ void Player_Spindash(Player *p)
 
     if (p->moveState & MOVESTATE_IN_AIR) {
         sub_80236C8(p);
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
 
 #ifndef COLLECT_RINGS_ROM
         if (p->moveState & MOVESTATE_IN_WATER) {
@@ -5091,7 +5095,7 @@ void Player_Spindash(Player *p)
             p->rotation = rot;
         }
 
-        sub_8022190(p);
+        SA2_LABEL(sub_8022190)(p);
 
         if ((p->moveState & (MOVESTATE_STOOD_ON_OBJ | MOVESTATE_IN_AIR)) == MOVESTATE_STOOD_ON_OBJ) {
             gPlayer.callback = Player_TouchGround;
@@ -5118,8 +5122,8 @@ void Player_Spindash(Player *p)
             p->qSpeedGround = groundSpeed;
         }
 
-        sub_80232D0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_80232D0)(p);
+        SA2_LABEL(sub_8023260)(p);
         sub_8023128(p);
 
         p->qWorldX += p->qSpeedAirX;
@@ -5139,15 +5143,15 @@ void Player_Spindash(Player *p)
 
         sub_8022D6C(p);
 
-        if (p->unk2A) {
-            p->unk2A -= 1;
+        if (p->SA2_LABEL(unk2A)) {
+            p->SA2_LABEL(unk2A) -= 1;
         } else if ((p->rotation + 32) & 0xC0) {
             s32 absGroundSpeed = ABS(p->qSpeedGround);
             if (absGroundSpeed < Q(1.875)) {
                 p->qSpeedGround = 0;
 
                 p->moveState |= MOVESTATE_IN_AIR;
-                p->unk2A = GBA_FRAMES_PER_SECOND / 2;
+                p->SA2_LABEL(unk2A) = GBA_FRAMES_PER_SECOND / 2;
             }
         }
     }
@@ -5165,13 +5169,13 @@ void InitPlayerGrindGraphics(Player *p)
     p->itemEffect |= PLAYER_ITEM_EFFECT__TELEPORT;
 #ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
-        newY = sub_801E6D4(I(p->qWorldY) - p->spriteOffsetY, I(p->qWorldX), p->layer, -8, NULL, sub_801EE64);
+        newY = sub_801E6D4(I(p->qWorldY) - p->spriteOffsetY, I(p->qWorldX), p->layer, -8, NULL, SA2_LABEL(sub_801EE64));
 
         p->qWorldY = p->qWorldY - Q(newY);
     } else
 #endif
     {
-        newY = sub_801E6D4(I(p->qWorldY) + p->spriteOffsetY, I(p->qWorldX), p->layer, 8, NULL, sub_801EE64);
+        newY = sub_801E6D4(I(p->qWorldY) + p->spriteOffsetY, I(p->qWorldX), p->layer, 8, NULL, SA2_LABEL(sub_801EE64));
 
         p->qWorldY = p->qWorldY + Q(newY);
     }
@@ -5189,9 +5193,9 @@ void Player_InitGrinding(Player *p)
                       | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
-    p->unk61 = 0;
-    p->unk62 = 0;
-    p->unk63 = 0;
+    p->SA2_LABEL(unk61) = 0;
+    p->SA2_LABEL(unk62) = 0;
+    p->SA2_LABEL(unk63) = 0;
     p->unk71 = 0;
     p->unk70 = FALSE;
 #endif
@@ -5241,8 +5245,8 @@ void Player_DoGrinding(Player *p)
         if (((p->rotation + Q(0.375)) & 0xFF) < 0xC0)
             p->qSpeedGround += GET_ROTATED_ACCEL_2(p->rotation);
 
-        sub_80232D0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_80232D0)(p);
+        SA2_LABEL(sub_8023260)(p);
 
         if (p->moveState & MOVESTATE_IN_AIR) {
             PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
@@ -5364,7 +5368,7 @@ void Player_802A258(Player *p)
             PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
 
             p->moveState |= MOVESTATE_SPIN_ATTACK;
-            p->unk99[0] = 0;
+            p->SA2_LABEL(unk99)[0] = 0;
             PLAYERFN_SET_AND_CALL(Player_Rolling, p);
         } else {
             Player_TouchGround(p);
@@ -5383,7 +5387,7 @@ void sub_8026B64(Player *p)
 {
     s16 groundSpeed = p->qSpeedGround;
 
-    if ((p->unk2A == 0) && (p->heldInput & (DPAD_LEFT | DPAD_RIGHT))) {
+    if ((p->SA2_LABEL(unk2A) == 0) && (p->heldInput & (DPAD_LEFT | DPAD_RIGHT))) {
         if ((p->heldInput & DPAD_RIGHT) && (groundSpeed < p->topSpeed)) {
             groundSpeed += Q(1.0 / 32.0);
         } else if ((p->heldInput & DPAD_LEFT) && (groundSpeed > Q(1.0))) {
@@ -5410,8 +5414,8 @@ void Player_8026BCC(Player *p)
                 p->qSpeedGround += accel;
         }
 
-        sub_80232D0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_80232D0)(p);
+        SA2_LABEL(sub_8023260)(p);
 
         if (p->moveState & MOVESTATE_IN_AIR) {
             PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
@@ -5439,7 +5443,7 @@ void Player_8026D2C(Player *p)
     sub_80246DC(p);
     Player_AirInputControls(p);
     sub_80236C8(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
     PLAYERFN_UPDATE_POSITION(p);
@@ -5516,7 +5520,7 @@ void Player_InitPipeExit(Player *p)
 
         p->moveState |= MOVESTATE_SPIN_ATTACK;
 
-        p->unk99[0] = 30;
+        p->SA2_LABEL(unk99)[0] = 30;
 
         PLAYERFN_SET_AND_CALL(Player_Rolling, p);
     }
@@ -5553,7 +5557,7 @@ void Player_PropellorSpring(Player *p)
 
     Player_AirInputControls(p);
     sub_80236C8(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
     PLAYERFN_UPDATE_POSITION(p);
@@ -5613,7 +5617,7 @@ void Player_Corkscrew(Player *p)
     }
     p->qSpeedGround = speed;
 
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_UNK2A(p);
 }
@@ -5670,7 +5674,7 @@ void Player_InitHurt(Player *p)
 
 void Player_Hurt(Player *p)
 {
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
     PLAYERFN_UPDATE_POSITION(p);
@@ -5744,8 +5748,8 @@ void Player_GoalSlowdown(Player *p)
         } else {
             Player_CameraShift_inline(p);
 
-            sub_80232D0(p);
-            sub_8023260(p);
+            SA2_LABEL(sub_80232D0)(p);
+            SA2_LABEL(sub_8023260)(p);
 
             PLAYERFN_UPDATE_POSITION(p);
 
@@ -5801,9 +5805,9 @@ void Player_GoalBrake(Player *p)
     if (p->qSpeedGround < 0)
         p->qSpeedGround = 0;
 
-    sub_8029FA4(p);
-    sub_80232D0(p);
-    sub_8023260(p);
+    SA2_LABEL(sub_8029FA4)(p);
+    SA2_LABEL(sub_80232D0)(p);
+    SA2_LABEL(sub_8023260)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
 
@@ -5816,7 +5820,7 @@ void Player_InitVictoryPoseTransition(Player *p)
 {
     Player_CameraShift_inline(p);
 
-    p->unk72 = TIME(0, 1.5);
+    p->SA2_LABEL(unk72) = TIME(0, 1.5);
 
     if (gCurrentLevel < LEVEL_INDEX(ZONE_FINAL, ACT_XX_FINAL_ZONE)) {
         switch (gCurrentLevel & 0x3) {
@@ -5843,7 +5847,7 @@ void Player_VictoryPose(Player *p)
 {
     Player_CameraShift_inline(p);
 
-    if (--p->unk72 == 0) {
+    if (--p->SA2_LABEL(unk72) == 0) {
         if (gGameMode == GAME_MODE_TIME_ATTACK) {
             CreateTimeAttackResults(gCourseTime);
         } else {
@@ -5852,8 +5856,8 @@ void Player_VictoryPose(Player *p)
         PLAYERFN_SET(Player_CameraShift);
     }
 
-    sub_80232D0(p);
-    sub_8023260(p);
+    SA2_LABEL(sub_80232D0)(p);
+    SA2_LABEL(sub_8023260)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
 
@@ -5872,14 +5876,14 @@ void Player_80279F8(Player *p)
         p->qSpeedGround = Q(5.0);
     }
 
-    if (p->unk72 < INT16_MAX)
-        p->unk72++;
+    if (p->SA2_LABEL(unk72) < INT16_MAX)
+        p->SA2_LABEL(unk72)++;
 
-    if (p->unk72 == 120) {
+    if (p->SA2_LABEL(unk72) == 120) {
         p->charState = CHARSTATE_ACT_CLEAR_TIME_ATTACK_OR_BOSS;
     }
 
-    if (p->unk72 == 180) {
+    if (p->SA2_LABEL(unk72) == 180) {
         if (gGameMode == GAME_MODE_TIME_ATTACK) {
             CreateTimeAttackResults(gCourseTime);
         } else {
@@ -5887,8 +5891,8 @@ void Player_80279F8(Player *p)
         }
     }
 
-    sub_80232D0(p);
-    sub_8023260(p);
+    SA2_LABEL(sub_80232D0)(p);
+    SA2_LABEL(sub_8023260)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
 
@@ -5913,8 +5917,8 @@ void Player_80279F8(Player *p)
 
 void Player_8027B98(Player *p)
 {
-    sub_80232D0(p);
-    sub_8023260(p);
+    SA2_LABEL(sub_80232D0)(p);
+    SA2_LABEL(sub_8023260)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
 
@@ -5939,8 +5943,8 @@ void Player_8027C5C(Player *p)
         p->qSpeedGround = Q(5.0);
     }
 
-    sub_80232D0(p);
-    sub_8023260(p);
+    SA2_LABEL(sub_80232D0)(p);
+    SA2_LABEL(sub_8023260)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
 
@@ -5974,8 +5978,8 @@ void Player_HandleMultiplayerFinish(Player *p)
         }
     }
 
-    sub_80232D0(p);
-    sub_8023260(p);
+    SA2_LABEL(sub_80232D0)(p);
+    SA2_LABEL(sub_8023260)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
 
@@ -6000,7 +6004,7 @@ void Player_HandleMultiplayerFinish(Player *p)
         }
 
         p->moveState &= ~MOVESTATE_FACING_LEFT;
-        p->unk72 = 0;
+        p->SA2_LABEL(unk72) = 0;
         p->heldInput = 0;
 
         PLAYERFN_SET(Player_Nop);
@@ -6013,16 +6017,16 @@ void Player_HandlePhysicsWithAirInput(Player *p)
     if (p->moveState & MOVESTATE_IN_AIR) {
         Player_AirInputControls(p);
         sub_80236C8(p);
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
 
         PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
         PLAYERFN_UPDATE_POSITION(p);
         PLAYERFN_UPDATE_ROTATION(p);
         PLAYERFN_MAYBE_TRANSITION_TO_GROUND(p);
     } else {
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
         sub_80231C0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_8023260)(p);
 
         PLAYERFN_UPDATE_POSITION(p);
 
@@ -6036,15 +6040,15 @@ void Player_HandlePhysicsWithAirInput(Player *p)
 void Player_HandlePhysics(Player *p)
 {
     if (p->moveState & MOVESTATE_IN_AIR) {
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
 
         PLAYERFN_UPDATE_POSITION(p);
         PLAYERFN_UPDATE_ROTATION(p);
         PLAYERFN_MAYBE_TRANSITION_TO_GROUND(p);
     } else {
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
         sub_80231C0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_8023260)(p);
 
         PLAYERFN_UPDATE_POSITION(p);
 
@@ -6054,11 +6058,11 @@ void Player_HandlePhysics(Player *p)
     }
 }
 
-void sub_8028204(Player *p)
+void SA2_LABEL(sub_8028204)(Player *p)
 {
     Player_AirInputControls(p);
     sub_80236C8(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_AIR_FALL_SPEED_B(p);
 
@@ -6067,7 +6071,7 @@ void sub_8028204(Player *p)
     PLAYERFN_MAYBE_TRANSITION_TO_GROUND(p);
 }
 
-void sub_80282EC(Player *p)
+void SA2_LABEL(sub_80282EC)(Player *p)
 {
     p->acceleration >>= 1;
 
@@ -6077,16 +6081,16 @@ void sub_80282EC(Player *p)
         sub_80236C8(p);
     }
 
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
     PLAYERFN_UPDATE_ROTATION(p);
     PLAYERFN_MAYBE_TRANSITION_TO_GROUND(p);
 }
 
-void sub_80283C4(Player *p)
+void SA2_LABEL(sub_80283C4)(Player *p)
 {
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
     PLAYERFN_UPDATE_ROTATION(p);
@@ -6097,7 +6101,7 @@ void sub_8028478(Player *p)
 {
     if (p->moveState & MOVESTATE_IN_AIR) {
         sub_80236C8(p);
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
 
         PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
         PLAYERFN_UPDATE_POSITION(p);
@@ -6112,9 +6116,9 @@ void sub_8028478(Player *p)
             }
         }
 
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
         sub_80231C0(p);
-        sub_8023260(p);
+        SA2_LABEL(sub_8023260)(p);
 
         PLAYERFN_UPDATE_POSITION(p);
 
@@ -6165,9 +6169,9 @@ void Player_InitDefaultTrick(Player *p)
     PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
 
     if (mask & MASK_80D6992_4)
-        p->unk72 = 10;
+        p->SA2_LABEL(unk72) = 10;
     else if (mask & MASK_80D6992_8)
-        p->unk72 = 45;
+        p->SA2_LABEL(unk72) = 45;
 
 #if !DISABLE_TRICK_AIR_WAIT
     p->qSpeedAirX = 0;
@@ -6211,7 +6215,7 @@ void Player_WindupDefaultTrick(Player *p)
         }
     }
 
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
     PLAYERFN_UPDATE_POSITION(p);
     PLAYERFN_UPDATE_ROTATION(p);
     PLAYERFN_MAYBE_TRANSITION_TO_GROUND(p);
@@ -6227,8 +6231,8 @@ void Player_DefaultTrick(Player *p)
         p->variant = 2;
     }
 
-    if (p->unk72 != 0) {
-        p->unk72--;
+    if (p->SA2_LABEL(unk72) != 0) {
+        p->SA2_LABEL(unk72)--;
     } else {
         if (mask & MASK_80D6992_4)
             mask &= ~MASK_80D6992_4;
@@ -6245,7 +6249,7 @@ void Player_DefaultTrick(Player *p)
         sub_80236C8(p);
     }
 
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     if (mask & MASK_80D6992_10) {
         PLAYERFN_UPDATE_AIR_FALL_SPEED_B(p);
@@ -6459,7 +6463,7 @@ void Player_8029074(Player *p)
 #endif
     Player_AirInputControls(p);
     sub_80236C8(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
     PLAYERFN_UPDATE_POSITION(p);
@@ -6576,7 +6580,7 @@ void Player_8029314(Player *p)
     DoTrickIfButtonPressed(p);
 #endif
     sub_8023708(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_AIR_FALL_SPEED(p);
     PLAYERFN_UPDATE_POSITION(p);
@@ -6587,13 +6591,13 @@ void Player_8029314(Player *p)
 #ifndef COLLECT_RINGS_ROM
 void Player_DashRing(Player *p)
 {
-    if (--p->unk72 == -1) {
+    if (--p->SA2_LABEL(unk72) == -1) {
         PLAYERFN_SET(Player_8029074);
     }
 
     sub_80246DC(p);
     DoTrickIfButtonPressed(p);
-    sub_80232D0(p);
+    SA2_LABEL(sub_80232D0)(p);
 
     PLAYERFN_UPDATE_POSITION(p);
     PLAYERFN_UPDATE_ROTATION(p);
@@ -6704,7 +6708,7 @@ bool32 Player_TryInitSpindash(Player *p)
 
             PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
 
-            p->spindashAccel = 0;
+            p->qSpindashAccel = 0;
             p->qSpeedAirX = r6;
             p->qSpeedAirY = 0;
             p->qSpeedGround = 0;
@@ -6727,7 +6731,7 @@ void Player_HandleGroundMovement(Player *p)
     s32 acc = p->acceleration;
     s32 dec = p->deceleration;
 
-    if ((p->unk2A == 0) && p->heldInput & (DPAD_LEFT | DPAD_RIGHT)) {
+    if ((p->SA2_LABEL(unk2A) == 0) && p->heldInput & (DPAD_LEFT | DPAD_RIGHT)) {
         if (p->qSpeedGround > 0) {
             if (p->heldInput & DPAD_RIGHT) {
                 if (p->qSpeedGround < p->topSpeed) {
@@ -6752,7 +6756,7 @@ void Player_HandleGroundMovement(Player *p)
                 }
                 p->qSpeedGround -= dec;
 #ifndef COLLECT_RINGS_ROM
-                sub_8029FA4(p);
+                SA2_LABEL(sub_8029FA4)(p);
 #endif
                 m4aSongNumStart(SE_BRAKE);
             } else {
@@ -6791,7 +6795,7 @@ void Player_HandleGroundMovement(Player *p)
 
                     p->qSpeedGround += dec;
 #ifndef COLLECT_RINGS_ROM
-                    sub_8029FA4(p);
+                    SA2_LABEL(sub_8029FA4)(p);
 #endif
                     m4aSongNumStart(SE_BRAKE);
                 } else {
@@ -6975,10 +6979,10 @@ void DestroyPlayerTasks(Player *p)
 // Just call some inline function, possibly the inline
 // functions were defined here but agbcc requires it be defined above
 UNUSED void sub_020111F4(Player *p) { Player_TransitionCancelBoost(p); }
-UNUSED void sub_0201121C(Player *p) { sub_8022190(p); }
+UNUSED void sub_0201121C(Player *p) { SA2_LABEL(sub_8022190)(p); }
 #endif
 
-s32 sub_8029A28(Player *p, u8 *rot, s32 *out)
+s32 SA2_LABEL(sub_8029A28)(Player *p, u8 *rot, s32 *out)
 {
     s32 result;
 
@@ -7010,7 +7014,7 @@ s32 sub_8029A28(Player *p, u8 *rot, s32 *out)
     return result;
 }
 
-s32 sub_8029A74(Player *p, u8 *rot, s32 *out)
+s32 SA2_LABEL(sub_8029A74)(Player *p, u8 *rot, s32 *out)
 {
     s32 result;
 
@@ -7041,7 +7045,7 @@ s32 sub_8029A74(Player *p, u8 *rot, s32 *out)
     return result;
 }
 
-s32 sub_8029AC0(Player *p, u8 *rot, s32 *out)
+s32 SA2_LABEL(sub_8029AC0)(Player *p, u8 *rot, s32 *out)
 {
     s32 result;
 
@@ -7073,7 +7077,7 @@ s32 sub_8029AC0(Player *p, u8 *rot, s32 *out)
     return result;
 }
 
-s32 sub_8029B0C(Player *p, u8 *ret_rotation, s32 *out)
+s32 SA2_LABEL(sub_8029B0C)(Player *p, u8 *ret_rotation, s32 *out)
 {
     s32 result;
 
@@ -7110,26 +7114,26 @@ s32 sub_8029B58(Player *p, u8 *rot, s32 *out)
     s32 result;
 #ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
-        result = sub_8029B0C(p, rot, out);
+        result = SA2_LABEL(sub_8029B0C)(p, rot, out);
     } else
 #endif
     {
-        result = sub_8029AC0(p, rot, out);
+        result = SA2_LABEL(sub_8029AC0)(p, rot, out);
     }
 
     return result;
 }
 
-s32 sub_8029B88(Player *p, u8 *rot, s32 *out)
+s32 SA2_LABEL(sub_8029B88)(Player *p, u8 *rot, s32 *out)
 {
     s32 result;
 #ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
-        result = sub_8029AC0(p, rot, out);
+        result = SA2_LABEL(sub_8029AC0)(p, rot, out);
     } else
 #endif
     {
-        result = sub_8029B0C(p, rot, out);
+        result = SA2_LABEL(sub_8029B0C)(p, rot, out);
     }
 
     return result;
@@ -7160,7 +7164,7 @@ s32 sub_8029BB8(Player *p, u8 *rotation, s32 *out)
         mask |= 0x80;
     }
 
-    r5 = sub_801E4E4(playerY2, playerX2, mask, 8, &anotherByte, sub_801EE64);
+    r5 = SA2_LABEL(sub_801E4E4)(playerY2, playerX2, mask, 8, &anotherByte, SA2_LABEL(sub_801EE64));
 
     playerY = I(p->qWorldY) + p->spriteOffsetY;
     playerX = I(p->qWorldX) + (2 + p->spriteOffsetX);
@@ -7170,7 +7174,7 @@ s32 sub_8029BB8(Player *p, u8 *rotation, s32 *out)
         mask |= 0x80;
     }
 
-    r1 = sub_801E4E4(playerY, playerX, mask, 8, &anotherByte2, sub_801EE64);
+    r1 = SA2_LABEL(sub_801E4E4)(playerY, playerX, mask, 8, &anotherByte2, SA2_LABEL(sub_801EE64));
 
     if (r5 < r1) {
         result = r5;
@@ -7195,7 +7199,7 @@ void sub_8029C84(Player *p)
 }
 #endif
 
-void sub_8029CA0(Player *p)
+void SA2_LABEL(sub_8029CA0)(Player *p)
 {
     s32 rot = p->rotation;
     if (((rot + DEG_TO_TURNS(135)) & (DEG_TO_TURNS(360) - 1)) < DEG_TO_TURNS(270)) {
@@ -7309,7 +7313,7 @@ bool32 Player_TryJump(Player *p)
         }
 #endif
 
-        if (sub_8022F58(rot + Q(0.5), p) > 3) {
+        if (SA2_LABEL(sub_8022F58)(rot + Q(0.5), p) > 3) {
             PLAYERFN_SET(Player_InitJump);
             return TRUE;
         }
@@ -7335,7 +7339,7 @@ void ContinueLevelSongAfterDrowning(Player *p)
     }
 }
 
-void sub_8029FA4(Player *p)
+void SA2_LABEL(sub_8029FA4)(Player *p)
 {
     u8 mask = (p->moveState & MOVESTATE_GOAL_REACHED) ? 0x7 : 0x3;
 
@@ -7402,7 +7406,7 @@ void SetStageSpawnPos(u32 character, u32 level, u32 playerID, Player *p)
     p->qWorldX = -1;
     p->qWorldY = -1;
 
-    p->unk98 = 0;
+    p->SA2_LABEL(unk98) = 0;
     p->checkpointTime = 0;
     p->spriteInfoBody = &gPlayerBodyPSI;
 }
@@ -7479,7 +7483,7 @@ void Player_SpinAttack(Player *p)
     PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
 
     p->moveState |= MOVESTATE_SPIN_ATTACK;
-    p->unk99[0] = 0;
+    p->SA2_LABEL(unk99)[0] = 0;
     PLAYERFN_SET_AND_CALL(Player_Rolling, p);
 }
 #endif
@@ -7504,7 +7508,7 @@ void Player_InitSpindash(Player *p)
 
     PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
 
-    p->spindashAccel = 0;
+    p->qSpindashAccel = 0;
     p->qSpeedAirX = 0;
     p->qSpeedAirY = 0;
     p->qSpeedGround = 0;
@@ -7519,11 +7523,11 @@ void sub_02011950(Player *p)
     u8 rotation;
     s32 sp04;
     s32 sp08;
-    s32 res = sub_8029B0C(p, &rotation, &sp04);
+    s32 res = SA2_LABEL(sub_8029B0C)(p, &rotation, &sp04);
     if (res <= 0) {
         p->qWorldY += Q(res);
         p->rotation = rotation;
-        sub_8021BE0(p);
+        SA2_LABEL(sub_8021BE0)(p);
         p->qSpeedAirY = 0;
         p->qSpeedGround = p->qSpeedAirX;
     }
@@ -7600,7 +7604,7 @@ void Player_InitSpecialStageTransition(Player *p)
     p->isBoosting = FALSE;
     p->charState = CHARSTATE_WALK_A;
     p->moveState &= ~(MOVESTATE_FACING_LEFT);
-    p->unk72 = 0;
+    p->SA2_LABEL(unk72) = 0;
 
     PLAYERFN_SET_AND_CALL(Player_80279F8, p);
 }
@@ -7688,7 +7692,7 @@ void Player_InitTaunt(Player *p)
 
 void sub_802A660(Player *p)
 {
-    if (p->unk2A == 0) {
+    if (p->SA2_LABEL(unk2A) == 0) {
         if ((p->heldInput & DPAD_SIDEWAYS) != DPAD_RIGHT) {
             if ((p->heldInput & DPAD_SIDEWAYS) == DPAD_LEFT) {
                 s32 grnd = p->qSpeedGround;

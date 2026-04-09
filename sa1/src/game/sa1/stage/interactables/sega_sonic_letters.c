@@ -5,7 +5,7 @@
 #include "game/shared/stage/entity.h"
 #include "game/shared/stage/collision.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 typedef struct {
     SpriteBase base;

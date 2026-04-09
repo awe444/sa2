@@ -19,11 +19,11 @@
 #include "game/sa2/title_screen.h"
 #endif
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 typedef struct {
     Player *unk0;
@@ -383,7 +383,8 @@ static void sub_808E114(void)
         scene->unk70 = player->qWorldX - (gCamera.x * 256) - 0x4000;
     }
 
-    result = sub_801F100((scene->unk72 >> 8) + gCamera.y, (scene->unk70 >> 8) + gCamera.x + scene->unk7C, 1, 8, sub_801EC3C);
+    result = SA2_LABEL(sub_801F100)((scene->unk72 >> 8) + gCamera.y, (scene->unk70 >> 8) + gCamera.x + scene->unk7C, 1, 8,
+                                    SA2_LABEL(sub_801EC3C));
 
     if (result < 0) {
         scene->unk72 += result * 0x100;

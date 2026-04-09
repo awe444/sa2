@@ -18,7 +18,7 @@
 
 #include "game/sa1/assets/compressed/entities.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 typedef struct {
     Sprite s;
@@ -192,7 +192,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/Task_RingsMgrMain.inc", void Task_Ring
 
                                 if ((sp08 != FALSE) || (gCurrentLevel != 15 && IS_ALIVE(p))) {
                                     // Player touches ring(?)
-                                    if (PLAYER_TOUCHING_RING(p, (struct Rect8 *)rect, rx, ry)) {
+                                    if (PLAYER_TOUCHING_RING(p, (Rect8 *)rect, rx, ry)) {
                                         // _08008166
                                         INCREMENT_RINGS(1);
                                         // _080081AC

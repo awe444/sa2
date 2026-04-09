@@ -16,8 +16,8 @@
 #include "game/sa2/save.h"
 #include "game/sa2/title_screen.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/anim_sizes.h"
 
 #if (GAME == GAME_SA1)
 #define DEMO_SPRITE_PRIO   1
@@ -228,7 +228,7 @@ void Task_DemoManagerEndFadeout(void)
         LOADED_SAVE->timeLimitDisabled = dm->timeLimitDisabled;
         TasksDestroyAll();
         PAUSE_BACKGROUNDS_QUEUE();
-        SA2_LABEL(gBgSpritesCount) = 0;
+        gBgSpritesCount = 0;
         PAUSE_GRAPHICS_QUEUE();
 
 #if (GAME == GAME_SA1)

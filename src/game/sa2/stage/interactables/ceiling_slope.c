@@ -8,8 +8,8 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/player_transitions.h"
-#include "constants/interactables.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/interactables.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

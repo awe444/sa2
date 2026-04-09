@@ -5,7 +5,13 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/dust_effect_braking.h"
 
-#include "constants/animations.h"
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#include "constants/sa1/vram_hardcoded.h"
+#elif (GAME == GAME_SA2)
+#include "constants/sa2/animations.h"
+#include "constants/sa2/vram_hardcoded.h"
+#endif
 
 DustEffectBraking ALIGNED(8) gDustEffectBrakingTask = {};
 
@@ -46,27 +52,42 @@ struct Task *CreateBrakingDustEffect(s32 x, s32 y)
         s = &bde->s;
         p = &gPlayer;
 
+#if (GAME == GAME_SA2)
         if (p->moveState & MOVESTATE_GOAL_REACHED) {
             s->graphics.dest = VramMalloc(15);
             s->graphics.anim = SA2_ANIM_BRAKING_DUST_EFFECT;
             s->variant = 0;
             s->frameFlags = (SPRITE_FLAG(PRIORITY, 2) | SPRITE_FLAG(X_FLIP, 1));
-        } else {
-            s->graphics.dest = ((void *)OBJ_VRAM0 + 0x2300);
+        } else
+#endif
+        {
+            s->graphics.dest = VRAM_RESERVED_DUST_EFFECT_BRAKING;
+#if (GAME == GAME_SA1)
+            s->graphics.size = 0;
+            s->graphics.anim = SA1_ANIM_SMALL_DUST_PARTICLE;
+            s->variant = 0;
+            s->prevVariant = -1;
+            s->oamFlags = SPRITE_OAM_ORDER(8);
+            s->qAnimDelay = 0;
+            s->animSpeed = SPRITE_ANIM_SPEED(1.0);
+            s->palId = 0;
+#elif (GAME == GAME_SA2)
             s->graphics.anim = SA2_ANIM_SMALL_DUST_PARTICLE;
             s->variant = 0;
+#endif
             s->frameFlags = SPRITE_FLAG(PRIORITY, 2);
 
             s->frameFlags |= ((u32)PseudoRandom32() & (SPRITE_FLAG_MASK_Y_FLIP | SPRITE_FLAG_MASK_X_FLIP));
         }
 
+#if (GAME == GAME_SA2)
         s->graphics.size = 0;
         s->prevVariant = -1;
         s->oamFlags = SPRITE_OAM_ORDER(8);
         s->qAnimDelay = 0;
         s->animSpeed = SPRITE_ANIM_SPEED(1.0);
         s->palId = 0;
-
+#endif
         return t;
     }
 }

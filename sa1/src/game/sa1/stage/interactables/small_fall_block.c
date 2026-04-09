@@ -6,7 +6,7 @@
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/mp_event_mgr.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 /* Blocks that fall down after stepping on them, in X-Zone */
 

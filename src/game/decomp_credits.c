@@ -10,9 +10,9 @@
 #include "game/sa2/title_screen.h"
 #include "game/sa2/stage/debug_text_printer.h"
 
-#include "constants/animations.h"
-#include "constants/characters.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/characters.h"
+#include "constants/sa2/songs.h"
 
 #if ENABLE_DECOMP_CREDITS
 typedef struct {

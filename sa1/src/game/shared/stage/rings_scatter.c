@@ -14,8 +14,14 @@
 #include "game/shared/stage/collect_ring_effect.h"
 #include "game/shared/stage/rings_manager.h" // for RESERVED_RING_TILES_VRAM
 
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+
+#if (GAME == GAME_SA1)
+#define UNK10_CONDITION 1
+#elif (GAME == GAME_SA2)
+#define UNK10_CONDITION !(ring->unk10 & 0x7)
+#endif
 
 // NOTE: It is possible that rings_scatter.c was part of
 //       player.c originally, due to it being directly above it in both,

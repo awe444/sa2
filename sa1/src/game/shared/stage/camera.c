@@ -25,10 +25,10 @@
 #include "game/sa1/stage/background/zone_final.h"
 #endif
 
-#include "constants/animations.h"
-#include "constants/characters.h"
-#include "constants/tilemaps.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/characters.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/zones.h"
 
 // Probably a array (as it's aligned 16)
 struct Backgrounds ALIGNED(16) gStageBackgroundsRam = {};
@@ -855,7 +855,7 @@ void UpdateCamera(void)
             camera->unk8 += Q(0.125);
         }
 
-        if ((player->moveState & MOVESTATE_IN_AIR) && (player->character != CHARACTER_KNUCKLES || player->unk61 != 9))
+        if ((player->moveState & MOVESTATE_IN_AIR) && (player->character != CHARACTER_KNUCKLES || player->SA2_LABEL(unk61) != 9))
 #endif
         {
             camera->sa2__unk48 += 4;

@@ -3,7 +3,11 @@
 #include "task.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#elif (GAME == GAME_SA2)
+#include "constants/sa2/animations.h"
+#endif
 
 #ifndef COLLECT_RINGS_ROM
 #define DUST_CLOUD_VRAM_ADDRESS (void *)(OBJ_VRAM0 + 0x1000);
@@ -24,7 +28,11 @@ void CreateDustCloud(s16 x, s16 y)
     s->graphics.dest = DUST_CLOUD_VRAM_ADDRESS;
     s->oamFlags = SPRITE_OAM_ORDER(15);
     s->graphics.size = 0;
+#if (GAME == GAME_SA1)
+    s->graphics.anim = SA1_ANIM_DUST_CLOUD;
+#else
     s->graphics.anim = SA2_ANIM_DUST_CLOUD;
+#endif
     s->variant = 0;
     s->animCursor = 0;
     s->qAnimDelay = 0;

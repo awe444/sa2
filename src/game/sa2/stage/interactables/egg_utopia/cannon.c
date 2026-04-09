@@ -11,10 +11,10 @@
 #include "trig.h"
 #include "game/math.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     // Completely unused, maybe the base?
@@ -259,7 +259,7 @@ NONMATCH("asm/non_matching/game/sa2/stage/interactables/egg_utopia/cannon__IsPla
     playerY = I(gPlayer.qWorldY) - gCamera.y;
 
     // gPlayerBodyPSI.s.hitboxes[0] s-<hitboxes[0]
-    if (HB_COLLISION(x, y, s2->hitboxes[0], playerX, playerY, gPlayerBodyPSI.s.hitboxes[0])) {
+    if (HB_COLLISION(x, y, s2->hitboxes[0].b, playerX, playerY, gPlayerBodyPSI.s.hitboxes[0].b)) {
         return 1;
     }
 

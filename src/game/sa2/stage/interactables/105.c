@@ -1,8 +1,6 @@
 #include "global.h"
 #include "gba/types.h"
 
-#include "game/shared/stage/collision.h"
-
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/entity.h"

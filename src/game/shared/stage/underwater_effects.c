@@ -11,7 +11,7 @@
 #include "game/shared/stage/underwater_effects.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 #define MAX_SMALL_BUBBLE_COUNT 11
 

@@ -10,8 +10,8 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/ice_paradise/half_pipe.h"
 
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
 
 typedef struct {
     s32 x;

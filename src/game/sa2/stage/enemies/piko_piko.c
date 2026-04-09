@@ -1,14 +1,11 @@
 #include "global.h"
 #include "malloc_vram.h"
 
-#include "game/shared/stage/collision.h"
-
-#include "game/shared/stage/terrain_collision.h"
 #include "game/shared/stage/player.h"
 
 #include "game/shared/stage/entity.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

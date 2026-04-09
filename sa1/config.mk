@@ -54,6 +54,7 @@ endif
 GAME_REVISION ?= 0
 GAME_REGION   ?= EUROPE
 GAME_VARIANT  ?= DEFAULT
+GAME          ?= GAME_SA1
 DEBUG         ?= 0
 
 # For gbafix

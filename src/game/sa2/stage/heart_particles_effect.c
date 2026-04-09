@@ -8,7 +8,7 @@
 #include "game/shared/stage/camera.h"
 #include "sprite.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 #define NUM_HEARTS 4
 

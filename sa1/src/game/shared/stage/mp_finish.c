@@ -16,8 +16,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/animations.h"
-#include "constants/text.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/text.h"
 
 #if (GAME == GAME_SA1) && !(defined NON_MATCHING)
 // Once CreateMultiplayerFinishHandler matches in SA1,

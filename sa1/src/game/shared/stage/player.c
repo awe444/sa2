@@ -30,11 +30,11 @@
 #include "game/shared/stage/underwater_effects.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/zones.h"
 
 Player ALIGNED(8) gPlayer = {};
 #if (GAME == GAME_SA1)
@@ -514,7 +514,7 @@ void InitializePlayer(Player *p)
     p->SA2_LABEL(unk63) = 0;
     p->secondsUntilDrown = 30;
     p->framesUntilDrownCountDecrement = 60;
-    p->SA2_LABEL(unk88) = 10;
+    p->framesUntilWaterSurfaceEffect = 10;
 
 #if (GAME == GAME_SA2)
     p->transition = 0;
@@ -609,9 +609,9 @@ void Player_TransitionCancelFlyingAndBoost(Player *p)
                       | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
-    p->unk61 = 0;
-    p->unk62 = 0;
-    p->unk63 = 0;
+    p->SA2_LABEL(unk61) = 0;
+    p->SA2_LABEL(unk62) = 0;
+    p->SA2_LABEL(unk63) = 0;
     p->unk71 = 0;
     p->unk70 = FALSE;
 
@@ -1193,9 +1193,9 @@ void sub_8022218(Player *p)
     s32 *pSp04 = &sp04;
 
     if (GRAVITY_IS_INVERTED) {
-        res = sub_8029AC0(p, &rotation, pSp04);
+        res = SA2_LABEL(sub_8029AC0)(p, &rotation, pSp04);
     } else {
-        res = sub_8029B0C(p, &rotation, pSp04);
+        res = SA2_LABEL(sub_8029B0C)(p, &rotation, pSp04);
     }
 
     if (res <= 0) {
@@ -1205,7 +1205,7 @@ void sub_8022218(Player *p)
 
         p->qWorldY += Q(res);
         p->rotation = rotation;
-        sub_8021BE0(p);
+        SA2_LABEL(sub_8021BE0)(p);
 
         p->qSpeedAirY = 0;
         p->qSpeedGround = p->qSpeedAirX;
@@ -2807,7 +2807,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_8043EC0.inc", void SA2_
 }
 END_NONMATCH
 
-bool32 Player_Spindash(Player *p)
+bool32 Player_TrySpindash(Player *p)
 {
     if (!(p->moveState & MOVESTATE_SPINDASH)) {
         if ((p->charState != CHARSTATE_CROUCH) || !(p->frameInput & gPlayerControls.jump)) {
@@ -3380,8 +3380,8 @@ void SA2_LABEL(sub_8023878)(Player *p)
 
             p->qSpeedAirX = p->qSpeedAirX >> 1;
             p->qSpeedAirY = p->qSpeedAirY >> 2;
-            if ((p->character != CHARACTER_KNUCKLES || p->SA2_LABEL(unk61) != 9) && (s8)p->SA2_LABEL(unk88) < 1) {
-                p->SA2_LABEL(unk88) = 10;
+            if ((p->character != CHARACTER_KNUCKLES || p->SA2_LABEL(unk61) != 9) && (s8)p->framesUntilWaterSurfaceEffect < 1) {
+                p->framesUntilWaterSurfaceEffect = 10;
                 CreateWaterfallSurfaceHitEffect(I(p->qWorldX), gWater.currentWaterLevel);
                 m4aSongNumStart(SE_WATERFALL_SURFACE_HIT);
             }
@@ -3443,8 +3443,8 @@ void SA2_LABEL(sub_8023878)(Player *p)
             p->moveState |= MOVESTATE_1000;
             p->qSpeedAirY = p->qSpeedAirY << 1;
 
-            if ((p->character != CHARACTER_KNUCKLES || p->SA2_LABEL(unk61) != 9) && p->SA2_LABEL(unk88) < 1) {
-                p->SA2_LABEL(unk88) = 10;
+            if ((p->character != CHARACTER_KNUCKLES || p->SA2_LABEL(unk61) != 9) && p->framesUntilWaterSurfaceEffect < 1) {
+                p->framesUntilWaterSurfaceEffect = 10;
                 CreateWaterfallSurfaceHitEffect(I(p->qWorldX), gWater.currentWaterLevel);
                 m4aSongNumStart(SE_WATERFALL_SURFACE_HIT);
             }
@@ -3490,8 +3490,8 @@ void SA2_LABEL(sub_8023878)(Player *p)
         p->deceleration = p->deceleration >> 2;
     }
 
-    if (p->SA2_LABEL(unk88) != 0) {
-        p->SA2_LABEL(unk88)--;
+    if (p->framesUntilWaterSurfaceEffect != 0) {
+        p->framesUntilWaterSurfaceEffect--;
     }
 }
 
@@ -3940,7 +3940,7 @@ void Task_PlayerMain(void)
     if (!(p->moveState & MOVESTATE_IA_OVERRIDE)) {
         p->callback(p);
     } else if (IS_BOSS_STAGE(gCurrentLevel)) {
-        sub_80232D0(p);
+        SA2_LABEL(sub_80232D0)(p);
     }
 
     sub_802486C(p, p->spriteInfoBody);
@@ -4079,7 +4079,7 @@ void Task_PlayerMain(void)
             m4aSongNumStop(28);
         }
 
-        if ((p->itemEffect & PLAYER_ITEM_EFFECT__20) && (--p->timer24 == 0)) {
+        if ((p->itemEffect & PLAYER_ITEM_EFFECT__20) && (--p->itemEffect20Timer == 0)) {
             p->itemEffect &= ~PLAYER_ITEM_EFFECT__20;
 
             gDispCnt &= ~0x8000;

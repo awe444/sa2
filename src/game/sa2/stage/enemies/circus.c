@@ -4,7 +4,7 @@
 #include "game/shared/stage/entities_manager.h"
 #include "task.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

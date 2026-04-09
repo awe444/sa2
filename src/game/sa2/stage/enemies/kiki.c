@@ -2,13 +2,12 @@
 #include "game/shared/stage/entity.h"
 #include "game/sa2/stage/enemies/kiki.h"
 #include "game/shared/stage/entities_manager.h"
-#include "game/shared/stage/collision.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "malloc_vram.h"
 #include "sprite.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -221,7 +220,7 @@ static void Task_KikiProjMain(void)
     s->y += Q_8_8_TO_INT(proj->unk32);
 
     if (proj->unk32 && proj->unk32 > -1) {
-        s32 delta = sub_801F07C(s->y, s->x, 1, 8, 0, sub_801EE64);
+        s32 delta = SA2_LABEL(sub_801F07C)(s->y, s->x, 1, 8, 0, SA2_LABEL(sub_801EE64));
         if (delta < 0) {
             s->y += delta;
             if (proj->unk30 == 0) {

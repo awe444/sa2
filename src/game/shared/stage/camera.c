@@ -14,9 +14,9 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/tilemaps.h"
-#include "constants/zones.h"
-#include "constants/characters.h"
+#include "constants/sa2/tilemaps.h"
+#include "constants/sa2/zones.h"
+#include "constants/sa2/characters.h"
 
 #define BOSS_CAM_FRAME_DELTA_PIXELS 5
 
@@ -719,7 +719,7 @@ void UpdateCamera(void)
             camera->unk8 += Q(0.125);
         }
 
-        if ((player->moveState & MOVESTATE_IN_AIR) && (player->character != CHARACTER_KNUCKLES || player->unk61 != 9)) {
+        if ((player->moveState & MOVESTATE_IN_AIR) && (player->character != CHARACTER_KNUCKLES || player->SA2_LABEL(unk61) != 9)) {
             camera->unk48 += 4;
             camera->unk48 = MIN(camera->unk48, 24);
         } else {

@@ -6,7 +6,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/leaf_forest/windmill.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ Sprite s;

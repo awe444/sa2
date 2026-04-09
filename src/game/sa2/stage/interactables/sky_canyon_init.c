@@ -4,7 +4,7 @@
 
 #include "game/sa2/stage/interactables/sky_canyon_init.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 static void Task_80808DC(void);
 

@@ -12,9 +12,9 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/hot_crater/crane.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
 
 #define CRANE_MAX_ACCELERATION (Q_8_8(12))
 #define CHAIN_LENGTH           6

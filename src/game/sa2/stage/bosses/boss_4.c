@@ -21,10 +21,10 @@
 #include "game/shared/stage/screen_shake.h"
 #include "game/sa2/stage/boss_results_transition.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 #define NUM_TAIL_SEGMENTS 3
 
@@ -159,7 +159,7 @@ static void CreateAeroEggBombDebris(AeroEgg *boss, s32 screenX, s32 screenY, s16
     _part.x += _part.dx;                                                                                                                   \
     _part.y += _part.dy;                                                                                                                   \
                                                                                                                                            \
-    res = sub_801E4E4(I(_part.y) + _halfHeight, I(_part.x), 1, 8, NULL, &sub_801EE64);                                                     \
+    res = SA2_LABEL(sub_801E4E4)(I(_part.y) + _halfHeight, I(_part.x), 1, 8, NULL, &sub_801EE64);                                          \
                                                                                                                                            \
     if ((res <= 0) && (_part.dy >= 0)) {                                                                                                   \
         _part.y += Q(res);                                                                                                                 \
@@ -923,7 +923,7 @@ static void Task_CreateAeroEggBombMain(void)
         s->y = I(eb->screenY);
     }
 
-    if (sub_801E4E4(I(eb->screenY) + gCamera.y, I(eb->screenX) + gCamera.x, 1, 8, NULL, sub_801EE64) < 0) {
+    if (SA2_LABEL(sub_801E4E4)(I(eb->screenY) + gCamera.y, I(eb->screenX) + gCamera.x, 1, 8, NULL, SA2_LABEL(sub_801EE64)) < 0) {
         m4aSongNumStart(SE_PROJECTILE_IMPACT);
 
         eb->dx = 0;
@@ -1040,7 +1040,7 @@ static void Task_AeroEggBombDebris(void)
     s->x = I(deb->screenX);
     s->y = I(deb->screenY);
 
-    if (sub_801E4E4(I(deb->screenY) + gCamera.y, I(deb->screenX) + gCamera.x, 1, 8, NULL, sub_801EE64) < 0) {
+    if (SA2_LABEL(sub_801E4E4)(I(deb->screenY) + gCamera.y, I(deb->screenX) + gCamera.x, 1, 8, NULL, SA2_LABEL(sub_801EE64)) < 0) {
         if (deb->dy > 0) {
             TaskDestroy(gCurTask);
             return;

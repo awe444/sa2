@@ -4,7 +4,7 @@
 #include "game/shared/stage/entity.h"
 #include "game/sa1/stage/player_controls.h"
 
-#include "constants/char_states.h"
+#include "constants/sa1/char_states.h"
 
 typedef struct {
     /* 0x00 */ MapEntity *me;

@@ -4,7 +4,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/entity.h"
 
-#include "constants/interactables.h"
+#include "constants/sa1/interactables.h"
 
 typedef struct {
     /* 0x00 */ u8 x;

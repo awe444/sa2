@@ -10,12 +10,12 @@
 #include "game/sa2/ui/course_select.h"
 #include "game/sa2/options_screen.h"
 #include "game/sa2/title_screen.h"
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 #include "task.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 struct TimeAttackLobbyScreen {
     Background unk0;

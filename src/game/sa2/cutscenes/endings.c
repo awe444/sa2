@@ -11,7 +11,7 @@
 #include "trig.h"
 #include "game/sa2/save.h"
 
-#include "constants/songs.h"
+#include "constants/sa2/songs.h"
 
 struct EndingCutSceneTransition {
     u8 filler0[0x6C];

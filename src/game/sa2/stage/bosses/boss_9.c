@@ -16,9 +16,9 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 typedef struct {
     /* 0x00 */ s32 unk0;
@@ -1828,7 +1828,7 @@ bool32 sub_804F010(Sprite *s, s32 x, s32 y, u8 hbIndex)
         return FALSE;
     }
 
-    if (HB_COLLISION(x, y, s->hitboxes[hbIndex], I(qSonicX), I(qSonicY), sprSonic->hitboxes[0])) {
+    if (HB_COLLISION(x, y, s->hitboxes[hbIndex].b, I(qSonicX), I(qSonicY), sprSonic->hitboxes[0].b)) {
         return TRUE;
     } else {
         return FALSE;

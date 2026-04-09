@@ -9,9 +9,9 @@
 #include "game/shared/stage/collision.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/anim_sizes.h"
+#include "constants/sa1/songs.h"
 
 /* Sonic 2 - emerald hill boss */
 

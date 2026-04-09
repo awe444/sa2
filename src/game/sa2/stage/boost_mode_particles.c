@@ -9,7 +9,7 @@
 #include "game/sa2/stage/boost_mode_particles.h"
 #include "trig.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 #define NUM_PARTICLES 16
 

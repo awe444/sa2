@@ -15,8 +15,8 @@
 #include "game/sa2/stage/bosses/boss_8.h"
 #include "game/sa2/stage/bosses/boss_9.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/zones.h"
 
 void Task_BossParticleWithExplosionUpdate(void);
 void Task_BossParticleStatic(void);

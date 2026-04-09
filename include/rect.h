@@ -56,11 +56,11 @@ typedef struct {
 
 /* Rect collision checks using integer values
    Clones of the RECT_ ,macros that access values directly */
-#define HB_WIDTH(hb)     ((hb).b.right - (hb).b.left)
-#define HB_HEIGHT(hb)    ((hb).b.bottom - (hb).b.top)
-#define HB_LEFT(x, hb)   ((x) + hb.b.left)
+#define HB_WIDTH(hb)     ((hb).right - (hb).left)
+#define HB_HEIGHT(hb)    ((hb).bottom - (hb).top)
+#define HB_LEFT(x, hb)   ((x) + hb.left)
 #define HB_RIGHT(x, hb)  (HB_LEFT((x), (hb)) + HB_WIDTH(hb))
-#define HB_TOP(y, hb)    ((y) + hb.b.top)
+#define HB_TOP(y, hb)    ((y) + hb.top)
 #define HB_BOTTOM(y, hb) (HB_TOP(y, hb) + HB_HEIGHT(hb))
 
 #define HB_COLLISION_A_X(x0, hb0, x1, hb1) (HB_LEFT(x0, hb0) <= HB_LEFT(x1, hb1) && HB_RIGHT(x0, hb0) >= HB_LEFT(x1, hb1))

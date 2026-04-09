@@ -31,16 +31,16 @@
 #endif
 
 #if (GAME == GAME_SA1)
-#include "constants/songs.h"
+#include "constants/sa2/songs.h"
 #endif
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 
 #include "game/sa2/assets/compressed/roms.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 typedef struct {
     // Possibly an array of ui elements?

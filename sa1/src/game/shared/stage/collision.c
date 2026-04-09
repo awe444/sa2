@@ -19,11 +19,11 @@
 #include "game/shared/stage/rings_scatter.h"
 #include "game/sa1/stage/trapped_animals.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/player_transitions.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 bool32 Coll_DamageSuperSonic(Player *p);
 
@@ -46,7 +46,7 @@ u32 SA2_LABEL(sub_800C060)(Sprite *s, CamCoord sx, CamCoord sy, Player *p)
         ip = TRUE;
     }
 
-    if (RECT_COLLISION_2(sx, sy, &s->hitboxes[0].b, p->qWorldX, p->qWorldY, (struct Rect8 *)rectPlayer) && (p->qSpeedAirY >= 0)) {
+    if (RECT_COLLISION_2(sx, sy, &s->hitboxes[0].b, p->qWorldX, p->qWorldY, (Rect8 *)rectPlayer) && (p->qSpeedAirY >= 0)) {
 
 #ifndef NON_MATCHING
         register s32 y asm("r1");
@@ -427,7 +427,7 @@ u32 sub_800CCB8(Sprite *s, s32 sx, s32 sy, Player *p)
         p->moveState |= MOVESTATE_IN_AIR;
     }
 
-    mask = sub_800CE94(s, sx, sy, (struct Rect8 *)rectPlayer, p);
+    mask = sub_800CE94(s, sx, sy, (Rect8 *)rectPlayer, p);
 
     if (mask) {
         if (mask & 0x10000) {
@@ -476,7 +476,7 @@ u32 sub_800CDBC(Sprite *s, s32 sx, s32 sy, Player *p)
         p->moveState &= ~MOVESTATE_STOOD_ON_OBJ;
     }
 
-    mask = sub_800CE94(s, sx, sy, (struct Rect8 *)rectPlayer, p);
+    mask = sub_800CE94(s, sx, sy, (Rect8 *)rectPlayer, p);
 
     if (mask & 0x10000) {
         p->moveState |= MOVESTATE_STOOD_ON_OBJ;
@@ -494,7 +494,7 @@ u32 sub_800CDBC(Sprite *s, s32 sx, s32 sy, Player *p)
 
 // Looks like each byte in the result is one value
 // TODO: Remove gotos
-u32 sub_800CE94(Sprite *s, s32 sx, s32 sy, struct Rect8 *inRect, Player *p)
+u32 sub_800CE94(Sprite *s, s32 sx, s32 sy, Rect8 *inRect, Player *p)
 {
     s32 px = I(p->qWorldX);
     s32 py = I(p->qWorldY);
@@ -649,7 +649,7 @@ u32 SA2_LABEL(sub_800DA4C)(Sprite *opponent, s16 qOppX, s16 qOppY, UNUSED s32 pa
 }
 END_NONMATCH
 
-u32 Coll_Player_Entity_RectIntersection(Sprite *s, CamCoord sx, CamCoord sy, Player *p, struct Rect8 *rectPlayer)
+u32 Coll_Player_Entity_RectIntersection(Sprite *s, CamCoord sx, CamCoord sy, Player *p, Rect8 *rectPlayer)
 {
     u32 result = 0;
 
@@ -923,7 +923,7 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__sa2__800C060.inc",
         ip = TRUE;
     }
 
-    if (RECT_COLLISION_2(sx, sy, &s->hitboxes[0].b, p->qWorldX, p->qWorldY, (struct Rect8 *)rectPlayer) && (p->qSpeedAirY >= 0)) {
+    if (RECT_COLLISION_2(sx, sy, &s->hitboxes[0].b, p->qWorldX, p->qWorldY, (Rect8 *)rectPlayer) && (p->qSpeedAirY >= 0)) {
 
 #ifndef NON_MATCHING
         register s32 y asm("r1");
@@ -1416,7 +1416,7 @@ u32 sub_800C394(Sprite *s, s16 sx, s16 sy, Player *p)
     }
 
     if ((((p->moveState & MOVESTATE_JUMPING) == MOVESTATE_JUMPING) && (p->qSpeedAirY > 0)
-         && HB_COLLISION(sx, sy, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*(struct Rect8 *)rectPlayer)))
+         && HB_COLLISION(sx, sy, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*(Rect8 *)rectPlayer)))
         || (p->spriteInfoBody->s.hitboxes[1].index != HITBOX_STATE_INACTIVE
             && HB_COLLISION(sx, sy, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), p->spriteInfoBody->s.hitboxes[1].b)
             && !(p->moveState & (MOVESTATE_JUMPING)))) {
@@ -1480,7 +1480,7 @@ bool32 Coll_DamagePlayer(Player *p)
 
         p->layer ^= PLAYER_LAYER__MASK;
 
-        if (sa2__sub_8022F58(p->rotation + Q(0.5), p) < 4) {
+        if (SA2_LABEL(sub_8022F58)(p->rotation + Q(0.5), p) < 4) {
             p->layer ^= PLAYER_LAYER__MASK;
         } else {
             p->moveState &= ~MOVESTATE_1000000;
@@ -1868,18 +1868,18 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, s16 x, s16 y, Player *p)
 u32 sub_800DF38(Sprite *s, s32 x, s32 y, Player *p)
 #endif
 {
-    // TODO: Could this match with a 'struct Rect8' instead of s8[4]?
+    // TODO: Could this match with a 'Rect8' instead of s8[4]?
     s8 rectPlayer[4] = { -p->spriteOffsetX, -p->spriteOffsetY, +p->spriteOffsetX, +p->spriteOffsetY };
 
-    return Coll_Player_Entity_RectIntersection(s, x, y, p, (struct Rect8 *)&rectPlayer);
+    return Coll_Player_Entity_RectIntersection(s, x, y, p, (Rect8 *)&rectPlayer);
 }
 
 #if (GAME == GAME_SA1)
 u32 sub_800CE98(Sprite *s, s16 x, s16 y, Player *p)
 {
-    // TODO: Could this match with a 'struct Rect8' instead of s8[4]?
+    // TODO: Could this match with a 'Rect8' instead of s8[4]?
     s8 rectPlayer[4] = { -(p->spriteOffsetX + 5), (1 - p->spriteOffsetY), +(p->spriteOffsetX + 5), +(p->spriteOffsetY - 1) };
 
-    return Coll_Player_Entity_RectIntersection(s, x, y, p, (struct Rect8 *)&rectPlayer);
+    return Coll_Player_Entity_RectIntersection(s, x, y, p, (Rect8 *)&rectPlayer);
 }
 #endif

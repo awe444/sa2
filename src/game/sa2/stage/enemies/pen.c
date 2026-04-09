@@ -7,7 +7,7 @@
 #include "game/sa2/stage/enemies/pen.h"
 #include "game/shared/stage/entities_manager.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

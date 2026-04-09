@@ -75,6 +75,20 @@ typedef struct {
 
 typedef struct {
     ROOMEVENT_BASE;
+    u8 x; // regionX truncated
+    u8 y; // regionY truncated
+    u8 id;
+    u8 unk4;
+} RoomEvent_BalloonPopped;
+
+typedef struct {
+    ROOMEVENT_BASE;
+    u8 id1;
+    u8 id2;
+} RoomEvent_ChaoCollected;
+
+typedef struct {
+    ROOMEVENT_BASE;
     u8 unk1;
     u8 unk2;
 } RoomEvent_Unknown;

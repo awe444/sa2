@@ -13,9 +13,9 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 void Task_MultiplayerEventMgr_Send(void);
 void Task_MultiplayerEventMgr_Receive(void);

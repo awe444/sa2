@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/include/**"
             ],
-            "defines": ["PLATFORM_GBA=1"],
+            "defines": ["PLATFORM_GBA=1", "GAME=GAME_SA2"],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu17",
             "cppStandard": "gnu++17",
@@ -17,7 +17,7 @@
             "includePath": [
                 "${workspaceFolder}/sa1/include/**"
             ],
-            "defines": ["PLATFORM_GBA=1", "GAME=1"],
+            "defines": ["PLATFORM_GBA=1", "GAME=GAME_SA1"],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu17",
             "cppStandard": "gnu++17",

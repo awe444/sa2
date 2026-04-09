@@ -6,16 +6,15 @@
 #include "trig.h"
 #include "malloc_vram.h"
 
-#include "game/shared/stage/collision.h"
 #include "game/sa2/stage/interactables/platform_square.h"
 #include "game/shared/stage/entity.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
-#include "constants/interactables.h"
-#include "constants/player_transitions.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/interactables.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -173,8 +172,8 @@ static void Task_Platform_Square(void)
             p->qWorldY += deltaY - Q(2.0);
         }
 
-        res = sub_801F100(I(gPlayer.qWorldY) + gPlayer.spriteOffsetY, I(gPlayer.qWorldX) + gPlayer.spriteOffsetX, gPlayer.layer, +8,
-                          sub_801EC3C);
+        res = SA2_LABEL(sub_801F100)(I(gPlayer.qWorldY) + gPlayer.spriteOffsetY, I(gPlayer.qWorldX) + gPlayer.spriteOffsetX, gPlayer.layer,
+                                     +8, SA2_LABEL(sub_801EC3C));
         if (res < 0) {
             gPlayer.qWorldY += Q(res);
 
@@ -184,20 +183,21 @@ static void Task_Platform_Square(void)
         }
 
         temp = I(p->qWorldX) + 2;
-        res = sub_801F100(temp + p->spriteOffsetX, I(p->qWorldY), p->layer, +8, sub_801EB44);
+        res = SA2_LABEL(sub_801F100)(temp + p->spriteOffsetX, I(p->qWorldY), p->layer, +8, sub_801EB44);
 
         if (res < 0) {
             p->qWorldX += Q(res);
         }
 
         temp2 = I(p->qWorldX) - 2;
-        res = sub_801F100(temp2 - p->spriteOffsetX, I(p->qWorldY), p->layer, -8, sub_801EB44);
+        res = SA2_LABEL(sub_801F100)(temp2 - p->spriteOffsetX, I(p->qWorldY), p->layer, -8, sub_801EB44);
 
         if (res < 0) {
             p->qWorldX -= Q(res);
         }
 
-        res = sub_801F100(I(p->qWorldY) + p->spriteOffsetY, I(p->qWorldX) - p->spriteOffsetX, p->layer, +8, sub_801EC3C);
+        res = SA2_LABEL(sub_801F100)(I(p->qWorldY) + p->spriteOffsetY, I(p->qWorldX) - p->spriteOffsetX, p->layer, +8,
+                                     SA2_LABEL(sub_801EC3C));
 
         if (res < 0) {
             p->qWorldY += Q(res);
@@ -237,7 +237,7 @@ static void Task_Platform_Square(void)
                     p->qSpeedAirY = 0;
                 }
 
-                res = sub_801F100(I(p->qWorldY) + p->spriteOffsetY, I(p->qWorldX), p->layer, 8, sub_801EC3C);
+                res = SA2_LABEL(sub_801F100)(I(p->qWorldY) + p->spriteOffsetY, I(p->qWorldX), p->layer, 8, SA2_LABEL(sub_801EC3C));
 
                 if ((res < 0) && (deltaY > 0)) {
                     Platform_Square_KillPlayer();
@@ -274,7 +274,8 @@ static void Task_Platform_Square(void)
                     }
 
                     if (otherRes & 0x10000) {
-                        s32 newRes = sub_801F100(I(p->qWorldY) - p->spriteOffsetY, I(p->qWorldX), p->layer, -8, sub_801EC3C);
+                        s32 newRes
+                            = SA2_LABEL(sub_801F100)(I(p->qWorldY) - p->spriteOffsetY, I(p->qWorldX), p->layer, -8, SA2_LABEL(sub_801EC3C));
 
                         if (newRes < 0) {
                             if (deltaY < 0) {
@@ -295,7 +296,7 @@ static void Task_Platform_Square(void)
                 } else {
                     s32 newRes;
                     p->qSpeedAirY = 0;
-                    newRes = sub_801F100(I(p->qWorldY) - p->spriteOffsetY, I(p->qWorldX), p->layer, -8, sub_801EC3C);
+                    newRes = SA2_LABEL(sub_801F100)(I(p->qWorldY) - p->spriteOffsetY, I(p->qWorldX), p->layer, -8, SA2_LABEL(sub_801EC3C));
 
                     if ((newRes < 0) && (deltaY < 0)) {
                         Platform_Square_KillPlayer();
@@ -313,14 +314,14 @@ static void Task_Platform_Square(void)
 
             if (result & 0x40000) {
                 s32 tempXVal = I(p->qWorldX) + 2;
-                if (sub_801F100(tempXVal + p->spriteOffsetX, I(p->qWorldY), p->layer, -8, sub_801EB44) < 0) {
+                if (SA2_LABEL(sub_801F100)(tempXVal + p->spriteOffsetX, I(p->qWorldY), p->layer, -8, sub_801EB44) < 0) {
                     Platform_Square_KillPlayer();
                 }
             }
 
             if (result & 0x80000) {
                 s32 tempXVal = I(p->qWorldX) - 2;
-                if (sub_801F100(tempXVal - p->spriteOffsetX, I(p->qWorldY), p->layer, +8, sub_801EB44) < 0) {
+                if (SA2_LABEL(sub_801F100)(tempXVal - p->spriteOffsetX, I(p->qWorldY), p->layer, +8, sub_801EB44) < 0) {
                     Platform_Square_KillPlayer();
                 }
             }

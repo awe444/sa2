@@ -11,9 +11,9 @@
 #include "trig.h"
 #include "flags.h"
 #include "malloc_ewram.h"
-#include "constants/zones.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/zones.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 void sub_806EA04(void);
 void sub_806E7C0(struct SpecialStageWorld *world);

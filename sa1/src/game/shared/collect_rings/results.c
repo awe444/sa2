@@ -17,11 +17,11 @@
 #include "game/sa1/save.h"
 #include "game/sa1/stage/tilemap_table.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h"
+#include "constants/sa1/tilemaps.h"
+#include "constants/sa1/zones.h"
 
 extern u8 gUnknown_087D7E80[0x3400];
 extern u8 gUnknown_087E3610[0x2000];
@@ -236,7 +236,7 @@ void SA2_LABEL(Task_808207C)(void)
     struct MultiplayerSinglePakResultsScreen *resultsScreen;
     gDispCnt |= 0x1800;
     gMultiplayerConnections = ((gMultiSioStatusFlags & MULTI_SIO_ALL_CONNECTED) >> 8);
-    MultiPakHeartbeat();
+    LINK_HEARTBEAT();
 
     gMultiSioSend.pat0.unk0 = COMM_DATA(0x10);
 
@@ -609,7 +609,7 @@ void SA2_LABEL(sub_8082788)(void)
     Sprite *s;
     struct MultiplayerSinglePakResultsScreen *resultsScreen;
 
-    MultiPakHeartbeat();
+    LINK_HEARTBEAT();
     resultsScreen = TASK_DATA(gCurTask);
 
     for (i = 0; i < 4; i++) {

@@ -6,6 +6,12 @@
 #include "task.h"
 #include "game/shared/stage/entity.h"
 
+// TODO: merge with the below
+typedef struct {
+    /* 0x00 */ SpriteBase base;
+    /* 0x0C */ Sprite s;
+} EntityShared;
+
 typedef struct {
     /* 0x00 */ SpriteBase base;
     /* 0x0C */ Sprite displayed;
@@ -42,5 +48,7 @@ void CreateEnemyDefeatScoreAndManageLives(s16 x, s16 y);
 
 // TaskDestructor_SpriteEntity
 void TaskDestructor_80095E8(struct Task *);
+// The same as above, should align the name
+void TaskDestructor_EntityShared(struct Task *);
 
 #endif
