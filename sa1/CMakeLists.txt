@@ -163,8 +163,15 @@ function(sa1_preprocess OUTPUT_VAR)
             COMMENT "preproc ${REL}"
             VERBATIM
         )
-        # Tell the compiler the output is already preprocessed
-        set_source_files_properties("${PP_C}" PROPERTIES LANGUAGE C)
+        # The .pp.c file is already fully preprocessed (cc -E + preproc).
+        # Strip the target's compile definitions and include directories so the
+        # compiler does not re-preprocess it — matching the Makefile pipeline
+        # where CC1 receives no -D or -I flags for already-preprocessed code.
+        set_source_files_properties("${PP_C}" PROPERTIES
+            LANGUAGE C
+            COMPILE_DEFINITIONS ""
+            INCLUDE_DIRECTORIES ""
+        )
         list(APPEND PP_OUTPUTS "${PP_C}")
     endforeach()
 
@@ -423,4 +430,5 @@ else()
     target_link_libraries(${SA1_TARGET} PRIVATE ${SDL2_LIBRARIES})
 endif()
 
-set_target_properties(${SA1_TARGET} PROPERTIES C_STANDARD 11)
+# NOTE: No C_STANDARD is set here, matching the Makefile which does not pass
+# -std= and lets the compiler default (gnu17 for modern GCC/Clang).

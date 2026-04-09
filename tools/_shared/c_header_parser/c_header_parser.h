@@ -48,6 +48,7 @@ enum TokenTypes {
     POUND_INCLUDE = 0x87,
     POUND_IF      = 0x88,
     POUND_ELSE    = 0x89,
+    POUND_ELIF    = 0x8A,
 };
 
 TokenList tokenize(MemArena *arena, char *headerPath);
