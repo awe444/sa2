@@ -183,12 +183,12 @@ void sub_8052C84(const char *param0, Strc_8052C84 *param1)
                 break;
             }
 
-            oam->all.attr0 = ((strc0->unk9 << 14)) | (param1->unkC & 0xFF) | (sl) | 0x400;
-            oam->all.attr1 = ((strc0->unk8 << 14) | (r8 << 9)) | ((((strc0->unkA * i) << 3) + param1->unkA) & 0x1FF);
+            OAM_SET_GBA_ATTR0(oam, ((strc0->unk9 << 14)) | (param1->unkC & 0xFF) | (sl) | 0x400);
+            OAM_SET_GBA_ATTR1(oam, ((strc0->unk8 << 14) | (r8 << 9)) | ((((strc0->unkA * i) << 3) + param1->unkA) & 0x1FF));
             a = (param1->unk12 << 12);
             b = strc0->unk4 * FROM_UI_DIGIT(param0[i]);
             a += strc0->unk0 + b;
-            oam->all.attr2 = +a;
+            OAM_SET_GBA_ATTR2(oam, +a);
         }
     }
 }
@@ -222,8 +222,8 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_8052D64.inc", void sub_8052D6
         r9 = 3;
 
         oamStack = &sp00;
-        oamStack->all.attr0 = ((r9 << 8) | (strc0->unk9 << 14)) | (param1->unkC & 0xFF);
-        oamStack->all.attr2 = (param1->unk12 << 12) | (strc0->unk0 & 0x3FF);
+        OAM_SET_GBA_ATTR0(oamStack, ((r9 << 8) | (strc0->unk9 << 14)) | (param1->unkC & 0xFF));
+        OAM_SET_GBA_ATTR2(oamStack, (param1->unk12 << 12) | (strc0->unk0 & 0x3FF));
 
         for (i = 0, oamStack2 = &sp00; i < param1->byteCount; i++) {
             OamData *oam = OamMalloc((param1->unk8) >> 3);
@@ -232,9 +232,9 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_8052D64.inc", void sub_8052D6
                 break;
             }
 
-            oam->all.attr0 = oamStack2->all.attr0;
-            oam->all.attr1 = ((strc0->unk8 << 14) | (r8 << 9)) | ((((strc0->unkA * i) << 3) + param1->unkA) & 0x1FF);
-            oam->all.attr2 = oamStack2->all.attr2 + strc0->unk4 * FROM_UI_DIGIT(param0[i]);
+            OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(oamStack2));
+            OAM_SET_GBA_ATTR1(oam, ((strc0->unk8 << 14) | (r8 << 9)) | ((((strc0->unkA * i) << 3) + param1->unkA) & 0x1FF));
+            OAM_SET_GBA_ATTR2(oam, OAM_GET_GBA_ATTR2(oamStack2) + strc0->unk4 * FROM_UI_DIGIT(param0[i]));
         }
     }
 }
@@ -272,11 +272,11 @@ void sub_8052E40(u8 *param0, Strc_8052C84 *param1)
                 break;
             }
 
-            oam->all.attr0 = (strc0->unk9 << 14) + (r9 << 8) + (param1->unkC & 0x1FF);
-            oam->all.attr1 = (strc0->unk8 << 14) + (sl << 9) + ((param1->unk0 * i) >> 5) + param1->unkA;
+            OAM_SET_GBA_ATTR0(oam, (strc0->unk9 << 14) + (r9 << 8) + (param1->unkC & 0x1FF));
+            OAM_SET_GBA_ATTR1(oam, (strc0->unk8 << 14) + (sl << 9) + ((param1->unk0 * i) >> 5) + param1->unkA);
             r2 = (param1->unk12 << 12);
             r2 += strc0->unk0 + strc0->unk4 * FROM_UI_DIGIT(param0[i]);
-            oam->all.attr2 = +r2;
+            OAM_SET_GBA_ATTR2(oam, +r2);
         }
     }
 }
@@ -331,9 +331,9 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_8052F78.inc", void sub_8052F7
 
     oamStack = &sp00;
     a = (strc0->unk9 << 14) + (unsigned char)param1->unkC + 0x400;
-    oamStack->all.attr0 = a;
-    oamStack->all.attr1 = (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF);
-    oamStack->all.attr2 = (param1->unk12 << 12) | (strc0->unk0 & 0x3FF);
+    OAM_SET_GBA_ATTR0(oamStack, a);
+    OAM_SET_GBA_ATTR1(oamStack, (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF));
+    OAM_SET_GBA_ATTR2(oamStack, (param1->unk12 << 12) | (strc0->unk0 & 0x3FF));
 
     if (param1->unk16 != 0) {
         s32 i;
@@ -344,16 +344,16 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_8052F78.inc", void sub_8052F7
                 break;
             }
 
-            oam->all.attr0 = sp00.all.attr0;
-            oam->all.attr1 = sp00.all.attr1;
-            sp00.all.attr1 += r9;
-            oam->all.attr2 = sp00.all.attr2 + FROM_UI_DIGIT(param0[i]) * strc0->unk4;
+            OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(&sp00));
+            OAM_SET_GBA_ATTR1(oam, OAM_GET_GBA_ATTR1(&sp00));
+            OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r9);
+            OAM_SET_GBA_ATTR2(oam, OAM_GET_GBA_ATTR2(&sp00) + FROM_UI_DIGIT(param0[i]) * strc0->unk4);
         }
     } else {
         s32 i = 0;
         for (i = 0; i < param1->unk14; i++) {
             s32 w;
-            sp00.all.attr1 = (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF);
+            OAM_SET_GBA_ATTR1(&sp00, (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF));
             w = ((s32)(-param1->qUnkA & 0x1FF) >> 7);
             while (w < param1->unkE) {
                 OamData *oam = OamMalloc((param1->unk8) >> 3);
@@ -362,14 +362,14 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_8052F78.inc", void sub_8052F7
                     break;
                 }
 
-                oam->all.attr0 = sp00.all.attr0;
-                oam->all.attr1 = sp00.all.attr1;
-                sp00.all.attr1 += r9;
+                OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(&sp00));
+                OAM_SET_GBA_ATTR1(oam, OAM_GET_GBA_ATTR1(&sp00));
+                OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r9);
 
-                oam->all.attr2 = sp00.all.attr2 + FROM_UI_DIGIT(param0[w]) * strc0->unk4;
+                OAM_SET_GBA_ATTR2(oam, OAM_GET_GBA_ATTR2(&sp00) + FROM_UI_DIGIT(param0[w]) * strc0->unk4);
                 w++;
             }
-            sp00.all.attr0 = sp08 + sp00.all.attr0;
+            OAM_SET_GBA_ATTR0(&sp00, sp08 + OAM_GET_GBA_ATTR0(&sp00));
         }
     }
 }
@@ -397,9 +397,9 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_80530CC.inc", void sub_80530C
 
     oamStack = &sp00;
     a = (strc0->unk9 << 14) + (unsigned char)param1->unkC;
-    oamStack->all.attr0 = a;
-    oamStack->all.attr1 = (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF);
-    oamStack->all.attr2 = (param1->unk12 << 12) | (strc0->unk0 & 0x3FF);
+    OAM_SET_GBA_ATTR0(oamStack, a);
+    OAM_SET_GBA_ATTR1(oamStack, (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF));
+    OAM_SET_GBA_ATTR2(oamStack, (param1->unk12 << 12) | (strc0->unk0 & 0x3FF));
 
     if (param1->unk16 != 0) {
         s32 i;
@@ -410,16 +410,16 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_80530CC.inc", void sub_80530C
                 break;
             }
 
-            oam->all.attr0 = sp00.all.attr0;
-            oam->all.attr1 = sp00.all.attr1;
-            sp00.all.attr1 += r9;
-            oam->all.attr2 = sp00.all.attr2 + FROM_UI_DIGIT(param0[i]) * strc0->unk4;
+            OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(&sp00));
+            OAM_SET_GBA_ATTR1(oam, OAM_GET_GBA_ATTR1(&sp00));
+            OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r9);
+            OAM_SET_GBA_ATTR2(oam, OAM_GET_GBA_ATTR2(&sp00) + FROM_UI_DIGIT(param0[i]) * strc0->unk4);
         }
     } else {
         s32 i = 0;
         for (i = 0; i < param1->unk14; i++) {
             s32 w;
-            sp00.all.attr1 = (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF);
+            OAM_SET_GBA_ATTR1(&sp00, (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF));
             w = ((s32)(-param1->qUnkA & 0x1FF) >> 7);
             while (w < param1->unkE) {
                 OamData *oam = OamMalloc((param1->unk8) >> 3);
@@ -428,14 +428,14 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_80530CC.inc", void sub_80530C
                     break;
                 }
 
-                oam->all.attr0 = sp00.all.attr0;
-                oam->all.attr1 = sp00.all.attr1;
-                sp00.all.attr1 += r9;
+                OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(&sp00));
+                OAM_SET_GBA_ATTR1(oam, OAM_GET_GBA_ATTR1(&sp00));
+                OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r9);
 
-                oam->all.attr2 = sp00.all.attr2 + FROM_UI_DIGIT(param0[w]) * strc0->unk4;
+                OAM_SET_GBA_ATTR2(oam, OAM_GET_GBA_ATTR2(&sp00) + FROM_UI_DIGIT(param0[w]) * strc0->unk4);
                 w++;
             }
-            sp00.all.attr0 = sp08 + sp00.all.attr0;
+            OAM_SET_GBA_ATTR0(&sp00, sp08 + OAM_GET_GBA_ATTR0(&sp00));
         }
     }
 }
@@ -463,9 +463,9 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_805321C.inc", void sub_805321
 
     oamStack = &sp00;
     a = (strc0->unk9 << 14) + (unsigned char)param1->unkC;
-    oamStack->all.attr0 = a;
-    oamStack->all.attr1 = (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF);
-    oamStack->all.attr2 = (param1->unk12 << 12) | (strc0->unk0 & 0x3FF);
+    OAM_SET_GBA_ATTR0(oamStack, a);
+    OAM_SET_GBA_ATTR1(oamStack, (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF));
+    OAM_SET_GBA_ATTR2(oamStack, (param1->unk12 << 12) | (strc0->unk0 & 0x3FF));
 
     if (param1->unk16 != 0) {
         s32 i;
@@ -476,16 +476,16 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_805321C.inc", void sub_805321
                 break;
             }
 
-            oam->all.attr0 = sp00.all.attr0;
-            oam->all.attr1 = sp00.all.attr1;
-            sp00.all.attr1 += r9;
-            oam->all.attr2 = sp00.all.attr2 + FROM_UI_DIGIT(param0[i]) * strc0->unk4;
+            OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(&sp00));
+            OAM_SET_GBA_ATTR1(oam, OAM_GET_GBA_ATTR1(&sp00));
+            OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r9);
+            OAM_SET_GBA_ATTR2(oam, OAM_GET_GBA_ATTR2(&sp00) + FROM_UI_DIGIT(param0[i]) * strc0->unk4);
         }
     } else {
         s32 i = 0;
         for (i = 0; i < param1->unk14; i++) {
             s32 w;
-            sp00.all.attr1 = (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF);
+            OAM_SET_GBA_ATTR1(&sp00, (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF));
             w = ((s32)(-param1->qUnkA & 0x1FF) >> 7);
             while (w < param1->unkE) {
                 OamData *oam = OamMalloc((param1->unk8 + w) >> 3);
@@ -494,14 +494,14 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_805321C.inc", void sub_805321
                     break;
                 }
 
-                oam->all.attr0 = sp00.all.attr0;
-                oam->all.attr1 = sp00.all.attr1;
-                sp00.all.attr1 += r9;
+                OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(&sp00));
+                OAM_SET_GBA_ATTR1(oam, OAM_GET_GBA_ATTR1(&sp00));
+                OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r9);
 
-                oam->all.attr2 = sp00.all.attr2 + FROM_UI_DIGIT(param0[w]) * strc0->unk4;
+                OAM_SET_GBA_ATTR2(oam, OAM_GET_GBA_ATTR2(&sp00) + FROM_UI_DIGIT(param0[w]) * strc0->unk4);
                 w++;
             }
-            sp00.all.attr0 = sp08 + sp00.all.attr0;
+            OAM_SET_GBA_ATTR0(&sp00, sp08 + OAM_GET_GBA_ATTR0(&sp00));
         }
     }
 }
@@ -531,13 +531,13 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_8053370.inc", void sub_805337
 
     oamStack = &sp00;
     a = (strc0->unk9 << 14) + (unsigned char)param1->unkC;
-    oamStack->all.attr0 = a;
-    oamStack->all.attr1 = (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF);
-    oamStack->all.attr2 = (param1->unk12 << 12) | (strc0->unk0 & 0x3FF);
+    OAM_SET_GBA_ATTR0(oamStack, a);
+    OAM_SET_GBA_ATTR1(oamStack, (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF));
+    OAM_SET_GBA_ATTR2(oamStack, (param1->unk12 << 12) | (strc0->unk0 & 0x3FF));
 
     for (i = 0; i < param1->unkE; i++) {
         if (param0[i] == UI_DIGIT(0)) {
-            sp00.all.attr1 += r8;
+            OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r8);
         } else {
             OamData *oam = OamMalloc((param1->unk8 + i) >> 3);
             s32 v;
@@ -546,20 +546,19 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_8053370.inc", void sub_805337
                 break;
             }
 
-            oam->all.attr0 = sp00.all.attr0;
-            oam->all.attr1 = sp00.all.attr1;
-            sp00.all.attr1 += r8;
+            OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(&sp00));
+            OAM_SET_GBA_ATTR1(oam, OAM_GET_GBA_ATTR1(&sp00));
+            OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r8);
 
             if (param0[i] > UI_DIGIT(0x40)) {
-                oam->all.attr0 += 8;
+                OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(oam) + 8);
 
                 v = param0[i] - 0x11;
             } else {
                 v = FROM_UI_DIGIT(param0[i]);
             }
 
-            oam->all.attr2 = sp00.all.attr2 + v * strc0->unk4;
-            oam->all.attr2 &= ~0xC00;
+            OAM_SET_GBA_ATTR2(oam, (OAM_GET_GBA_ATTR2(&sp00) + v * strc0->unk4) & ~0xC00);
         }
     }
 }
@@ -589,9 +588,9 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_805345C.inc", void sub_805345
 
     oamStack = &sp00;
     a = (strc0->unk9 << 14) + (unsigned char)param1->unkC;
-    oamStack->all.attr0 = a;
-    oamStack->all.attr1 = (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF);
-    oamStack->all.attr2 = (param1->unk12 << 12) | (strc0->unk0 & 0x3FF) | 0x800;
+    OAM_SET_GBA_ATTR0(oamStack, a);
+    OAM_SET_GBA_ATTR1(oamStack, (strc0->unk8 << 14) + (param1->qUnkA & 0x1FF));
+    OAM_SET_GBA_ATTR2(oamStack, (param1->unk12 << 12) | (strc0->unk0 & 0x3FF) | 0x800);
 
     for (i = 0; i < param1->unkE; i++) {
         OamData *oam = OamMalloc((param1->unk8 + i) >> 3);
@@ -600,10 +599,10 @@ NONMATCH("asm/non_matching/game/gTask_3006240__sub_805345C.inc", void sub_805345
             break;
         }
 
-        oam->all.attr0 = sp00.all.attr0;
-        oam->all.attr1 = sp00.all.attr1;
-        sp00.all.attr1 += r8;
-        oam->all.attr2 = sp00.all.attr2 + FROM_UI_DIGIT(param0[i]) * strc0->unk4;
+        OAM_SET_GBA_ATTR0(oam, OAM_GET_GBA_ATTR0(&sp00));
+        OAM_SET_GBA_ATTR1(oam, OAM_GET_GBA_ATTR1(&sp00));
+        OAM_SET_GBA_ATTR1(&sp00, OAM_GET_GBA_ATTR1(&sp00) + r8);
+        OAM_SET_GBA_ATTR2(oam, OAM_GET_GBA_ATTR2(&sp00) + FROM_UI_DIGIT(param0[i]) * strc0->unk4);
     }
 }
 END_NONMATCH
