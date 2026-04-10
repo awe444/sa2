@@ -51,8 +51,8 @@ SECTIONS {
         sa2/src/game/shared/stage/unused_flash_task.o(.text);
         src/game/shared/stage/mp_player.o(.text);
         src/game/shared/stage/mp_indicators.o(.text);
-        src/game/sa1/stage/enemies/bosses_egg_mobile.o(.text);
-        src/game/sa1/stage/enemies/bosses_misc.o(.text);
+        sa2/src/game/sa1/stage/enemies/bosses_egg_mobile.o(.text);
+        sa2/src/game/sa1/stage/enemies/bosses_misc.o(.text);
         sa2/src/game/sa1/stage/nuts_and_bolts_task.o(.text);
         src/game/shared/stage/spot_lights_manager.o(.text);
 
@@ -70,8 +70,8 @@ SECTIONS {
         sa2/src/game/sa1/stage/mp_unk_1.o(.text);
         
         /* prototype ? */
-        src/game/sa1/stage/enemies/kiki.o(.text);
-        src/game/sa1/stage/enemies/buzzer.o(.text);
+        sa2/src/game/sa1/stage/enemies/kiki.o(.text);
+        sa2/src/game/sa1/stage/enemies/buzzer.o(.text);
         sa2/src/game/shared/stage/collect_ring_effect.o(.text);
         sa2/src/game/sa1/stage/itembox.o(.text);
         sa2/src/game/sa1/stage/interactables/stage_goal.o(.text);
@@ -87,7 +87,7 @@ SECTIONS {
         sa2/src/game/sa1/stage/interactables/platform_crumbling.o(.text);
         sa2/src/game/sa1/stage/interactables/fadein_to_be_continued.o(.text);
         sa2/src/game/sa1/stage/temporary_sound_play_task.o(.text);
-        src/game/sa1/stage/enemies/boss_1_egg_hammer_tank.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_1_egg_hammer_tank.o(.text);
         sa2/src/game/sa1/stage/interactables/breakable_wall.o(.text);
         
         src/game/sa1/stage/mp_chao.o(.text);
@@ -95,13 +95,13 @@ SECTIONS {
     
         sa2/src/game/sa1/special_stage/main.o(.text);
 
-        src/game/sa1/stage/enemies/boss_2_egg_press.o(.text);
-        src/game/sa1/stage/enemies/boss_3_egg_ball.o(.text);
-        src/game/sa1/stage/enemies/boss_4_egg_spider.o(.text);
-        src/game/sa1/stage/enemies/boss_6_egg_snake.o(.text);
-        src/game/sa1/stage/enemies/boss_x1_egg_wrecker.o(.text);
-        src/game/sa1/stage/enemies/boss_x2_egg_drillster.o(.text);
-        src/game/sa1/stage/enemies/boss_x3_egg_x.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_2_egg_press.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_3_egg_ball.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_4_egg_spider.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_6_egg_snake.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_x1_egg_wrecker.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_x2_egg_drillster.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_x3_egg_x.o(.text);
 
         sa2/src/game/sa1/multiplayer/chao_message.o(.text);
         sa2/src/game/shared/multiplayer/communication_outcome.o(.text);
@@ -159,8 +159,8 @@ SECTIONS {
         sa2/src/game/sa1/stage/interactables/water_bridge_splash.o(.text);
         sa2/src/game/sa1/stage/interactables/mini_loop.o(.text);
         sa2/src/game/sa1/stage/interactables/039.o(.text);
-        src/game/sa1/stage/enemies/boss_5_mecha_knuckles.o(.text);
-        src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_5_mecha_knuckles.o(.text);
+        sa2/src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.o(.text);
         
         sa2/src/game/sa1/stage/ui_rendering.o(.text);
         src/game/sa1/stage/stage_ui.o(.text);
@@ -191,24 +191,24 @@ SECTIONS {
         sa2/src/game/sa1/ui/multiplayer_continue_screen.o(.text);
         sa2/src/game/sa1/ui/time_attack_records.o(.text);
 
-        src/game/sa1/stage/enemies/gamigami.o(.text);
-        src/game/sa1/stage/enemies/rhinotank.o(.text);
-        src/game/sa1/stage/enemies/kerokero.o(.text);
-        src/game/sa1/stage/enemies/hanabii.o(.text);
-        src/game/sa1/stage/enemies/pierrot.o(.text);
-        src/game/sa1/stage/enemies/slot.o(.text);
-        src/game/sa1/stage/enemies/leon.o(.text);
-        src/game/sa1/stage/enemies/wamu.o(.text);
-        src/game/sa1/stage/enemies/mirror.o(.text);
-        src/game/sa1/stage/enemies/oct.o(.text);
-        src/game/sa1/stage/enemies/senbon.o(.text);
-        src/game/sa1/stage/enemies/fireball.o(.text);
-        src/game/sa1/stage/enemies/mole.o(.text);
-        src/game/sa1/stage/enemies/yukimaru.o(.text);
-        src/game/sa1/stage/enemies/drisame.o(.text);
-        src/game/sa1/stage/enemies/kuraa.o(.text);
-        src/game/sa1/stage/enemies/pen_mk1.o(.text);
-        src/game/sa1/stage/enemies/tentou.o(.text);
+        sa2/src/game/sa1/stage/enemies/gamigami.o(.text);
+        sa2/src/game/sa1/stage/enemies/rhinotank.o(.text);
+        sa2/src/game/sa1/stage/enemies/kerokero.o(.text);
+        sa2/src/game/sa1/stage/enemies/hanabii.o(.text);
+        sa2/src/game/sa1/stage/enemies/pierrot.o(.text);
+        sa2/src/game/sa1/stage/enemies/slot.o(.text);
+        sa2/src/game/sa1/stage/enemies/leon.o(.text);
+        sa2/src/game/sa1/stage/enemies/wamu.o(.text);
+        sa2/src/game/sa1/stage/enemies/mirror.o(.text);
+        sa2/src/game/sa1/stage/enemies/oct.o(.text);
+        sa2/src/game/sa1/stage/enemies/senbon.o(.text);
+        sa2/src/game/sa1/stage/enemies/fireball.o(.text);
+        sa2/src/game/sa1/stage/enemies/mole.o(.text);
+        sa2/src/game/sa1/stage/enemies/yukimaru.o(.text);
+        sa2/src/game/sa1/stage/enemies/drisame.o(.text);
+        sa2/src/game/sa1/stage/enemies/kuraa.o(.text);
+        sa2/src/game/sa1/stage/enemies/pen_mk1.o(.text);
+        sa2/src/game/sa1/stage/enemies/tentou.o(.text);
 
         sa2/src/game/sa1/stage/interactables/trampoline.o(.text);
         sa2/src/game/sa1/stage/interactables/bounce_block.o(.text);
@@ -363,8 +363,8 @@ SECTIONS {
         src/data/sa1/tilemap_table.o(.rodata);
         sa2/src/game/shared/stage/terrain_collision.o(.rodata);
         data/sa1/data_0_4.o(.rodata);
-        src/game/sa1/stage/enemies/boss_5_mecha_knuckles.o(.rodata);
-        src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.o(.rodata);
+        sa2/src/game/sa1/stage/enemies/boss_5_mecha_knuckles.o(.rodata);
+        sa2/src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.o(.rodata);
         src/data/sa1/tilemap_data_3.o(.rodata);
         data/sa1/data_0_5_0.o(.rodata);
         src/data/sa1/ui_graphics_data.o(.rodata);
@@ -388,8 +388,8 @@ SECTIONS {
         data/sa1/data_0_6_1.o(.rodata);
         sa2/src/game/sa1/ui/time_attack_records.o(.rodata);
         data/sa1/data_0_6_2.o(.rodata);
-        src/game/sa1/stage/enemies/kerokero.o(.rodata);
-        src/game/sa1/stage/enemies/drisame.o(.rodata);
+        sa2/src/game/sa1/stage/enemies/kerokero.o(.rodata);
+        sa2/src/game/sa1/stage/enemies/drisame.o(.rodata);
         data/sa1/data_0_7.o(.rodata);
         sa2/src/game/sa1/stage/interactables/red_flag_and_pole.o(.rodata);
         sa2/src/game/sa1/stage/interactables/forced_slide.o(.rodata);

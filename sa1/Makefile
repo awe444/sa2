@@ -333,9 +333,40 @@ SA2_C_FILES := \
 	src/game/sa1/stage/interactables/carousel.c \
 	src/game/sa1/stage/interactables/swing_rope.c \
 	src/game/sa1/stage/interactables/bumpers.c \
+	src/game/sa1/stage/enemies/wamu.c \
+	src/game/sa1/stage/enemies/bosses_egg_mobile.c \
+	src/game/sa1/stage/enemies/tentou.c \
+	src/game/sa1/stage/enemies/boss_1_egg_hammer_tank.c \
+	src/game/sa1/stage/enemies/gamigami.c \
+	src/game/sa1/stage/enemies/boss_4_egg_spider.c \
+	src/game/sa1/stage/enemies/kerokero.c \
+	src/game/sa1/stage/enemies/boss_3_egg_ball.c \
+	src/game/sa1/stage/enemies/pen_mk1.c \
+	src/game/sa1/stage/enemies/bosses_misc.c \
+	src/game/sa1/stage/enemies/drisame.c \
+	src/game/sa1/stage/enemies/leon.c \
+	src/game/sa1/stage/enemies/slot.c \
+	src/game/sa1/stage/enemies/buzzer.c \
+	src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.c \
+	src/game/sa1/stage/enemies/oct.c \
+	src/game/sa1/stage/enemies/boss_x1_egg_wrecker.c \
+	src/game/sa1/stage/enemies/fireball.c \
+	src/game/sa1/stage/enemies/pierrot.c \
+	src/game/sa1/stage/enemies/kiki.c \
+	src/game/sa1/stage/enemies/boss_2_egg_press.c \
+	src/game/sa1/stage/enemies/boss_x3_egg_x.c \
+	src/game/sa1/stage/enemies/mole.c \
+	src/game/sa1/stage/enemies/boss_x2_egg_drillster.c \
+	src/game/sa1/stage/enemies/senbon.c \
+	src/game/sa1/stage/enemies/rhinotank.c \
+	src/game/sa1/stage/enemies/mirror.c \
+	src/game/sa1/stage/enemies/kuraa.c \
+	src/game/sa1/stage/enemies/boss_5_mecha_knuckles.c \
+	src/game/sa1/stage/enemies/boss_6_egg_snake.c \
+	src/game/sa1/stage/enemies/yukimaru.c \
+	src/game/sa1/stage/enemies/hanabii.c \
 
-# None matching
-
+# Nonmatching
 
 # Can't build
 # 	src/game/sa1/stage/camera_destroy.c \
@@ -357,38 +388,7 @@ SA2_C_FILES := \
 # 	src/game/sa1/stage/backgrounds/zone_1.c \
 # 	src/game/sa1/stage/backgrounds/zone_7_act_2_init.c \
 # 	src/game/sa1/stage/backgrounds/zone_5.c \
-# 	src/game/sa1/stage/enemies/wamu.c \
-# 	src/game/sa1/stage/enemies/bosses_egg_mobile.c \
-# 	src/game/sa1/stage/enemies/tentou.c \
-# 	src/game/sa1/stage/enemies/boss_1_egg_hammer_tank.c \
-# 	src/game/sa1/stage/enemies/gamigami.c \
-# 	src/game/sa1/stage/enemies/boss_4_egg_spider.c \
-# 	src/game/sa1/stage/enemies/kerokero.c \
-# 	src/game/sa1/stage/enemies/boss_3_egg_ball.c \
-# 	src/game/sa1/stage/enemies/pen_mk1.c \
-# 	src/game/sa1/stage/enemies/bosses_misc.c \
-# 	src/game/sa1/stage/enemies/drisame.c \
-# 	src/game/sa1/stage/enemies/leon.c \
-# 	src/game/sa1/stage/enemies/slot.c \
-# 	src/game/sa1/stage/enemies/buzzer.c \
-# 	src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.c \
-# 	src/game/sa1/stage/enemies/oct.c \
-# 	src/game/sa1/stage/enemies/boss_x1_egg_wrecker.c \
-# 	src/game/sa1/stage/enemies/fireball.c \
-# 	src/game/sa1/stage/enemies/pierrot.c \
-# 	src/game/sa1/stage/enemies/kiki.c \
-# 	src/game/sa1/stage/enemies/boss_2_egg_press.c \
-# 	src/game/sa1/stage/enemies/boss_x3_egg_x.c \
-# 	src/game/sa1/stage/enemies/mole.c \
-# 	src/game/sa1/stage/enemies/boss_x2_egg_drillster.c \
-# 	src/game/sa1/stage/enemies/senbon.c \
-# 	src/game/sa1/stage/enemies/rhinotank.c \
-# 	src/game/sa1/stage/enemies/mirror.c \
-# 	src/game/sa1/stage/enemies/kuraa.c \
-# 	src/game/sa1/stage/enemies/boss_5_mecha_knuckles.c \
-# 	src/game/sa1/stage/enemies/boss_6_egg_snake.c \
-# 	src/game/sa1/stage/enemies/yukimaru.c \
-# 	src/game/sa1/stage/enemies/hanabii.c \
+
 # 	src/game/sa1/stage/player_amy.c \
 # 	src/game/sa1/stage/player_knuckles.c \
 # 	src/game/sa1/stage/player_sonic.c \
