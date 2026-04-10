@@ -8,6 +8,9 @@
 #define AMY_HEART_PATTERN_STOP_N_SLAM   3
 #define AMY_HEART_PATTERN_COUNT         4
 
-extern void CreateAmyAttackHeartEffect(u16);
-
+#if (GAME == GAME_SA1)
+extern void CreateAmyAttackHeartEffect(void);
+#elif (GAME == GAME_SA2)
+extern void CreateAmyAttackHeartEffect(u16 kind);
+#endif
 #endif

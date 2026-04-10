@@ -15,8 +15,8 @@ void TaskDestructor_SpotlightBeamTask(struct Task *);
 
 struct Task *CreateSpotlightBeamTask(void)
 {
-    struct Task *t = TaskCreate(Task_SpotlightBeamTask, sizeof(SpotlightBeamTask), 0x2000, 0, TaskDestructor_SpotlightBeamTask);
-    SpotlightBeamTask *beam = TASK_DATA(t);
+    struct Task *t = TaskCreate(Task_SpotlightBeamTask, sizeof(SpotlightBeam), 0x2000, 0, TaskDestructor_SpotlightBeamTask);
+    SpotlightBeam *beam = TASK_DATA(t);
 
     beam->unk6 = 120;
     beam->unk8 = 200;
@@ -65,7 +65,7 @@ NONMATCH("asm/non_matching/game/shared/stage/Task_SpotlightBeamTask.inc", void T
     u32 temp_r5;
     u32 temp_r5_2;
 
-    SpotlightBeamTask *beam = TASK_DATA(gCurTask);
+    SpotlightBeam *beam = TASK_DATA(gCurTask);
 
     if (beam->unkB == 0) {
         return;

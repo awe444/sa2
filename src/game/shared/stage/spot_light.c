@@ -26,7 +26,7 @@ bool32 CreateSpotLightBeams(void)
 {
     struct Task *t = TaskCreate(Task_SpotLightMain, sizeof(StageSpotLight), 0x2000, 0, TaskDestructor_SpotLightMain);
     StageSpotLight *spotLight = TASK_DATA(t);
-    SpotlightBeamTask *beam;
+    SpotlightBeam *beam;
 
     spotLight->unk8 = 0x600;
     spotLight->unkC = 0;
@@ -59,7 +59,7 @@ bool32 CreateSpotLightBeams(void)
 void Task_SpotLightMain(void)
 {
     StageSpotLight *spotLight = TASK_DATA(gCurTask);
-    SpotlightBeamTask *beam;
+    SpotlightBeam *beam;
     s32 unkC;
 
     if (!(gStageFlags & STAGE_FLAG__100)) {
@@ -120,7 +120,7 @@ void Task_800A8E0(void)
 {
     bool32 boolR5 = FALSE;
     StageSpotLight *spotLight = TASK_DATA(gCurTask);
-    SpotlightBeamTask *beam;
+    SpotlightBeam *beam;
     s32 unkC;
 
     beam = TASK_DATA(spotLight->t0);

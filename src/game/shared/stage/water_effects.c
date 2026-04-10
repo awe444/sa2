@@ -142,8 +142,8 @@ void CreateStageWaterTask(s32 waterLevel, u32 p1, u32 mask)
 {
     gWater.currentWaterLevel = waterLevel;
     gWater.targetWaterLevel = waterLevel;
-    gWater.unk2 = 0xFF;
-    gWater.unk1 = -1;
+    gWater.SA2_LABEL(unk2) = 0xFF;
+    gWater.SA2_LABEL(unk1) = -1;
     gWater.unk8 = mask & 0x100;
     gWater.mask = p1;
 

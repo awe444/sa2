@@ -10,7 +10,7 @@ typedef struct {
     s16 unk8;
     u8 bg;
     u8 unkB;
-} SpotlightBeamTask; /* size: 0xC */
+} SpotlightBeam; /* size: 0xC */
 
 struct Task *CreateSpotlightBeamTask(void);
 
