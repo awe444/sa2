@@ -603,7 +603,7 @@ NONMATCH(
 END_NONMATCH
 
 // TODO: Maybe wrap sub_800DD54 and sub_800DE44 in a macro(?)
-u32 sub_800DA4C(Sprite *opponent, s16 oppX, s16 oppY, UNUSED s32 param3, UNUSED s32 param4, u8 layer)
+u32 SA2_LABEL(sub_800DA4C)(Sprite *opponent, s16 oppX, s16 oppY, UNUSED s32 param3, UNUSED s32 param4, u8 layer)
 {
     MultiplayerPlayer *mpp;
     Sprite *mpPlayerSprite;

@@ -13,9 +13,13 @@ typedef struct {
     /* 0x10 */ s16 unk10;
     /* 0x12 */ u16 unk12;
     /* 0x14 */ u16 unk14;
+#if (GAME == GAME_SA1)
+    /* 0x16 */ u8 mpPlayerID;
+#elif (GAME == GAME_SA2)
     /* 0x16 */ AnimId playerAnim;
     /* 0x18 */ u16 playerVariant;
     /* 0x1A */ u8 mpPlayerID;
+#endif
     /* 0x1C */ Sprite s;
     /* 0x4C */ SpriteTransform transform;
 } MultiplayerSpriteTask; /* size: 0x58 */
