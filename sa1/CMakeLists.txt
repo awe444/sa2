@@ -221,6 +221,59 @@ set(SA2_SHARED_SRCS
     src/input_recorder.c
     src/background.c
     src/game/globals.c
+    src/game/dummy_task.c
+    src/game/game.c
+    src/game/sa1/ui/time_attack_record.c
+    src/game/sa1/ui/multiplayer_continue_screen.c
+    src/game/sa1/ui/vs_record.c
+    src/game/sa1/ui/edit_language_screen.c
+    src/game/sa1/ui/sound_test.c
+    src/game/sa1/ui/time_attack_records.c
+    src/game/sa1/ui/time_over.c
+    src/game/sa1/ui/game_2_3.c
+    src/game/sa1/ui/time_attack_results.c
+    src/game/sa1/ui/time_attack_lobby.c
+    src/game/sa1/ui/special_stage_intro.c
+    src/game/sa1/ui/player_name_input_menu.c
+    src/game/sa1/ui/course_select.c
+    src/game/sa1/ui/staff_credits.c
+    src/game/sa1/ui/collect_chaos_emeralds_msg.c
+    src/game/sa1/ui/game_over.c
+    src/game/sa1/ui/character_select.c
+    src/game/sa1/ui/extra_stage_results.c
+    src/game/sa1/ui/game_2_0.c
+    src/game/sa1/ui/game_2_1.c
+    src/game/sa1/ui/stage_results.c
+    src/game/sa1/menus/time_attack.c
+    src/game/sa1/menus/mp_mode_select.c
+    src/game/sa1/menus/mp_mode_select_2.c
+    src/game/sa1/menus/player_data.c
+    src/game/sa1/menus/options.c
+    src/game/sa1/menus/title_screen.c
+    src/game/sa1/stage/mp_unk_1.c
+    src/game/sa1/stage/mp_results.c
+    src/game/sa1/stage/player_controls.c
+    src/game/sa1/stage/to_be_continued_screen.c
+    src/game/sa1/stage/mp_results_b.c
+    src/game/sa1/stage/mp_hud.c
+    src/game/sa1/stage/ui_rendering.c
+    src/game/sa1/stage/mp_unk_0.c
+    src/game/sa1/stage/nuts_and_bolts_task.c
+    src/game/sa1/stage/some_task_manager.c
+    src/game/sa1/stage/egg_rocket_transitions.c
+    src/game/sa1/stage/temporary_sound_play_task.c
+    src/game/sa1/stage/itembox.c
+    src/game/sa1/save.c
+    src/game/sa1/multiplayer/chao_message.c
+    src/game/sa1/special_stage/main.c
+    src/game/shared/stage/palette_loader.c
+    src/game/shared/stage/terrain_collision.c
+    src/game/shared/stage/screen_shake.c
+    src/game/shared/stage/dust_effect_braking.c
+    src/game/shared/stage/dust_cloud.c
+    src/game/shared/stage/collect_ring_effect.c
+    src/game/shared/stage/unused_flash_task.c
+    src/game/shared/multiplayer/communication_outcome.c
 )
 list(TRANSFORM SA2_SHARED_SRCS PREPEND "${SA2_ROOT}/")
 
@@ -231,6 +284,7 @@ set(SA1_INCLUDE_DIRS
 )
 
 set(SA1_DEFINITIONS
+    GAME=GAME_SA1
     PLATFORM_GBA=0
     PLATFORM_SDL=1
     PLATFORM_WIN32=0
