@@ -73,7 +73,11 @@ ifeq ($(PLATFORM),gba)
 CC1       := ../tools/agbcc/bin/agbcc$(EXE)
 CC1_OLD   := ../tools/agbcc/bin/old_agbcc$(EXE)
 else
+ifneq ($(filter environment% command%,$(origin CC)),)
+CC1       := $(CC)
+else
 CC1       := $(PREFIX)gcc$(EXE)
+endif
 CC1_OLD   := $(CC1)
 endif
 
@@ -393,11 +397,15 @@ SA2_C_FILES := \
 	src/game/sa1/stage/mystery_itembox.c \
 	src/game/sa1/ui/intro_animation.c \
 
+ifeq ($(PLATFORM),gba)
 SA2_C_ASM_FILES := \
 	src/rom_header.s \
 	src/lib/m4a/m4a0.s \
 	src/crt0.s \
 	src/multi_sio_asm.s
+else
+SA2_C_ASM_FILES :=
+endif
 
 SA2_C_SRCS = $(patsubst %.c,$(OBJ_DIR)/sa2/%.c,$(SA2_C_FILES))
 SA2_C_OBJS = $(patsubst %.c,%.o,$(SA2_C_SRCS))
@@ -480,6 +488,13 @@ else
   endif
   # Allow file input through stdin on modern GCC and set it to "compile only"
   CC1FLAGS += -x c -S
+
+  # Clang emits .addrsig directives that GNU as does not understand.
+  # Clang's strict aliasing optimizations can miscompile type-punned pointer
+  # accesses common in GBA decompilation code (e.g. OamData accessed via u16*).
+  ifneq ($(findstring clang,$(CC1)),)
+    CC1FLAGS += -fno-addrsig -fno-strict-aliasing
+  endif
 endif
 
 ifeq ($(DEBUG),1)
