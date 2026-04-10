@@ -12,12 +12,12 @@
 #include "game/sa1/ui/stage_results.h" // CreateStageResults
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/anim_sizes.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/zones.h"
 
 typedef struct BossCapsule {
     /* 0x00 */ Sprite s;

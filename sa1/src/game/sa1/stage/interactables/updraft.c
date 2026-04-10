@@ -2,7 +2,7 @@
 #include "malloc_vram.h"
 #include "game/shared/stage/entity.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

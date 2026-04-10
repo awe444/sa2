@@ -4,10 +4,9 @@
 #include "malloc_vram.h"
 
 #include "game/shared/stage/entity.h"
-
 #include "game/shared/stage/entities_manager.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -70,7 +69,7 @@ void Task_EnemySpinner(void)
         Sprite *s2 = &p->spriteInfoBody->s;
 
         if ((s2->hitboxes[0].index != HITBOX_STATE_INACTIVE) && (s->hitboxes[1].index != HITBOX_STATE_INACTIVE)) {
-            if (HB_COLLISION(pos.x, pos.y, s->hitboxes[1], I(p->qWorldX), I(p->qWorldY), s2->hitboxes[0])) {
+            if (HB_COLLISION(pos.x, pos.y, s->hitboxes[1].b, I(p->qWorldX), I(p->qWorldY), s2->hitboxes[0].b)) {
                 if ((p->itemEffect & 0x2) == PLAYER_ITEM_EFFECT__NONE) {
                     Coll_DamagePlayer(p);
                 }

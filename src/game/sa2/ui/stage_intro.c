@@ -15,8 +15,8 @@
 #include "game/sa2/stage/boss_results_transition.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/zones.h"
 
 #define INTRO_ICON_LEAF_FOREST  0
 #define INTRO_ICON_HOT_CRATAER  1

@@ -8,8 +8,8 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     s32 vramOffset;

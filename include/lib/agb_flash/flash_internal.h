@@ -1,6 +1,13 @@
 #ifndef GUARD_GBA_FLASH_INTERNAL_H
 #define GUARD_GBA_FLASH_INTERNAL_H
 
+#if (GAME == GAME_SA1)
+// It seems like the launch SDK had a way different
+// version of this library than later ones, so we use this
+// to make it match.
+#define AGBFLASH_USE_V126 1
+#endif
+
 #define FLASH_ROM_SIZE_1M 131072 // 1 megabit ROM
 #define SECTORS_PER_BANK  16
 
@@ -48,11 +55,15 @@ extern u16 gFlashNumRemainingBytes;
 extern u16 (*ProgramFlashSector)(u16, void *);
 extern u16 (*EraseFlashChip)(void);
 extern u16 (*EraseFlashSector)(u16);
+#ifndef AGBFLASH_USE_V126
 extern const u16 *gFlashMaxTime;
+#endif
 extern const struct FlashType *gFlash;
 
+#ifndef AGBFLASH_USE_V126
 extern u8 gFlashTimeoutFlag;
 extern u8 (*PollFlashStatus)(u8 *);
+#endif
 
 extern u16 (*WaitForFlashWrite)(u8, u8 *, u8);
 

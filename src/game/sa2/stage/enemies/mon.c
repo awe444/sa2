@@ -9,8 +9,9 @@
 
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
+// #include "game/shared/stage/.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 // TODO: Name the tasks accordingly
 
@@ -46,7 +47,7 @@ void CreateEntity_Mon(MapEntity *me, u16 spriteRegionX, u16 spriteRegionY, u8 sp
     mon->x = Q(TO_WORLD_POS(me->x, spriteRegionX));
     mon->y = Q(TO_WORLD_POS(me->y, spriteRegionY));
 
-    mon->y += Q(sub_801F07C(I(mon->y), I(mon->x), r2 >> 31, 8, NULL, sub_801EE64));
+    mon->y += Q(SA2_LABEL(sub_801F07C)(I(mon->y), I(mon->x), r2 >> 31, 8, NULL, SA2_LABEL(sub_801EE64)));
 
     s->x = 0;
     s->y = 0;

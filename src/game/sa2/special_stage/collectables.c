@@ -8,8 +8,8 @@
 #include "lib/m4a/m4a.h"
 #include "trig.h"
 #include "game/math.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 // Maybe same as SpecialStageCollectables_UNK874 or UNK_806CB84
 struct UNK_806DEA4 {

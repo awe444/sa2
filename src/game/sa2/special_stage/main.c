@@ -15,10 +15,10 @@
 #include "lib/m4a/m4a.h"
 #include "task.h"
 #include "game/sa2/title_screen.h"
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 #define MAX_POINTS 99900
 

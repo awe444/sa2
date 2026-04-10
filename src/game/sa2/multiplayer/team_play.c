@@ -11,10 +11,10 @@
 #include "game/sa2/ui/course_select.h"
 #include "trig.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 struct MultiplayerTeamPlayScreen {
     Sprite unk0[4];
@@ -616,7 +616,7 @@ static void sub_805D644(struct MultiplayerTeamPlayScreen *teamPlayScreen)
     Sprite *s;
 
     for (i = 0; i < 4; i++) {
-        if CONNECTION_REGISTERED (i) {
+        if (CONNECTION_REGISTERED(i)) {
             s = &teamPlayScreen->unk0[i];
             s->x = gUnknown_080D92B8[i & 1];
             s->y = i * 0x18 + 0x40;

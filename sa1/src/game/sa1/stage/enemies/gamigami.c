@@ -5,9 +5,9 @@
 #include "game/shared/stage/entities_manager.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/animations.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     /* 0x00 */ EntityShared shared;

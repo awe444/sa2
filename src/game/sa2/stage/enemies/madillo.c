@@ -7,7 +7,7 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -63,10 +63,10 @@ static void Task_MadilloMain(void)
 
     // TODO: Merge with ENEMY_CLAMP_TO_GROUND macro
     {
-        s32 delta = ENEMY_CLAMP_TO_GROUND_INNER(madillo, madillo->clampParam, sub_801EC3C);
+        s32 delta = ENEMY_CLAMP_TO_GROUND_INNER(madillo, madillo->clampParam, SA2_LABEL(sub_801EC3C));
         if (delta < 0) {
             madillo->offsetY += Q(delta);
-            delta = ENEMY_CLAMP_TO_GROUND_INNER(madillo, madillo->clampParam, sub_801EC3C);
+            delta = ENEMY_CLAMP_TO_GROUND_INNER(madillo, madillo->clampParam, SA2_LABEL(sub_801EC3C));
         }
 
         if (delta > 0) {
@@ -131,7 +131,7 @@ static void Task_8056230(void)
     s2 = &p->spriteInfoBody->s;
 
     if ((s2->hitboxes[0].index != -1)) {
-        if (HB_COLLISION(pos.x, pos.y, s->hitboxes[0], I(p->qWorldX), I(p->qWorldY), s2->hitboxes[0])) {
+        if (HB_COLLISION(pos.x, pos.y, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), s2->hitboxes[0].b)) {
             if ((p->itemEffect & 0x2) == PLAYER_ITEM_EFFECT__NONE) {
                 Coll_DamagePlayer(p);
             }

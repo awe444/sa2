@@ -11,10 +11,10 @@
 #include "trig.h"
 #include "game/shared/stage/entity.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     SpriteBase base;

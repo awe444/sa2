@@ -1,14 +1,13 @@
 #include "global.h"
 #include "malloc_vram.h"
 #include "game/shared/stage/entity.h"
-#include "game/shared/stage/collision.h"
 #include "game/shared/stage/entities_manager.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "task.h"
 #include "sprite.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -99,7 +98,7 @@ static void Task_FlickeyMain(void)
 
     pos.x = I(flickey->spawnX + flickey->offsetX);
     pos.y = I(flickey->spawnY + flickey->offsetY);
-    someVal = sub_801F07C(pos.y, pos.x, 1, 8, 0, sub_801EE64);
+    someVal = SA2_LABEL(sub_801F07C)(pos.y, pos.x, 1, 8, 0, SA2_LABEL(sub_801EE64));
     s->x = pos.x - gCamera.x;
     s->y = pos.y - gCamera.y;
 
@@ -277,7 +276,7 @@ static void sub_80591FC(void)
         flickey->positions[i + 3].y += 0x30;
         flickey->positions[i].x += flickey->positions[i + 3].x;
         flickey->positions[i].y += flickey->positions[i + 3].y;
-        someVal = sub_801F07C(I(flickey->positions[i].y), I(flickey->positions[i].x), 1, 8, 0, sub_801EE64);
+        someVal = SA2_LABEL(sub_801F07C)(I(flickey->positions[i].y), I(flickey->positions[i].x), 1, 8, 0, SA2_LABEL(sub_801EE64));
 
         if (someVal < 0) {
             flickey->positions[i].y += QS(someVal);

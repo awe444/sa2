@@ -10,16 +10,14 @@
 #include "game/sa1/stage/player_controls.h"
 #include "game/sa1/stage/player_sonic.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
 
 /* Sonic */
 
 s32 sub_8047668(Player *p);
 struct Task *Player_Sonic_InitGfx_InstaShield(Player *p);
-
-extern bool32 Player_Spindash(Player *p);
 
 void Player_Sonic_80473AC(Player *p)
 {
@@ -31,7 +29,7 @@ void Player_Sonic_80473AC(Player *p)
                 // inline of sub_8047774 ?
                 if (p->SA2_LABEL(unk62) == 0) {
                     if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (sub_8047668(p) == 0)) {
-                        if (!Player_Spindash(p) && !Player_TryJump(p)) {
+                        if (!Player_TrySpindash(p) && !Player_TryJump(p)) {
                             SA2_LABEL(sub_8029CA0)(p);
                             Player_8044F7C(p);
                             SA2_LABEL(sub_80232D0)(p);
@@ -298,7 +296,7 @@ void sub_8047774(Player *p)
 {
     if (p->SA2_LABEL(unk62) == 0) {
         if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (sub_8047668(p) == 0)) {
-            if (!Player_Spindash(p) && !Player_TryJump(p)) {
+            if (!Player_TrySpindash(p) && !Player_TryJump(p)) {
                 SA2_LABEL(sub_8029CA0)(p);
                 Player_8044F7C(p);
                 SA2_LABEL(sub_80232D0)(p);

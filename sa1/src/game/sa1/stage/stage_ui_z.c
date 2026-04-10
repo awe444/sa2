@@ -11,9 +11,9 @@
 #include "game/shared/stage/underwater_effects.h"
 #include "game/shared/stage/water_effects.h"
 
-#include "constants/ui_graphics.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/zones.h"
+#include "constants/sa1/ui_graphics.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/zones.h"
 
 void Task_8055458(void);
 void Task_8055730(void);

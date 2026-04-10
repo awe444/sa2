@@ -12,8 +12,8 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     SpriteBase base;

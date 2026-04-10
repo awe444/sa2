@@ -17,9 +17,9 @@
 #include "game/sa2/save.h"
 #include "game/shared/stage/screen_shake.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 typedef struct {
     /* 0x00 */ s32 qWorldX;
@@ -768,7 +768,7 @@ void sub_803FB88(EggTotem *totem)
         res = totem->qWheelPos[i].y;
         discY += res;
 
-        totem->qWheelPos[i].y += Q(sub_801F100(I(res) - 1, I(totem->qWheelPos[i].x), 1, +8, sub_801EC3C) + 1);
+        totem->qWheelPos[i].y += Q(SA2_LABEL(sub_801F100)(I(res) - 1, I(totem->qWheelPos[i].x), 1, +8, SA2_LABEL(sub_801EC3C)) + 1);
     }
 
     res = Div(discY, 3) - Q(2.0);
@@ -862,7 +862,7 @@ void sub_803FC14(EggTotem *totem)
         t3c->qWorldX += t3c->qUnk8;
         t3c->qWorldY += t3c->qUnkA;
 
-        divRes = sub_801F100(I(t3c->qWorldY) + 3, I(t3c->qWorldX), 1, +8, sub_801EC3C);
+        divRes = SA2_LABEL(sub_801F100)(I(t3c->qWorldY) + 3, I(t3c->qWorldX), 1, +8, SA2_LABEL(sub_801EC3C));
         if (divRes < 0) {
             s32 v;
             t3c->qWorldY += Q(divRes);
@@ -891,7 +891,8 @@ void sub_803FF44(EggTotem *totem)
             totem->qWheelPos[i].x += totem->unk24[i][0];
             totem->qWheelPos[i].y += totem->unk24[i][1];
 
-            res = sub_801F100(I(totem->qWheelPos[i].y) + gUnknown_080D7F10[i] - 1, I(totem->qWheelPos[i].x), 1, +8, sub_801EC3C);
+            res = SA2_LABEL(sub_801F100)(I(totem->qWheelPos[i].y) + gUnknown_080D7F10[i] - 1, I(totem->qWheelPos[i].x), 1, +8,
+                                         SA2_LABEL(sub_801EC3C));
 
             if (res < 0) {
                 // __minRes
@@ -916,7 +917,7 @@ void sub_803FF44(EggTotem *totem)
         totem->qUnk9C += totem->qUnkA4;
         totem->qUnkA0 += totem->qUnkA6;
 
-        res = sub_801F100(I(totem->qUnkA0) - 8, I(totem->qUnk9C), 1, +8, sub_801EC3C);
+        res = SA2_LABEL(sub_801F100)(I(totem->qUnkA0) - 8, I(totem->qUnk9C), 1, +8, SA2_LABEL(sub_801EC3C));
 
         if (res < 0) {
             totem->qUnkA0 += Q(res);
@@ -966,7 +967,7 @@ void sub_803FF44(EggTotem *totem)
         totem->qUnk90 += totem->qUnk98;
         totem->qUnk94 += totem->qUnk9A;
 
-        res = sub_801F100(I(totem->qUnk94) - 50, I(totem->qUnk90), 1, +8, sub_801EC3C);
+        res = SA2_LABEL(sub_801F100)(I(totem->qUnk94) - 50, I(totem->qUnk90), 1, +8, SA2_LABEL(sub_801EC3C));
 
         if (res < 0) {
             // _08040256
@@ -1073,7 +1074,7 @@ void sub_803FF44(EggTotem *totem)
         t3c->qWorldX += t3c->qUnk8;
         t3c->qWorldY += t3c->qUnkA;
 
-        res = sub_801F100(I(t3c->qWorldY) + 4, I(t3c->qWorldX), 1, +8, sub_801EC3C);
+        res = SA2_LABEL(sub_801F100)(I(t3c->qWorldY) + 4, I(t3c->qWorldX), 1, +8, SA2_LABEL(sub_801EC3C));
         if (res < 0) {
             s32 v;
             t3c->qWorldY += Q(res);

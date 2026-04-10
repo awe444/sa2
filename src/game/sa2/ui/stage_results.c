@@ -15,10 +15,10 @@
 #include "game/sa2/ui/stage_results.h"
 #include "game/sa2/stage/stage_ui.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 typedef struct {
     StageResultsBase base;

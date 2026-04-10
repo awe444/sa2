@@ -25,10 +25,10 @@
 #include "game/shared/stage/screen_shake.h"
 #include "game/sa2/ui/time_attack_results.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 #define EGG_HAMMER_TANK_II_STATE_RESET   0
 #define EGG_HAMMER_TANK_II_STATE_EXTEND  1
@@ -628,7 +628,7 @@ static void PhysicsHandler_OnTerrain(void)
     x = (boss->x + Q(24));
     y = (origY + boss->rearAxelY + Q(14.5));
 
-    result = sub_801F100(I(y), I(x), 1, 8, sub_801EC3C);
+    result = SA2_LABEL(sub_801F100)(I(y), I(x), 1, 8, SA2_LABEL(sub_801EC3C));
     if (result < 1) {
         boss->y += result * 64;
         idx = -result;
@@ -652,7 +652,7 @@ static void PhysicsHandler_OnTerrain(void)
     x = (boss->x - Q(22));
     y = (origY + boss->frontAxelY + Q(14.5));
 
-    result = sub_801F100(I(y), I(x), 1, 8, sub_801EC3C);
+    result = SA2_LABEL(sub_801F100)(I(y), I(x), 1, 8, SA2_LABEL(sub_801EC3C));
     if (result < 1) {
         boss->y += (result * Q(0.25));
 
@@ -761,7 +761,7 @@ static void StateHandler_HammerPlunge(EggHammerTankII *boss)
     x = I(boss->x) + ((boss->hammerArmSegmentPositions[7] * COS((boss->hammerArmSegmentAngles[7] - val) & (SIN_PERIOD - 1))) >> 0x17);
     y = I(boss->y) + ((boss->hammerArmSegmentPositions[7] * SIN((boss->hammerArmSegmentAngles[7] - val) & (SIN_PERIOD - 1))) >> 0x17);
 
-    result = sub_801E6D4(y, x, 1, 8, NULL, sub_801EE64);
+    result = sub_801E6D4(y, x, 1, 8, NULL, SA2_LABEL(sub_801EE64));
 
     if (result < 1) {
         m4aSongNumStart(SE_238);
@@ -956,7 +956,7 @@ static void DestructionScene_UpdateComponents(EggHammerTankII *boss)
     ds->bodyX += ds->bodySpeedX;
     ds->bodyY += ds->bodySpeedY;
 
-    result = sub_801F100(I(ds->bodyY) + 28, I(ds->bodyX), 1, 8, sub_801EC3C);
+    result = SA2_LABEL(sub_801F100)(I(ds->bodyY) + 28, I(ds->bodyX), 1, 8, SA2_LABEL(sub_801EC3C));
     if (ds->axelsJoinedRemainingBounces > 0) {
         ds->wheels[0].x = ds->bodyX - Q(22);
         ds->wheels[0].y = ds->bodyY + boss->frontAxelY + Q(14.5);
@@ -978,7 +978,7 @@ static void DestructionScene_UpdateComponents(EggHammerTankII *boss)
             ds->wheels[i].x += ds->wheels[i].speedX;
             ds->wheels[i].y += ds->wheels[i].speedY;
 
-            result1 = sub_801F100(I(ds->wheels[i].y), I(ds->wheels[i].x), 1, 8, sub_801EC3C);
+            result1 = SA2_LABEL(sub_801F100)(I(ds->wheels[i].y), I(ds->wheels[i].x), 1, 8, SA2_LABEL(sub_801EC3C));
             if (result1 < 0) {
                 s32 r0;
                 if (ds->wheels[i].remainingBounces != 0) {
@@ -1025,7 +1025,7 @@ static void DestructionScene_UpdateComponents(EggHammerTankII *boss)
 
         ds->armSegments[i].y += ds->armSegments[i].speedY;
 
-        result = sub_801F100(I(ds->armSegments[i].y) + 5, I(ds->armSegments[i].x), 1, 8, sub_801EC3C);
+        result = SA2_LABEL(sub_801F100)(I(ds->armSegments[i].y) + 5, I(ds->armSegments[i].x), 1, 8, SA2_LABEL(sub_801EC3C));
 
         if (result < 0) {
             if (ds->armSegments[i].remainingBounces != 0) {
@@ -1049,7 +1049,7 @@ static void DestructionScene_UpdateComponents(EggHammerTankII *boss)
 
         ds->hammerArmSegments[i].y += ds->hammerArmSegments[i].speedY;
 
-        result = sub_801F100(I(ds->hammerArmSegments[i].y) + 5, I(ds->hammerArmSegments[i].x), 1, 8, sub_801EC3C);
+        result = SA2_LABEL(sub_801F100)(I(ds->hammerArmSegments[i].y) + 5, I(ds->hammerArmSegments[i].x), 1, 8, SA2_LABEL(sub_801EC3C));
 
         if (result < 0) {
             if (ds->hammerArmSegments[i].remainingBounces != 0) {
@@ -1071,7 +1071,7 @@ static void DestructionScene_UpdateComponents(EggHammerTankII *boss)
     ds->hammerX += ds->hammerSpeedX;
     ds->hammerY += ds->hammerSpeedY;
 
-    result = sub_801F100(I(ds->hammerY) + 24, I(ds->hammerX), 1, 8, sub_801EC3C);
+    result = SA2_LABEL(sub_801F100)(I(ds->hammerY) + 24, I(ds->hammerX), 1, 8, SA2_LABEL(sub_801EC3C));
     if (result < 0) {
         ExplosionPartsInfo parts;
 
@@ -1532,11 +1532,11 @@ static bool8 IsBossTouchingTerrain(void)
     x = (boss->x + Q(24));
     y = (boss->y + boss->rearAxelY + Q(14.5));
 
-    result = sub_801F100(I(y), I(x), 1, 8, sub_801EC3C);
+    result = SA2_LABEL(sub_801F100)(I(y), I(x), 1, 8, SA2_LABEL(sub_801EC3C));
     if (result > 0) {
         x = (boss->x - Q(22));
         y = (boss->y + boss->frontAxelY + Q(14.5));
-        result = sub_801F100(I(y), I(x), 1, 8, sub_801EC3C);
+        result = SA2_LABEL(sub_801F100)(I(y), I(x), 1, 8, SA2_LABEL(sub_801EC3C));
 
         if (result > 0) {
             return FALSE;

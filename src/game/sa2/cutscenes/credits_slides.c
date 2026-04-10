@@ -8,8 +8,8 @@
 #include "lib/m4a/m4a.h"
 #include "game/sa2/save.h"
 
-#include "constants/animations.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/tilemaps.h"
 
 typedef struct {
     Background unk0;

@@ -16,10 +16,10 @@
 #include "game/sa2/title_screen.h"
 #include "game/sa2/stage/screen_mask.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 #define PAK_MODE_MULTI  0
 #define PAK_MODE_SINGLE 1

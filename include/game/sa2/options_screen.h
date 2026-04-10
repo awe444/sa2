@@ -5,7 +5,7 @@
 #include "game/sa2/save.h"
 #include "sprite.h"
 #include "game/sa2/stage/screen_fade.h"
-#include "constants/text.h"
+#include "constants/sa2/text.h"
 #include "game/sa2/stage/player_controls.h"
 
 #define RENDER_TARGET_SCREEN   0

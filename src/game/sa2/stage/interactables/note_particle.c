@@ -11,7 +11,7 @@
 
 #include "game/sa2/stage/interactables/note_particle.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ Sprite s;

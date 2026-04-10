@@ -28,9 +28,9 @@
 #include "game/sa1/ui/time_over.h"
 #endif
 
-#include "constants/characters.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/characters.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 typedef struct Struct_sub_80550F8 {
     u8 filler0[0x27];

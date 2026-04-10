@@ -9,8 +9,8 @@
 #include "game/shared/stage/terrain_collision.h"
 #include "game/shared/stage/entity.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/zones.h"
 
 /* Chao that spawns in the Chao Hunt minigame */
 

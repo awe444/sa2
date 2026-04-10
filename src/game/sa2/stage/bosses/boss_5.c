@@ -21,9 +21,9 @@
 #include "game/sa2/stage/screen_fade.h"
 
 #include "lib/m4a/m4a.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
-#include "constants/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
+#include "constants/sa2/animations.h"
 #include "flags.h"
 
 typedef struct {
@@ -745,7 +745,7 @@ void sub_8043E2C(EggSaucer *boss)
 
         bottomX = I(x);
         bottomY = I(y) + 10;
-        ground = sub_801E4E4(bottomY, bottomX, 1, 8, NULL, sub_801EE64);
+        ground = SA2_LABEL(sub_801E4E4)(bottomY, bottomX, 1, 8, NULL, SA2_LABEL(sub_801EE64));
         if (ground < 0) {
             boss->unk2C += Q(ground);
             boss->unk22 = Div(-(boss->unk22 * 80), 100);
@@ -964,7 +964,7 @@ static void SaucerUpdatePosAndRotate(EggSaucer *boss)
     bottomX = I(x);
     bottomY = I(y) + (BOSS_HEIGHT / 2);
 
-    boss->y += Q(sub_801E4E4(bottomY, bottomX, 1, 8, 0, sub_801EE64));
+    boss->y += Q(SA2_LABEL(sub_801E4E4)(bottomY, bottomX, 1, 8, 0, SA2_LABEL(sub_801EE64)));
 
     boss->cabinDiskAngle = ({ (boss->cabinDiskAngle + DEG_TO_SIN(BOSS_ROTATE_SPEED_DEG)) & (SIN_PERIOD - 1); });
     boss->gunDiskAngle = ({ (boss->gunDiskAngle + DEG_TO_SIN(BOSS_ROTATE_SPEED_DEG)) & (SIN_PERIOD - 1); });
@@ -986,7 +986,7 @@ void sub_8044540(EggSaucer *boss)
     bottomX = I(boss->x);
     bottomY = I(boss->y) + (BOSS_HEIGHT / 2);
 
-    boss->y += Q(sub_801E4E4(bottomY, bottomX, 1, 8, 0, sub_801EE64));
+    boss->y += Q(SA2_LABEL(sub_801E4E4)(bottomY, bottomX, 1, 8, 0, SA2_LABEL(sub_801EE64)));
     boss->unkD6 += 0x30;
 
     boss->cabinX += boss->unkD4;
@@ -994,7 +994,7 @@ void sub_8044540(EggSaucer *boss)
 
     bottomX = I(boss->cabinX);
     bottomY = I(boss->cabinY);
-    res = sub_801E4E4(bottomY, bottomX, 1, 8, 0, sub_801EE64);
+    res = SA2_LABEL(sub_801E4E4)(bottomY, bottomX, 1, 8, 0, SA2_LABEL(sub_801EE64));
     if (res < 0) {
         boss->cabinY += QS(res);
         boss->unkD6 = Div(-0x46 * boss->unkD6, 100);
@@ -1007,7 +1007,7 @@ void sub_8044540(EggSaucer *boss)
 
     bottomX = I(boss->armBaseX);
     bottomY = I(boss->armBaseY);
-    res = sub_801E4E4(bottomY, bottomX, 1, 8, 0, sub_801EE64);
+    res = SA2_LABEL(sub_801E4E4)(bottomY, bottomX, 1, 8, 0, SA2_LABEL(sub_801EE64));
     if (res < 0) {
         boss->armBaseY += QS(res);
         boss->unkDA = Div(-0x41 * boss->unkDA, 100);
@@ -1021,7 +1021,7 @@ void sub_8044540(EggSaucer *boss)
 
         bottomX = I(boss->unkDC[i][0]);
         bottomY = I(boss->unkDC[i][1]);
-        res = sub_801E4E4(bottomY, bottomX, 1, 8, 0, sub_801EE64);
+        res = SA2_LABEL(sub_801E4E4)(bottomY, bottomX, 1, 8, 0, SA2_LABEL(sub_801EE64));
         if (res < 0) {
             boss->unkDC[i][1] += QS(res);
             boss->unk10C[i][1] = Div(boss->unk10C[i][1] * (i - 0x41), 100);
@@ -1035,7 +1035,7 @@ void sub_8044540(EggSaucer *boss)
 
     bottomX = I(boss->handX);
     bottomY = I(boss->handY);
-    res = sub_801E4E4(bottomY, bottomX, 1, 8, 0, sub_801EE64);
+    res = SA2_LABEL(sub_801E4E4)(bottomY, bottomX, 1, 8, 0, SA2_LABEL(sub_801EE64));
     if (res < 0) {
         boss->handY += QS(res);
         boss->unk12E = Div(-60 * boss->unk12E, 100);

@@ -6,7 +6,7 @@
 #include "game/shared/stage/entity.h"
 #include "lib/m4a/m4a.h"
 
-#include "constants/songs.h"
+#include "constants/sa2/songs.h"
 
 struct MPAttack1Effect {
     /* 0x00 */ u8 unk0;

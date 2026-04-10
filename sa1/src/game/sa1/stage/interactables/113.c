@@ -3,7 +3,7 @@
 #include "game/shared/stage/entity.h"
 #include "game/sa1/stage/player_controls.h"
 
-#include "constants/move_states.h"
+#include "constants/sa1/move_states.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

@@ -7,21 +7,32 @@
 
 #include "lib/m4a/m4a.h"
 
+#include "game/shared/multiplayer/communication_outcome.h"
+
+#if (GAME == GAME_SA1)
+#include "game/sa1/stage/mp_results.h"
+#include "game/sa1/ui/character_select.h"
+#include "game/sa1/save.h"
+#include "game/sa1/menus/title_screen.h"
+
+#include "game/sa1/stage/tilemap_table.h"
+
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/text.h"
+#include "constants/sa1/tilemaps.h"
+#elif (GAME == GAME_SA2)
 #include "game/sa2/ui/character_select.h"
 #include "game/sa2/save.h"
 #include "game/sa2/title_screen.h"
-#include "game/shared/multiplayer/communication_outcome.h"
-#include "game/sa2/multiplayer/multipak_connection.h"
-#if (GAME == GAME_SA1)
-#include "game/sa2/multiplayer/results.h"
-#endif
 
 #include "game/sa2/stage/tilemap_table.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
+#endif
 
 struct CommunicationOutcomeScreen {
     Background unk0;
@@ -106,7 +117,7 @@ void CreateMultipackOutcomeScreen(u8 outcome)
     outcomeScreen->unk1FC = 0;
 
     for (i = 0, count = 0; i < 4; i++) {
-        if CONNECTION_REGISTERED (i) {
+        if (CONNECTION_REGISTERED(i)) {
             count++;
         }
     }
@@ -153,7 +164,7 @@ void CreateMultipackOutcomeScreen(u8 outcome)
     s->graphics.dest = (void *)OBJ_VRAM0;
     s->oamFlags = SPRITE_OAM_ORDER(15);
     s->graphics.size = 0;
-    s->graphics.anim = SA1_ANIM_MP_OUTCOME_MESSAGES;
+    s->graphics.anim = SA1_ANIM_MP_OUTCOME_MESSAGES_EN;
     s->variant = outcomeScreen->unk203 + 8;
     s->animCursor = 0;
     s->qAnimDelay = 0;
@@ -345,7 +356,7 @@ static void Task_MultipackOutcomeScreen(void)
         u8 outcome = outcomeScreen->unk203;
         TasksDestroyAll();
         PAUSE_BACKGROUNDS_QUEUE();
-        SA2_LABEL(gBgSpritesCount) = 0;
+        gBgSpritesCount = 0;
         PAUSE_GRAPHICS_QUEUE();
         if (outcome == OUTCOME_CONNECTION_SUCCESS) {
 

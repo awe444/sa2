@@ -5,8 +5,8 @@
 #include "malloc_vram.h"
 #include "task.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/anim_sizes.h"
 
 typedef struct {
     Sprite s;

@@ -25,10 +25,10 @@
 
 #include "data/sa2/collect_rings.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 struct MultiplayerSinglePakResultsScreen_UNK80 {
     Sprite unk0;
@@ -492,7 +492,7 @@ void SA2_LABEL(sub_808267C)(void)
     if ((gMultiSioStatusFlags & MULTI_SIO_TYPE) == MULTI_SIO_PARENT) {
         u8 i;
         for (i = 0; i < 4; i++) {
-            if CONNECTION_REGISTERED (i) {
+            if (CONNECTION_REGISTERED(i)) {
                 packet = &gMultiSioRecv[i];
                 if (packet->pat0.unk0 != COMM_DATA(0x51)) {
                     return;

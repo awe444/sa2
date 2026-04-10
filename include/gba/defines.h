@@ -49,7 +49,7 @@
 #define DISPLAY_WIDTH  320
 #define DISPLAY_HEIGHT 180
 #else
-#define DISPLAY_WIDTH  426
+#define DISPLAY_WIDTH  320
 #define DISPLAY_HEIGHT 240
 #endif
 

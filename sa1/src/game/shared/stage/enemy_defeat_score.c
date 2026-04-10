@@ -5,7 +5,7 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 
 void Task_CreateEnemyDefeatScore_MoveUp(void);
 void Task_CreateEnemyDefeatScore_Hold(void);

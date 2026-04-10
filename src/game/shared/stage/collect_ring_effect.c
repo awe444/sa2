@@ -9,7 +9,11 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
-#include "constants/animations.h"
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#elif (GAME == GAME_SA2)
+#include "constants/sa2/animations.h"
+#endif
 
 typedef struct {
     Sprite s;
@@ -35,7 +39,11 @@ void CreateCollectRingEffect(s16 x, s16 y)
         s->graphics.dest = RESERVED_RING_EFFECT_TILES_VRAM;
         s->oamFlags = SPRITE_OAM_ORDER(15);
         s->graphics.size = 0;
+#if (GAME == GAME_SA1)
+        s->graphics.anim = SA1_ANIM_RING_COLLECT_EFFECT;
+#else
         s->graphics.anim = SA2_ANIM_RING_COLLECT_EFFECT;
+#endif
         s->variant = 0;
         s->animCursor = 0;
         s->qAnimDelay = 0;

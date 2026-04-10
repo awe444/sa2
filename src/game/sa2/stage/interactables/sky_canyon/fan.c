@@ -11,8 +11,8 @@
 
 #include "malloc_vram.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/zones.h"
 
 /* This is the small propellers appearing in Sky Canyon,
    which you can run at while keeping a distance from them and increasing your speed.

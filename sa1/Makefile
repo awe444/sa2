@@ -136,6 +136,7 @@ INCLUDE_SCANINC_ARGS := $(INCLUDE_DIRS:%=-I %)
 
 SA2_INCLUDE_DIRS = ../include
 SA2_INCLUDE_CPP_ARGS := $(SA2_INCLUDE_DIRS:%=-iquote %)
+SA2_INCLUDE_SCANINC_ARGS := $(INCLUDE_DIRS:%=-I %)
 
 ASM_SUBDIR = asm
 ASM_BUILDDIR = $(OBJ_DIR)/$(ASM_SUBDIR)
@@ -207,6 +208,197 @@ SA2_C_FILES := \
 	src/input_recorder.c \
 	src/background.c \
 	src/game/globals.c \
+	src/game/sa1/ui/time_attack_record.c \
+	src/game/sa1/ui/multiplayer_continue_screen.c \
+	src/game/sa1/ui/vs_record.c \
+	src/game/sa1/ui/edit_language_screen.c \
+	src/game/sa1/ui/sound_test.c \
+	src/game/sa1/ui/time_attack_records.c \
+	src/game/sa1/ui/time_over.c \
+	src/game/sa1/ui/game_2_3.c \
+	src/game/sa1/ui/time_attack_results.c \
+	src/game/sa1/ui/time_attack_lobby.c \
+	src/game/sa1/ui/special_stage_intro.c \
+	src/game/sa1/ui/player_name_input_menu.c \
+	src/game/sa1/ui/course_select.c \
+	src/game/sa1/ui/staff_credits.c \
+	src/game/sa1/ui/collect_chaos_emeralds_msg.c \
+	src/game/sa1/ui/game_over.c \
+	src/game/sa1/ui/character_select.c \
+	src/game/sa1/ui/extra_stage_results.c \
+	src/game/sa1/menus/time_attack.c \
+	src/game/sa1/menus/mp_mode_select.c \
+	src/game/sa1/menus/player_data.c \
+	src/game/sa1/menus/options.c \
+	src/game/sa1/stage/mp_unk_1.c \
+	src/game/sa1/stage/mp_results.c \
+	src/game/sa1/stage/player_controls.c \
+	src/game/sa1/stage/to_be_continued_screen.c \
+	src/game/sa1/stage/mp_results_b.c \
+	src/game/sa1/stage/mp_hud.c \
+	src/game/sa1/stage/ui_rendering.c \
+	src/game/sa1/stage/mp_unk_0.c \
+	src/game/sa1/stage/nuts_and_bolts_task.c \
+	src/game/sa1/stage/some_task_manager.c \
+	src/game/sa1/save.c \
+	src/game/sa1/multiplayer/chao_message.c \
+	src/game/shared/stage/palette_loader.c \
+	src/game/shared/stage/terrain_collision.c \
+	src/game/shared/stage/screen_shake.c \
+	src/game/shared/stage/dust_effect_braking.c \
+	src/game/shared/stage/dust_cloud.c \
+	src/game/shared/stage/collect_ring_effect.c \
+	src/game/shared/stage/unused_flash_task.c \
+	src/game/shared/multiplayer/communication_outcome.c \
+	src/game/sa1/ui/game_2_0.c \
+	src/game/sa1/ui/game_2_1.c \
+	src/game/sa1/ui/stage_results.c \
+	src/game/sa1/menus/mp_mode_select_2.c \
+	src/game/sa1/special_stage/main.c \
+	src/game/sa1/stage/egg_rocket_transitions.c \
+	src/game/sa1/stage/temporary_sound_play_task.c \
+	src/game/sa1/stage/itembox.c \
+	src/game/sa1/menus/title_screen.c \
+	src/game/dummy_task.c \
+	src/game/game.c \
+	src/game/decomp_credits.c \
+
+# Non matching
+# 	src/game/sa1/stage/interactables/special_spring.c \
+# 	src/game/sa1/stage/interactables/toggle_gravity.c \
+# 	src/game/sa1/stage/interactables/half_pipe.c \
+# 	src/game/sa1/stage/interactables/conveyor_belt_movement.c \
+# 	src/game/sa1/stage/interactables/track.c \
+# 	src/game/sa1/stage/interactables/water_bridge_splash.c \
+# 	src/game/sa1/stage/interactables/updraft.c \
+# 	src/game/sa1/stage/interactables/bounce_block.c \
+# 	src/game/sa1/stage/interactables/pipe.c \
+# 	src/game/sa1/stage/interactables/wall_bumper.c \
+# 	src/game/sa1/stage/interactables/flippers.c \
+# 	src/game/sa1/stage/interactables/ferris_wheel.c \
+# 	src/game/sa1/stage/interactables/platform_square.c \
+# 	src/game/sa1/stage/interactables/booster.c \
+# 	src/game/sa1/stage/interactables/ship_swing.c \
+# 	src/game/sa1/stage/interactables/maze_air_corner.c \
+# 	src/game/sa1/stage/interactables/113.c \
+# 	src/game/sa1/stage/interactables/toggle_player_visibility.c \
+# 	src/game/sa1/stage/interactables/flipper_small_blue.c \
+# 	src/game/sa1/stage/interactables/air_bubbles.c \
+# 	src/game/sa1/stage/interactables/spring.c \
+# 	src/game/sa1/stage/interactables/spikes.c \
+# 	src/game/sa1/stage/interactables/decoration.c \
+# 	src/game/sa1/stage/interactables/hook_rail.c \
+# 	src/game/sa1/stage/interactables/platforms_085_089.c \
+# 	src/game/sa1/stage/interactables/107.c \
+# 	src/game/sa1/stage/interactables/mini_loop.c \
+# 	src/game/sa1/stage/interactables/boulder_spawner.c \
+# 	src/game/sa1/stage/interactables/lava.c \
+# 	src/game/sa1/stage/interactables/fadein_to_be_continued.c \
+# 	src/game/sa1/stage/interactables/039.c \
+# 	src/game/sa1/stage/interactables/checkpoint.c \
+# 	src/game/sa1/stage/interactables/marble_track.c \
+# 	src/game/sa1/stage/interactables/moving_spring.c \
+# 	src/game/sa1/stage/interactables/platform_crumbling.c \
+# 	src/game/sa1/stage/interactables/hang_bar.c \
+# 	src/game/sa1/stage/interactables/shrubbery.c \
+# 	src/game/sa1/stage/interactables/steam_exhaust.c \
+# 	src/game/sa1/stage/interactables/propeller.c \
+# 	src/game/sa1/stage/interactables/spiked_barrel.c \
+# 	src/game/sa1/stage/interactables/stage_goal.c \
+# 	src/game/sa1/stage/interactables/platform_spiked.c \
+# 	src/game/sa1/stage/interactables/conveyor_belt_object.c \
+# 	src/game/sa1/stage/interactables/toggle_player_float.c \
+# 	src/game/sa1/stage/interactables/grind_rail.c \
+# 	src/game/sa1/stage/interactables/party_balloon.c \
+# 	src/game/sa1/stage/interactables/skating_stone.c \
+# 	src/game/sa1/stage/interactables/teleport_orb.c \
+# 	src/game/sa1/stage/interactables/breakable_wall.c \
+# 	src/game/sa1/stage/interactables/trampoline.c \
+# 	src/game/sa1/stage/interactables/waterfall.c \
+# 	src/game/sa1/stage/interactables/spring_hiding.c \
+# 	src/game/sa1/stage/interactables/forced_slide.c \
+# 	src/game/sa1/stage/interactables/platform_thin.c \
+# 	src/game/sa1/stage/interactables/small_fall_block.c \
+# 	src/game/sa1/stage/interactables/crane_claw_and_lift.c \
+# 	src/game/sa1/stage/interactables/incline_ramp.c \
+# 	src/game/sa1/stage/interactables/security_gate.c \
+# 	src/game/sa1/stage/interactables/toggle_player_layer.c \
+# 	src/game/sa1/stage/interactables/bowl.c \
+# 	src/game/sa1/stage/interactables/iron_ball.c \
+# 	src/game/sa1/stage/interactables/034.c \
+# 	src/game/sa1/stage/interactables/run_wheel.c \
+# 	src/game/sa1/stage/interactables/ice_block.c \
+# 	src/game/sa1/stage/interactables/torch.c \
+# 	src/game/sa1/stage/interactables/swinging_hook.c \
+# 	src/game/sa1/stage/interactables/red_flag_and_pole.c \
+# 	src/game/sa1/stage/interactables/underwater_lava_platform.c \
+# 	src/game/sa1/stage/interactables/mini_loop_boost.c \
+# 	src/game/sa1/stage/interactables/sega_sonic_letters.c \
+# 	src/game/sa1/stage/interactables/water_bridge.c \
+# 	src/game/sa1/stage/interactables/096.c \
+# 	src/game/sa1/stage/interactables/panel_gate.c \
+# 	src/game/sa1/stage/interactables/carousel.c \
+# 	src/game/sa1/stage/interactables/swing_rope.c \
+# 	src/game/sa1/stage/interactables/bumpers.c \
+
+# Can't build
+# 	src/game/sa1/stage/camera_destroy.c \
+# 	src/game/sa1/stage/stage_ui_z.c \
+# 	src/game/sa1/stage/stage_ui.c \
+# 	src/game/sa1/stage/trapped_animals.c \
+# 	src/game/sa1/stage/mystery_itembox.c \
+# 	src/game/sa1/stage/backgrounds/zone_5_init.c \
+# 	src/game/sa1/stage/backgrounds/zone_4.c \
+# 	src/game/sa1/stage/backgrounds/zone_3_firework.c \
+# 	src/game/sa1/stage/backgrounds/zone_3.c \
+# 	src/game/sa1/stage/backgrounds/zone_2_interior.c \
+# 	src/game/sa1/stage/backgrounds/zone_7_act_2.c \
+# 	src/game/sa1/stage/backgrounds/zone_4_init.c \
+# 	src/game/sa1/stage/backgrounds/zone_2.c \
+# 	src/game/sa1/stage/backgrounds/zone_6_hblank.c \
+# 	src/game/sa1/stage/backgrounds/zone_6.c \
+# 	src/game/sa1/stage/backgrounds/zone_7_act_1.c \
+# 	src/game/sa1/stage/backgrounds/zone_1.c \
+# 	src/game/sa1/stage/backgrounds/zone_7_act_2_init.c \
+# 	src/game/sa1/stage/backgrounds/zone_5.c \
+# 	src/game/sa1/stage/enemies/wamu.c \
+# 	src/game/sa1/stage/enemies/bosses_egg_mobile.c \
+# 	src/game/sa1/stage/enemies/tentou.c \
+# 	src/game/sa1/stage/enemies/boss_1_egg_hammer_tank.c \
+# 	src/game/sa1/stage/enemies/gamigami.c \
+# 	src/game/sa1/stage/enemies/boss_4_egg_spider.c \
+# 	src/game/sa1/stage/enemies/kerokero.c \
+# 	src/game/sa1/stage/enemies/boss_3_egg_ball.c \
+# 	src/game/sa1/stage/enemies/pen_mk1.c \
+# 	src/game/sa1/stage/enemies/bosses_misc.c \
+# 	src/game/sa1/stage/enemies/drisame.c \
+# 	src/game/sa1/stage/enemies/leon.c \
+# 	src/game/sa1/stage/enemies/slot.c \
+# 	src/game/sa1/stage/enemies/buzzer.c \
+# 	src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.c \
+# 	src/game/sa1/stage/enemies/oct.c \
+# 	src/game/sa1/stage/enemies/boss_x1_egg_wrecker.c \
+# 	src/game/sa1/stage/enemies/fireball.c \
+# 	src/game/sa1/stage/enemies/pierrot.c \
+# 	src/game/sa1/stage/enemies/kiki.c \
+# 	src/game/sa1/stage/enemies/boss_2_egg_press.c \
+# 	src/game/sa1/stage/enemies/boss_x3_egg_x.c \
+# 	src/game/sa1/stage/enemies/mole.c \
+# 	src/game/sa1/stage/enemies/boss_x2_egg_drillster.c \
+# 	src/game/sa1/stage/enemies/senbon.c \
+# 	src/game/sa1/stage/enemies/rhinotank.c \
+# 	src/game/sa1/stage/enemies/mirror.c \
+# 	src/game/sa1/stage/enemies/kuraa.c \
+# 	src/game/sa1/stage/enemies/boss_5_mecha_knuckles.c \
+# 	src/game/sa1/stage/enemies/boss_6_egg_snake.c \
+# 	src/game/sa1/stage/enemies/yukimaru.c \
+# 	src/game/sa1/stage/enemies/hanabii.c \
+# 	src/game/sa1/stage/player_amy.c \
+# 	src/game/sa1/stage/player_knuckles.c \
+# 	src/game/sa1/stage/player_sonic.c \
+# 	src/game/sa1/stage/mp_chao.c \
+#   src/game/sa1/stage/player_super_sonic.c \
+# 	src/game/sa1/stage/player_tails.c \
 
 ifeq ($(PLATFORM),gba)
 SA2_C_ASM_FILES := \
@@ -247,7 +439,7 @@ FORMAT_H_PATHS   := $(shell find . -name "*.h" ! -path '*/build/*' ! -path '*/ex
 # -P disables line markers (don't EVER use this, if you want proper debug info!)
 # -I sets an include path
 # -D defines a symbol
-CPPFLAGS ?= $(INCLUDE_CPP_ARGS) -D $(GAME_REGION)
+CPPFLAGS ?= -D $(GAME_REGION) -D GAME=$(GAME)
 CC1FLAGS ?= -Wimplicit -Wparentheses -Werror
 
 ifneq ($(GAME_VARIANT), DEFAULT)
@@ -443,7 +635,7 @@ clean: tidy clean-tools
 	@$(MAKE) clean -C ../libagbsyscall PLATFORM=$(PLATFORM) CPU_ARCH=$(CPU_ARCH)
 
 	$(RM) $(SAMPLE_SUBDIR)/*.bin $(MID_SUBDIR)/*.s
-	find . \( -iwholename './data/maps/*/*/entities/*.bin' -o -iname '*.1bpp' -o -iname '*.4bpp' -o -iname '*.8bpp' -o -iname '*.gbapal' -o -iname '*.lz' -o -iname '*.rl' -o -iname '*.latfont' -o -iname '*.hwjpnfont' -o -iname '*.fwjpnfont' \) -exec $(RM) {} +
+	find . \( -iwholename './data/*/maps/*/*/entities/*.bin' -o -iname '*.1bpp' -o -iname '*.4bpp' -o -iname '*.8bpp' -o -iname '*.gbapal' -o -iname '*.lz' -o -iname '*.rl' -o -iname '*.latfont' -o -iname '*.hwjpnfont' -o -iname '*.fwjpnfont' \) -exec $(RM) {} +
 
 clean-tools:
 	@$(foreach tooldir,$(TOOLDIRS),$(MAKE) clean -C $(tooldir);)
@@ -485,13 +677,13 @@ data/sa1/mb_chao_garden_japan.gba.lz: data/sa1/mb_chao_garden_japan.gba
 	$(GFX) $< $@ -search 1
 
 %interactables.bin: %interactables.csv
-	$(ENT_POS) $< $@ -entities INTERACTABLES -header "./include/constants/interactables.h"
+	$(ENT_POS) $< $@ -entities INTERACTABLES -header "../include/constants/sa1/interactables.h"
 
 %itemboxes.bin: %itemboxes.csv
-	$(ENT_POS) $< $@ -entities ITEMS -header "./include/constants/items.h"
+	$(ENT_POS) $< $@ -entities ITEMS -header "../include/constants/sa1/items.h"
 
 %enemies.bin: %enemies.csv
-	$(ENT_POS) $< $@ -entities ENEMIES -header "./include/constants/enemies.h"
+	$(ENT_POS) $< $@ -entities ENEMIES -header "../include/constants/sa1/enemies.h"
 
 %rings.bin: %rings.csv
 	$(ENT_POS) $< $@ -entities RINGS
@@ -541,14 +733,14 @@ $(OBJ_DIR)/sa2/%.s: ../%.s
 $(OBJ_DIR)/sa2/%.o: $(OBJ_DIR)/sa2/%.c
 	@echo "$(CC1) <flags> -o $@ $<"
 	@$(shell mkdir -p $(shell dirname '$(OBJ_DIR)/sa2/$*.i'))
-	@$(CPP) $(CPPFLAGS) $< -o $(OBJ_DIR)/sa2/$*.i
+	@$(CPP) $(CPPFLAGS) $(SA2_INCLUDE_CPP_ARGS) $< -o $(OBJ_DIR)/sa2/$*.i
 	@$(PREPROC) $(OBJ_DIR)/sa2/$*.i $(PLATFORM) "" | $(CC1) $(PROLOGUE_FIX) $(CC1FLAGS) -o $(OBJ_DIR)/sa2/$*.s -
 	@printf ".text\n\t.align\t2, 0\n" >> $(OBJ_DIR)/sa2/$*.s
 	@$(AS) $(ASFLAGS) $(OBJ_DIR)/sa2/$*.s -o $@
 
 $(OBJ_DIR)/sa2/%.d: $(OBJ_DIR)/sa2/%.c
 	@$(shell mkdir -p $(shell dirname '$(OBJ_DIR)/sa2/$*.d'))
-	$(SCANINC) -M $@ $(INCLUDE_SCANINC_ARGS) $<
+	$(SCANINC) -M $@ $(SA2_INCLUDE_SCANINC_ARGS) $<
 
 $(OBJ_DIR)/sa2/%.o: $(OBJ_DIR)/sa2/%.s
 	@echo "$(AS) <flags> -o $@ $<"
@@ -559,7 +751,7 @@ $(OBJ_DIR)/sa2/%.o: $(OBJ_DIR)/sa2/%.s
 $(C_BUILDDIR)/%.o: $(C_SUBDIR)/%.c
 	@echo "$(CC1) <flags> -o $@ $<"
 	@$(shell mkdir -p $(shell dirname '$(C_BUILDDIR)/$*.i'))
-	@$(CPP) $(CPPFLAGS) $< -o $(C_BUILDDIR)/$*.i
+	@$(CPP) $(CPPFLAGS) $(INCLUDE_CPP_ARGS) $(SA2_INCLUDE_CPP_ARGS) $< -o $(C_BUILDDIR)/$*.i
 	@$(PREPROC) $(C_BUILDDIR)/$*.i $(PLATFORM) "" | $(CC1) $(PROLOGUE_FIX) $(CC1FLAGS) -o $(C_BUILDDIR)/$*.s -
 ifeq ($(PLATFORM), gba)
 	@printf ".text\n\t.align\t2, 0\n" >> $(C_BUILDDIR)/$*.s
@@ -579,7 +771,7 @@ $(C_BUILDDIR)/%.o: $(C_SUBDIR)/%.s
 
 $(DATA_ASM_BUILDDIR)/%.o: $(DATA_ASM_SUBDIR)/%.s
 	@echo "$(AS) <flags> -o $@ $<"
-	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) - | $(AS) $(ASFLAGS) -o $@ -
+	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) $(INCLUDE_CPP_ARGS) - | $(AS) $(ASFLAGS) -o $@ -
 
 # Scan the ASM data dependencies to determine if any .inc files have changed
 $(DATA_ASM_BUILDDIR)/%.d: $(DATA_ASM_SUBDIR)/%.s
@@ -587,12 +779,13 @@ $(DATA_ASM_BUILDDIR)/%.d: $(DATA_ASM_SUBDIR)/%.s
     
 ifneq ($(NODEP),1)
 -include $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.d))
+-include $(SA2_C_SRCS:.c=.d)
 -include $(addprefix $(OBJ_DIR)/,$(DATA_ASM_SRCS:.s=.d))
 endif
 
 $(SONG_BUILDDIR)/%.o: $(SONG_SUBDIR)/%.s
 	@echo "$(AS) <flags> -o $@ $<"
-	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) - | $(AS) $(ASFLAGS) -o $@ -
+	@$(PREPROC) $< $(PLATFORM) "" | $(CPP) $(CPPFLAGS) $(INCLUDE_CPP_ARGS) - | $(AS) $(ASFLAGS) -o $@ -
 
 ### SUB-PROGRAMS ###
 

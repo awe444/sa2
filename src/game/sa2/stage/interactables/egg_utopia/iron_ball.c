@@ -4,13 +4,11 @@
 #include "task.h"
 #include "trig.h"
 
-#include "game/shared/stage/collision.h"
-
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/egg_utopia/iron_ball.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     SpriteBase base;

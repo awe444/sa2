@@ -171,19 +171,19 @@ OBJ_TILES_4BPP_SUBDIR = graphics/sa2/obj_tiles/4bpp
 TILESETS_SUBDIR = graphics/sa2/tilesets/
 
 ifeq ($(PLATFORM),gba)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/platform/*")
+C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/*")
 else ifeq ($(PLATFORM),sdl)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
+C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
 else ifeq ($(PLATFORM),sdl_psp)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
+C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
 else ifeq ($(PLATFORM),ps2)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/platform/win32/*" -not -path "*/platform/pret_sdl/*")
+C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/pret_sdl/*")
 else ifeq ($(PLATFORM),sdl_win32)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
+C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
 else ifeq ($(PLATFORM),win32)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/platform/pret_sdl/*" -not -path "*/platform/ps2/*")
+C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/pret_sdl/*" -not -path "*/platform/ps2/*")
 else
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c")
+C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*")
 endif
 C_OBJS := $(patsubst $(C_SUBDIR)/%.c,$(C_BUILDDIR)/%.o,$(C_SRCS))
 
@@ -229,7 +229,7 @@ FORMAT_H_PATHS   := $(shell find . -name "*.h" ! -path '*/build/*' ! -path '*/ex
 # -P disables line markers (don't EVER use this, if you want proper debug info!)
 # -I sets an include path
 # -D defines a symbol
-CPPFLAGS ?= $(INCLUDE_CPP_ARGS) -D $(GAME_REGION)
+CPPFLAGS ?= $(INCLUDE_CPP_ARGS) -D $(GAME_REGION) -D GAME=$(GAME)
 CC1FLAGS ?= -Wimplicit -Wparentheses -Werror
 
 ifneq ($(GAME_VARIANT), DEFAULT)
@@ -506,13 +506,13 @@ data/sa2/mb_chao_garden_japan.gba.lz: data/sa2/mb_chao_garden_japan.gba
 	$(GFX) $< $@ -search 1
 
 %interactables.bin: %interactables.csv
-	$(ENT_POS) $< $@ -entities INTERACTABLES -header "./include/constants/interactables.h"
+	$(ENT_POS) $< $@ -entities INTERACTABLES -header "./include/constants/sa2/interactables.h"
 
 %itemboxes.bin: %itemboxes.csv
-	$(ENT_POS) $< $@ -entities ITEMS -header "./include/constants/items.h"
+	$(ENT_POS) $< $@ -entities ITEMS -header "./include/constants/sa2/items.h"
 
 %enemies.bin: %enemies.csv
-	$(ENT_POS) $< $@ -entities ENEMIES -header "./include/constants/enemies.h"
+	$(ENT_POS) $< $@ -entities ENEMIES -header "./include/constants/sa2/enemies.h"
 
 %rings.bin: %rings.csv
 	$(ENT_POS) $< $@ -entities RINGS

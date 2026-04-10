@@ -7,11 +7,11 @@
 #include "game/shared/stage/entity.h"
 #include "game/shared/stage/collision.h"
 
-#include "constants/animations.h"
-#include "constants/anim_sizes.h"
-#include "constants/songs.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/anim_sizes.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/zones.h"
 
 /* TODO: Maybe inline this file into bosses_misc.c ? */
 

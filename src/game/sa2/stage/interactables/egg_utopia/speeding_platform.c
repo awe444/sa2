@@ -5,7 +5,6 @@
 #include "trig.h"
 #include "lib/m4a/m4a.h"
 
-#include "game/shared/stage/collision.h"
 #include "game/shared/stage/entity.h"
 
 #include "game/shared/stage/player.h"
@@ -13,9 +12,9 @@
 
 #include "game/sa2/stage/interactables/egg_utopia/speeding_platform.h"
 
-#include "constants/animations.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     SpriteBase base;
@@ -106,7 +105,7 @@ static void sub_807F9F0(void)
 
     sub_807FB1C(platform);
     if (platform->unk4C && platform->unk5A > -1) {
-        s32 res = sub_801F100(platform->y + I(platform->unk48), platform->x + I(platform->unk44), 1, 8, sub_801EC3C);
+        s32 res = SA2_LABEL(sub_801F100)(platform->y + I(platform->unk48), platform->x + I(platform->unk44), 1, 8, SA2_LABEL(sub_801EC3C));
         if (res < 0) {
             platform->unk4C = FALSE;
             gPlayer.transition = PLTRANS_INIT_JUMP;

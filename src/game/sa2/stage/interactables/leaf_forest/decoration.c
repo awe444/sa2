@@ -7,7 +7,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/entity.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

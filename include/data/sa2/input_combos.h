@@ -2,7 +2,7 @@
 #define GUARD_SA2_DATA_INPUT_COMBOS
 
 #include "types.h"
-#include "constants/characters.h"
+#include "constants/sa2/characters.h"
 
 extern const u8 *const *const gUnknown_08C871D4[NUM_CHARACTERS];
 

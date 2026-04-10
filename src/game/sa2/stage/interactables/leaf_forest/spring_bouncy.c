@@ -7,15 +7,15 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/entity.h"
-#include "game/shared/stage/collision.h"
+
 #include "sprite.h"
 #include "task.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

@@ -4,7 +4,10 @@
 #if CPU_ARCH_X86
 #include <immintrin.h>
 #endif
-#include "gba/gba.h"
+#include "gba/types.h"
+#include "gba/multiboot.h"
+#include "gba/io_reg.h"
+#include "gba/syscall.h"
 
 #if (!(defined PLATFORM_GBA) || (PLATFORM_GBA == 0))
 

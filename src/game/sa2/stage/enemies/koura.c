@@ -8,8 +8,8 @@
 #include "game/shared/stage/entities_manager.h"
 #include "trig.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -68,7 +68,7 @@ void CreateEntity_Koura(MapEntity *me, u16 spriteRegionX, u16 spriteRegionY, u8 
     ENEMY_SET_SPAWN_POS_STATIC(koura, me);
     koura->offsetX = 0;
     if (koura->unk54 < 2) {
-        koura->offsetY = QS(sub_801F07C(I(koura->spawnY), I(koura->spawnX), koura->unk54, 8, NULL, sub_801EE64));
+        koura->offsetY = QS(SA2_LABEL(sub_801F07C)(I(koura->spawnY), I(koura->spawnX), koura->unk54, 8, NULL, SA2_LABEL(sub_801EE64)));
     } else {
         koura->offsetY = 0;
     }

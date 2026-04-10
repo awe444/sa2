@@ -10,10 +10,10 @@
 #include "game/sa1/stage/player_controls.h"
 #include "game/shared/stage/underwater_effects.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 /* Tails Start */
 void Player_Tails_8047A3C(Player *p);
@@ -25,7 +25,7 @@ static inline void sub_8047E94_inline(Player *p)
 {
     if (p->SA2_LABEL(unk62) == 0) {
         if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (Player_Tails_8047B04(p) == 0)) {
-            if (!Player_Spindash(p) && !Player_TryJump(p)) {
+            if (!Player_TrySpindash(p) && !Player_TryJump(p)) {
                 SA2_LABEL(sub_8029CA0)(p);
                 Player_8044F7C(p);
                 SA2_LABEL(sub_80232D0)(p);

@@ -15,16 +15,16 @@
 #include "game/sa2/stage/screen_fade.h"
 #include "game/sa2/stage/tilemap_table.h"
 #include "lib/m4a/m4a.h"
-#include "constants/text.h"
+#include "constants/sa2/text.h"
 #include "flags.h"
 
 #include "game/sa2/ui/character_select.h"
 
 #include "data/sa2/sprite_tables.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/tilemaps.h"
 
 struct MultiPakConnectScreen {
     ScreenFade fade;
@@ -309,7 +309,7 @@ static void sub_805ADAC(void)
         gMultiplayerPseudoRandom = recv->unk10;
         gMultiplayerConnections = recv->unk2;
         for (i = 0; i < MULTI_SIO_PLAYERS_MAX; i++) {
-            if CONNECTION_REGISTERED (i) {
+            if (CONNECTION_REGISTERED(i)) {
                 if (i == 0) {
                     gMultiplayerIds[0] = recv->unk4;
                     gMultiplayerNames[0][0] = recv->unk8[0];
@@ -486,7 +486,7 @@ static void sub_805B4C0(void)
 
         gGameMode = GAME_MODE_MULTI_PLAYER;
         for (i = 3; i >= 0; i--) {
-            if CONNECTION_REGISTERED (i) {
+            if (CONNECTION_REGISTERED(i)) {
                 if (i == 0) {
                     if (gMultiplayerIds[i] == recv->unk4) {
                         gMultiplayerNames[i][3] = recv->unk8[0];

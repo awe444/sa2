@@ -7,7 +7,7 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/mp_player.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 #ifndef COLLECT_RINGS_ROM
 #define RESERVED_INDICATOR_TILES_VRAM (void *)(OBJ_VRAM0 + 0x2700)

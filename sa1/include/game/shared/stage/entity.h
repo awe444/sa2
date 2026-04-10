@@ -108,7 +108,7 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p
 #define ENEMY_SET_SPAWN_POS_GROUND(_enemy, _mapEntity)                                                                                     \
     ENEMY_SET_SPAWN_POS_STATIC(_enemy, _mapEntity);                                                                                        \
     _enemy->offsetX = 0;                                                                                                                   \
-    _enemy->offsetY = Q(sub_801F07C(I(_enemy->spawnY), I(_enemy->spawnX), _enemy->clampParam, 8, NULL, sub_801EE64));
+    _enemy->offsetY = Q(SA2_LABEL(sub_801F07C)(I(_enemy->spawnY), I(_enemy->spawnX), _enemy->clampParam, 8, NULL, SA2_LABEL(sub_801EE64)));
 
 #if (GAME == GAME_SA1)
 #define ENEMY_UPDATE_EX_RAW(_s, _posX, _posY, code_insert)                                                                                 \
@@ -167,19 +167,20 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p
 #define ENEMY_CROSSED_BOTTOM_BORDER(_enemy, _mapEntity) ENEMY_CROSSED_BOTTOM_BORDER_RAW(_enemy, _mapEntity, I(_enemy->offsetY))
 
 #define ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, _task)                                                                           \
-    sub_801F100(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, 8, _task);
+    SA2_LABEL(sub_801F100)(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, 8, _task);
 
 #define ENEMY_CLAMP_TO_GROUND_INNER_X_FIRST(_enemy, _unknownBool)                                                                          \
-    sub_801F100(I(_enemy->spawnX + _enemy->offsetX), I(_enemy->spawnY + _enemy->offsetY), _unknownBool, 8, sub_801EC3C);
+    SA2_LABEL(sub_801F100)                                                                                                                 \
+    (I(_enemy->spawnX + _enemy->offsetX), I(_enemy->spawnY + _enemy->offsetY), _unknownBool, 8, SA2_LABEL(sub_801EC3C));
 
 #define ENEMY_CLAMP_TO_GROUND_RAW(_enemy, _unknownBool, _p)                                                                                \
     {                                                                                                                                      \
-        s32 delta                                                                                                                          \
-            = sub_801F07C(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, 8, _p, sub_801EE64);     \
+        s32 delta = SA2_LABEL(sub_801F07C)(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, 8, _p,  \
+                                           sub_801EE64);                                                                                   \
                                                                                                                                            \
         if (delta < 0) {                                                                                                                   \
             _enemy->offsetY += Q(delta);                                                                                                   \
-            delta = ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, sub_801EC3C);                                                        \
+            delta = ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, SA2_LABEL(sub_801EC3C));                                             \
         }                                                                                                                                  \
                                                                                                                                            \
         if (delta > 0) {                                                                                                                   \
@@ -191,12 +192,12 @@ u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p
 
 #define ENEMY_CLAMP_TO_GROUND_2(_enemy, _unknownBool)                                                                                      \
     {                                                                                                                                      \
-        s32 delta                                                                                                                          \
-            = sub_801F07C(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, -8, NULL, sub_801EE64);  \
+        s32 delta = SA2_LABEL(sub_801F07C)(I(_enemy->spawnY + _enemy->offsetY), I(_enemy->spawnX + _enemy->offsetX), _unknownBool, -8,     \
+                                           NULL, SA2_LABEL(sub_801EE64));                                                                  \
                                                                                                                                            \
         if (delta < 0) {                                                                                                                   \
             _enemy->offsetY -= Q(delta);                                                                                                   \
-            delta = ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, sub_801EC3C);                                                        \
+            delta = ENEMY_CLAMP_TO_GROUND_INNER(_enemy, _unknownBool, SA2_LABEL(sub_801EC3C));                                             \
         }                                                                                                                                  \
                                                                                                                                            \
         if (delta > 0) {                                                                                                                   \

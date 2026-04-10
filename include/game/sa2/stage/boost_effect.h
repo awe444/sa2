@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "sprite.h"
-#include "constants/characters.h"
+#include "constants/sa2/characters.h"
 
 void sub_801561C(void);
 void sub_8015750(void);

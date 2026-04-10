@@ -20,8 +20,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     u32 unk0;
@@ -617,7 +617,7 @@ static void sub_8048654(EggFrog *boss)
     boss->x += boss->qSpeedX;
     boss->y += boss->qSpeedY;
 
-    result = sub_801E4E4(I(boss->y) + 0x1E, I(boss->x), 1, 8, 0, sub_801EE64);
+    result = SA2_LABEL(sub_801E4E4)(I(boss->y) + 0x1E, I(boss->x), 1, 8, 0, SA2_LABEL(sub_801EE64));
     if (result < 0) {
         boss->y += Q(result);
         boss->qSpeedY = Div(-(boss->qSpeedY * 9), 10);
@@ -633,7 +633,7 @@ static void sub_8048654(EggFrog *boss)
         y += ((SIN(boss->unk1C[i][0]) * 0x17) >> 0xE);
         y += SIN(boss->unk1C[i][1]) >> temp2;
 
-        result = sub_801E4E4(y + 6, x, 1, 8, 0, sub_801EE64);
+        result = SA2_LABEL(sub_801E4E4)(y + 6, x, 1, 8, 0, SA2_LABEL(sub_801EE64));
         if (result >= 1) {
             if (boss->unk1C[i][1] >= 0x100 && boss->unk1C[i][1] <= 0x300) {
                 boss->unk1C[i][1] -= 2;
@@ -651,7 +651,7 @@ static void sub_8048654(EggFrog *boss)
         boss->unk1C[i][1] = boss->unk1C[i][1] & (SIN_PERIOD - 1);
         y += gUnknown_080D8148[0];
         y += ((SIN(boss->unk1C[i][2]) * 0x32) >> 0xE);
-        result = sub_801E4E4(y, x, 1, 8, 0, sub_801EE64);
+        result = SA2_LABEL(sub_801E4E4)(y, x, 1, 8, 0, SA2_LABEL(sub_801EE64));
 
         if (result >= 1) {
             if (boss->unk1C[i][2] >= 0x100 && boss->unk1C[i][2] <= 0x300) {
@@ -692,7 +692,7 @@ static void sub_8048858(EggFrog *boss)
         y += (SIN(boss->unk1C[i][0]) * 0x17) >> 0xE;
         y += (SIN(boss->unk1C[i][1]) >> temp);
         y += (SIN(boss->unk1C[i][2]) * 0x32) >> 0xE;
-        result = sub_801E4E4(y, x, 1, someVal, 0, sub_801EE64);
+        result = SA2_LABEL(sub_801E4E4)(y, x, 1, someVal, 0, SA2_LABEL(sub_801EE64));
 
         if (result < 0) {
             boss->y += boss->unk18 != 0 ? -Q(result) : Q(result);
@@ -1130,7 +1130,7 @@ static void sub_804920C(EggFrog *boss)
     y += SIN(boss->unk1C[1][1]) >> temp;
     y += (SIN(boss->unk1C[1][2]) * 0x32) >> 0xE;
 
-    result = sub_801E4E4(y, x, 1, 8, 0, sub_801EE64);
+    result = SA2_LABEL(sub_801E4E4)(y, x, 1, 8, 0, SA2_LABEL(sub_801EE64));
 
     if (result < 0) {
         boss->y += Q(result);
@@ -1242,7 +1242,7 @@ static void sub_80494EC(void)
 
     x = I(bomb->x) + gCamera.x;
     y = I(bomb->y) + gCamera.y;
-    result = sub_801E4E4(y, x, 1, temp, 0, sub_801EE64);
+    result = SA2_LABEL(sub_801E4E4)(y, x, 1, temp, 0, SA2_LABEL(sub_801EE64));
 
     // hit floor
     if (result < 0) {

@@ -3,22 +3,35 @@
 
 #include "global.h"
 #include "rect.h"
-#include "constants/zones.h"
+
+#if (GAME == GAME_SA1)
+#include "constants/sa2/zones.h"
+#elif (GAME == GAME_SA2)
+#include "constants/sa1/zones.h"
+#endif
 
 #define MP_COLLECT_RINGS_COMPRESSED_POS_DATA ((u8 **)(EWRAM_START + 0x33008))
 #define MP_COLLECT_RINGS_COMPRESSED_SIZE     (u8 **)(EWRAM_START + 0x3300C)
 #define MP_COLLECT_RINGS_BUFFER              (u8 *)(EWRAM_START + 0x3F000)
 
+#if (GAME == GAME_SA1)
+#define RESERVED_RING_TILES_VRAM (void *)(OBJ_VRAM0 + 0x1D00)
+#else
 #ifndef COLLECT_RINGS_ROM
 #define RESERVED_RING_TILES_VRAM (void *)(OBJ_VRAM0 + 0x1F00)
 #else
 #define RESERVED_RING_TILES_VRAM (void *)(OBJ_VRAM0 + 0x2E40)
 #endif
+#endif
 
+#if (GAME == GAME_SA1)
+#define RESERVED_RING_EFFECT_TILES_VRAM (void *)(OBJ_VRAM0 + 0x1F00)
+#else
 #ifndef COLLECT_RINGS_ROM
 #define RESERVED_RING_EFFECT_TILES_VRAM (void *)(OBJ_VRAM0 + 0x2100)
 #else
 #define RESERVED_RING_EFFECT_TILES_VRAM (void *)(OBJ_VRAM0 + 0x3040)
+#endif
 #endif
 
 #define RECT_TOUCHING_RING(posX, posY, ringIntX, ringIntY, rect)                                                                           \

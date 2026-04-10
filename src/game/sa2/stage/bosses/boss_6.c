@@ -18,9 +18,9 @@
 #include "game/shared/stage/terrain_collision.h"
 #include "game/sa2/stage/player_callbacks.h"
 
-#include "constants/move_states.h"
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa2/move_states.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 #define NUM_PLATFORMS      4
 #define NUM_LINKS          3
@@ -1248,7 +1248,7 @@ static void UpdateIntroPos(EggGoRound *boss)
 {
     boss->x += boss->speedX + (boss->timer * 8);
     boss->y += boss->speedY;
-    boss->y += Q(sub_801E4E4(I(boss->y), I(boss->x), 0, 8, 0, sub_801EE64));
+    boss->y += Q(SA2_LABEL(sub_801E4E4)(I(boss->y), I(boss->x), 0, 8, 0, SA2_LABEL(sub_801EE64)));
     boss->rotation = (boss->rotation + boss->rotationSpeed) % (unsigned)Q(1024);
 }
 
@@ -1257,7 +1257,7 @@ static void UpdatePos(EggGoRound *boss)
     boss->x += boss->speedX;
     boss->y += boss->speedY;
 
-    boss->y += Q(sub_801F07C(I(boss->y), I(boss->x), 0, 8, 0, sub_801EE64));
+    boss->y += Q(SA2_LABEL(sub_801F07C)(I(boss->y), I(boss->x), 0, 8, 0, SA2_LABEL(sub_801EE64)));
     boss->rotation = (boss->rotation + boss->rotationSpeed) % (unsigned)Q(1024);
 
     if (boss->health < 5 && boss->rotationSpeed != -256) {
@@ -1286,7 +1286,7 @@ static inline void UpdatePropPos(DestructionProp *prop)
     prop->x += prop->speedX;
     prop->y += prop->speedY;
 
-    result = sub_801F100(I(prop->y) + 20, I(prop->x), 1, 8, sub_801EC3C);
+    result = SA2_LABEL(sub_801F100)(I(prop->y) + 20, I(prop->x), 1, 8, SA2_LABEL(sub_801EC3C));
     if (result < 0) {
         u32 temp;
         prop->speedX -= Q(0.25);

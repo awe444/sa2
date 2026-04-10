@@ -8,9 +8,9 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/animations.h"
+#include "constants/sa1/animations.h"
 #if (GAME == GAME_SA2)
-#include "constants/char_states.h"
+#include "constants/sa1/char_states.h"
 #endif
 
 typedef struct {

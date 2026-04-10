@@ -9,8 +9,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/songs.h"
-#include "constants/player_transitions.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/player_transitions.h"
 
 // Same def as SpriteBase
 typedef struct {

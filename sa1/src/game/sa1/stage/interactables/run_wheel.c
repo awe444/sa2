@@ -7,10 +7,10 @@
 #include "game/shared/stage/collision.h"
 #include "game/sa1/stage/stage_ui.h"
 
-#include "constants/animations.h"
-#include "constants/vram_hardcoded.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/vram_hardcoded.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

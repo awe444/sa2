@@ -1,8 +1,8 @@
 #ifndef GUARD_MAIN_H
 #define GUARD_MAIN_H
 
-#ifndef GEN_CTX
-#include <string.h> // for memcpy
+#if !GEN_CTX
+#include <string.h> // memcpy
 #endif
 
 #include "global.h"
@@ -114,12 +114,28 @@ struct MultiSioData_0_4 {
     u8 unk13;
 };
 
+struct MultiSioData_0_5 {
+    // id
+    u16 unk0;
+    // value
+    s16 x;
+    s16 y;
+
+    u8 filler3[0x9];
+    u8 sioId;
+    u8 unk10;
+    u8 unk11;
+    u8 unk12;
+    u8 unk13;
+};
+
 union MultiSioData {
     struct MultiSioData_0_0 pat0;
     struct MultiSioData_0_1 pat1;
     struct MultiSioData_0_2 pat2;
     struct MultiSioData_0_3 pat3;
     struct MultiSioData_0_4 pat4;
+    struct MultiSioData_0_5 pat5;
 }; /* size = MULTI_SIO_BLOCK_SIZE */
 
 // TODO: Have we defined this somewhere else already?
@@ -192,7 +208,13 @@ struct SpriteTables {
         gMultiplayerPseudoRandom = (gMultiplayerPseudoRandom * 0x196225) + 0x3C6EF35F;                                                     \
         gMultiplayerPseudoRandom;                                                                                                          \
     })
+
+// TODO: align the usage of this between both games
+#if (GAME == GAME_SA1)
+#define PseudoRandBetween(min, max) ((PseudoRandom32() & ((-min) + (max))) + (min))
+#else
 #define PseudoRandBetween(min, max) ((PseudoRandom32() & ((-min) + (max - 1))) + (min))
+#endif
 
 extern u32 gFlags;
 extern u32 gFlagsPreVBlank;
@@ -264,6 +286,7 @@ extern u16 gDispCnt;
 #define WINREG_WININ  4
 #define WINREG_WINOUT 5
 
+// TODO: Use these everywhere in SA1!
 #define PALETTE_LEN_4BPP                                    16u
 #define GET_PALETTE_COLOR_OBJ(_paletteId, _colorId)         gObjPalette[(_paletteId)*PALETTE_LEN_4BPP + (_colorId)]
 #define GET_PALETTE_COLOR_BG(_paletteId, _colorId)          gBgPalette[(_paletteId)*PALETTE_LEN_4BPP + (_colorId)]
@@ -273,9 +296,13 @@ extern u16 gDispCnt;
 extern winreg_t gWinRegs[6];
 extern struct BlendRegs gBldRegs;
 extern BgAffineReg gBgAffineRegs[NUM_AFFINE_BACKGROUNDS];
+#if (GAME == GAME_SA1)
+extern u16 gObjPalette[OBJ_PLTT_SIZE / sizeof(u16)];
+extern u16 gBgPalette[BG_PLTT_SIZE / sizeof(u16)];
+#else
 extern ColorRaw gObjPalette[16 * PALETTE_LEN_4BPP];
 extern ColorRaw gBgPalette[16 * PALETTE_LEN_4BPP];
-
+#endif
 extern u16 gBgCntRegs[4];
 
 // TODO: Turn this into a struct-array?
@@ -304,7 +331,7 @@ extern s16 SA2_LABEL(gUnknown_0300194C);
 
 extern Tilemap **gTilemapsRef;
 extern u8 gBgSprites_Unknown2[4][4];
-extern u8 gBgSprites_Unknown1[4];
+extern u8 gBgSprites_Unknown1[16];
 
 #define LOG_GRAPHICS_QUEUE !TRUE
 #if (!PLATFORM_GBA && LOG_GRAPHICS_QUEUE)
@@ -365,9 +392,9 @@ extern u8 gVCountSetting;
 extern void *gHBlankCopyTarget;
 extern u8 gBackgroundsCopyQueueIndex;
 extern u8 gHBlankCopySize;
-extern u16 gUnknown_03002A8C;
-// When paused, the previously-active OAM elements get moved to the end
-// of the OAM. This is the index of the first currently-inactive element
+extern u16 SA2_LABEL(gUnknown_03002A8C);
+//// When paused, the previously-active OAM elements get moved to the end
+//// of the OAM. This is the index of the first currently-inactive element
 extern u8 gOamFirstPausedIndex;
 extern u8 gBackgroundsCopyQueueCursor;
 extern Sprite *gBgSprites[16];

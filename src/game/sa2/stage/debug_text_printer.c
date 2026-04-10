@@ -4,7 +4,7 @@
 #include "task.h"
 #include "gba/syscall.h"
 
-#include "constants/animations.h"
+#include "constants/sa2/animations.h"
 
 typedef struct {
     Sprite chars[SA2_ANIM_NUM_ASCII_CHARS];

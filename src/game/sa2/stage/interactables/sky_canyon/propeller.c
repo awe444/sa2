@@ -15,10 +15,10 @@
 #include "game/sa2/stage/interactables/sky_canyon/propeller.h"
 #include "game/sa2/stage/interactables/sky_canyon_init.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     SpriteBase base;
@@ -70,20 +70,24 @@ static void Task_PlayerFloating(void)
             gPlayer.qWorldX -= Q(0.5);
         }
 
-        temp = sub_801F100(({ I(gPlayer.qWorldX) + 2; }) + gPlayer.spriteOffsetX, I(gPlayer.qWorldY), gPlayer.layer, +8, sub_801EB44);
+        temp = SA2_LABEL(sub_801F100)(({ I(gPlayer.qWorldX) + 2; }) + gPlayer.spriteOffsetX, I(gPlayer.qWorldY), gPlayer.layer, +8,
+                                      sub_801EB44);
         if (temp < 0) {
             gPlayer.qWorldX += Q(temp);
         }
-        temp = sub_801F100(({ I(gPlayer.qWorldX) - 2; }) - gPlayer.spriteOffsetX, I(gPlayer.qWorldY), gPlayer.layer, -8, sub_801EB44);
+        temp = SA2_LABEL(sub_801F100)(({ I(gPlayer.qWorldX) - 2; }) - gPlayer.spriteOffsetX, I(gPlayer.qWorldY), gPlayer.layer, -8,
+                                      sub_801EB44);
         if (temp < 0) {
             gPlayer.qWorldX -= Q(temp);
         }
 
-        temp = sub_801F100(I(gPlayer.qWorldY) + gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, 8, sub_801EC3C);
+        temp = SA2_LABEL(sub_801F100)(I(gPlayer.qWorldY) + gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, 8,
+                                      SA2_LABEL(sub_801EC3C));
         if (temp < 0) {
             gPlayer.qWorldY += Q(temp);
         }
-        temp = sub_801F100(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, -8, sub_801EC3C);
+        temp = SA2_LABEL(sub_801F100)(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, -8,
+                                      SA2_LABEL(sub_801EC3C));
         if (temp < 0) {
             gPlayer.qWorldY -= Q(temp);
         }
@@ -133,22 +137,26 @@ static void sub_807B530(void)
         gPlayer.qWorldY += propeller->unk46;
         propeller->unk48 -= 4;
 
-        temp = sub_801F100(({ I(gPlayer.qWorldX) + 2; }) + gPlayer.spriteOffsetX, I(gPlayer.qWorldY), gPlayer.layer, 8, sub_801EB44);
+        temp = SA2_LABEL(sub_801F100)(({ I(gPlayer.qWorldX) + 2; }) + gPlayer.spriteOffsetX, I(gPlayer.qWorldY), gPlayer.layer, 8,
+                                      sub_801EB44);
         if (temp < 0) {
             gPlayer.qWorldX += Q(temp);
             propeller->unk44 = 32;
         }
-        temp = sub_801F100(({ I(gPlayer.qWorldX) - 2; }) - gPlayer.spriteOffsetX, I(gPlayer.qWorldY), gPlayer.layer, -8, sub_801EB44);
+        temp = SA2_LABEL(sub_801F100)(({ I(gPlayer.qWorldX) - 2; }) - gPlayer.spriteOffsetX, I(gPlayer.qWorldY), gPlayer.layer, -8,
+                                      sub_801EB44);
         if (temp < 0) {
             gPlayer.qWorldX -= Q(temp);
             propeller->unk44 = -32;
         }
 
-        temp = sub_801F100(I(gPlayer.qWorldY) + gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, 8, sub_801EC3C);
+        temp = SA2_LABEL(sub_801F100)(I(gPlayer.qWorldY) + gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, 8,
+                                      SA2_LABEL(sub_801EC3C));
         if (temp < 0) {
             gPlayer.qWorldY += Q(temp);
         }
-        temp = sub_801F100(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, -8, sub_801EC3C);
+        temp = SA2_LABEL(sub_801F100)(I(gPlayer.qWorldY) - gPlayer.spriteOffsetY, I(gPlayer.qWorldX), gPlayer.layer, -8,
+                                      SA2_LABEL(sub_801EC3C));
         if (temp < 0) {
             gPlayer.qWorldY -= Q(temp);
         }

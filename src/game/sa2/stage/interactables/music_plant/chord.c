@@ -10,10 +10,10 @@
 #include "game/shared/stage/camera.h"
 #include "game/sa2/stage/interactables/music_plant/chord.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/player_transitions.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
 
 #define NUM_CHORD_ELEMENTS 6
 #define CHORD_WIDTH_PX     (NUM_CHORD_ELEMENTS * TILE_WIDTH)

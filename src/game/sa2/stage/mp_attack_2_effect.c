@@ -5,7 +5,7 @@
 
 #include "game/sa2/stage/mp_attack_2_effect.h"
 
-#include "constants/zones.h"
+#include "constants/sa2/zones.h"
 
 #ifndef COLLECT_RINGS_ROM
 // Not clear why this is 16 aligned in the main game

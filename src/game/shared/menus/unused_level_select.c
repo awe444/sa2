@@ -21,7 +21,7 @@
 #include "animation_commands_bg.h"
 #include "data/sa2/tileset_debug_ascii.h"
 
-#include "constants/songs.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     void *vram;

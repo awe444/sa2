@@ -26,10 +26,10 @@
 #endif
 #include "game/sa2/multiplayer/multipak_connection.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/move_states.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/move_states.h"
+#include "constants/sa2/songs.h"
 
 // TODO: Names
 #if (GAME == GAME_SA1)

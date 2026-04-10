@@ -9,8 +9,13 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
-#include "constants/animations.h"
-#include "constants/zones.h"
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#include "constants/sa1/zones.h"
+#elif (GAME == GAME_SA2)
+#include "constants/sa2/animations.h"
+#include "constants/sa2/zones.h"
+#endif
 
 typedef struct {
     Sprite s;
@@ -34,7 +39,11 @@ void CreateMagneticRing(s16 x, s16 y)
     s->graphics.dest = RESERVED_RING_TILES_VRAM;
     s->oamFlags = SPRITE_OAM_ORDER(15);
     s->graphics.size = 0;
-    s->graphics.anim = SA2_ANIM_RING;
+#if (GAME == GAME_SA1)
+    GET_SPRITE_ANIM(s) = SA1_ANIM_RING;
+#elif (GAME == GAME_SA2)
+    GET_SPRITE_ANIM(s) = SA2_ANIM_RING;
+#endif
     s->variant = 0;
     s->animCursor = 0;
     s->qAnimDelay = 0;
@@ -51,7 +60,7 @@ void Task_MagneticRing(void)
     s32 ringToPlayerX = I(p->qWorldX) - (u16)ring->s.x;
     s32 ringToPlayerY = I(p->qWorldY) - (u16)ring->s.y;
 
-    s16 sinVal = sub_8004418(ringToPlayerY, ringToPlayerX);
+    s16 sinVal = SA2_LABEL(sub_8004418)(ringToPlayerY, ringToPlayerX);
     s16 ringX, ringY;
 
     ring->speed += Q(0.25);
@@ -62,7 +71,7 @@ void Task_MagneticRing(void)
     ringY = ring->s.y;
     ringX = ring->s.x;
 
-    if (HB_TOUCHING_RING(I(gPlayer.qWorldX), I(gPlayer.qWorldY), ringX, ringY, gPlayerBodyPSI.s.hitboxes[0])) {
+    if (HB_TOUCHING_RING(I(gPlayer.qWorldX), I(gPlayer.qWorldY), ringX, ringY, gPlayerBodyPSI.s.hitboxes[0].b)) {
         if (PLAYER_IS_ALIVE) {
             INCREMENT_RINGS(1);
 

@@ -5,16 +5,16 @@
 #include "sprite.h"
 #include "game/sa2/stage/screen_fade.h"
 #include "lib/m4a/m4a.h"
-#include "constants/songs.h"
+#include "constants/sa2/songs.h"
 #include "game/sa2/save.h"
 #include "malloc_vram.h"
 #include "game/sa2/collect_rings/singlepak_connection.h"
 #include "game/sa2/title_screen.h"
 #include "game/sa2/ui/character_select.h"
 
-#include "constants/animations.h"
-#include "constants/text.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/text.h"
+#include "constants/sa2/tilemaps.h"
 
 struct MultiplayerLobbyScreen {
     Sprite chao;
@@ -378,7 +378,7 @@ static void Task_NotifyExit(void)
     LINK_HEARTBEAT();
 
     for (i = 1; i < MULTI_SIO_PLAYERS_MAX; i++) {
-        if CONNECTION_REGISTERED (i) {
+        if (CONNECTION_REGISTERED(i)) {
             if (CatchInvalidPacket(&gMultiSioRecv[i])) {
                 return;
             }

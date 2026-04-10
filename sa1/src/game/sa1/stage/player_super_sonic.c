@@ -16,10 +16,10 @@
 #include "game/shared/stage/terrain_collision.h"
 #include "game/shared/stage/underwater_effects.h"
 
-#include "constants/animations.h"
-#include "constants/char_states.h"
-#include "constants/songs.h"
-#include "constants/vram_hardcoded.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/vram_hardcoded.h"
 
 /* Start of Super Sonic ? */
 #include "game/sa1/stage/enemies/boss_xtra_super_egg_robo.h"

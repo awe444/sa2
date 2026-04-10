@@ -8,16 +8,16 @@
 
 #include "lib/m4a/m4a.h"
 #include "game/sa2/ui/character_select.h"
-#include "constants/songs.h"
-#include "constants/text.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
 #include "task.h"
 #include "malloc_vram.h"
 #include "game/sa2/multiplayer/multipak_connection.h"
 #include "game/sa2/stage/bosses/final_intro.h"
 #include "trig.h"
 
-#include "constants/animations.h"
-#include "constants/tilemaps.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/tilemaps.h"
 
 struct CourseSelectionScreen {
     ScreenFade fade;

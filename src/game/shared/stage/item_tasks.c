@@ -11,8 +11,8 @@
 #include "game/shared/stage/item_tasks.h"
 #include "game/shared/stage/mp_player.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
 
 typedef struct {
     Sprite s;

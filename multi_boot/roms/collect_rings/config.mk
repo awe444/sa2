@@ -6,6 +6,7 @@ MIDI_COMMENTS := "arm"
 PLATFORM      ?= gba
 GAME_REVISION ?= 0
 GAME_REGION   ?= USA
+GAME          ?= GAME_SA2
 DEBUG         ?= 0
 COMPARE       ?= 1
 

@@ -12,8 +12,8 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/char_states.h"
-#include "constants/songs.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/songs.h"
 
 void ReceiveRoomEvent_ReachedStageGoal(union MultiSioData *recv, u8 i);
 void ReceiveRoomEvent_ItemEffect(union MultiSioData *recv, u8 i);
@@ -103,7 +103,7 @@ void ReceiveRoomEvent_ItemEffect(union MultiSioData *recv, u8 i)
             case 0: {
                 if (gGameMode != GAME_MODE_TEAM_PLAY || !IS_SAME_TEAM(i, SIO_MULTI_CNT->id)) {
                     gPlayer.itemEffect |= PLAYER_ITEM_EFFECT__CONFUSION;
-                    gPlayer.confusionTimer = TIME(0, 10);
+                    gPlayer.timerConfusion = TIME(0, 10);
                     CreateItemTask_Confusion(gPlayer.character);
                     m4aSongNumStart(SE_ITEM_CONFUSION);
                 }

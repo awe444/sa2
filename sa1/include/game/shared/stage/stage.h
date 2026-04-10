@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "core.h"
-#include "constants/zones.h"
+#include "constants/sa1/zones.h"
 
 void ApplyGameStageSettings(void);
 void GameStageStart(void);

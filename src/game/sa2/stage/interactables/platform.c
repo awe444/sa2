@@ -5,16 +5,15 @@
 #include "trig.h"
 #include "malloc_vram.h"
 
-#include "game/shared/stage/collision.h"
 #include "game/sa2/stage/interactables/platform.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/entity.h"
 #include "game/shared/stage/mp_event_mgr.h"
 
-#include "constants/animations.h"
-#include "constants/interactables.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/interactables.h"
+#include "constants/sa2/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;

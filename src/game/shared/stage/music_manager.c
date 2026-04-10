@@ -7,7 +7,7 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/songs.h"
+#include "constants/sa2/songs.h"
 
 static void MusManager_UpdateBgmParams(void);
 void MusManager_Fadeout(u16 fadeoutSpeed);

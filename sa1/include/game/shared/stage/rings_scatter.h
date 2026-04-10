@@ -1,18 +1,14 @@
 #ifndef GUARD_SA2_RINGS_SCATTER_H
 #define GUARD_SA2_RINGS_SCATTER_H
 
+#include "core.h"
+
 #if (GAME == GAME_SA1)
 #define MAX_SCATTERING_RINGS_COUNT_SP 48
 #define MAX_SCATTERING_RINGS_COUNT_MP 32
 #elif (GAME == GAME_SA2)
 #define MAX_SCATTERING_RINGS_COUNT_SP 32
 #define MAX_SCATTERING_RINGS_COUNT_MP 16
-#endif
-
-#if (GAME == GAME_SA1)
-#define UNK10_CONDITION 1
-#elif (GAME == GAME_SA2)
-#define UNK10_CONDITION !(ring->unk10 & 0x7)
 #endif
 
 typedef struct {
@@ -30,9 +26,9 @@ typedef struct {
 typedef struct {
     /* 0x000|0x000 */ Sprite sprRing;
     /* 0x030|0x030 */ ScatterRing rings[MAX_SCATTERING_RINGS_COUNT_SP];
-    /* 0x330|0x2B0 */ u32 sa2__unk2B0;
-    /* 0x334|0x2B4 */ u16 sa2__unk2B4;
-    /* 0x336|0x2B6 */ u16 sa2__unk2B6;
+    /* 0x330|0x2B0 */ u32 SA2_LABEL(unk2B0);
+    /* 0x334|0x2B4 */ u16 SA2_LABEL(unk2B4);
+    /* 0x336|0x2B6 */ u16 SA2_LABEL(unk2B6);
 } RingsScatter; /* size: 0x2B8 */
 
 extern struct Task *gRingsScatterTask; // -> RingsScatter

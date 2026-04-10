@@ -7,9 +7,9 @@
 #include "game/sa2/special_stage/utils.h"
 #include "game/sa2/special_stage/data.h"
 
-#include "constants/animations.h"
-#include "constants/songs.h"
-#include "constants/text.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/text.h"
 
 void RenderTime(void);
 void RenderRingCounters(void);

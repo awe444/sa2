@@ -28,10 +28,10 @@
 
 #include "lib/m4a/m4a.h"
 
-#include "constants/animations.h"
-#include "constants/characters.h"
-#include "constants/songs.h"
-#include "constants/zones.h"
+#include "constants/sa2/animations.h"
+#include "constants/sa2/characters.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 
 #include "game/shared/stage/mp_event_mgr.h"
 
@@ -271,7 +271,7 @@ void CreateGameStage(void)
         for (i = 0; i < MULTI_SIO_PLAYERS_MAX; i++) {
             gMultiplayerCharRings[i] = 0;
 
-            if CONNECTION_REGISTERED (i) {
+            if (CONNECTION_REGISTERED(i)) {
                 CreateMultiplayerPlayer(i);
                 if (i != SIO_MULTI_CNT->id) {
                     CreateOpponentPositionIndicator(i);
@@ -526,7 +526,7 @@ void HandleLifeLost(void)
         TasksDestroyAll();
         PAUSE_BACKGROUNDS_QUEUE();
 
-        SA2_LABEL(gBgSpritesCount) = 0;
+        gBgSpritesCount = 0;
 
         PAUSE_GRAPHICS_QUEUE();
         CreateTimeAttackLobbyScreen();
@@ -557,7 +557,7 @@ void HandleLifeLost(void)
             TasksDestroyAll();
             PAUSE_BACKGROUNDS_QUEUE();
 
-            SA2_LABEL(gBgSpritesCount) = 0;
+            gBgSpritesCount = 0;
 
             PAUSE_GRAPHICS_QUEUE();
             CreateGameStage();
@@ -745,7 +745,7 @@ void GoToNextLevel(void)
 
     TasksDestroyAll();
     PAUSE_BACKGROUNDS_QUEUE();
-    SA2_LABEL(gBgSpritesCount) = 0;
+    gBgSpritesCount = 0;
     PAUSE_GRAPHICS_QUEUE();
 
 #if (GAME == GAME_SA1)

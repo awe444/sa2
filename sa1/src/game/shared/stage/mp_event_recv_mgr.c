@@ -8,7 +8,7 @@
 #include "game/shared/stage/rings_scatter.h"
 #include "game/shared/stage/entities_manager.h"
 
-#include "constants/songs.h"
+#include "constants/sa1/songs.h"
 
 void *CreateRoomEvent(void)
 {
