@@ -261,6 +261,7 @@ SA2_C_FILES := \
 	src/game/sa1/menus/title_screen.c \
 	src/game/dummy_task.c \
 	src/game/game.c \
+	src/game/decomp_credits.c \
 
 # Non matching
 # 	src/game/sa1/stage/interactables/special_spring.c \

@@ -222,6 +222,7 @@ set(SA2_SHARED_SRCS
     src/game/globals.c
     src/game/dummy_task.c
     src/game/game.c
+    src/game/decomp_credits.c
     src/game/sa1/ui/time_attack_record.c
     src/game/sa1/ui/multiplayer_continue_screen.c
     src/game/sa1/ui/vs_record.c
