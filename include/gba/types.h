@@ -270,7 +270,12 @@ typedef union {
 #if EXTENDED_OAM
 
 static inline void OAM_SET_GBA_ATTR0(OamData *oam, u16 attr0) {
-    oam->split.y = (s16)(u8)(attr0 & 0xFF);
+    // GBA Y field is u8 (0-255). Values > DISPLAY_HEIGHT wrap above the
+    // screen (e.g. 255 → -1). Sign-extend to match the non-EXTENDED_OAM
+    // renderer logic: if (obj_y > DISPLAY_HEIGHT) obj_y -= 256;
+    s32 y = attr0 & 0xFF;
+    if (y > DISPLAY_HEIGHT) y -= 256;
+    oam->split.y = (s16)y;
     oam->split.affineMode = (attr0 >> 8) & 3;
     oam->split.objMode = (attr0 >> 10) & 3;
     oam->split.mosaic = (attr0 >> 12) & 1;
