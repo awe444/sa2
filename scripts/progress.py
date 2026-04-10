@@ -10,6 +10,8 @@ def collect_non_matching_funcs():
     result = []
     for root, dirs, files in os.walk('src'):
         for file in files:
+            if "/sa1/" in file:
+                continue
             if file.endswith('.c'):
                 with open(os.path.join(root, file), 'r') as f:
                     data = f.read()

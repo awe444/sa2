@@ -60,13 +60,6 @@
 #define CAM_SCREENBASE_MAP_BACK  56
 #endif
 
-struct Backgrounds {
-    Background unk0;
-    Background unk40;
-    Background unk80;
-    Background unkC0;
-};
-
 // Probably a array (as it's aligned 16)
 struct Backgrounds ALIGNED(16) gStageBackgroundsRam = {};
 

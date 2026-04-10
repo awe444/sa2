@@ -365,36 +365,37 @@ SA2_C_FILES := \
 	src/game/sa1/stage/enemies/boss_6_egg_snake.c \
 	src/game/sa1/stage/enemies/yukimaru.c \
 	src/game/sa1/stage/enemies/hanabii.c \
+	src/game/sa1/stage/player_sonic.c \
+	src/game/sa1/stage/player_amy.c \
+	src/game/sa1/stage/player_knuckles.c \
+	src/game/sa1/stage/player_tails.c \
+  	src/game/sa1/stage/player_super_sonic.c \
+	src/game/sa1/stage/mp_chao.c \
+	src/game/sa1/stage/camera_destroy.c \
+	src/game/sa1/stage/backgrounds/zone_5_init.c \
+	src/game/sa1/stage/backgrounds/zone_4.c \
+	src/game/sa1/stage/backgrounds/zone_3_firework.c \
+	src/game/sa1/stage/backgrounds/zone_3.c \
+	src/game/sa1/stage/backgrounds/zone_2_interior.c \
+	src/game/sa1/stage/backgrounds/zone_7_act_2.c \
+	src/game/sa1/stage/backgrounds/zone_4_init.c \
+	src/game/sa1/stage/backgrounds/zone_2.c \
+	src/game/sa1/stage/backgrounds/zone_6_hblank.c \
+	src/game/sa1/stage/backgrounds/zone_6.c \
+	src/game/sa1/stage/backgrounds/zone_7_act_1.c \
+	src/game/sa1/stage/backgrounds/zone_1.c \
+	src/game/sa1/stage/backgrounds/zone_7_act_2_init.c \
+	src/game/sa1/stage/backgrounds/zone_5.c \
+# 	src/game/sa1/stage/trapped_animals.c \
+# 	src/game/sa1/stage/stage_ui_z.c \
+# 	src/game/sa1/stage/stage_ui.c \
+# 	src/game/sa1/stage/mystery_itembox.c \
+
+
 
 # Nonmatching
 
 # Can't build
-# 	src/game/sa1/stage/camera_destroy.c \
-# 	src/game/sa1/stage/stage_ui_z.c \
-# 	src/game/sa1/stage/stage_ui.c \
-# 	src/game/sa1/stage/trapped_animals.c \
-# 	src/game/sa1/stage/mystery_itembox.c \
-# 	src/game/sa1/stage/backgrounds/zone_5_init.c \
-# 	src/game/sa1/stage/backgrounds/zone_4.c \
-# 	src/game/sa1/stage/backgrounds/zone_3_firework.c \
-# 	src/game/sa1/stage/backgrounds/zone_3.c \
-# 	src/game/sa1/stage/backgrounds/zone_2_interior.c \
-# 	src/game/sa1/stage/backgrounds/zone_7_act_2.c \
-# 	src/game/sa1/stage/backgrounds/zone_4_init.c \
-# 	src/game/sa1/stage/backgrounds/zone_2.c \
-# 	src/game/sa1/stage/backgrounds/zone_6_hblank.c \
-# 	src/game/sa1/stage/backgrounds/zone_6.c \
-# 	src/game/sa1/stage/backgrounds/zone_7_act_1.c \
-# 	src/game/sa1/stage/backgrounds/zone_1.c \
-# 	src/game/sa1/stage/backgrounds/zone_7_act_2_init.c \
-# 	src/game/sa1/stage/backgrounds/zone_5.c \
-
-# 	src/game/sa1/stage/player_amy.c \
-# 	src/game/sa1/stage/player_knuckles.c \
-# 	src/game/sa1/stage/player_sonic.c \
-# 	src/game/sa1/stage/mp_chao.c \
-#   src/game/sa1/stage/player_super_sonic.c \
-# 	src/game/sa1/stage/player_tails.c \
 
 SA2_C_ASM_FILES := \
 	src/rom_header.s \
