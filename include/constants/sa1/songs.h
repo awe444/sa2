@@ -184,8 +184,9 @@
 #define SE_222         222
 #define SE_223         223
 #define SE_224         224
+#define SE_LONG_BRAKE  232
 
-/* 225 - 300: Dummies */
+/* 225 - 300: Dummies (except SE_LONG_BRAKE) */
 
 #define SE_301                    301
 #define SE_302                    302
