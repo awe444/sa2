@@ -331,7 +331,7 @@ extern s16 SA2_LABEL(gUnknown_0300194C);
 
 extern Tilemap **gTilemapsRef;
 extern u8 gBgSprites_Unknown2[4][4];
-extern u8 gBgSprites_Unknown1[4];
+extern u8 gBgSprites_Unknown1[16];
 
 #define LOG_GRAPHICS_QUEUE !TRUE
 #if (!PLATFORM_GBA && LOG_GRAPHICS_QUEUE)
