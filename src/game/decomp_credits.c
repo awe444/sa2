@@ -5,14 +5,23 @@
 #include "core.h"
 #include "lib/m4a/m4a.h"
 #include "game/game.h"
+
+#if (GAME == GAME_SA1)
+#include "game/sa1/save.h"
+#include "game/sa1/menus/title_screen.h"
+#include "game/sa1/menus/options_screen.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/characters.h"
+#include "constants/sa1/songs.h"
+#elif (GAME == GAME_SA2)
 #include "game/sa2/save.h"
 #include "game/sa2/options_screen.h"
 #include "game/sa2/title_screen.h"
 #include "game/sa2/stage/debug_text_printer.h"
-
 #include "constants/sa2/animations.h"
 #include "constants/sa2/characters.h"
 #include "constants/sa2/songs.h"
+#endif
 
 #if ENABLE_DECOMP_CREDITS
 typedef struct {
@@ -64,7 +73,9 @@ void CreateDecompCreditsScreen(bool32 hasProfile)
     DCCredits *cred;
     Sprite *s;
 
+#if (GAME == GAME_SA2)
     Debug_CreateAsciiTask(0, 0);
+#endif
 
     t = TaskCreate(Task_DecompCreditsFirst, sizeof(DCCredits), 0, 0, TaskDestructor_DecompCredits);
     cred = TASK_DATA(t);
@@ -123,7 +134,9 @@ void UpdateSprites(DCCredits *cred)
 
     REG_IE |= INTR_FLAG_HBLANK;
 
+#if (GAME == GAME_SA2)
     Debug_PrintTextAt("Game decompiled by:", 8, 16);
+#endif
 
     s = &cred->sprSonic;
     UpdateSpriteAnimation(s);
@@ -142,17 +155,23 @@ void UpdateSprites(DCCredits *cred)
     UpdateSpriteAnimation(s);
     DisplaySprite(s);
     s->x = I(cred->qLogoOllieScreenX);
+#if (GAME == GAME_SA2)
     Debug_PrintTextAt("@freshollie", 16, s->y);
+#endif
 
     s = &cred->sprLogoJace;
     UpdateSpriteAnimation(s);
     DisplaySprite(s);
     cred->qLogoJaceScreenX += cred->qSpeedTails;
     s->x = I(cred->qLogoJaceScreenX);
+#if (GAME == GAME_SA2)
     Debug_PrintTextAt("@JaceCear", 16, cred->sprLogoJace.y + 8);
+#endif
 
     if (tailsIsCheering && ((cred->frames % 64u) < 32)) {
+#if (GAME == GAME_SA2)
         Debug_PrintTextAt("Press START to continue", 8, DISPLAY_HEIGHT);
+#endif
     }
 }
 
@@ -254,7 +273,9 @@ void TaskDestructor_DecompCredits(struct Task *t)
     m4aSongNumStop(SE_LONG_BRAKE);
 
     /* Deallocate all graphics from VRAM */
+#if (GAME == GAME_SA2)
     Debug_TextPrinterDestroy();
+#endif
 
     VramFree(cred->sprSonic.graphics.dest);
     VramFree(cred->sprTails.graphics.dest);
@@ -267,26 +288,51 @@ void TaskDestructor_DecompCredits(struct Task *t)
     PAUSE_GRAPHICS_QUEUE();
 
     if (gFlags & FLAGS_NO_FLASH_MEMORY) {
+#if (GAME == GAME_SA1)
+        CreateSegaLogo();
+        {
+            s32 i;
+            for (i = 0; i < NUM_CHARACTERS; i++) {
+                LOADED_SAVE->unlockedLevels[i] = 0xF;
+            }
+        }
+#elif (GAME == GAME_SA2)
         CreateTitleScreen();
         LoadCompletedSaveGame();
+#endif
         return;
     }
 
+#if (GAME == GAME_SA1)
+    if (cred->hasProfile) {
+        CreateEditLanguageScreen(1);
+        return;
+    }
+#elif (GAME == GAME_SA2)
     if (!cred->hasProfile) {
         CreateNewProfileScreen();
         return;
     }
+#endif
 
     // When a special button combination is pressed
     // skip the intro and go straight to the
     // title screen
     if (gFlags & FLAGS_SKIP_INTRO) {
+#if (GAME == GAME_SA1)
+        CreateTitleScreen(1);
+#elif (GAME == GAME_SA2)
         CreateTitleScreenAndSkipIntro();
+#endif
         gFlags &= ~FLAGS_SKIP_INTRO;
         return;
     }
 
+#if (GAME == GAME_SA1)
+    CreateSegaLogo();
+#elif (GAME == GAME_SA2)
     CreateTitleScreen();
+#endif
 }
 
 // Changes background colors depending on the current horizontal line
