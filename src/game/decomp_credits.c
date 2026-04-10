@@ -104,15 +104,19 @@ void CreateDecompCreditsScreen(bool32 hasProfile)
     s = &cred->sprLogoOllie;
     s->x = DISPLAY_CENTER_X + 24;
     s->y = DISPLAY_CENTER_Y - (LOGO_WIDTH / 2);
+#if (GAME == GAME_SA2)
     SPRITE_INIT_FLAGS(s, 64, 1133, 1, 18, 2, SPRITE_FLAG_MASK_X_FLIP);
     s->palId = 2;
+#endif
     cred->qLogoOllieScreenX = Q(s->x);
 
     s = &cred->sprLogoJace;
     s->x = cred->sprTails.x - 64;
     s->y = cred->sprTails.y;
+#if (GAME == GAME_SA2)
     SPRITE_INIT(s, 64, 1133, 0, 18, 2);
     s->palId = 3;
+#endif
     cred->qLogoJaceScreenX = Q(s->x);
 
     // Screen setup
@@ -152,16 +156,20 @@ void UpdateSprites(DCCredits *cred)
     tailsIsCheering = (s->graphics.anim == SA2_ANIM_CHAR(33, CHARACTER_TAILS)) ? 1 : 0;
 
     s = &cred->sprLogoOllie;
+#if (GAME == GAME_SA2)
     UpdateSpriteAnimation(s);
     DisplaySprite(s);
+#endif
     s->x = I(cred->qLogoOllieScreenX);
 #if (GAME == GAME_SA2)
     Debug_PrintTextAt("@freshollie", 16, s->y);
 #endif
 
     s = &cred->sprLogoJace;
+#if (GAME == GAME_SA2)
     UpdateSpriteAnimation(s);
     DisplaySprite(s);
+#endif
     cred->qLogoJaceScreenX += cred->qSpeedTails;
     s->x = I(cred->qLogoJaceScreenX);
 #if (GAME == GAME_SA2)
@@ -279,8 +287,10 @@ void TaskDestructor_DecompCredits(struct Task *t)
 
     VramFree(cred->sprSonic.graphics.dest);
     VramFree(cred->sprTails.graphics.dest);
+#if (GAME == GAME_SA2)
     VramFree(cred->sprLogoOllie.graphics.dest);
     VramFree(cred->sprLogoJace.graphics.dest);
+#endif
 
     gIntrTable[INTR_INDEX_HBLANK] = cred->prevHBlank;
 
