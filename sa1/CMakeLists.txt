@@ -190,7 +190,6 @@ set(SA1_PLATFORM_SRCS
     src/platform/shared/compression.c
     src/platform/shared/dma.c
     src/platform/shared/input.c
-    src/platform/shared/sio_stub.c
     src/platform/shared/stub.c
     src/platform/shared/audio/cgb_audio.c
     src/platform/shared/audio/m4a_sound_mixer.c
