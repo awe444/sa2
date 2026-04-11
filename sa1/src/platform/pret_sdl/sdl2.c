@@ -16,7 +16,7 @@
 
 // Audio diagnostic logging - set to 0 to disable
 #ifndef AUDIO_DEBUG_LOG
-#define AUDIO_DEBUG_LOG 1
+#define AUDIO_DEBUG_LOG 0
 #endif
 #include "core.h"
 #include "multi_sio.h"
