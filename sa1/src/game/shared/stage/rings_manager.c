@@ -398,7 +398,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/Task_RingsMgrMain.inc", void Task_Ring
                                         if (iwram_end == oamAllocated)
                                             return;
 
-                                        DmaCopy16(3, oamDat, oamAllocated, 6 /*sizeof(OamDataShort)*/);
+                                        DmaCopy16(3, oamDat, oamAllocated, sizeof(OamDataShort));
 
 #if !EXTENDED_OAM
                                         // TODO: Can these be done more explicitly?
