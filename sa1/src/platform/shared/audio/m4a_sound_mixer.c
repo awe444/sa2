@@ -7,9 +7,9 @@
 
 #include <stdio.h>
 
-// Audio diagnostic logging - set to 0 to disable
+// Audio diagnostic logging - set to 1 to enable verbose audio diagnostics
 #ifndef AUDIO_DEBUG_LOG
-#define AUDIO_DEBUG_LOG 1
+#define AUDIO_DEBUG_LOG 0
 #endif
 
 static inline void GenerateAudio(struct SoundMixerState *mixer, struct MixerSource *chan, struct WaveData *wav, fixed8_24 *pcmBuffer,
@@ -112,7 +112,7 @@ static void SampleMixer(struct SoundMixerState *mixer, u32 scanlineLimit, u16 sa
         // memset(pcmBuffer + maxBufSize, 0, samplesPerFrame);
         for (int i = 0; i < samplesPerFrame; i++) {
             fixed8_24 *dst = &pcmBuffer[i * 2];
-            dst[1] = dst[0] = 0.0f;
+            dst[1] = dst[0] = 0;
         }
     }
 
@@ -955,7 +955,13 @@ void m4aSoundVSync(void)
             // 32768 is size expected for s16 audio
             // 32768 = 1 << 15
             // 24 - 15 = 9
-            audioBuffer[i] = sample >> 9;
+            s32 out = sample >> 9;
+
+            // Clamp to s16 range to prevent wraparound distortion
+            // when multiple channels are at high volume simultaneously
+            if (out > 32767) out = 32767;
+            else if (out < -32768) out = -32768;
+            audioBuffer[i] = (s16)out;
 
 #if AUDIO_DEBUG_LOG
             if (audioBuffer[i] < sampleMin) sampleMin = audioBuffer[i];
