@@ -687,7 +687,7 @@ bool32 sub_800DD54(Player *p)
     p->moveState &= ~MOVESTATE_SPIN_ATTACK;
     p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
     p->moveState |= MOVESTATE_IN_AIR;
-    p->moveState &= ~MOVESTATE_400;
+    p->moveState &= ~MOVESTATE_SPINDASH;
     p->moveState &= ~MOVESTATE_100;
 
     p->charState = SA2_CHAR_ANIM_20;
@@ -750,7 +750,7 @@ bool32 sub_800DE44(Player *p)
     p->moveState &= ~MOVESTATE_SPIN_ATTACK;
     p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
     p->moveState |= MOVESTATE_IN_AIR;
-    p->moveState &= ~MOVESTATE_400;
+    p->moveState &= ~MOVESTATE_SPINDASH;
     p->moveState &= ~MOVESTATE_100;
 
     p->charState = SA2_CHAR_ANIM_20;

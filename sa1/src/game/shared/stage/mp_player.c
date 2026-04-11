@@ -668,7 +668,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/mp_player__Task_CreateMultiplayerPlaye
                         gPlayer.moveState &= ~MOVESTATE_4;
                         gPlayer.moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                         gPlayer.moveState |= MOVESTATE_IN_AIR;
-                        gPlayer.moveState &= ~MOVESTATE_400;
+                        gPlayer.moveState &= ~MOVESTATE_SPINDASH;
                         gPlayer.moveState &= ~MOVESTATE_100;
                         PLAYERFN_CHANGE_SHIFT_OFFSETS(&gPlayer, 6, 14);
                         gPlayer.SA2_LABEL(unk61) = 0;
@@ -729,7 +729,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/mp_player__Task_CreateMultiplayerPlaye
             //     // TODO: macro this
             //     TasksDestroyAll();
             //     PAUSE_BACKGROUNDS_QUEUE();
-            //     gUnknown_03005390 = 0;
+            //     gBgSpritesCount = 0;
             //     PAUSE_GRAPHICS_QUEUE();
             //     LinkCommunicationError();
             //     return;
@@ -744,7 +744,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/mp_player__Task_CreateMultiplayerPlaye
             // TODO: macro this
             TasksDestroyAll();
             PAUSE_BACKGROUNDS_QUEUE();
-            gUnknown_03005390 = 0;
+            gBgSpritesCount = 0;
             PAUSE_GRAPHICS_QUEUE();
             LinkCommunicationError();
             return;

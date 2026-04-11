@@ -5,6 +5,15 @@
 #include "game/shared/stage/rings_scatter.h"
 #include "game/shared/stage/entities_manager.h"
 
+#if (GAME == GAME_SA1)
+#include "lib/m4a/m4a.h"
+
+#include "game/shared/stage/mp_player.h"
+#include "game/sa1/stage/mp_chao.h"
+
+#include "constants/sa1/songs.h"
+#endif
+
 void *CreateRoomEvent(void)
 {
     RoomEvent *result = &gRoomEventQueue[gRoomEventQueueWritePos];
@@ -152,6 +161,33 @@ void ReceiveRoomEvent_MysteryItemBoxBreak(union MultiSioData *msioData, u8 UNUSE
 }
 
 #ifndef COLLECT_RINGS_ROM
-// Type of this is determined by it being referenced in a C func-array
-void ReceiveRoomEvent_Unknown(union MultiSioData *msioData, u8 UNUSED someId) { REG_SIOCNT_32; }
+void ReceiveRoomEvent_8(union MultiSioData *msioData, u8 UNUSED someId)
+{
+    if (SIO_MULTI_CNT->id == msioData->pat5.sioId) {
+#if (GAME == GAME_SA1)
+        if (msioData->pat5.unk10 != 0) {
+            gPlayer.moveState |= MOVESTATE_10000;
+        } else {
+            gPlayer.moveState &= ~MOVESTATE_10000;
+        }
+#endif
+    }
+}
+#endif
+
+#if (GAME == GAME_SA1)
+void ReceiveRoomEvent_CollectChao(union MultiSioData *msioData, u8 mppId)
+{
+    Chao *chao = TASK_DATA(gChaoTasks[msioData->pat5.sioId]);
+    MultiplayerPlayer *mpp;
+
+    chao->playerIdA = msioData->pat5.unk10;
+    mpp = TASK_DATA(gMultiplayerPlayerTasks[mppId]);
+    mpp->unk5C &= ~(0x10000 << msioData->pat5.sioId);
+
+    mpp = TASK_DATA(gMultiplayerPlayerTasks[msioData->pat5.unk10]);
+    mpp->unk5C |= (0x10000 << msioData->pat5.sioId);
+
+    m4aSongNumStart(SE_CHAO_HUH);
+}
 #endif

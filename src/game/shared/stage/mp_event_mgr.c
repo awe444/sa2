@@ -28,7 +28,7 @@ const RoomEventHandler gRoomEventHandlers[] = {
     [ROOMEVENT_TYPE_ITEMEFFECT_APPLIED - 1] = ReceiveRoomEvent_ItemEffect,
 #ifndef COLLECT_RINGS_ROM
     [ROOMEVENT_TYPE_REACHED_STAGE_GOAL - 1] = ReceiveRoomEvent_ReachedStageGoal,
-    [ROOMEVENT_TYPE_UNKNOWN - 1] = ReceiveRoomEvent_Unknown,
+    [ROOMEVENT_TYPE_UNKNOWN - 1] = ReceiveRoomEvent_8,
 #endif
     NULL,
 };
@@ -218,7 +218,7 @@ void ReceiveRoomEvent_ReachedStageGoal(union MultiSioData *recv, u8 i)
                     gPlayer.moveState &= ~MOVESTATE_SPIN_ATTACK;
                     gPlayer.moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                     gPlayer.moveState |= MOVESTATE_IN_AIR;
-                    gPlayer.moveState &= ~MOVESTATE_400;
+                    gPlayer.moveState &= ~MOVESTATE_SPINDASH;
                     gPlayer.moveState &= ~MOVESTATE_100;
                     gPlayer.charState = CHARSTATE_HIT_AIR;
                     PLAYERFN_CHANGE_SHIFT_OFFSETS(&gPlayer, 6, 14);

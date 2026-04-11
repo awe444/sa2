@@ -3,13 +3,16 @@
 #include "malloc_vram.h"
 #include "task.h"
 
-#include "game/shared/stage/amy_attack_heart_effect.h"
 #include "game/globals.h"
+#include "game/shared/stage/amy_attack_heart_effect.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/player.h"
 
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
-#if (GAME == GAME_SA2)
 #include "constants/sa2/char_states.h"
 #endif
 
@@ -38,7 +41,7 @@ typedef struct {
 } AmyAtkHearts; /* size: 0x10C */
 
 void Task_AmyAttackHeartEffect(void);
-void sub_8015E28(u16);
+void SA2_LABEL(sub_8015E28)(u16);
 void TaskDestructor_AmyAttackHeartEffect(struct Task *);
 
 ALIGNED(4)
@@ -181,7 +184,7 @@ void Task_AmyAttackHeartEffect(void)
 
                 if (old106 >= r2) {
                     u32 v;
-                    sub_8015E28(hearts->unk108);
+                    SA2_LABEL(sub_8015E28)(hearts->unk108);
 
                     hearts->unk108 = ((++hearts->unk108) & 0x7);
 
@@ -225,7 +228,7 @@ void Task_AmyAttackHeartEffect(void)
     }
 }
 
-void sub_8015E28(u16 p0)
+void SA2_LABEL(sub_8015E28)(u16 p0)
 {
     AmyAtkHearts *hearts = TASK_DATA(gCurTask);
     u8 i = 0;

@@ -976,7 +976,7 @@ void Player_TransitionCancelFlyingAndBoost(Player *p)
     }
 
     p->moveState &= ~(MOVESTATE_SOME_ATTACK | MOVESTATE_10000000 | MOVESTATE_1000000 | MOVESTATE_80000 | MOVESTATE_40000 | MOVESTATE_20000
-                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
+                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
     p->SA2_LABEL(unk61) = 0;
@@ -1001,7 +1001,7 @@ void Player_TransitionCancelFlyingAndBoost(Player *p)
 static inline void Player_TransitionCancelBoost(Player *p)
 {
     p->moveState &= ~(MOVESTATE_SOME_ATTACK | MOVESTATE_10000000 | MOVESTATE_1000000 | MOVESTATE_80000 | MOVESTATE_40000 | MOVESTATE_20000
-                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
+                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
     p->SA2_LABEL(unk61) = 0;
@@ -4409,7 +4409,7 @@ void Player_TouchGround(Player *p)
         Player_TransitionCancelFlyingAndBoost(p);
 #else
         p->moveState &= ~(MOVESTATE_SOME_ATTACK | MOVESTATE_10000000 | MOVESTATE_1000000 | MOVESTATE_80000 | MOVESTATE_40000
-                          | MOVESTATE_20000 | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200
+                          | MOVESTATE_20000 | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200
                           | MOVESTATE_100 | MOVESTATE_20 | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
         p->SA2_LABEL(unk61) = 0;
@@ -4751,7 +4751,7 @@ void Player_InitJump(Player *p)
     Player_TransitionCancelFlyingAndBoost(p);
 #else
     p->moveState &= ~(MOVESTATE_SOME_ATTACK | MOVESTATE_10000000 | MOVESTATE_1000000 | MOVESTATE_80000 | MOVESTATE_40000 | MOVESTATE_20000
-                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
+                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
     p->SA2_LABEL(unk61) = r3;
@@ -4912,7 +4912,7 @@ void Player_InitUncurl(Player *p)
     Player_TransitionCancelFlyingAndBoost(p);
 #else
     p->moveState &= ~(MOVESTATE_SOME_ATTACK | MOVESTATE_10000000 | MOVESTATE_1000000 | MOVESTATE_80000 | MOVESTATE_40000 | MOVESTATE_20000
-                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
+                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
     p->SA2_LABEL(unk61) = 0;
@@ -4987,7 +4987,7 @@ void Player_InitSpindash(Player *p)
 {
     p->charState = CHARSTATE_SPIN_DASH;
 
-    p->moveState |= (MOVESTATE_400 | MOVESTATE_SPIN_ATTACK);
+    p->moveState |= (MOVESTATE_SPINDASH | MOVESTATE_SPIN_ATTACK);
     p->moveState &= ~(MOVESTATE_20 | MOVESTATE_IN_AIR);
 
     PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
@@ -5012,7 +5012,7 @@ void Player_Spindash(Player *p)
     if (!(p->heldInput & DPAD_DOWN)) {
         s16 index;
         s32 speed;
-        p->moveState &= ~MOVESTATE_400;
+        p->moveState &= ~MOVESTATE_SPINDASH;
 
         index = I(p->qSpindashAccel);
         if (index > 8)
@@ -5190,7 +5190,7 @@ void Player_InitGrinding(Player *p)
     Player_TransitionCancelFlyingAndBoost(p);
 #else
     p->moveState &= ~(MOVESTATE_SOME_ATTACK | MOVESTATE_10000000 | MOVESTATE_1000000 | MOVESTATE_80000 | MOVESTATE_40000 | MOVESTATE_20000
-                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
+                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
     p->SA2_LABEL(unk61) = 0;
@@ -6703,7 +6703,7 @@ bool32 Player_TryInitSpindash(Player *p)
             PLAYERFN_SET(Player_InitSpindash);
             p->charState = CHARSTATE_SPIN_DASH;
 
-            p->moveState |= (MOVESTATE_400 | MOVESTATE_SPIN_ATTACK);
+            p->moveState |= (MOVESTATE_SPINDASH | MOVESTATE_SPIN_ATTACK);
             p->moveState &= ~(MOVESTATE_20 | MOVESTATE_IN_AIR);
 
             PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
@@ -7503,7 +7503,7 @@ void Player_InitSpindash(Player *p)
 {
     p->charState = CHARSTATE_SPIN_DASH;
 
-    p->moveState |= (MOVESTATE_400 | MOVESTATE_SPIN_ATTACK);
+    p->moveState |= (MOVESTATE_SPINDASH | MOVESTATE_SPIN_ATTACK);
     p->moveState &= ~(MOVESTATE_20 | MOVESTATE_IN_AIR);
 
     PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
@@ -7552,7 +7552,7 @@ void Player_802A258(Player *p)
 
 bool32 Player_TryAttack(Player *p)
 {
-    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (p->moveState & (MOVESTATE_8000 | MOVESTATE_400))
+    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (p->moveState & (MOVESTATE_8000 | MOVESTATE_SPINDASH))
         || ((s8)(p->rotation + Q(0.25)) <= 0)) {
         return FALSE;
     } else if (p->frameInput & gPlayerControls.attack) {

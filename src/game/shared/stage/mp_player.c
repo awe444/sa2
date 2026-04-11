@@ -674,7 +674,7 @@ NONMATCH("asm/non_matching/game/shared/stage/mp_player__Task_CreateMultiplayerPl
                     gPlayer.moveState &= ~MOVESTATE_SPIN_ATTACK;
                     gPlayer.moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                     gPlayer.moveState |= MOVESTATE_IN_AIR;
-                    gPlayer.moveState &= ~MOVESTATE_400;
+                    gPlayer.moveState &= ~MOVESTATE_SPINDASH;
                     gPlayer.moveState &= ~MOVESTATE_100;
                     PLAYERFN_CHANGE_SHIFT_OFFSETS(&gPlayer, 6, 14);
                     gPlayer.SA2_LABEL(unk61) = 0;

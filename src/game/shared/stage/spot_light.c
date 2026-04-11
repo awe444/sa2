@@ -22,6 +22,7 @@ void Task_SpotLightMain(void);
 void Task_800A8E0(void);
 void TaskDestructor_SpotLightMain(struct Task *);
 
+// TODO: rename to SpotlightsManager
 bool32 CreateSpotLightBeams(void)
 {
     struct Task *t = TaskCreate(Task_SpotLightMain, sizeof(StageSpotLight), 0x2000, 0, TaskDestructor_SpotLightMain);

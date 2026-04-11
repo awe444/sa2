@@ -16,7 +16,6 @@
 #define MOVESTATE_DEAD               0x00000080
 #define MOVESTATE_100                0x00000100
 #define MOVESTATE_200                0x00000200
-#define MOVESTATE_400                0x00000400
 #define MOVESTATE_SPINDASH           0x00000400
 #define MOVESTATE_ICE_SLIDE          0x00000800 // SA2: MOVESTATE_ICE_SLIDE
 #define MOVESTATE_1000               0x00001000
@@ -56,7 +55,7 @@
 #define MOVESTATE_DEAD               0x00000080
 #define MOVESTATE_100                0x00000100
 #define MOVESTATE_200                0x00000200
-#define MOVESTATE_400                0x00000400
+#define MOVESTATE_SPINDASH           0x00000400
 #define MOVESTATE_ICE_SLIDE          0x00000800
 #define MOVESTATE_1000               0x00001000
 #define MOVESTATE_2000               0x00002000
