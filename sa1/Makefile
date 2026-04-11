@@ -249,6 +249,7 @@ SA2_C_FILES := \
 	src/game/shared/stage/unused_flash_task.c \
 	src/game/shared/multiplayer/communication_outcome.c \
 	src/game/shared/stage/pause_menu.c \
+	src/game/shared/stage/item_tasks.c \
 	src/game/sa1/ui/game_2_0.c \
 	src/game/sa1/ui/game_2_1.c \
 	src/game/sa1/ui/stage_results.c \

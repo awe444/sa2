@@ -141,7 +141,7 @@ SECTIONS {
         sa2/src/game/sa1/stage/player_knuckles.o(.text);
         sa2/src/game/sa1/stage/player_amy.o(.text);
         sa2/src/game/sa1/stage/player_super_sonic.o(.text);
-        src/game/shared/stage/item_tasks.o(.text);
+        sa2/src/game/shared/stage/item_tasks.o(.text);
         src/game/shared/stage/underwater_effects.o(.text);
         src/game/shared/stage/water_effects.o(.text);
         sa2/src/game/shared/stage/screen_shake.o(.text);
