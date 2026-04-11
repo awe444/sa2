@@ -62,7 +62,11 @@ void CreateDemoManager(void)
     DemoManager *dm;
     Sprite *s;
 #if (GAME == GAME_SA1)
+#ifndef NON_MATCHING
     const AnimId arr[2];
+#else
+    AnimId arr[2];
+#endif
     memcpy(&arr, gPressStartTiles, sizeof(arr));
 #endif
     blendCtrl = gBldRegs.bldCnt & 0xC0;
