@@ -6,6 +6,7 @@
 
 #if !PLATFORM_GBA
 #include "platform/shared/audio/cgb_audio.h"
+#include "platform/platform.h"
 #endif
 
 #if PLATFORM_GBA
@@ -500,6 +501,10 @@ void m4aSoundVSyncOff(void)
         REG_DMA2CNT_H = DMA_32BIT;
 
         CpuFill32(0, soundInfo->pcmBuffer, sizeof(soundInfo->pcmBuffer));
+#if !PLATFORM_GBA
+        // Clear the SDL audio queue so old audio doesn't play through transitions
+        Platform_ClearQueuedAudio();
+#endif
     }
 }
 

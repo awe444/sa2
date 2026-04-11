@@ -86,7 +86,16 @@ static void SampleMixer(struct SoundMixerState *mixer, u32 scanlineLimit, u16 sa
         u16 i = 0;
         do {
             fixed8_24 s = tmp1[0] + tmp1[1] + tmp2[0] + tmp2[1];
-            s = (s * reverb) >> 9;
+            // Cast to s64 to prevent overflow and preserve sign for negative values.
+            // Without this, s32 * u32 promotes to unsigned, and the logical right shift
+            // produces wrong positive values for negative sums (~50% of audio samples),
+            // causing noise and distortion.
+            s = (s32)(((s64)s * reverb) >> 9);
+            // Match GBA behavior: the original ARM code (tst r0, 0x80 / addne r0, 0x1)
+            // adds 1 to negative results, rounding toward zero. Without this, arithmetic
+            // right shift rounds toward -infinity, causing a permanent -1 DC offset in
+            // the reverb buffer that never decays to zero.
+            if (s < 0) s++;
             tmp1[0] = tmp1[1] = s;
             tmp1 += 2;
             tmp2 += 2;
@@ -96,7 +105,7 @@ static void SampleMixer(struct SoundMixerState *mixer, u32 scanlineLimit, u16 sa
         // memset(pcmBuffer + maxBufSize, 0, samplesPerFrame);
         for (int i = 0; i < samplesPerFrame; i++) {
             fixed8_24 *dst = &pcmBuffer[i * 2];
-            dst[1] = dst[0] = 0.0f;
+            dst[1] = dst[0] = 0;
         }
     }
 
@@ -930,7 +939,13 @@ void m4aSoundVSync(void)
             // 32768 is size expected for s16 audio
             // 32768 = 1 << 15
             // 24 - 15 = 9
-            audioBuffer[i] = sample >> 9;
+            s32 out = sample >> 9;
+
+            // Clamp to s16 range to prevent wraparound distortion
+            // when multiple channels are at high volume simultaneously
+            if (out > 32767) out = 32767;
+            else if (out < -32768) out = -32768;
+            audioBuffer[i] = (s16)out;
         }
 
         Platform_QueueAudio(audioBuffer, samplesPerFrame * sizeof(s16));
