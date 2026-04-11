@@ -5,7 +5,11 @@
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
+#endif
 
 void Task_CreateEnemyDefeatScore_MoveUp(void);
 void Task_CreateEnemyDefeatScore_Hold(void);
@@ -27,10 +31,18 @@ void CreateEnemyDefeatScore(s16 x, s16 y)
     score->s.x = x;
     score->s.y = y;
 
+#if (GAME == GAME_SA1)
+    s->graphics.dest = ALLOC_TILES(SA1_ANIM_SCORE);
+#elif (GAME == GAME_SA2)
     s->graphics.dest = VramMalloc(TILE_COUNT__ANIM_SCORE);
+#endif
     s->oamFlags = SPRITE_OAM_ORDER(0);
     s->graphics.size = 0;
+#if (GAME == GAME_SA1)
+    s->graphics.anim = SA1_ANIM_SCORE;
+#elif (GAME == GAME_SA2)
     s->graphics.anim = SA2_ANIM_SCORE;
+#endif
     s->variant = gPlayer.defeatScoreIndex;
     s->animCursor = 0;
     s->qAnimDelay = 0;

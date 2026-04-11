@@ -43,8 +43,8 @@ SECTIONS {
 
         src/game/shared/stage/spot_light_beam_task.o(.text);
         sa2/src/game/sa1/stage/to_be_continued_screen.o(.text);
-        src/game/shared/stage/enemy_defeat_score.o(.text);
-        src/game/shared/stage/demo_manager.o(.text);
+        sa2/src/game/shared/stage/enemy_defeat_score.o(.text);
+        sa2/src/game/shared/stage/demo_manager.o(.text);
         
         sa2/src/game/sa1/save.o(.text);
 
