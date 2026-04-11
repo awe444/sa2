@@ -108,7 +108,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/Task_RingsMgrMain.inc", void Task_Ring
 {
     // oam sub-frame ID?
     u8 sp1C = 0;
-    s32 sp08;
+    s32 sp08 = FALSE;
     u32 regions_x; // sp0C;
     u32 regions_y; // sp10;
     Player *p;
