@@ -263,6 +263,72 @@ typedef union {
 
 #endif
 
+// Helpers for writing GBA-format attr0/attr1/attr2 values to an OamData.
+// On GBA (non-EXTENDED_OAM), these are direct assignments.
+// On EXTENDED_OAM, the all.attr0/attr1/attr2 fields don't contain x/y,
+// so we need to unpack GBA-format values into the split fields.
+#if EXTENDED_OAM
+
+static inline void OAM_SET_GBA_ATTR0(OamData *oam, u16 attr0) {
+    // GBA Y field is u8 (0-255). Values > DISPLAY_HEIGHT wrap above the
+    // screen (e.g. 255 → -1). Sign-extend to match the non-EXTENDED_OAM
+    // renderer logic: if (obj_y > DISPLAY_HEIGHT) obj_y -= 256;
+    s32 y = attr0 & 0xFF;
+    if (y > DISPLAY_HEIGHT) y -= 256;
+    oam->split.y = (s16)y;
+    oam->split.affineMode = (attr0 >> 8) & 3;
+    oam->split.objMode = (attr0 >> 10) & 3;
+    oam->split.mosaic = (attr0 >> 12) & 1;
+    oam->split.bpp = (attr0 >> 13) & 1;
+    oam->split.shape = (attr0 >> 14) & 3;
+}
+
+static inline void OAM_SET_GBA_ATTR1(OamData *oam, u16 attr1) {
+    s32 x = attr1 & 0x1FF;
+    if (x >= 0x100) x -= 0x200;
+    oam->split.x = (s16)x;
+    oam->split.matrixNum = (attr1 >> 9) & 0x1F;
+    oam->split.size = (attr1 >> 14) & 3;
+}
+
+static inline void OAM_SET_GBA_ATTR2(OamData *oam, u16 attr2) {
+    oam->split.tileNum = attr2 & 0x3FF;
+    oam->split.priority = (attr2 >> 10) & 3;
+    oam->split.paletteNum = (attr2 >> 12) & 0xF;
+}
+
+static inline u16 OAM_GET_GBA_ATTR0(const OamData *oam) {
+    return (u16)((oam->split.y & 0xFF)
+        | (oam->split.affineMode << 8)
+        | (oam->split.objMode << 10)
+        | (oam->split.mosaic << 12)
+        | (oam->split.bpp << 13)
+        | (oam->split.shape << 14));
+}
+
+static inline u16 OAM_GET_GBA_ATTR1(const OamData *oam) {
+    return (u16)((oam->split.x & 0x1FF)
+        | (oam->split.matrixNum << 9)
+        | (oam->split.size << 14));
+}
+
+static inline u16 OAM_GET_GBA_ATTR2(const OamData *oam) {
+    return (u16)(oam->split.tileNum
+        | (oam->split.priority << 10)
+        | (oam->split.paletteNum << 12));
+}
+
+#else
+
+#define OAM_SET_GBA_ATTR0(oam, val) ((oam)->all.attr0 = (val))
+#define OAM_SET_GBA_ATTR1(oam, val) ((oam)->all.attr1 = (val))
+#define OAM_SET_GBA_ATTR2(oam, val) ((oam)->all.attr2 = (val))
+#define OAM_GET_GBA_ATTR0(oam) ((oam)->all.attr0)
+#define OAM_GET_GBA_ATTR1(oam) ((oam)->all.attr1)
+#define OAM_GET_GBA_ATTR2(oam) ((oam)->all.attr2)
+
+#endif
+
 #define ST_OAM_HFLIP     0x08
 #define ST_OAM_VFLIP     0x10
 #define ST_OAM_MNUM_FLIP_MASK 0x18

@@ -304,9 +304,9 @@ NONMATCH("asm/non_matching/game/sa1/stage/stage_ui__sub_80550F8.inc", struct Tas
                 break;
             }
 
-            oam->all.attr0 = 0x400 | 42;
-            oam->all.attr1 = i * 32 + ~0x7FFF;
-            oam->all.attr2 = 0x6080;
+            OAM_SET_GBA_ATTR0(oam, 0x400 | 42);
+            OAM_SET_GBA_ATTR1(oam, i * 32 + ~0x7FFF);
+            OAM_SET_GBA_ATTR2(oam, 0x6080);
         }
     }
 
