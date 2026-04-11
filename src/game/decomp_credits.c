@@ -276,8 +276,9 @@ void TaskDestructor_DecompCredits(struct Task *t)
 {
     DCCredits *cred = TASK_DATA(t);
 
-    /* If players skip the credits while the soundeffect plays,
-       it continues if it isn't manually stopped. */
+    /* Stop the credits music and sound effects that would
+       otherwise continue playing into the next scene. */
+    m4aSongNumStop(MUS_STAFF_CREDITS);
     m4aSongNumStop(SE_LONG_BRAKE);
 
     /* Deallocate all graphics from VRAM */

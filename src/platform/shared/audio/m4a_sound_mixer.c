@@ -91,6 +91,11 @@ static void SampleMixer(struct SoundMixerState *mixer, u32 scanlineLimit, u16 sa
             // produces wrong positive values for negative sums (~50% of audio samples),
             // causing noise and distortion.
             s = (s32)(((s64)s * reverb) >> 9);
+            // Match GBA behavior: the original ARM code (tst r0, 0x80 / addne r0, 0x1)
+            // adds 1 to negative results, rounding toward zero. Without this, arithmetic
+            // right shift rounds toward -infinity, causing a permanent -1 DC offset in
+            // the reverb buffer that never decays to zero.
+            if (s < 0) s++;
             tmp1[0] = tmp1[1] = s;
             tmp1 += 2;
             tmp2 += 2;
