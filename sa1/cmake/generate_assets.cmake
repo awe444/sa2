@@ -396,7 +396,7 @@ foreach(MID ${MID_FILES})
         if(DEFINED MID2AGB_FLAGS_${MID_NAME})
             set(SONG_FLAGS ${MID2AGB_FLAGS_${MID_NAME}})
         else()
-            message(WARNING "No mid2agb flags defined for ${MID_NAME}, using defaults")
+            message(WARNING "No mid2agb flags defined for ${MID_NAME} — mid2agb will use built-in defaults (voice group 0, volume 127)")
         endif()
         execute_process(
             COMMAND "${MID2AGB}" "${MID}" "${MID_S}" ${SONG_FLAGS}
