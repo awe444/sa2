@@ -127,7 +127,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/stage_ui__Task_StageUIMain.inc", void 
     for (i = 8; i >= 0; i--) {
         remainder0 = Div(remainder, 10);
 
-        ui->digitsRings[i] = UI_DIGIT(remainder - ((remainder0 << 3) + (remainder0 << 1)));
+        ((u8 *)&ui->unk10)[i] = UI_DIGIT(remainder - ((remainder0 << 3) + (remainder0 << 1)));
 
         remainder = remainder0;
     }
