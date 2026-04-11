@@ -271,16 +271,16 @@ int main(int argc, char **argv)
 
     SDL_memset(&want, 0, sizeof(want)); /* or SDL_zero(want) */
     want.freq = 48000;
-    want.format = AUDIO_F32;
+    want.format = AUDIO_S16;
     want.channels = 2;
     want.samples = (want.freq / 60);
     cgb_audio_init(want.freq);
 
-    if (SDL_OpenAudio(&want, 0) < 0)
+    if (SDL_OpenAudio(&want, 0) < 0) {
         SDL_Log("Failed to open audio: %s", SDL_GetError());
-    else {
-        if (want.format != AUDIO_F32) /* we let this one thing change. */
-            SDL_Log("We didn't get Float32 audio format.");
+    } else {
+        if (want.format != AUDIO_S16) /* we let this one thing change. */
+            SDL_Log("We didn't get S16 audio format.");
         SDL_PauseAudio(0);
     }
 #endif
@@ -475,7 +475,7 @@ static u16 keys;
 u32 fullScreenFlags = 0;
 static SDL_DisplayMode sdlDispMode = { 0 };
 
-void Platform_QueueAudio(const void *data, uint32_t bytesCount)
+void Platform_QueueAudio(const s16 *data, uint32_t bytesCount)
 {
     if (headless) {
         return;
