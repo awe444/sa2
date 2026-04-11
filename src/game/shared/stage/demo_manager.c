@@ -11,13 +11,18 @@
 #include "game/shared/stage/demo_manager.h"
 #include "game/shared/stage/player.h"
 
-// TODO: add headers for these into sa1_sa2_shared
-// instead of including from the main game
+#if (GAME == GAME_SA1)
+#include "game/sa1/save.h"
+#include "game/sa1/menus/title_screen.h"
+
+#include "constants/sa1/animations.h"
+#elif (GAME == GAME_SA2)
 #include "game/sa2/save.h"
 #include "game/sa2/title_screen.h"
 
 #include "constants/sa2/animations.h"
 #include "constants/sa2/anim_sizes.h"
+#endif
 
 #if (GAME == GAME_SA1)
 #define DEMO_SPRITE_PRIO   1
@@ -57,7 +62,11 @@ void CreateDemoManager(void)
     DemoManager *dm;
     Sprite *s;
 #if (GAME == GAME_SA1)
+#ifndef NON_MATCHING
     const AnimId arr[2];
+#else
+    AnimId arr[2];
+#endif
     memcpy(&arr, gPressStartTiles, sizeof(arr));
 #endif
     blendCtrl = gBldRegs.bldCnt & 0xC0;

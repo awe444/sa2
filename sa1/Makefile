@@ -253,6 +253,10 @@ SA2_C_FILES := \
 	src/game/shared/stage/collect_ring_effect.c \
 	src/game/shared/stage/unused_flash_task.c \
 	src/game/shared/multiplayer/communication_outcome.c \
+	src/game/shared/stage/pause_menu.c \
+	src/game/shared/stage/item_tasks.c \
+	src/game/shared/stage/demo_manager.c \
+	src/game/shared/stage/enemy_defeat_score.c \
 	src/game/sa1/ui/game_2_0.c \
 	src/game/sa1/ui/game_2_1.c \
 	src/game/sa1/ui/stage_results.c \

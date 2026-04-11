@@ -715,7 +715,7 @@ bool32 sub_8048B38(Player *p)
 
     p->moveState |= MOVESTATE_IN_AIR;
     p->moveState &= ~(MOVESTATE_1000000 | MOVESTATE_20);
-    p->moveState &= ~(MOVESTATE_800);
+    p->moveState &= ~(MOVESTATE_ICE_SLIDE);
 
     /* 1st speed apply */
     if (p->moveState & MOVESTATE_IN_WATER) {
