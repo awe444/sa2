@@ -8,7 +8,9 @@
 #include <stdio.h>
 
 // Audio diagnostic logging - set to 0 to disable
+#ifndef AUDIO_DEBUG_LOG
 #define AUDIO_DEBUG_LOG 1
+#endif
 
 static inline void GenerateAudio(struct SoundMixerState *mixer, struct MixerSource *chan, struct WaveData *wav, fixed8_24 *pcmBuffer,
                                  u16 samplesPerFrame, float sampleRateReciprocal);
@@ -928,10 +930,10 @@ void m4aSoundVSync(void)
 #if AUDIO_DEBUG_LOG
         // Track statistics for diagnostic logging
         static u32 audioFrameCount = 0;
-        s16 sampleMin = 0, sampleMax = 0;
+        s16 sampleMin = 32767, sampleMax = -32768;
         u32 zeroCount = 0;
-        s32 m4aMin = 0, m4aMax = 0;
-        s32 cgbMin = 0, cgbMax = 0;
+        s32 m4aMin = 0x7FFFFFFF, m4aMax = (s32)0x80000000;
+        s32 cgbMin = 0x7FFFFFFF, cgbMax = (s32)0x80000000;
 #endif
 
         for (u32 i = 0; i < samplesPerFrame; i++) {
