@@ -522,6 +522,14 @@ void Platform_QueueAudio(const s16 *data, uint32_t bytesCount)
     SDL_QueueAudio(1, data, bytesCount);
 }
 
+void Platform_ClearQueuedAudio(void)
+{
+    if (headless) {
+        return;
+    }
+    SDL_ClearQueuedAudio(1);
+}
+
 void ProcessSDLEvents(void)
 {
     SDL_Event event;

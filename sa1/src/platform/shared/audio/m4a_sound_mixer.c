@@ -93,7 +93,11 @@ static void SampleMixer(struct SoundMixerState *mixer, u32 scanlineLimit, u16 sa
         u16 i = 0;
         do {
             fixed8_24 s = tmp1[0] + tmp1[1] + tmp2[0] + tmp2[1];
-            s = (s * reverb) >> 9;
+            // Cast to s64 to prevent overflow and preserve sign for negative values.
+            // Without this, s32 * u32 promotes to unsigned, and the logical right shift
+            // produces wrong positive values for negative sums (~50% of audio samples),
+            // causing noise and distortion.
+            s = (s32)(((s64)s * reverb) >> 9);
             tmp1[0] = tmp1[1] = s;
             tmp1 += 2;
             tmp2 += 2;
