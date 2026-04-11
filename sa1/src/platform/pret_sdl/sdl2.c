@@ -13,11 +13,6 @@
 #include <SDL.h>
 
 #include "global.h"
-
-// Audio diagnostic logging - set to 0 to disable
-#ifndef AUDIO_DEBUG_LOG
-#define AUDIO_DEBUG_LOG 0
-#endif
 #include "core.h"
 #include "multi_sio.h"
 #include "gba/defines.h"
@@ -281,18 +276,9 @@ int main(int argc, char **argv)
     want.samples = (want.freq / 60);
     cgb_audio_init(want.freq);
 
-#if AUDIO_DEBUG_LOG
-    printf("[AUDIO_DIAG] Requesting SDL audio: freq=%d, format=AUDIO_S16(0x%04x), channels=%d, samples=%d\n",
-           want.freq, want.format, want.channels, want.samples);
-#endif
-
     if (SDL_OpenAudio(&want, 0) < 0) {
         SDL_Log("Failed to open audio: %s", SDL_GetError());
     } else {
-#if AUDIO_DEBUG_LOG
-        printf("[AUDIO_DIAG] SDL audio opened: freq=%d, format=0x%04x, channels=%d, samples=%d\n",
-               want.freq, want.format, want.channels, want.samples);
-#endif
         if (want.format != AUDIO_S16) /* we let this one thing change. */
             SDL_Log("We didn't get S16 audio format.");
         SDL_PauseAudio(0);
@@ -501,23 +487,9 @@ void Platform_QueueAudio(const s16 *data, uint32_t bytesCount)
     // If this happens it suggests there was some OS level lag
     // in playing audio. The queue length should remain stable at < 10 otherwise
     if (queuedSize > (bytesCount * 10)) {
-#if AUDIO_DEBUG_LOG
-        printf("[AUDIO_DIAG] Queue overflow! queuedSize=%u, threshold=%u — clearing queue\n",
-               queuedSize, bytesCount * 10);
-#endif
         SDL_ClearQueuedAudio(1);
         queuedSize = 0;
     }
-
-#if AUDIO_DEBUG_LOG
-    // Log queue status periodically
-    static u32 queueLogCounter = 0;
-    if (queueLogCounter++ % 60 == 0) {
-        printf("[AUDIO_DIAG] Queue: size=%u bytes, queuing=%u bytes (~%.1f frames buffered)\n",
-               queuedSize, bytesCount,
-               bytesCount > 0 ? (double)queuedSize / (double)bytesCount : 0.0);
-    }
-#endif
 
     SDL_QueueAudio(1, data, bytesCount);
 }

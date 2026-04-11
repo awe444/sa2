@@ -5,13 +5,6 @@
 #include "platform/platform.h"
 #include "platform/shared/audio/cgb_audio.h"
 
-#include <stdio.h>
-
-// Audio diagnostic logging - set to 1 to enable verbose audio diagnostics
-#ifndef AUDIO_DEBUG_LOG
-#define AUDIO_DEBUG_LOG 0
-#endif
-
 static inline void GenerateAudio(struct SoundMixerState *mixer, struct MixerSource *chan, struct WaveData *wav, fixed8_24 *pcmBuffer,
                                  u16 samplesPerFrame, float sampleRateReciprocal);
 static void SampleMixer(struct SoundMixerState *mixer, u32 scanlineLimit, u16 samplesPerFrame, fixed8_24 *pcmBuffer, u8 dmaCounter,
@@ -936,15 +929,6 @@ void m4aSoundVSync(void)
             m4aBuffer += samplesPerFrame * (mixer->framesPerDmaCycle - (dmaCounter - 1));
         }
 
-#if AUDIO_DEBUG_LOG
-        // Track statistics for diagnostic logging
-        static u32 audioFrameCount = 0;
-        s16 sampleMin = 32767, sampleMax = -32768;
-        u32 zeroCount = 0;
-        s32 m4aMin = 0x7FFFFFFF, m4aMax = (s32)0x80000000;
-        s32 cgbMin = 0x7FFFFFFF, cgbMax = (s32)0x80000000;
-#endif
-
         for (u32 i = 0; i < samplesPerFrame; i++) {
             // Sample is fixed 8.24 with a value of -1 to 1
             // but when we add we divide by 8 to add some headroom
@@ -962,37 +946,7 @@ void m4aSoundVSync(void)
             if (out > 32767) out = 32767;
             else if (out < -32768) out = -32768;
             audioBuffer[i] = (s16)out;
-
-#if AUDIO_DEBUG_LOG
-            if (audioBuffer[i] < sampleMin) sampleMin = audioBuffer[i];
-            if (audioBuffer[i] > sampleMax) sampleMax = audioBuffer[i];
-            if (audioBuffer[i] == 0) zeroCount++;
-            if (m4aBuffer[i] < m4aMin) m4aMin = m4aBuffer[i];
-            if (m4aBuffer[i] > m4aMax) m4aMax = m4aBuffer[i];
-            if (cgbBuffer[i] < cgbMin) cgbMin = cgbBuffer[i];
-            if (cgbBuffer[i] > cgbMax) cgbMax = cgbBuffer[i];
-#endif
         }
-
-#if AUDIO_DEBUG_LOG
-        audioFrameCount++;
-        // Log mixer state on first frame
-        if (audioFrameCount == 1) {
-            printf("[AUDIO_DIAG] Mixer init: samplesPerFrame=%d (mono=%d), sampleRate=%f, "
-                   "framesPerDmaCycle=%d, numChans=%d, masterVol=%d, reverb=%d, lockStatus=0x%x\n",
-                   samplesPerFrame, mixer->samplesPerFrame,
-                   (double)mixer->sampleRate, mixer->framesPerDmaCycle,
-                   mixer->numChans, mixer->masterVol, mixer->reverb,
-                   mixer->lockStatus);
-        }
-        // Log sample statistics every 60 frames (~1 second)
-        if (audioFrameCount % 60 == 0) {
-            printf("[AUDIO_DIAG] Frame %u: output[min=%d max=%d zero=%u/%d] "
-                   "m4a[min=%d max=%d] cgb[min=%d max=%d] dmaCounter=%d\n",
-                   audioFrameCount, sampleMin, sampleMax, zeroCount, samplesPerFrame,
-                   m4aMin, m4aMax, cgbMin, cgbMax, dmaCounter);
-        }
-#endif
 
         Platform_QueueAudio(audioBuffer, samplesPerFrame * sizeof(s16));
         if ((s8)(--mixer->dmaCounter) <= 0)
