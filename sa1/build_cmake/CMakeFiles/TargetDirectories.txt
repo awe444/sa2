@@ -1,0 +1,4 @@
+/home/runner/work/sa2/sa2/sa1/build_cmake/CMakeFiles/preproc.dir
+/home/runner/work/sa2/sa2/sa1/build_cmake/CMakeFiles/sa1_sdl.dir
+/home/runner/work/sa2/sa2/sa1/build_cmake/CMakeFiles/edit_cache.dir
+/home/runner/work/sa2/sa2/sa1/build_cmake/CMakeFiles/rebuild_cache.dir
