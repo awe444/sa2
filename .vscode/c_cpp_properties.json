@@ -15,7 +15,7 @@
         {
             "name": "SA1 Linux GBA",
             "includePath": [
-                "${workspaceFolder}/sa1/include/**"
+                "${workspaceFolder}/include/**", "${workspaceFolder}/sa1/include/**"
             ],
             "defines": ["PLATFORM_GBA=1", "GAME=GAME_SA1"],
             "compilerPath": "/usr/bin/gcc",

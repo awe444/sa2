@@ -1673,7 +1673,7 @@ void SA2_LABEL(sub_80228C0)(Player *p)
                 }
                 rot = r0;
             } else {
-                if (p->moveState & MOVESTATE_800) {
+                if (p->moveState & MOVESTATE_ICE_SLIDE) {
                     playerY += Q(val);
                 } else {
                     p->moveState |= MOVESTATE_IN_AIR;
@@ -2925,7 +2925,7 @@ bool32 Player_TryJump(Player *p)
     p->moveState |= MOVESTATE_IN_AIR;
     p->moveState &= ~(MOVESTATE_1000000 | MOVESTATE_20);
     p->moveState |= MOVESTATE_100;
-    p->moveState &= ~(MOVESTATE_800);
+    p->moveState &= ~(MOVESTATE_ICE_SLIDE);
 
     switch (p->character) {
         case CHARACTER_SONIC:
@@ -3022,7 +3022,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/Player__sub_8044434.inc", bool32 sub_8
     p->moveState |= MOVESTATE_IN_AIR;
     p->moveState &= ~(MOVESTATE_1000000 | MOVESTATE_20);
     p->moveState |= MOVESTATE_100;
-    p->moveState &= ~(MOVESTATE_800);
+    p->moveState &= ~(MOVESTATE_ICE_SLIDE);
 
     gPlayer.itemEffect &= ~PLAYER_ITEM_EFFECT__TELEPORT;
 
@@ -5691,7 +5691,7 @@ void SA2_LABEL(sub_8029ED8)(Player *p)
 {
 #if (GAME == GAME_SA1)
     // TODO: Is this part of the macro in SA1?
-    if (!(p->moveState & MOVESTATE_800))
+    if (!(p->moveState & MOVESTATE_ICE_SLIDE))
 #endif
     {
         PLAYERFN_UPDATE_UNK2A(p);

@@ -95,7 +95,7 @@ bool32 Player_Amy_8049370(Player *p)
     p->moveState |= MOVESTATE_IN_AIR;
     p->moveState &= ~(MOVESTATE_1000000 | MOVESTATE_20);
     p->moveState |= MOVESTATE_100;
-    p->moveState &= ~MOVESTATE_800;
+    p->moveState &= ~MOVESTATE_ICE_SLIDE;
 
     m4aSongNumStart(SE_JUMP);
 
