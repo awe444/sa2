@@ -774,7 +774,6 @@ NONMATCH("asm/non_matching/game/sa1/stage/rings_scatter/RingsScatterMultipak_Fli
                         OamData *oamAlloced = OamMalloc(GET_SPRITE_OAM_ORDER(s));
 
                         if (iwram_end != oamAlloced) {
-                            // NOTE: This will not work out for widescreen resolutions
                             DmaCopy16(3, oam, oamAlloced, sizeof(OamDataShort));
 
                             OAM_SET_Y(oamAlloced, screenY - (u16)s->dimensions->offsetY);
