@@ -1684,6 +1684,8 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
 
                 if (!is8BPP) {
                     int tileDataIndex = (block_offset + oam->split.tileNum) * 32 + (tile_y * 4) + (tile_x / 2);
+                    if ((unsigned)tileDataIndex >= OBJ_VRAM_TOTAL_SIZE)
+                        continue;
                     pixel = tiledata[tileDataIndex];
                     if (tile_x & 1)
                         pixel >>= 4;
@@ -1694,7 +1696,10 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
                     vramPalIdBuffer[0x800 + (tileDataIndex / 32)] = 16 + oam->split.paletteNum;
 #endif
                 } else {
-                    pixel = tiledata[(block_offset * 2 + oam->split.tileNum) * 32 + (tile_y * 8) + tile_x];
+                    int tileDataIndex8 = (block_offset * 2 + oam->split.tileNum) * 32 + (tile_y * 8) + tile_x;
+                    if ((unsigned)tileDataIndex8 >= OBJ_VRAM_TOTAL_SIZE)
+                        continue;
+                    pixel = tiledata[tileDataIndex8];
                 }
 
                 if (pixel != 0) {
