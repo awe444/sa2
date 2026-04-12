@@ -3,6 +3,6 @@
 
 #include "gba/types.h"
 
-bool32 CreateSpotLightBeams(void);
+bool32 CreateSpotlightsManager(void);
 
 #endif // GUARD_STAGE_SPOT_LIGHT_H

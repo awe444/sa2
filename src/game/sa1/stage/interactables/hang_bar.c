@@ -70,7 +70,7 @@ void Task_HangBar(void)
                     || (barX + (me->d.sData[0] * TILE_WIDTH) + (me->d.uData[2] * TILE_WIDTH) < I(PLAYER(i).qWorldX)))) {
                 Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
                 PLAYER(i).moveState &= ~MOVESTATE_IA_OVERRIDE;
-                PLAYER(i).moveState |= MOVESTATE_4;
+                PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                 PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                 PLAYER(i).qSpeedAirY = Q(0);
                 PLAYER(i).charState = CHARSTATE_SPINATTACK;

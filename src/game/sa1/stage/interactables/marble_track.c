@@ -167,7 +167,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/marble_track_exit__Task_
                         && (worldY - 10 <= I(PLAYER(i).qWorldY)) && (worldY + 10 >= I(PLAYER(i).qWorldY))) {
                         dir->unk3E[i] = 0;
 
-                        PLAYER(i).moveState |= MOVESTATE_4;
+                        PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                         PLAYER(i).moveState |= MOVESTATE_IGNORE_INPUT;
                         PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;
 
@@ -296,7 +296,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/marble_track_exit__Task_
                         && (worldY - 12 <= I(PLAYER(i).qWorldY)) && (worldY + 12 >= I(PLAYER(i).qWorldY))) {
                         basePipe->unk44[i] = 0;
                         basePipe->unk3C[i] = 0;
-                        PLAYER(i).moveState |= MOVESTATE_4;
+                        PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                         PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;
 
                         PLAYER(i).qSpeedAirY = -Q(0);
@@ -458,7 +458,7 @@ void Task_MarbleTrack_Entrance(void)
                     entrance->unk3C[i] = 0;
                     entrance->unk40[i] = 0;
                     Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                     PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;
                     PLAYER(i).SA2_LABEL(unk99)[0] = me->d.uData[3];
@@ -648,7 +648,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/marble_track_exit__Task_
 
                         PLAYER(i).moveState &= ~MOVESTATE_100;
                         PLAYER(i).moveState |= MOVESTATE_FLIP_WITH_MOVE_DIR;
-                        PLAYER(i).moveState |= MOVESTATE_4;
+                        PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                         PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                         PLAYER(i).moveState |= MOVESTATE_IGNORE_INPUT;
                         PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;

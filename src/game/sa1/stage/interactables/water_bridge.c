@@ -157,7 +157,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/water_bridge__Task_Water
                 Player_TransitionCancelFlyingAndBoost(p);
 
                 p->charState = CHARSTATE_HIT_AIR;
-                p->moveState &= ~MOVESTATE_4;
+                p->moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
                 p->moveState |= MOVESTATE_IGNORE_INPUT;

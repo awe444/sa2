@@ -107,7 +107,7 @@ SECTIONS
         src/game/shared/stage/demo_manager.o(.text);
         src/game/shared/stage/unused_flash_task.o(.text);
         src/game/sa2/stage/simple_sprite_particle.o(.text);
-        src/game/shared/stage/spot_light.o(.text);
+        src/game/shared/stage/spot_lights_manager.o(.text);
         src/game/shared/stage/pause_menu.o(.text);
         src/game/shared/stage/collect_ring_effect.o(.text);
         src/game/sa2/stage/itembox.o(.text);

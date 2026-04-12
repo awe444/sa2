@@ -67,7 +67,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/Task_InclineRamp.inc", v
                     PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                     PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                     PLAYER(i).moveState &= ~MOVESTATE_100;
-                    PLAYER(i).moveState &= ~MOVESTATE_4;
+                    PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                     PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 14);
 
@@ -90,7 +90,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/Task_InclineRamp.inc", v
                 PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                 PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                 PLAYER(i).moveState &= ~MOVESTATE_100;
-                PLAYER(i).moveState &= ~MOVESTATE_4;
+                PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 14);
 

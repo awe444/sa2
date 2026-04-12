@@ -790,8 +790,8 @@ void SA2_LABEL(sub_8021BE0)(Player *p)
             p->charState = 4;
         }
 
-        if (p->moveState & MOVESTATE_4) {
-            p->moveState &= ~MOVESTATE_4;
+        if (p->moveState & MOVESTATE_SPIN_ATTACK) {
+            p->moveState &= ~MOVESTATE_SPIN_ATTACK;
             Player_HandleSpriteYOffsetChange(p, 14);
         }
         PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 14);
@@ -1259,10 +1259,10 @@ void SA2_LABEL(sub_8022318)(Player *p)
 {
     s32 offsetY;
 
-    if (!(p->moveState & MOVESTATE_4)) {
+    if (!(p->moveState & MOVESTATE_SPIN_ATTACK)) {
         PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 14);
     } else {
-        p->moveState &= ~MOVESTATE_4;
+        p->moveState &= ~MOVESTATE_SPIN_ATTACK;
         p->charState = CHARSTATE_IDLE;
 
         offsetY = p->spriteOffsetY - 14;
@@ -2521,7 +2521,7 @@ void SA2_LABEL(sub_8023128)(Player *p)
                 p->moveState |= MOVESTATE_20;
 
 #if (GAME == GAME_SA1)
-                p->moveState &= ~MOVESTATE_4;
+                p->moveState &= ~MOVESTATE_SPIN_ATTACK;
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
 #endif
 
@@ -2540,7 +2540,7 @@ void SA2_LABEL(sub_8023128)(Player *p)
                 p->moveState |= MOVESTATE_20;
 
 #if (GAME == GAME_SA1)
-                p->moveState &= ~MOVESTATE_4;
+                p->moveState &= ~MOVESTATE_SPIN_ATTACK;
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
 #endif
 
@@ -2586,7 +2586,7 @@ void SA2_LABEL(sub_80231C0)(Player *p)
             case 1: {
                 p->qWorldX -= r2;
                 p->qSpeedAirX = 0;
-                p->moveState &= ~MOVESTATE_4;
+                p->moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
                 p->qSpeedGround = 0;
@@ -2601,7 +2601,7 @@ void SA2_LABEL(sub_80231C0)(Player *p)
             case 3: {
                 p->qWorldX += r2;
                 p->qSpeedAirX = 0;
-                p->moveState &= ~MOVESTATE_4;
+                p->moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
 
@@ -2675,7 +2675,7 @@ void Player_8043DDC(Player *p)
 
         if (qSpeedGround == 0) {
             if (!(p->moveState & MOVESTATE_200)) {
-                p->moveState &= ~MOVESTATE_4;
+                p->moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                 if (p->heldInput & DPAD_DOWN) {
                     p->charState = CHARSTATE_CROUCH;
@@ -2850,7 +2850,7 @@ bool32 Player_TrySpindash(Player *p)
             }
 
             p->qSpeedGround = qNewSpeed;
-            p->moveState |= MOVESTATE_4;
+            p->moveState |= MOVESTATE_SPIN_ATTACK;
 
             m4aSongNumStart(SE_SPINDASH_RELEASE);
             p->charState = CHARSTATE_SPINATTACK;
@@ -2979,8 +2979,8 @@ bool32 Player_TryJump(Player *p)
     m4aSongNumStart(SE_JUMP);
 
     if (p->character != CHARACTER_AMY) {
-        if (!(p->moveState & MOVESTATE_4)) {
-            p->moveState |= MOVESTATE_4;
+        if (!(p->moveState & MOVESTATE_SPIN_ATTACK)) {
+            p->moveState |= MOVESTATE_SPIN_ATTACK;
             PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
         } else {
             p->moveState |= MOVESTATE_FLIP_WITH_MOVE_DIR;
@@ -3054,8 +3054,8 @@ NONMATCH("asm/non_matching/game/sa1/stage/Player__sub_8044434.inc", bool32 sub_8
     SPRITE_FLAG_SET_VALUE(&p->spriteInfoLimbs->s, PRIORITY, 2);
 
     if (p->character != CHARACTER_AMY) {
-        if (!(p->moveState & MOVESTATE_4)) {
-            p->moveState |= MOVESTATE_4;
+        if (!(p->moveState & MOVESTATE_SPIN_ATTACK)) {
+            p->moveState |= MOVESTATE_SPIN_ATTACK;
             PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
         } else {
             p->moveState |= MOVESTATE_FLIP_WITH_MOVE_DIR;
@@ -3236,7 +3236,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_80447D8.inc", void Play
         }
     } else if (p->character != CHARACTER_AMY) {
         m4aSongNumStart(SE_SPIN_ATTACK);
-        p->moveState |= MOVESTATE_4;
+        p->moveState |= MOVESTATE_SPIN_ATTACK;
         PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
         p->charState = CHARSTATE_SPINATTACK;
 
@@ -4151,7 +4151,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_Tails_804571C.inc", voi
         p->qSpeedAirY = Q(0);
 
         p->charState = CHARSTATE_56;
-        p->moveState &= ~MOVESTATE_4;
+        p->moveState &= ~MOVESTATE_SPIN_ATTACK;
         p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
         p->moveState &= ~MOVESTATE_200;
         p->moveState &= ~MOVESTATE_100000;
@@ -4901,7 +4901,7 @@ top:
                     // _080466B4
 
                     p->moveState |= MOVESTATE_IN_AIR;
-                    p->moveState |= MOVESTATE_4;
+                    p->moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 9);
 
                     p->charState = CHARSTATE_49;
@@ -5270,7 +5270,7 @@ void Player_TransitionCancelFlyingAndBoost(Player *p)
     }
 
     p->moveState &= ~(MOVESTATE_SOME_ATTACK | MOVESTATE_10000000 | MOVESTATE_1000000 | MOVESTATE_80000 | MOVESTATE_40000 | MOVESTATE_20000
-                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_400 | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
+                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
                       | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
     p->SA2_LABEL(unk61) = 0;

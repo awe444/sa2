@@ -130,7 +130,7 @@ void Task_SkatingStoneInit(void)
                     PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                     PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                     PLAYER(i).moveState &= ~MOVESTATE_100;
-                    PLAYER(i).moveState &= ~MOVESTATE_4;
+                    PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                     PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 14);
 
@@ -217,7 +217,7 @@ void Task_SkatingStone2(void)
             }
 
             if (GetBit(stone->unkB2, i)) {
-                if (!(PLAYER(i).moveState & (MOVESTATE_SPINDASH | MOVESTATE_4))) {
+                if (!(PLAYER(i).moveState & (MOVESTATE_SPINDASH | MOVESTATE_SPIN_ATTACK))) {
                     PLAYER(i).qWorldY = Q(worldY) + stone->qUnkAC - Q(46);
                 } else {
                     PLAYER(i).qWorldY = Q(worldY) + stone->qUnkAC - Q(42);
@@ -435,7 +435,7 @@ void Task_SkatingStone2(void)
                                     }
                                 }
 
-                                if (!(PLAYER(i).moveState & (MOVESTATE_SPINDASH | MOVESTATE_4))) {
+                                if (!(PLAYER(i).moveState & (MOVESTATE_SPINDASH | MOVESTATE_SPIN_ATTACK))) {
                                     s->y = I(PLAYER(i).qWorldY) - gCamera.y + 46;
                                 } else {
                                     s->y = I(PLAYER(i).qWorldY) - gCamera.y + 42;
@@ -464,7 +464,7 @@ void Task_SkatingStone2(void)
                             PLAYER(i).moveState &= ~MOVESTATE_IN_AIR;
                             PLAYER(i).moveState &= ~MOVESTATE_100;
                             PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
-                            PLAYER(i).moveState &= ~MOVESTATE_4;
+                            PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                             PLAYER(i).charState = CHARSTATE_WALK_A;
 

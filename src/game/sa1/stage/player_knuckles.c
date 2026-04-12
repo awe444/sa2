@@ -31,7 +31,7 @@ extern const u8 gCharStatesKnucklesGlideTurn[];
 
 void Player_Knuckles_GlideInit(Player *p)
 {
-    p->moveState &= ~MOVESTATE_4;
+    p->moveState &= ~MOVESTATE_SPIN_ATTACK;
     PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 6);
     p->qSpeedAirY += Q(1.5);
 
@@ -567,7 +567,7 @@ _080488CA:
         }
         // _080488F2
 
-        p->moveState |= MOVESTATE_4;
+        p->moveState |= MOVESTATE_SPIN_ATTACK;
         p->moveState |= MOVESTATE_IN_AIR;
         p->moveState |= MOVESTATE_100;
         PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 9);
@@ -891,7 +891,7 @@ void sub_8048E34(Player *p)
             if (p->moveState & MOVESTATE_1000) {
                 if ((p->moveState & MOVESTATE_IN_WATER) && (p->qSpeedAirY >= Q(0))) {
                     p->SA2_LABEL(unk61) = 9;
-                    p->moveState &= ~(MOVESTATE_4 | MOVESTATE_FLIP_WITH_MOVE_DIR);
+                    p->moveState &= ~(MOVESTATE_SPIN_ATTACK | MOVESTATE_FLIP_WITH_MOVE_DIR);
                     p->charState = CHARSTATE_KNUCKLES_FLOAT;
                     Player_Knuckles_InitGfx_FloatSplash(p);
                 }
@@ -901,7 +901,7 @@ void sub_8048E34(Player *p)
             if (p->moveState & MOVESTATE_1000) {
                 if ((p->moveState & MOVESTATE_IN_WATER) && (p->qSpeedAirY >= Q(0))) {
                     p->SA2_LABEL(unk61) = 9;
-                    p->moveState &= ~(MOVESTATE_4 | MOVESTATE_FLIP_WITH_MOVE_DIR);
+                    p->moveState &= ~(MOVESTATE_SPIN_ATTACK | MOVESTATE_FLIP_WITH_MOVE_DIR);
                     p->charState = CHARSTATE_KNUCKLES_FLOAT;
                     Player_Knuckles_InitGfx_FloatSplash(p);
                 }
@@ -921,7 +921,7 @@ void sub_8048E34(Player *p)
             if (p->moveState & MOVESTATE_1000) {
                 if ((p->moveState & MOVESTATE_IN_WATER) && (p->qSpeedAirY >= Q(0))) {
                     p->SA2_LABEL(unk61) = 9;
-                    p->moveState &= ~(MOVESTATE_4 | MOVESTATE_FLIP_WITH_MOVE_DIR);
+                    p->moveState &= ~(MOVESTATE_SPIN_ATTACK | MOVESTATE_FLIP_WITH_MOVE_DIR);
                     p->charState = CHARSTATE_KNUCKLES_FLOAT;
                     Player_Knuckles_InitGfx_FloatSplash(p);
                 }
@@ -989,7 +989,7 @@ void Player_Knuckles_8049000(Player *p)
             sub_8048E34(p);
         } break;
 
-        case MOVESTATE_4: {
+        case MOVESTATE_SPIN_ATTACK: {
             Player_804726C(p);
             Player_8047280(p);
             if (!Player_TryJump(p)) {
@@ -1013,7 +1013,7 @@ void Player_Knuckles_8049000(Player *p)
             if (p->moveState & MOVESTATE_1000) {
                 if ((p->moveState & MOVESTATE_IN_WATER) && (p->qSpeedAirY >= Q(0))) {
                     p->SA2_LABEL(unk61) = 9;
-                    p->moveState &= ~(MOVESTATE_4 | MOVESTATE_FLIP_WITH_MOVE_DIR);
+                    p->moveState &= ~(MOVESTATE_SPIN_ATTACK | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
                     p->charState = CHARSTATE_KNUCKLES_FLOAT;
 
@@ -1105,7 +1105,7 @@ void sub_8049208(Player *p)
     if (p->moveState & MOVESTATE_1000) {
         if ((p->moveState & MOVESTATE_IN_WATER) && (p->qSpeedAirY >= Q(0))) {
             p->SA2_LABEL(unk61) = 9;
-            p->moveState &= ~(MOVESTATE_4 | MOVESTATE_FLIP_WITH_MOVE_DIR);
+            p->moveState &= ~(MOVESTATE_SPIN_ATTACK | MOVESTATE_FLIP_WITH_MOVE_DIR);
 
             p->charState = CHARSTATE_KNUCKLES_FLOAT;
 

@@ -178,9 +178,9 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/air_bubbles__Task_Bubble
                 PLAYER(i).charState = CHARSTATE_27;
                 // _0809128A
 
-                if (PLAYER(i).moveState & MOVESTATE_4) {
+                if (PLAYER(i).moveState & MOVESTATE_SPIN_ATTACK) {
                     // _080912AA
-                    PLAYER(i).moveState &= ~MOVESTATE_4;
+                    PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
                     // _080912C4
                     PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 

@@ -11,7 +11,13 @@
 #include "game/shared/stage/underwater_effects.h"
 #include "game/shared/stage/water_effects.h"
 
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#include "constants/sa1/vram_hardcoded.h"
+#elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
+#include "constants/sa2/vram_hardcoded.h"
+#endif
 
 #define MAX_SMALL_BUBBLE_COUNT 11
 
@@ -23,10 +29,9 @@ u8 gSmallAirBubbleCount = 0;
 
 static void Task_DrowningCountdown(void);
 static void Task_SpawnAirBubbles(void);
-
 static void TaskDestructor_SpawnAirBubbles(struct Task *t);
 
-static void Task_DrowningCountdown(void)
+void Task_DrowningCountdown(void)
 {
     MultiplayerSpriteTask *ts = TASK_DATA(gCurTask);
     Sprite *s = &ts->s;
@@ -84,8 +89,13 @@ struct Task *SpawnDrowningCountdownNum(Player *p, s32 countdown)
     ts->mpPlayerID = p->playerID;
 
     s = &ts->s;
+#if (GAME == GAME_SA1)
+    s->graphics.dest = ALLOC_TILES(SA1_ANIM_DROWN_COUNTDOWN);
+    s->graphics.anim = SA1_ANIM_DROWN_COUNTDOWN;
+#elif (GAME == GAME_SA2)
     s->graphics.dest = VramMalloc(4);
     s->graphics.anim = SA2_ANIM_DROWN_COUNTDOWN;
+#endif
     s->variant = 5 - countdown;
 
     s->oamFlags = SPRITE_OAM_ORDER(9);
@@ -102,7 +112,7 @@ struct Task *SpawnDrowningCountdownNum(Player *p, s32 countdown)
 }
 
 // Called when air bubbles spawn underwater
-struct Task *SpawnAirBubbles(s32 p0, s32 p1, s32 p2, s32 p3)
+struct Task *SpawnAirBubbles(s32 x, s32 y, s32 p2, s32 p3)
 {
     if ((s8)gSmallAirBubbleCount > MAX_SMALL_BUBBLE_COUNT) {
         return NULL;
@@ -120,8 +130,8 @@ struct Task *SpawnAirBubbles(s32 p0, s32 p1, s32 p2, s32 p3)
         s = &ts->s;
         transform = &ts->transform;
 
-        ts->x = p0;
-        ts->y = p1;
+        ts->x = x;
+        ts->y = y;
         ts->unk8 = p2;
         ts->unkA = -0x80;
         ts->unk10 = 0;
@@ -129,12 +139,20 @@ struct Task *SpawnAirBubbles(s32 p0, s32 p1, s32 p2, s32 p3)
         ts->unk14 = 0;
 
         if (p3 == 0) {
-            s->graphics.dest = (void *)(OBJ_VRAM0 + 0x2A40);
+            s->graphics.dest = VRAM_RESERVED_BUBBLES_SMALL;
+#if (GAME == GAME_SA1)
+            s->graphics.anim = SA1_ANIM_BUBBLES_SMALL;
+#elif (GAME == GAME_SA2)
             s->graphics.anim = SA2_ANIM_BUBBLES_SMALL;
+#endif
             s->variant = 0;
         } else {
-            s->graphics.dest = (void *)(OBJ_VRAM0 + 0x2AC0);
+            s->graphics.dest = VRAM_RESERVED_BUBBLES_GROUP;
+#if (GAME == GAME_SA1)
+            s->graphics.anim = SA1_ANIM_BUBBLES_GROUP;
+#elif (GAME == GAME_SA2)
             s->graphics.anim = SA2_ANIM_BUBBLES_GROUP;
+#endif
             s->variant = 0;
 
             ts->unk14 = (((u32)PseudoRandom32() & 0x30000) >> 16);
@@ -207,7 +225,10 @@ static void Task_SpawnAirBubbles(void)
         transform->qScaleY = -transform->qScaleY;
 
     if ((transform->x < -32 || transform->x > DISPLAY_WIDTH + 32) || (transform->y < -32 || transform->y > DISPLAY_HEIGHT + 32)
-        || (gWater.isActive != TRUE) || (gWater.currentWaterLevel < 0) || (I(r4) - 3 < gWater.currentWaterLevel) || (ts->unk10 > 0x1E0)) {
+#if (GAME == GAME_SA2)
+        || (gWater.isActive != TRUE)
+#endif
+        || (gWater.currentWaterLevel < 0) || (I(r4) - 3 < gWater.currentWaterLevel) || (ts->unk10 > 0x1E0)) {
         TaskDestroy(gCurTask);
         return;
     } else {

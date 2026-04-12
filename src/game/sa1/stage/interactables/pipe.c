@@ -266,7 +266,7 @@ void Task_PipeEntrance(void)
                 p->moveState &= ~MOVESTATE_100;
                 p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                 p->moveState &= ~MOVESTATE_20;
-                p->moveState |= MOVESTATE_4;
+                p->moveState |= MOVESTATE_SPIN_ATTACK;
                 p->moveState |= MOVESTATE_IA_OVERRIDE;
 
                 p->qWorldX = qPlayerX;
@@ -296,7 +296,7 @@ void Task_PipeEntrance(void)
                     p->moveState &= ~MOVESTATE_100;
                     p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                     p->moveState &= ~MOVESTATE_20;
-                    p->moveState |= MOVESTATE_4;
+                    p->moveState |= MOVESTATE_SPIN_ATTACK;
                     p->moveState |= MOVESTATE_IA_OVERRIDE;
 
                     p->qWorldX = qPlayerX;
@@ -319,7 +319,7 @@ void Task_PipeEntrance(void)
                     p->moveState &= ~MOVESTATE_100;
                     p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                     p->moveState &= ~MOVESTATE_20;
-                    p->moveState |= MOVESTATE_4;
+                    p->moveState |= MOVESTATE_SPIN_ATTACK;
                     p->moveState |= MOVESTATE_IA_OVERRIDE;
 
                     p->qWorldX = qPlayerX;
@@ -676,7 +676,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/pipe__Task_PipeExit.inc"
                     p->moveState &= ~MOVESTATE_100;
                     p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                     p->moveState &= ~MOVESTATE_20;
-                    p->moveState |= MOVESTATE_4;
+                    p->moveState |= MOVESTATE_SPIN_ATTACK;
                     p->moveState |= MOVESTATE_IA_OVERRIDE;
 
                     p->charState = CHARSTATE_SPINATTACK;

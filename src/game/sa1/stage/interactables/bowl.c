@@ -285,7 +285,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/bowl__Task_BowlRotating.
             if (bowl->unk50 > 64) {
                 if (!(PLAYER(i).moveState & MOVESTATE_DEAD)) {
                     PLAYER(i).moveState &= ~MOVESTATE_IA_OVERRIDE;
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState |= MOVESTATE_FLIP_WITH_MOVE_DIR;
                     PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                     PLAYER(i).qSpeedAirX = 0;

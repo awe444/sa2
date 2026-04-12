@@ -87,7 +87,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/swing_rope__Task_SwingRo
                     PLAYER(i).moveState &= ~MOVESTATE_IGNORE_INPUT;
                     PLAYER(i).heldInput |= gPlayerControls.jump | gPlayerControls.attack;
                     PLAYER(i).moveState &= ~MOVESTATE_IA_OVERRIDE;
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                     PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                     PLAYER(i).moveState &= ~MOVESTATE_100;

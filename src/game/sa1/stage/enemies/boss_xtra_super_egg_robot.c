@@ -606,10 +606,10 @@ NONMATCH("asm/non_matching/game/sa1/stage/enemies/boss_xtra__sub_8050A88.inc", v
     sp4 = I(strc->unk0.qUnk50) - gCamera.x;
     sp8 = I(strc->unk0.qUnk54) - gCamera.y;
 
-    if ((gPlayer.sa2__unk62 != 0) && (sub_800C0E0(s, I(strc->unk0.qUnk50), I(strc->unk0.qUnk54), &gPlayer))) {
+    if ((gPlayer.SA2_LABEL(unk62) != 0) && (sub_800C0E0(s, I(strc->unk0.qUnk50), I(strc->unk0.qUnk54), &gPlayer))) {
         if (!(boss->flags58 & SER_FLAG__80) && (boss->unk69 <= 0)) {
             boss->unk69 = 0x20;
-            gPlayer.sa2__unk62 = 0;
+            gPlayer.SA2_LABEL(unk62) = 0;
             gPlayer.timerInvulnerability = 8;
             gPlayer.qSpeedAirX = -Q(2);
             gPlayer.qSpeedGround = -Q(2);

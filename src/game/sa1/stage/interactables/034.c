@@ -47,7 +47,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/Task_Interactable034.inc
             }
 
             Player_TransitionCancelFlyingAndBoost(p);
-            p->moveState |= MOVESTATE_200 | MOVESTATE_4;
+            p->moveState |= MOVESTATE_200 | MOVESTATE_SPIN_ATTACK;
             p->moveState |= MOVESTATE_IGNORE_INPUT;
             p->heldInput = 0;
             p->frameInput = 0;

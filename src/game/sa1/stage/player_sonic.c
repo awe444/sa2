@@ -64,7 +64,7 @@ void Player_Sonic_80473AC(Player *p)
             SA2_LABEL(sub_8022190)(p);
         } break;
 
-        case MOVESTATE_4: {
+        case MOVESTATE_SPIN_ATTACK: {
             // inline of sub_804784C ?
             Player_804726C(p);
             Player_8047280(p);

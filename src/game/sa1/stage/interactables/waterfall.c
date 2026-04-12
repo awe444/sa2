@@ -282,7 +282,7 @@ void Task_WaterfallZone5(void)
                             Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
 
                             PLAYER(i).moveState &= ~MOVESTATE_IN_AIR;
-                            PLAYER(i).moveState &= ~MOVESTATE_4;
+                            PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
                             PLAYER(i).charState = CHARSTATE_WALK_A;
                             PLAYER(i).qWorldY += Q(0.6875);
 

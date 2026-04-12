@@ -2,22 +2,31 @@
 #include "core.h"
 #include "malloc_vram.h"
 #include "task.h"
-#include "game/sa2/save.h"
 
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
 
 #include "game/shared/stage/mp_finish.h"
 #include "game/shared/stage/mp_player.h"
-#include "game/sa2/multiplayer/results.h"
 #include "game/shared/stage/mp_event_mgr.h"
 
 #include "game/shared/collect_rings/results.h"
 
 #include "lib/m4a/m4a.h"
 
+#if (GAME == GAME_SA1)
+#include "game/sa1/save.h"
+#include "game/sa1/stage/mp_results.h"
+
+#include "constants/sa1/animations.h"
+#include "constants/sa1/text.h"
+#elif (GAME == GAME_SA2)
+#include "game/sa2/save.h"
+#include "game/sa2/multiplayer/results.h"
+
 #include "constants/sa2/animations.h"
 #include "constants/sa2/text.h"
+#endif
 
 #if (GAME == GAME_SA1) && !(defined NON_MATCHING)
 // Once CreateMultiplayerFinishHandler matches in SA1,
@@ -96,7 +105,7 @@ void CreateMultiplayerFinishResult(u8 sioId, u8 count)
     u32 i = 0;
 
 #if (GAME == GAME_SA2)
-    if (SA2_LABEL(gMultiplayerRanks)[sioId] == -1)
+    if (gMultiplayerRanks[sioId] == -1)
 #endif
     {
         struct Task *t = TaskCreate(SA2_LABEL(Task_8019E70), sizeof(MpFinish1), 0x2010, 0, SA2_LABEL(TaskDestructor_8019EF4));
@@ -112,10 +121,10 @@ void CreateMultiplayerFinishResult(u8 sioId, u8 count)
         }
 
         if (count < 6) {
-            SA2_LABEL(gMultiplayerRanks)[sioId] = count;
+            gMultiplayerRanks[sioId] = count;
         } else {
             // BUG(?): Value underflows if i is 0
-            SA2_LABEL(gMultiplayerRanks)[sioId] = i - 1;
+            gMultiplayerRanks[sioId] = i - 1;
         }
 
         finish->unk30 = sioId;
@@ -192,42 +201,20 @@ void SA2_LABEL(TaskDestructor_8019EF4)(struct Task *t)
     VramFree(s->graphics.dest);
 }
 
-#if (GAME == GAME_SA1)
-extern const u8 gUnknown_080BB490[4];
-// (97.32%) https://decomp.me/scratch/nE6RC
-NONMATCH("asm/non_matching/game/sa2/multiplayer/finish__CreateMultiplayerFinishHandler.inc", void CreateMultiplayerFinishHandler(void))
-#elif (GAME == GAME_SA2)
 void CreateMultiplayerFinishHandler(void)
-#endif
 {
     u32 i;
     u32 r2;
     u8 r6;
+
 #if (GAME == GAME_SA1)
-#ifndef NON_MATCHING
-    u8 arr[4];
-    u8 arr2[4];
-    // Once CreateMultiplayerFinishHandler matches in SA1,
-    // this can go away.
-    memcpy(arr, &gUnknown_080BB490, 4);
-    memset(arr2, 0, 4);
-#else
     u8 arr[4] = { 0, 1, 2, 3 };
-    u8 arr2[4] = { 0 };
-#endif
+    u8 arr2[4] = {};
 #endif
     {
         struct Task *mpt;
         struct Task *t = TaskCreate(SA2_LABEL(Task_801A04C), sizeof(Finish2), 0x2000, 0, NULL);
         Finish2 *f2 = TASK_DATA(t);
-
-        // from M2C
-        u32 var_r6;
-        u32 var_r4;
-        u32 var_ip;
-        u8 *temp_r1_4;
-        u8 var_r5;
-        // end of m2c vars
 
         f2->unk0 = 0;
 
@@ -243,104 +230,115 @@ void CreateMultiplayerFinishHandler(void)
         }
 
 #if (GAME == GAME_SA1)
-        if (gGameMode == 4) {
+        if (gGameMode == GAME_MODE_CHAO_HUNT) {
             *((u32 *)arr2) = *((u32 *)gMultiplayerCharRings);
 
-            for (var_r6 = 0, var_ip = 3; var_r6 < 4; var_r6++) {
-                u32 var_r8 = var_ip;
-                for (var_r4 = 0; var_r4 < var_r8; var_r4++) {
-                    if (arr2[var_r4 + 0] < arr2[var_r4 + 1]) {
-                        XOR_SWAP(arr2[var_r4 + 0], arr2[var_r4 + 1]);
-                        XOR_SWAP(arr[var_r4 + 0], arr[var_r4 + 1]);
+            for (i = 0; i < ARRAY_COUNT(arr2); i++) {
+                u32 j;
+                for (j = 0; j < (3 - i); j++) {
+                    if (arr2[j + 0] < arr2[j + 1]) {
+                        XOR_SWAP(arr2[j + 0], arr2[j + 1]);
+                        XOR_SWAP(arr[j + 0], arr[j + 1]);
                     }
                 }
-#ifndef NON_MATCHING
-                asm("mov r1, #1\n"
-                    "neg r1, r1\n"
-                    "add %0, r1"
-                    : "=r"(var_ip));
-#else
-                var_ip--;
-#endif
             }
-            for (var_r6 = 0; var_r6 < 4; var_r6++) {
-                u8 *ptr = &arr[var_r6];
+            for (i = 0; i < ARRAY_COUNT(arr); i++) {
+                u8 *ptr = &arr[i];
 
-                if (var_r6 != 0) {
-                    if (arr2[var_r6] != arr2[0]) {
-                        SA2_LABEL(gMultiplayerRanks)[*ptr] = 1;
+                if (i != 0) {
+                    if (arr2[i] == arr2[0]) {
+#ifndef NON_MATCHING
+                        gMultiplayerRanks[*ptr] = ({
+                            register u8 r1 asm("r1") = 4;
+                            r1;
+                        });
+#else
+                        gMultiplayerRanks[*ptr] = 4;
+#endif
+
                     } else {
-                        SA2_LABEL(gMultiplayerRanks)[*ptr] = 4;
+                        gMultiplayerRanks[*ptr] = 1;
                     }
                 } else if (arr2[0] == arr2[1]) {
-                    SA2_LABEL(gMultiplayerRanks)[*ptr] = 4;
+#ifndef NON_MATCHING
+                    gMultiplayerRanks[*ptr] = ({
+                        register u8 r1 asm("r1") = 4;
+                        r1;
+                    });
+#else
+                    gMultiplayerRanks[*ptr] = 4;
+#endif
                 } else {
-                    SA2_LABEL(gMultiplayerRanks)[arr[0]] = var_r6;
+                    gMultiplayerRanks[arr[0]] = i;
                 }
             }
 
-            for (var_r6 = 0; var_r6 < 4; var_r6++) {
-                if (gMultiplayerPlayerTasks[var_r6] != NULL) {
-                    CreateMultiplayerFinishResult(var_r6, (u8)SA2_LABEL(gMultiplayerRanks)[var_r6]);
+            for (i = 0; i < ARRAY_COUNT(gMultiplayerPlayerTasks); i++) {
+                if (gMultiplayerPlayerTasks[i] != NULL) {
+                    CreateMultiplayerFinishResult(i, (u8)gMultiplayerRanks[i]);
                 }
             }
-        } else if (gGameMode == 5) {
-            for (var_r6 = 0; var_r6 < 4 && (gMultiplayerPlayerTasks[var_r6] != NULL); var_r6++) {
-                temp_r1_4 = &arr2[(gMultiplayerConnections & (0x10 << var_r6)) >> (var_r6 + 4)];
-                *temp_r1_4 += gMultiplayerCharRings[var_r6];
+        } else if (gGameMode == GAME_MODE_TEAM_PLAY) {
+            for (i = 0; i < ARRAY_COUNT(gMultiplayerPlayerTasks) && (gMultiplayerPlayerTasks[i] != NULL); i++) {
+                arr2[(gMultiplayerConnections & (0x10 << i)) >> (i + 4)] += gMultiplayerCharRings[i];
             }
 
             if ((u32)arr2[0] < (u32)arr2[1]) {
-                XOR_SWAP(arr2[0], arr2[1])
+                arr2[0] ^= (u8)arr2[1];
+                arr2[1] ^= (u8)arr2[0];
+                // xor swap swapped so can't use macro lol
+                arr2[0] = ((u8)arr2[0] ^ (u8)arr2[1]);
                 XOR_SWAP(arr[0], arr[1])
             }
             if (arr2[0] == arr2[1]) {
-                for (var_r6 = 0; var_r6 < 4; var_r6++) {
-                    if (gMultiplayerPlayerTasks[var_r6] != NULL) {
-                        SA2_LABEL(gMultiplayerRanks)[var_r6] = 4;
+                for (i = 0; i < 4; i++) {
+                    if (gMultiplayerPlayerTasks[i] != NULL) {
+                        gMultiplayerRanks[i] = 4;
                     }
                 }
             } else {
-                for (var_r6 = 0; var_r6 < 4; var_r6++) {
-                    if (gMultiplayerPlayerTasks[var_r6] != NULL) {
-                        if (((gMultiplayerConnections & (0x10 << var_r6)) >> (var_r6 + 4)) == arr[0]) {
-                            SA2_LABEL(gMultiplayerRanks)[var_r6] = 0;
+                for (i = 0; i < 4; i++) {
+                    if (gMultiplayerPlayerTasks[i] != NULL) {
+                        if (((gMultiplayerConnections & (0x10 << i)) >> (i + 4)) == arr[0]) {
+                            gMultiplayerRanks[i] = 0;
                         } else {
-                            SA2_LABEL(gMultiplayerRanks)[var_r6] = 1;
+                            gMultiplayerRanks[i] = 1;
                         }
                     }
                 }
             }
-            for (var_r6 = 0; var_r6 < 4; var_r6++) {
-                if (gMultiplayerPlayerTasks[var_r6] != NULL) {
-                    CreateMultiplayerFinishResult(var_r6, SA2_LABEL(gMultiplayerRanks)[var_r6]);
+            for (i = 0; i < 4; i++) {
+                if (gMultiplayerPlayerTasks[i] != NULL) {
+                    CreateMultiplayerFinishResult(i, gMultiplayerRanks[i]);
                 }
             }
-        } else if (gGameMode != 6) {
+        } else if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
             LOADED_SAVE->score += (s16)gRingCount;
             if (((u32)gCourseTime > MAX_COURSE_TIME) || ((STAGE_FLAG__TIMER_REVERSED & gStageFlags) && (gCourseTime == 0))) {
-                u32 var_r2 = 0;
-                if ((gGameMode != 3) && (gGameMode != 5)) {
-                    for (var_r4 = 0; var_r4 < 4 && (gMultiplayerPlayerTasks[var_r4] != NULL); var_r4++) {
-                        if (SA2_LABEL(gMultiplayerRanks)[var_r4] != -1) {
-                            var_r2 += 1;
+                u32 r2 = 0;
+                u8 r5;
+                u32 j;
+                if ((gGameMode != GAME_MODE_MULTI_PLAYER) && (gGameMode != GAME_MODE_TEAM_PLAY)) {
+                    for (j = 0; j < ARRAY_COUNT(gMultiplayerPlayerTasks) && (gMultiplayerPlayerTasks[j] != NULL); j++) {
+                        if (gMultiplayerRanks[j] != -1) {
+                            r2 += 1;
                         }
                     }
 
-                    if (var_r2 == 0) {
-                        var_r5 = 4;
-                    } else if (var_r2 == (var_r4 - 1)) {
-                        var_r5 = (u8)var_r2;
+                    if (r2 == 0) {
+                        r5 = 4;
+                    } else if (r2 == (j - 1)) {
+                        r5 = (j - 1);
                     } else {
-                        var_r5 = 5;
+                        r5 = 5;
                     }
                 } else {
-                    var_r5 = 4;
+                    r5 = 4;
                 }
 
-                for (var_r4 = 0; var_r4 < 4 && (gMultiplayerPlayerTasks[var_r4] != NULL); var_r4++) {
-                    if ((SA2_LABEL(gMultiplayerRanks)[var_r4] == -1) || (gGameMode == 3) || (gGameMode == 5)) {
-                        CreateMultiplayerFinishResult(var_r4, var_r5);
+                for (j = 0; j < ARRAY_COUNT(gMultiplayerPlayerTasks) && (gMultiplayerPlayerTasks[j] != NULL); j++) {
+                    if ((gMultiplayerRanks[j] == -1) || (gGameMode == GAME_MODE_MULTI_PLAYER) || (gGameMode == GAME_MODE_TEAM_PLAY)) {
+                        CreateMultiplayerFinishResult(j, r5);
                     }
                 }
             }
@@ -363,7 +361,7 @@ void CreateMultiplayerFinishHandler(void)
                     break;
                 }
 
-                if (SA2_LABEL(gMultiplayerRanks)[i] != -1) {
+                if (gMultiplayerRanks[i] != -1) {
                     r2++;
                 }
             }
@@ -384,7 +382,7 @@ void CreateMultiplayerFinishHandler(void)
                 break;
             }
 
-            if (SA2_LABEL(gMultiplayerRanks)[i] == -1) {
+            if (gMultiplayerRanks[i] == -1) {
                 MultiplayerPlayer *mpp;
                 mpt = gMultiplayerPlayerTasks[i];
                 mpp = TASK_DATA(mpt);
@@ -395,9 +393,6 @@ void CreateMultiplayerFinishHandler(void)
 #endif
     }
 }
-#if (GAME == GAME_SA1)
-END_NONMATCH
-#endif
 
 #endif // COLLECT_RINGS_ROM
 
@@ -465,14 +460,14 @@ void Task_TransitionToResultsScreen(void)
 
                 if (i != 0) {
                     if (sp04[i] != sp04[0]) {
-                        SA2_LABEL(gMultiplayerRanks)[sp00[i]] = i;
+                        gMultiplayerRanks[sp00[i]] = i;
                         gMultiplayerCharacters[sp00[i]] = 1;
                     } else {
 #ifndef NON_MATCHING
                         // TODO: Match without goto
                         goto else_block;
 #else
-                        SA2_LABEL(gMultiplayerRanks)[sp00[i]] = i;
+                        gMultiplayerRanks[sp00[i]] = i;
                         gMultiplayerCharacters[sp00[i]] = 2;
 #endif
                     }
@@ -482,10 +477,10 @@ void Task_TransitionToResultsScreen(void)
 #ifndef NON_MATCHING
                     else_block:
 #endif
-                        SA2_LABEL(gMultiplayerRanks)[sp00[i]] = i;
+                        gMultiplayerRanks[sp00[i]] = i;
                         gMultiplayerCharacters[sp00[i]] = 2;
                     } else {
-                        SA2_LABEL(gMultiplayerRanks)[sp00[0]] = i;
+                        gMultiplayerRanks[sp00[0]] = i;
                         gMPRingCollectWins[sp00[0]]++;
                         gMultiplayerCharacters[sp00[0]] = i;
                     }
@@ -534,9 +529,9 @@ void Task_TransitionToResultsScreen(void)
                 if (pid == SIO_MULTI_CNT->id)
                     continue;
 
-                if (SA2_LABEL(gMultiplayerRanks)[SIO_MULTI_CNT->id] < SA2_LABEL(gMultiplayerRanks)[pid]) {
+                if (gMultiplayerRanks[SIO_MULTI_CNT->id] < gMultiplayerRanks[pid]) {
                     foeResult = 0;
-                } else if (SA2_LABEL(gMultiplayerRanks)[SIO_MULTI_CNT->id] > SA2_LABEL(gMultiplayerRanks)[pid]) {
+                } else if (gMultiplayerRanks[SIO_MULTI_CNT->id] > gMultiplayerRanks[pid]) {
                     foeResult = 1;
                     ownResult = 1;
                 } else {

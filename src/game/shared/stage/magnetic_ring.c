@@ -40,9 +40,9 @@ void CreateMagneticRing(s16 x, s16 y)
     s->oamFlags = SPRITE_OAM_ORDER(15);
     s->graphics.size = 0;
 #if (GAME == GAME_SA1)
-    GET_SPRITE_ANIM(s) = SA1_ANIM_RING;
+    s->graphics.anim = SA1_ANIM_RING;
 #elif (GAME == GAME_SA2)
-    GET_SPRITE_ANIM(s) = SA2_ANIM_RING;
+    s->graphics.anim = SA2_ANIM_RING;
 #endif
     s->variant = 0;
     s->animCursor = 0;

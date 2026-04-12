@@ -196,7 +196,7 @@ endif
 CXX_OBJS := $(patsubst $(C_SUBDIR)/%.cc,$(C_BUILDDIR)/%.o,$(CXX_SRCS))
 
 # Platform not included as we only need the headers for decomp scratches
-C_HEADERS := $(shell find $(INCLUDE_DIRS) -name "*.h" -not -path "*/platform/*")
+C_HEADERS := $(shell find $(INCLUDE_DIRS) -name "*.h" -not -path "*/sa1/*" -not -path "*/platform/*")
 
 ifeq ($(PLATFORM),gba)
 C_ASM_SRCS := $(shell find $(C_SUBDIR) -name "*.s")
@@ -703,5 +703,5 @@ check_format:
 
 ctx.c: $(C_HEADERS)
 	@for header in $(C_HEADERS); do echo "#include \"$$header\""; done > ctx.h
-	gcc -P -E -dD -undef -nostdinc -I include -D GEN_CTX=1 -D PLATFORM_GBA=1 ctx.h | sed '/^#define __STDC/d' | sed '1s|^|#include <stdint.h>\n|' > ctx.c
+	gcc -P -E -dD -undef -nostdinc -I include -D GEN_CTX=1 -D PLATFORM_GBA=1 -D GAME=GAME_SA2 ctx.h | sed '/^#define __STDC/d' | sed '1s|^|#include <stdint.h>\n|' > ctx.c
 	@rm ctx.h

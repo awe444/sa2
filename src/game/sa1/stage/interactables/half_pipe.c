@@ -195,7 +195,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/half_pipe__sub_804D4A0.i
     }
     // _0804D550
 
-    if (!(p->moveState & MOVESTATE_4)) {
+    if (!(p->moveState & MOVESTATE_SPIN_ATTACK)) {
         // __0804D55A
         if (p->SA2_LABEL(unk62) == 0) {
             if (p->charState == CHARSTATE_WALK_A
