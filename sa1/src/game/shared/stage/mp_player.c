@@ -838,7 +838,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/mp_player__Task_CreateMultiplayerPlaye
                     }
                     {
                         RoomEvent_Unknown *roomEvent = CreateRoomEvent();
-                        roomEvent->type = ROOMEVENT_TYPE_UNKNOWN;
+                        roomEvent->type = ROOMEVENT_TYPE_8;
                         roomEvent->unk1 = mpp->unk56;
                         roomEvent->unk2 = 0;
                     }

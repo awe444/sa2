@@ -28,7 +28,7 @@ const RoomEventHandler gRoomEventHandlers[] = {
     [ROOMEVENT_TYPE_ITEMEFFECT_APPLIED - 1] = ReceiveRoomEvent_ItemEffect,
 #ifndef COLLECT_RINGS_ROM
     [ROOMEVENT_TYPE_REACHED_STAGE_GOAL - 1] = ReceiveRoomEvent_ReachedStageGoal,
-    [ROOMEVENT_TYPE_UNKNOWN - 1] = ReceiveRoomEvent_8,
+    [ROOMEVENT_TYPE_8 - 1] = ReceiveRoomEvent_8,
 #endif
     NULL,
 };

@@ -4,7 +4,7 @@
 #include "trig.h"
 
 #include "game/globals.h"
-#include "game/shared/stage/spot_light.h"
+#include "game/shared/stage/spot_lights_manager.h"
 #include "game/shared/stage/spot_light_beam_task.h"
 #include "game/shared/stage/player.h"
 
@@ -16,17 +16,17 @@ typedef struct {
     struct Task *t1;
     s16 unk8;
     s32 unkC;
-} StageSpotLight;
+} SpotlightsManager;
 
 void Task_SpotLightMain(void);
 void Task_800A8E0(void);
 void TaskDestructor_SpotLightMain(struct Task *);
 
 // TODO: rename to SpotlightsManager
-bool32 CreateSpotLightBeams(void)
+bool32 CreateSpotlightsManager(void)
 {
-    struct Task *t = TaskCreate(Task_SpotLightMain, sizeof(StageSpotLight), 0x2000, 0, TaskDestructor_SpotLightMain);
-    StageSpotLight *spotLight = TASK_DATA(t);
+    struct Task *t = TaskCreate(Task_SpotLightMain, sizeof(SpotlightsManager), 0x2000, 0, TaskDestructor_SpotLightMain);
+    SpotlightsManager *spotLight = TASK_DATA(t);
     SpotlightBeam *beam;
 
     spotLight->unk8 = 0x600;
@@ -59,7 +59,7 @@ bool32 CreateSpotLightBeams(void)
 
 void Task_SpotLightMain(void)
 {
-    StageSpotLight *spotLight = TASK_DATA(gCurTask);
+    SpotlightsManager *spotLight = TASK_DATA(gCurTask);
     SpotlightBeam *beam;
     s32 unkC;
 
@@ -120,7 +120,7 @@ void Task_SpotLightMain(void)
 void Task_800A8E0(void)
 {
     bool32 boolR5 = FALSE;
-    StageSpotLight *spotLight = TASK_DATA(gCurTask);
+    SpotlightsManager *spotLight = TASK_DATA(gCurTask);
     SpotlightBeam *beam;
     s32 unkC;
 

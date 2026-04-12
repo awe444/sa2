@@ -5,7 +5,7 @@
 #include "trig.h"
 
 #include "game/globals.h"
-#include "game/shared/stage/spot_light.h"
+#include "game/shared/stage/spot_lights_manager.h"
 
 #include "game/sa2/stage/player_super_sonic.h"
 
@@ -1201,7 +1201,7 @@ void CreateStageBg_Zone4(void)
 // to handle these spotlights
 #if !defined(__PS2__) && !defined(__PSP__)
     if (IS_SINGLE_PLAYER) {
-        CreateSpotLightBeams();
+        CreateSpotlightsManager();
     }
 #endif
 }

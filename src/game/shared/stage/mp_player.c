@@ -901,7 +901,7 @@ NONMATCH("asm/non_matching/game/shared/stage/mp_player__Task_CreateMultiplayerPl
                             }
 
                             roomEvent = CreateRoomEvent();
-                            roomEvent->type = ROOMEVENT_TYPE_UNKNOWN;
+                            roomEvent->type = ROOMEVENT_TYPE_8;
                             roomEvent->unk1 = mpp->unk56;
                             roomEvent->unk2 = 0;
                         }
