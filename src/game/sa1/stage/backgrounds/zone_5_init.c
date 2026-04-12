@@ -10,8 +10,17 @@
 void CreateStageBg_Zone5(void)
 {
     Background *bg = &gStageBackgroundsRam.unk0;
+#if WIDESCREEN_HACK
+    // @BUG(original): gBgCntRegs[0] is set with BLDCNT flags instead of BGCNT.
+    // On GBA the bit layout coincidentally encodes the correct charbase (3) and
+    // screenbase (28 = CAM_SCREENBASE_BACK_A).  In widescreen builds the cloud
+    // tilemap lives at a different screenbase, so we set the real BGCNT here.
+    gBgCntRegs[0] = BGCNT_PRIORITY(3) | BGCNT_CHARBASE(3) | BGCNT_16COLOR
+        | BGCNT_SCREENBASE(CAM_SCREENBASE_BACK_A) | BGCNT_TXT256x256;
+#else
     gBgCntRegs[0]
         = ((BLDCNT_TGT2_BG2 | BLDCNT_TGT2_BG3 | BLDCNT_TGT2_OBJ) | (BLDCNT_TGT1_BG0 | BLDCNT_TGT1_BG1 | BLDCNT_TGT1_BG2 | BLDCNT_TGT1_BG3));
+#endif
 
     *bg = gStageCameraBgTemplates[CAMBG_BACK_B_LAYER];
     bg->tilemapId = TM_EGG_ROCKET_CLOUDS;

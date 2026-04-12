@@ -57,7 +57,7 @@
 //       This hack should best be removed once there's a "native" platform layer.
 #if ((DISPLAY_WIDTH >= 256) || (DISPLAY_HEIGHT >= 256))
 #undef VRAM_SIZE
-#define VRAM_SIZE (0x18000 + (0x800 * (12)))
+#define VRAM_SIZE (0x18000 + (0x800 * (14)))
 #define WIDESCREEN_HACK TRUE
 #define EXTENDED_OAM TRUE
 #else
