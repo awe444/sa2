@@ -284,7 +284,7 @@ void Task_8025190(void)
             pointer->all.attr2
                 = (((oam[2] + s->palId) & ~0xFFF) | (SPRITE_FLAG_GET(s, PRIORITY) << 10) | (u16)(GET_TILE_NUM(s->graphics.dest) + r6));
 #else
-            pointer->split.paletteNum = (oam[2] + s->palId) >> 12;
+            pointer->split.paletteNum = (oam[OAM_DATA_COUNT_NO_AFFINE - 1] >> 12) + s->palId;
             pointer->split.priority = SPRITE_FLAG_GET(s, PRIORITY);
             pointer->split.tileNum = GET_TILE_NUM(s->graphics.dest) + r6;
 #endif
@@ -369,7 +369,7 @@ void Task_8025400(void)
             pointer->all.attr2
                 = (((oam[2] + s->palId) & ~0xFFF) | (SPRITE_FLAG_GET(s, PRIORITY) << 10) | (u16)(GET_TILE_NUM(s->graphics.dest) + r6));
 #else
-            pointer->split.paletteNum = (oam[2] + s->palId) >> 12;
+            pointer->split.paletteNum = (oam[OAM_DATA_COUNT_NO_AFFINE - 1] >> 12) + s->palId;
             pointer->split.priority = SPRITE_FLAG_GET(s, PRIORITY);
             pointer->split.tileNum = GET_TILE_NUM(s->graphics.dest) + r6;
 #endif
