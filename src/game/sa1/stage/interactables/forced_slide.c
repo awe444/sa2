@@ -134,7 +134,7 @@ void Task_ForcedSlide(void)
                     Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
                     PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                     PLAYER(i).moveState &= ~MOVESTATE_100;
-                    PLAYER(i).moveState &= ~MOVESTATE_4;
+                    PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                     PLAYER(i).moveState |= MOVESTATE_IGNORE_INPUT;
                     PLAYER(i).heldInput = 0;

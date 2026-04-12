@@ -148,7 +148,7 @@ bool32 sub_80753D0(Sprite *s, s32 worldX, s32 worldY)
                 PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                 PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                 PLAYER(i).moveState &= ~MOVESTATE_100;
-                PLAYER(i).moveState &= ~MOVESTATE_4;
+                PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
                 PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
                 if (gSelectedCharacter == CHARACTER_AMY) {

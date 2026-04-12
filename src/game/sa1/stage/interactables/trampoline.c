@@ -140,7 +140,7 @@ bool32 sub_8074FB0(Sprite *s, s16 worldX, s16 worldY)
             p->moveState &= ~MOVESTATE_STOOD_ON_OBJ;
             p->moveState |= MOVESTATE_IN_AIR;
             p->moveState &= ~MOVESTATE_100;
-            p->moveState &= ~MOVESTATE_4;
+            p->moveState &= ~MOVESTATE_SPIN_ATTACK;
             p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
             PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 14);
 

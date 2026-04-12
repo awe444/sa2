@@ -7,14 +7,18 @@
 
 #include "lib/m4a/m4a.h"
 
+#if (GAME == GAME_SA1)
+#include "constants/sa1/songs.h"
+#elif (GAME == GAME_SA2)
 #include "constants/sa2/songs.h"
+#endif
 
 static void MusManager_UpdateBgmParams(void);
 void MusManager_Fadeout(u16 fadeoutSpeed);
 
-#if (GAME == GAME_SA1)
 ALIGNED(4)
 const u16 gLevelSongs[] = {
+#if (GAME == GAME_SA1)
     MUS_NEO_GREEN_HILL__ACT_1,
     MUS_NEO_GREEN_HILL__ACT_2,
     MUS_SECRET_BASE__ACT_1,
@@ -35,10 +39,7 @@ const u16 gLevelSongs[] = {
     MUS_SECRET_BASE__ACT_1,
     MUS_CASINO_PARADISE__ACT_1,
     MUS_COSMIC_ANGEL,
-};
 #elif (GAME == GAME_SA2)
-ALIGNED(4)
-const u16 gLevelSongs[] = {
     MUS_LEAF_FOREST__ACT_1,
     MUS_LEAF_FOREST__ACT_2,
     MUS_BOSS,
@@ -79,14 +80,15 @@ const u16 gLevelSongs[] = {
     MUS_BOSS,
     MUS_BOSS,
     MUS_DUMMY,
+#endif
 };
-#endif
 
+const static u16 sBossSongIndices[] = {
 #if (GAME == GAME_SA1)
-const u16 gUnkMusicMgrData[7] = { 0x001D, 0x001E, 0x001F, 0x0020, 0x0031, 0x0032, 0x0019 };
-#elif (GAME == GAME_SA2)
-const u16 gUnkMusicMgrData[0] = {};
+    MUS_BOSS_FIGHT,       MUS_BOSS_INTRO,         MUS_BOSS_MECHA_KNUCKLES, MUS_BOSS_EGG_SNAKE,
+    MUS_BOSS_EGG_WRECKER, MUS_BOSS_EGG_DRILLSTER, MUS_FINAL_BOSS
 #endif
+};
 
 #if (GAME == GAME_SA1)
 #define SET_UNK5(v)
@@ -96,16 +98,11 @@ const u16 gUnkMusicMgrData[0] = {};
 
 void Task_StageMusicManager(void)
 {
-#if (GAME == GAME_SA1)
-    // TODO: Integrate SA2 version of sound lib!
-    struct SongHeader *songHeader = gMPlayTable[0].info->songHeader;
-#else
     struct MP2KSongHeader *songHeader = gMPlayTable[0].info->songHeader;
-#endif
 
     if ((gMusicManagerState.unk0 == 0) && PLAYER_IS_ALIVE) {
 #if (GAME == GAME_SA2)
-        if ((gMusicManagerState.unk1 & (0x10 | 0x20 | 0x40 | 0x80)) == (0x10 | 0x20)) {
+        if ((gMusicManagerState.unk1 & 0xF0) == 0x30) {
             MPlayStop(&gMPlayInfo_BGM);
 
             gMusicManagerState.unk0 = 0xFF;
@@ -146,19 +143,19 @@ void Task_StageMusicManager(void)
             gMusicManagerState.unk3 = 0;
             SET_UNK5(1);
             m4aSongNumStart(MUS_1_UP);
-        } else if ((gMusicManagerState.unk1 & (0x10 | 0x20 | 0x40 | 0x80)) == 0x10) {
-            u32 offset = (gMusicManagerState.unk1 &= 0x0F);
+        } else if ((gMusicManagerState.unk1 & 0xF0) == 0x10) {
+            u32 unk1 = (gMusicManagerState.unk1 &= 0x0F);
 
 #if (GAME == GAME_SA1)
-            m4aSongNumStart(gUnkMusicMgrData[gMusicManagerState.unk1]);
+            m4aSongNumStart(sBossSongIndices[gMusicManagerState.unk1]);
             gMusicManagerState.unk1 |= 0x20;
 #else
-            m4aSongNumStart(gLevelSongs[gCurrentLevel + offset]);
+            m4aSongNumStart(gLevelSongs[gCurrentLevel + unk1]);
 #endif
 #if (GAME == GAME_SA1)
-        } else if ((gMusicManagerState.unk1 & (0x10 | 0x20 | 0x40 | 0x80)) == 0x30) {
+        } else if ((gMusicManagerState.unk1 & 0xF0) == 0x30) {
             gMusicManagerState.unk1 &= 0xF;
-            m4aSongNumStop(gUnkMusicMgrData[gMusicManagerState.unk1]);
+            m4aSongNumStop(sBossSongIndices[gMusicManagerState.unk1]);
 
             m4aSongNumStart(gLevelSongs[gCurrentLevel]);
             MusManager_UpdateBgmParams();
@@ -171,9 +168,9 @@ void Task_StageMusicManager(void)
         } else if (((gMPlayInfo_BGM.status & MUSICPLAYER_STATUS_TRACK) == 0) || (gMPlayInfo_BGM.status & MUSICPLAYER_STATUS_PAUSE)) {
             if ((gMusicManagerState.unk1 & (0x10 | 0x20 | 0x40 | 0x80)) == 0x20) {
 #if (GAME == GAME_SA1)
-                m4aSongNumStart(gUnkMusicMgrData[gMusicManagerState.unk1 & 0xF]);
+                m4aSongNumStart(sBossSongIndices[gMusicManagerState.unk1 & 0xF]);
 #else
-                m4aSongNumStart(gUnkMusicMgrData[gMusicManagerState.unk1]);
+                m4aSongNumStart(sBossSongIndices[gMusicManagerState.unk1]);
 #endif
                 MusManager_UpdateBgmParams();
             } else {
@@ -209,11 +206,7 @@ void CreateStageMusicManager(void)
 
 static void MusManager_UpdateBgmParams(void)
 {
-#if (GAME == GAME_SA1)
-    struct MusicPlayerInfo *bgmInfo = &gMPlayInfo_BGM;
-#else
     struct MP2KPlayerState *bgmInfo = &gMPlayInfo_BGM;
-#endif
 
     m4aMPlayImmInit(bgmInfo);
     m4aMPlayVolumeControl(bgmInfo, 0xFF, 4);

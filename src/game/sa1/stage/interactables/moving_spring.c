@@ -247,7 +247,7 @@ bool32 sub_808B7A0(MovingSpring *spring, Sprite *s, s32 worldX, s32 worldY)
                 if ((r5 & (COLL_FLAG_100000 | COLL_FLAG_40000 | COLL_FLAG_20000 | COLL_FLAG_10000)) && sub_80549FC()) {
                     Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
                     PLAYER(i).charState = CHARSTATE_SPINATTACK;
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                 }
 

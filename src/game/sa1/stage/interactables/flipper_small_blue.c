@@ -148,7 +148,7 @@ void Task_Flipper_SmallBlue(void)
                         if (Coll_Player_Entity_Intersection(s, worldX, worldY, &PLAYER(i))) {
                             flipper->unk58[i] = 0;
                             Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
-                            PLAYER(i).moveState |= MOVESTATE_4;
+                            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                             PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;
                             PLAYER(i).SA2_LABEL(unk99)[0] = flipper->unk3E;
                             flipper->qUnk48[i] = PLAYER(i).qWorldY;

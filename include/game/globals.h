@@ -19,8 +19,13 @@
 #define GAME_MODE_MULTI_PLAYER_COLLECT_RINGS 5
 #endif
 
-// TODO: Improve this name
-#define IS_MP_OR_TEAM_PLAY ((gGameMode == GAME_MODE_MULTI_PLAYER) || (gGameMode == GAME_MODE_TEAM_PLAY))
+#if (GAME == GAME_SA1)
+// In SA1 this check also assumed multiplayer was team play
+#define IS_TEAM_PLAY ((gGameMode == GAME_MODE_MULTI_PLAYER) || (gGameMode == GAME_MODE_TEAM_PLAY))
+#elif (GAME == GAME_SA2)
+// In SA2 this only checks that we are in the team play game mode
+#define IS_TEAM_PLAY ((gGameMode == GAME_MODE_TEAM_PLAY))
+#endif
 
 #if (GAME == GAME_SA1)
 #define IS_SINGLE_PLAYER ((gGameMode == GAME_MODE_SINGLE_PLAYER) || (gGameMode == GAME_MODE_TIME_ATTACK))

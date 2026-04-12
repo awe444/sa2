@@ -235,7 +235,7 @@ void Player_Tails_8047BA0(Player *p)
             sub_8047F2C_inline(p);
         } break;
 
-        case MOVESTATE_4: {
+        case MOVESTATE_SPIN_ATTACK: {
             sub_8047FA0_inline(p);
         } break;
 
@@ -327,8 +327,8 @@ void sub_8047FE4(Player *p) { sub_8047FE4_inline(p); }
 //       That does not make sense.
 void Player_Tails_InitFlying(Player *p)
 {
-    if (p->moveState & MOVESTATE_4) {
-        p->moveState &= ~MOVESTATE_4;
+    if (p->moveState & MOVESTATE_SPIN_ATTACK) {
+        p->moveState &= ~MOVESTATE_SPIN_ATTACK;
         PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
     }
 

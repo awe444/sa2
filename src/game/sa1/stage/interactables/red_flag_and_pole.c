@@ -153,7 +153,7 @@ void Task_8077760(void)
 
             if (++pole->unk3D > 13) {
                 p->charState = pole->unk3E;
-                p->moveState &= ~MOVESTATE_4;
+                p->moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                 if (!(p->moveState & MOVESTATE_FACING_LEFT)) {
                     if (p->charState == CHARSTATE_BRAKE) {
@@ -372,7 +372,7 @@ void Task_8077D1C(void)
             if (++pole->unk3D > 13) {
                 p->moveState |= MOVESTATE_IN_AIR;
                 p->moveState &= ~MOVESTATE_100;
-                p->moveState &= ~MOVESTATE_4;
+                p->moveState &= ~MOVESTATE_SPIN_ATTACK;
                 p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
                 p->charState = CHARSTATE_SPRING_B;
@@ -459,9 +459,9 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/red_flag__sub_8077FA4.in
             continue;
         }
 
-        if (!(p->moveState & MOVESTATE_4) && (p->qSpeedGround >= -Q(3))) {
+        if (!(p->moveState & MOVESTATE_SPIN_ATTACK) && (p->qSpeedGround >= -Q(3))) {
             continue;
-        } else if ((p->moveState & MOVESTATE_4) && (p->qSpeedGround >= -Q(5.25))) {
+        } else if ((p->moveState & MOVESTATE_SPIN_ATTACK) && (p->qSpeedGround >= -Q(5.25))) {
             continue;
         }
 
@@ -522,7 +522,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/red_flag__sub_80780B4.in
             continue;
         }
 
-        if (!(p->moveState & MOVESTATE_4) && (p->qSpeedGround <= +Q(3))) {
+        if (!(p->moveState & MOVESTATE_SPIN_ATTACK) && (p->qSpeedGround <= +Q(3))) {
             if ((p->qSpeedGround > Q(5.25)) && !(p->moveState & MOVESTATE_FACING_LEFT)) {
                 Player_TransitionCancelFlyingAndBoost(p);
                 m4aSongNumStart(SE_POLE);

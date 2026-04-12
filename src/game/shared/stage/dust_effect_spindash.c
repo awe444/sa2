@@ -9,7 +9,11 @@
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/mp_player.h"
 
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
+#endif
 
 typedef struct {
     Sprite s;
@@ -28,9 +32,9 @@ struct Task *CreateSpindashDustEffect()
     s->graphics.dest = VramMalloc(20);
     s->graphics.size = 0;
 #if (GAME == GAME_SA1)
-    GET_SPRITE_ANIM(s) = SA1_ANIM_SPINDASH_DUST_EFFECT;
+    s->graphics.anim = SA1_ANIM_SPINDASH_DUST_EFFECT;
 #elif (GAME == GAME_SA2)
-    GET_SPRITE_ANIM(s) = SA2_ANIM_SPINDASH_DUST_EFFECT;
+    s->graphics.anim = SA2_ANIM_SPINDASH_DUST_EFFECT;
 #endif
     s->variant = 0;
     s->prevVariant = -1;
@@ -49,7 +53,7 @@ void Task_SpindashDustEffect(void)
     Player *p = &gPlayer;
     s32 offY;
 
-    if (p->spriteTask == NULL || (p->moveState & (MOVESTATE_400 | MOVESTATE_DEAD)) != MOVESTATE_400) {
+    if (p->spriteTask == NULL || (p->moveState & (MOVESTATE_SPINDASH | MOVESTATE_DEAD)) != MOVESTATE_SPINDASH) {
         TaskDestroy(gCurTask);
         return;
     } else {
@@ -58,9 +62,9 @@ void Task_SpindashDustEffect(void)
 
         if (p->qSpindashAccel > Q(2.0)) {
 #if (GAME == GAME_SA1)
-            GET_SPRITE_ANIM(s) = SA1_ANIM_SPINDASH_DUST_EFFECT_BIG;
+            s->graphics.anim = SA1_ANIM_SPINDASH_DUST_EFFECT_BIG;
 #elif (GAME == GAME_SA2)
-            GET_SPRITE_ANIM(s) = SA2_ANIM_SPINDASH_DUST_EFFECT_BIG;
+            s->graphics.anim = SA2_ANIM_SPINDASH_DUST_EFFECT_BIG;
 #endif
             s->variant = 0;
             s->prevVariant = -1;
@@ -110,7 +114,7 @@ void Task_SpindashDustEffectBig(void)
     Player *p = &gPlayer;
     s32 offY;
 
-    if (p->spriteTask == NULL || (p->moveState & (MOVESTATE_400 | MOVESTATE_DEAD)) != MOVESTATE_400) {
+    if (p->spriteTask == NULL || (p->moveState & (MOVESTATE_SPINDASH | MOVESTATE_DEAD)) != MOVESTATE_SPINDASH) {
         TaskDestroy(gCurTask);
         return;
     } else {
@@ -119,9 +123,9 @@ void Task_SpindashDustEffectBig(void)
 
         if (p->qSpindashAccel <= Q(2.0)) {
 #if (GAME == GAME_SA1)
-            GET_SPRITE_ANIM(s) = SA1_ANIM_SPINDASH_DUST_EFFECT;
+            s->graphics.anim = SA1_ANIM_SPINDASH_DUST_EFFECT;
 #elif (GAME == GAME_SA2)
-            GET_SPRITE_ANIM(s) = SA2_ANIM_SPINDASH_DUST_EFFECT;
+            s->graphics.anim = SA2_ANIM_SPINDASH_DUST_EFFECT;
 #endif
             s->variant = 0;
             s->prevVariant = -1;

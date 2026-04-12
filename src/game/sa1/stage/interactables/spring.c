@@ -742,7 +742,7 @@ bool32 sub_80228D0(Sprite *s, MapEntity *me, SpringA *spring, Player *p)
 
             Player_TransitionCancelFlyingAndBoost(p);
 
-            if (p->moveState & MOVESTATE_4) {
+            if (p->moveState & MOVESTATE_SPIN_ATTACK) {
                 p->charState = CHARSTATE_SPINATTACK;
             } else {
                 p->charState = CHARSTATE_WALK_A;
@@ -792,7 +792,7 @@ bool32 sub_80228D0(Sprite *s, MapEntity *me, SpringA *spring, Player *p)
 
             Player_TransitionCancelFlyingAndBoost(p);
 
-            if (p->moveState & MOVESTATE_4) {
+            if (p->moveState & MOVESTATE_SPIN_ATTACK) {
                 p->charState = CHARSTATE_SPINATTACK;
             } else {
                 p->charState = CHARSTATE_WALK_A;
@@ -849,7 +849,7 @@ bool32 sub_8022AB4(Sprite *s, MapEntity *me, SpringB *spring, Player *p)
     if (hitWithHammer || HB_COLLISION(worldX, worldY, s->hitboxes[1].b, I(p->qWorldX), I(p->qWorldY), (*((Rect8 *)&arr)))) {
         iaIndex = IA__SPRING__BIG_UPLEFT;
 
-        p->moveState &= ~MOVESTATE_4;
+        p->moveState &= ~MOVESTATE_SPIN_ATTACK;
         p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
         if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
@@ -974,7 +974,7 @@ bool32 sub_8022E14(Sprite *s, MapEntity *me, SpringB *spring, Player *p)
     hitWithHammer = Coll_AmyHammer_Spring(s, worldX, worldY, p);
 
     if (hitWithHammer || HB_COLLISION(worldX, worldY, s->hitboxes[1].b, I(p->qWorldX), I(p->qWorldY), (*((Rect8 *)&arr)))) {
-        p->moveState &= ~MOVESTATE_4;
+        p->moveState &= ~MOVESTATE_SPIN_ATTACK;
         p->moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
         iaIndex = IA__SPRING__SMALL_UPLEFT;

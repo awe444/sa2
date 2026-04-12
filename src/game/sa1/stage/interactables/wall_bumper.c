@@ -51,7 +51,7 @@ void Task_WallBumper(void)
                 if (PLAYER(i).SA2_LABEL(unk61)) {
                     Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
                     PLAYER(i).charState = 5;
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
 
                     PLAYERFN_SET_SHIFT_OFFSETS(&PLAYER(i), 6, 9);
                 }

@@ -107,7 +107,7 @@ typedef struct {
 #if (GAME == GAME_SA1)
 
 #ifndef NON_MATCHING
-// Previously called GET_SP_PLAYER_V0/GET_SP_PLAYER_V1
+// Previously called GET_SP_PLAYER_V0/PLAYER
 #define PLAYER_V0(index) ((index == 0) ? gPlayer : gPartner)
 #define PLAYER(index)    (((index) != 0) ? gPartner : gPlayer)
 
@@ -126,11 +126,11 @@ typedef struct {
 
 #elif (GAME == GAME_SA2)
 // NOTE: Ignores index, in SA2 you only ever have 1 player char in single player mode
-#define GET_SP_PLAYER_V0(index) (&gPlayer)
-#define GET_SP_PLAYER_V1(index) (&gPlayer)
+#define PLAYER_V0(index) (gPlayer)
+#define PLAYER(index)    (gPlayer)
 #elif (GAME == GAME_SA3)
-#define GET_SP_PLAYER_V0(index) ((index == PLAYER_1) ? &gPlayers[gStageData.playerIndex] : &gPlayers[p->charFlags.partnerIndex])
-#define GET_SP_PLAYER_V1(index) ((index != PLAYER_1) ? &gPlayers[p->charFlags.partnerIndex] : &gPlayers[gStageData.playerIndex])
+#define PLAYER_V0(index) ((index == PLAYER_1) ? gPlayers[gStageData.playerIndex] : gPlayers[p->charFlags.partnerIndex])
+#define PLAYER(index)    ((index != PLAYER_1) ? gPlayers[p->charFlags.partnerIndex] : gPlayers[gStageData.playerIndex])
 #endif
 
 // Declared beforehand because it's used inside Player struct

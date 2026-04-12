@@ -4,15 +4,21 @@
 #include "task.h"
 #include "trig.h"
 
-#include "game/shared/stage/mp_player.h"
 #include "game/globals.h"
-#include "game/shared/stage/camera.h"
+
 #include "game/shared/stage/mp_sprite_task.h"
 #include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
+
 #include "game/shared/stage/stage.h"
 #include "game/shared/stage/water_effects.h"
+#include "game/shared/stage/mp_player.h"
 
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
+#endif
 
 #if (GAME == GAME_SA2)
 const u16 sAnimData_StageGoalScoreBonus[][3] = {
@@ -98,7 +104,7 @@ void Task_UpdateMpSpriteTaskSprite(void)
                         ts->y = mpp->pos.y;
 #endif
                     } else {
-                        Player *p = GET_SP_PLAYER_V1(id);
+                        Player *p = &PLAYER(id);
 
                         ts->x = I(p->qWorldX);
                         ts->y = I(p->qWorldY);

@@ -193,7 +193,7 @@ void Task_FerrisWheel(void)
                     wheel->qUnkB0 = Q(1.0);
                 }
 
-                if (PLAYER(i).moveState & (MOVESTATE_SPINDASH | MOVESTATE_4)) {
+                if (PLAYER(i).moveState & (MOVESTATE_SPINDASH | MOVESTATE_SPIN_ATTACK)) {
                     PLAYER(i).qWorldY = Q((worldY + sp18) - 15);
                 } else {
                     PLAYER(i).qWorldY = Q((worldY + sp18) - 20);

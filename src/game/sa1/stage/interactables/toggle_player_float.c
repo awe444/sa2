@@ -140,7 +140,7 @@ void Task_PlayerFloatMain(void)
             if (res > 4) {
                 PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                 PLAYER(i).moveState &= ~MOVESTATE_100;
-                PLAYER(i).moveState &= ~MOVESTATE_4;
+                PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
                 PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
             }
             TASK_SET_MEMBER(TogglePlayerFloat, gCurTask, u8, unk3A[i], TASK_GET_MEMBER(TogglePlayerFloat, gCurTask, u8, unk38[i]));

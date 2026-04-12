@@ -607,7 +607,7 @@ void InitCamera(u32 level)
 
     camera->unk8 = Q(16);
     camera->unkC = 12;
-    camera->unk56 = 0;
+    camera->SA2_LABEL(unk56) = 0;
     camera->shiftX = 0;
     camera->shiftY = 0;
     camera->unk20 = 0;
@@ -794,8 +794,8 @@ void UpdateCamera(void)
                     s16 airSpeedX = player->qSpeedAirX;
                     camera->sa2__unk10 = I(player->qWorldX) + camera->shiftX - DISPLAY_CENTER_X;
 #if (GAME == GAME_SA2)
-                    camera->unk56 = (airSpeedX + (camera->unk56 * 15)) >> 4;
-                    camera->unk10 += (camera->unk56 >> 5);
+                    camera->SA2_LABEL(unk56) = (airSpeedX + (camera->SA2_LABEL(unk56) * 15)) >> 4;
+                    camera->unk10 += (camera->SA2_LABEL(unk56) >> 5);
 #endif
                 }
                 if (!(camera->sa2__unk50 & 2)) {
@@ -849,7 +849,7 @@ void UpdateCamera(void)
         newX = CLAMP(newX, camera->minX, camera->maxX - DISPLAY_WIDTH);
 
 #if (GAME == GAME_SA1)
-        if ((player->moveState & MOVESTATE_IN_AIR) && (player->character != CHARACTER_KNUCKLES || player->sa2__unk61 != 9))
+        if ((player->moveState & MOVESTATE_IN_AIR) && (player->character != CHARACTER_KNUCKLES || player->SA2_LABEL(unk61) != 9))
 #elif (GAME == GAME_SA2)
         if (camera->unk8 < Q(16)) {
             camera->unk8 += Q(0.125);

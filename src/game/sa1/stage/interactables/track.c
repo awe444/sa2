@@ -139,7 +139,7 @@ void Task_Track(void)
                         && (worldY - 10 <= I(PLAYER(i).qWorldY)) && (worldY + 10 >= I(PLAYER(i).qWorldY))) {
                         track->unk3F[i] = 0;
                         Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
-                        PLAYER(i).moveState |= MOVESTATE_4;
+                        PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                         PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;
                         PLAYER(i).qWorldX = Q(worldX);
                         PLAYER(i).qWorldY = Q(worldY);

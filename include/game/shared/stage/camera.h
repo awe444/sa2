@@ -92,9 +92,9 @@ typedef struct Camera {
     // mode
     /* 0x50 */ u16 unk50;
 
-    /* 0x52 */ u16 unk52;
-    /* 0x54 */ u16 unk54;
-    /* 0x56 */ s16 unk56;
+    /* 0x52 */ u16 SA2_LABEL(unk52);
+    /* 0x54 */ u16 SA2_LABEL(unk54);
+    /* 0x56 */ s16 SA2_LABEL(unk56);
     /* 0x58 */ BgUpdate fnBgUpdate;
     /* 0x5C */ struct Task *movementTask;
     /* 0x60 */ s16 shakeOffsetX;

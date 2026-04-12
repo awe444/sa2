@@ -221,12 +221,12 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/hook__Task_SwingingHook.
                 PLAYER(i).qSpeedAirY = Q(0);
 
                 if (PLAYER(i).character != CHARACTER_AMY) {
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).charState = CHARSTATE_SPINATTACK;
                     PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 9);
                 } else {
                     // _08087C5C
-                    PLAYER(i).moveState &= ~MOVESTATE_4;
+                    PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).charState = CHARSTATE_85;
                     PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 14);
                 }
@@ -316,12 +316,12 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/hook__Task_SwingingHook.
 
                         if (PLAYER(i).character != CHARACTER_AMY) {
                             // _08087FEA
-                            PLAYER(i).moveState |= MOVESTATE_4;
+                            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                             PLAYER(i).charState = CHARSTATE_SPINATTACK;
                             PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 9);
                         } else {
                             // _08088048
-                            // PLAYER(i).moveState &= ~MOVESTATE_4;
+                            // PLAYER(i).moveState &= ~MOVESTATE_SPIN_ATTACK;
                             PLAYER(i).charState = CHARSTATE_85;
                             PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 14);
                         }

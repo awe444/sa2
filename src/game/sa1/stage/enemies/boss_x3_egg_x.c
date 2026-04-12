@@ -2361,8 +2361,8 @@ NONMATCH("asm/non_matching/game/sa1/stage/enemies/boss_x3__sub_803A170.inc", voi
     Player_HandleSpriteYOffsetChange(&gPlayer, 0xE);
     gPlayer.spriteOffsetX = 6;
     gPlayer.spriteOffsetY = 0xE;
-    gPlayer.sa2__unk61 = 0;
-    gPlayer.sa2__unk62 = 0;
+    gPlayer.SA2_LABEL(unk61) = 0;
+    gPlayer.SA2_LABEL(unk62) = 0;
 }
 END_NONMATCH
 

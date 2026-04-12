@@ -665,10 +665,10 @@ NONMATCH("asm/non_matching/game/sa1/stage/mp_player__Task_CreateMultiplayerPlaye
                         mpp2->unk64 = SIO_MULTI_CNT->id;
                         gPlayer.moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                         gPlayer.moveState &= ~MOVESTATE_20;
-                        gPlayer.moveState &= ~MOVESTATE_4;
+                        gPlayer.moveState &= ~MOVESTATE_SPIN_ATTACK;
                         gPlayer.moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
                         gPlayer.moveState |= MOVESTATE_IN_AIR;
-                        gPlayer.moveState &= ~MOVESTATE_400;
+                        gPlayer.moveState &= ~MOVESTATE_SPINDASH;
                         gPlayer.moveState &= ~MOVESTATE_100;
                         PLAYERFN_CHANGE_SHIFT_OFFSETS(&gPlayer, 6, 14);
                         gPlayer.SA2_LABEL(unk61) = 0;
@@ -729,7 +729,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/mp_player__Task_CreateMultiplayerPlaye
             //     // TODO: macro this
             //     TasksDestroyAll();
             //     PAUSE_BACKGROUNDS_QUEUE();
-            //     gUnknown_03005390 = 0;
+            //     gBgSpritesCount = 0;
             //     PAUSE_GRAPHICS_QUEUE();
             //     LinkCommunicationError();
             //     return;
@@ -744,7 +744,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/mp_player__Task_CreateMultiplayerPlaye
             // TODO: macro this
             TasksDestroyAll();
             PAUSE_BACKGROUNDS_QUEUE();
-            gUnknown_03005390 = 0;
+            gBgSpritesCount = 0;
             PAUSE_GRAPHICS_QUEUE();
             LinkCommunicationError();
             return;
@@ -838,7 +838,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/mp_player__Task_CreateMultiplayerPlaye
                     }
                     {
                         RoomEvent_Unknown *roomEvent = CreateRoomEvent();
-                        roomEvent->type = ROOMEVENT_TYPE_UNKNOWN;
+                        roomEvent->type = ROOMEVENT_TYPE_8;
                         roomEvent->unk1 = mpp->unk56;
                         roomEvent->unk2 = 0;
                     }
@@ -1564,7 +1564,7 @@ void SA2_LABEL(sub_8017670)(void)
 
             if ((mpp->unk5C & 4)) {
                 gPlayer.moveState |= MOVESTATE_STOOD_ON_OBJ;
-                gPlayer.moveState &= ~MOVESTATE_4;
+                gPlayer.moveState &= ~MOVESTATE_SPIN_ATTACK;
                 gPlayer.moveState &= ~MOVESTATE_IN_AIR;
 
                 gPlayer.stoodObj = s;

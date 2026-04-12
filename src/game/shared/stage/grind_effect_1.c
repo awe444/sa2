@@ -1,12 +1,16 @@
 #include "global.h"
-#include "game/shared/stage/player.h"
-#include "game/shared/stage/camera.h"
 #include "core.h"
 #include "malloc_vram.h"
 #include "task.h"
 
+#include "game/shared/stage/player.h"
+#include "game/shared/stage/camera.h"
+
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
-#include "constants/sa2/anim_sizes.h"
+#endif
 
 typedef struct {
     Sprite s;

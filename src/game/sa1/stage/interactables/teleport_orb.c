@@ -115,7 +115,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/TeleportOrb__Task_Telepo
                 if ((worldX - 12 <= I(PLAYER(i).qWorldX)) && (worldX + 12 >= I(PLAYER(i).qWorldX)) && (worldY - 12 <= I(PLAYER(i).qWorldY))
                     && (worldY + 12 >= I(PLAYER(i).qWorldY))) {
                     Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;
 
                     PLAYER(i).qWorldX = Q(orb->v1x) + orb->v2x;

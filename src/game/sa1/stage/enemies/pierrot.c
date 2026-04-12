@@ -98,7 +98,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/enemies/Task_Pierrot.inc", void Task_P
         if (s->hitboxes[1].index != HITBOX_STATE_INACTIVE) {
             // _0806DEA0
             if (HB_COLLISION(worldX, worldY, s->hitboxes[1].b, I(gPlayer.qWorldX), I(gPlayer.qWorldY), gPlayerBodyPSI.s.hitboxes[0].b)) {
-                if (gPlayer.moveState & MOVESTATE_4) {
+                if (gPlayer.moveState & MOVESTATE_SPIN_ATTACK) {
                     if (gPlayer.moveState & MOVESTATE_FACING_LEFT) {
                         if (gPlayer.qSpeedGround > 0) {
                             gPlayer.qWorldX += gPlayer.qSpeedGround;

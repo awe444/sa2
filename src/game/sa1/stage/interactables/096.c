@@ -35,7 +35,7 @@ void Task_Interactable096(void)
 
                 Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
 
-                PLAYER(i).moveState |= MOVESTATE_4;
+                PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                 PLAYER(i).charState = CHARSTATE_SPINATTACK;
 
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 9);

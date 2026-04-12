@@ -126,7 +126,7 @@ void Task_Interactable107(void)
             Player_TransitionCancelFlyingAndBoost(&PLAYER(i));
             PLAYER(i).charState = CHARSTATE_SPINATTACK;
             PLAYERFN_CHANGE_SHIFT_OFFSETS(&PLAYER(i), 6, 14);
-            PLAYER(i).moveState |= MOVESTATE_4;
+            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
             PLAYER(i).moveState |= MOVESTATE_IN_AIR;
             PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;
 
@@ -148,7 +148,7 @@ void Task_Interactable107(void)
         } else {
             if (((worldX - 10 <= I(PLAYER(i).qWorldX)) && (worldX + 10 >= I(PLAYER(i).qWorldX)))
                 && ((worldY - 10 <= I(PLAYER(i).qWorldY)) && (worldY + 10 >= I(PLAYER(i).qWorldY)))) {
-                PLAYER(i).moveState |= MOVESTATE_4;
+                PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                 PLAYER(i).moveState |= MOVESTATE_IA_OVERRIDE;
 
                 ia->unk40[i] = 0;

@@ -239,7 +239,7 @@
     "kura_kura.h": "c",
     "star.h": "c",
     "demo_manager.h": "c",
-    "spot_light.h": "c",
+    "spot_lights_manager.h": "c",
     "entities_manager.h": "c",
     "rings_manager.h": "c",
     "game_over.h": "c",

@@ -178,7 +178,7 @@ NONMATCH("asm/non_matching/game/shared/stage/item_box__Task_ItemBoxMain.inc", vo
         s->x = worldX - gCamera.x;
         s->y = worldY - gCamera.y + itembox->iconOffset;
 
-        if (IS_MP_OR_TEAM_PLAY) {
+        if (IS_TEAM_PLAY) {
             u8 i;
             for (i = 0; (i < MULTI_SIO_PLAYERS_MAX) && (gMultiplayerPlayerTasks[i] != NULL); i++) {
                 if (i != SIO_MULTI_CNT->id) {

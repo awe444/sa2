@@ -225,7 +225,7 @@ bool32 BumperCheckCollAndPosA1(BumperA *bumper, Sprite *s, s32 worldX, s32 world
             PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
             PLAYER(i).moveState |= MOVESTATE_IN_AIR;
             PLAYER(i).moveState &= ~MOVESTATE_100;
-            PLAYER(i).moveState |= MOVESTATE_4;
+            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
             PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
             PLAYERFN_SET_SHIFT_OFFSETS(&PLAYER(i), 6, 9);
@@ -441,7 +441,7 @@ bool32 BumperCheckCollAndPosA2(BumperA *bumper, Sprite *s, s32 worldX, s32 world
             PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
             PLAYER(i).moveState |= MOVESTATE_IN_AIR;
             PLAYER(i).moveState &= ~MOVESTATE_100;
-            PLAYER(i).moveState |= MOVESTATE_4;
+            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
             PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
             (&PLAYER(i))->spriteOffsetX = 6;
@@ -622,7 +622,7 @@ bool32 BumperCheckCollAndPosB(BumperB *bumper, Sprite *s, s32 worldX, s32 worldY
                 PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                 PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                 PLAYER(i).moveState &= ~MOVESTATE_100;
-                PLAYER(i).moveState |= MOVESTATE_4;
+                PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                 PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
                 (&PLAYER(i))->spriteOffsetX = 6;
@@ -1009,7 +1009,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/bumpers__BumperCheckColl
                     PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                     PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                     PLAYER(i).moveState &= ~MOVESTATE_100;
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
                     (&PLAYER(i))->spriteOffsetX = 6;
@@ -1086,7 +1086,7 @@ bool32 BumperCheckCollAndPosC2(BumperC *bumper, Sprite *s, s32 worldX, s32 world
                     PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                     PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                     PLAYER(i).moveState &= ~MOVESTATE_100;
-                    PLAYER(i).moveState |= MOVESTATE_4;
+                    PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                     PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
                     (&PLAYER(i))->spriteOffsetX = 6;
@@ -1180,7 +1180,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/bumpers__BumperCheckColl
                             PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                             PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                             PLAYER(i).moveState &= ~MOVESTATE_100;
-                            PLAYER(i).moveState |= MOVESTATE_4;
+                            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                             PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
                             (&PLAYER(i))->spriteOffsetX = 6;
@@ -1213,7 +1213,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/bumpers__BumperCheckColl
                             PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                             PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                             PLAYER(i).moveState &= ~MOVESTATE_100;
-                            PLAYER(i).moveState |= MOVESTATE_4;
+                            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                             PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
                             (&PLAYER(i))->spriteOffsetX = 6;
@@ -1248,7 +1248,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/bumpers__BumperCheckColl
                             PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                             PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                             PLAYER(i).moveState &= ~MOVESTATE_100;
-                            PLAYER(i).moveState |= MOVESTATE_4;
+                            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                             PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
                             (&PLAYER(i))->spriteOffsetX = 6;
@@ -1280,7 +1280,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/bumpers__BumperCheckColl
                             PLAYER(i).moveState &= ~MOVESTATE_STOOD_ON_OBJ;
                             PLAYER(i).moveState |= MOVESTATE_IN_AIR;
                             PLAYER(i).moveState &= ~MOVESTATE_100;
-                            PLAYER(i).moveState |= MOVESTATE_4;
+                            PLAYER(i).moveState |= MOVESTATE_SPIN_ATTACK;
                             PLAYER(i).moveState &= ~MOVESTATE_FLIP_WITH_MOVE_DIR;
 
                             (&PLAYER(i))->spriteOffsetX = 6;

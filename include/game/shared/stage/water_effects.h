@@ -3,10 +3,21 @@
 
 #include "core.h"
 
+#if (GAME == GAME_SA1)
+#define HAS_RUN_ON_WATER FALSE
+#elif (GAME >= GAME_SA2)
+#define HAS_RUN_ON_WATER TRUE
+#endif
+
+#ifdef M2C
+// M2C: Empty structs are not supported.
+#else
 typedef struct {
-    // TODO: this is a 2D array
+#if (GAME == GAME_SA2)
     u16 pal[32][16];
+#endif
 } WaterData;
+#endif
 
 typedef struct {
 #if (GAME == GAME_SA1)
@@ -17,8 +28,8 @@ typedef struct {
     /* 0x01 */ u8 SA2_LABEL(unk2);
 #elif (GAME == GAME_SA2)
     /* 0x00 */ bool8 isActive;
-    /* 0x01 */ u8 SA2_LABEL(unk1);
-    /* 0x02 */ u8 SA2_LABEL(unk2);
+    /* 0x01 */ u8 unk1;
+    /* 0x02 */ u8 unk2;
     /* 0x03 */ u8 unk3;
 #endif
     /* 0x02|0x04 */ s16 currentWaterLevel;
@@ -33,8 +44,14 @@ typedef struct {
 
 extern Water gWater;
 
+#if (GAME == GAME_SA2)
 void InitWaterPalettes(void);
+#endif
+
+#if (HAS_RUN_ON_WATER)
 void CreateRunOnWaterEffect(void);
+#endif // HAS_RUN_ON_WATER
+
 struct Task *CreateWaterfallSurfaceHitEffect(s32 x, s32 y);
 void LoadPalette423Anim(void);
 
