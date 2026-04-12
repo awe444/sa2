@@ -1684,6 +1684,8 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
 
                 if (!is8BPP) {
                     int tileDataIndex = (block_offset + oam->split.tileNum) * 32 + (tile_y * 4) + (tile_x / 2);
+                    if ((unsigned)tileDataIndex >= OBJ_VRAM_TOTAL_SIZE)
+                        continue;
                     pixel = tiledata[tileDataIndex];
                     if (tile_x & 1)
                         pixel >>= 4;
@@ -1694,7 +1696,10 @@ static void DrawOamSprites(struct scanlineData *scanline, uint16_t vcount, bool 
                     vramPalIdBuffer[0x800 + (tileDataIndex / 32)] = 16 + oam->split.paletteNum;
 #endif
                 } else {
-                    pixel = tiledata[(block_offset * 2 + oam->split.tileNum) * 32 + (tile_y * 8) + tile_x];
+                    int tileDataIndex8 = (block_offset * 2 + oam->split.tileNum) * 32 + (tile_y * 8) + tile_x;
+                    if ((unsigned)tileDataIndex8 >= OBJ_VRAM_TOTAL_SIZE)
+                        continue;
+                    pixel = tiledata[tileDataIndex8];
                 }
 
                 if (pixel != 0) {
@@ -1754,7 +1759,10 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
     }
 
     unsigned int mode = REG_DISPCNT & 3;
-    unsigned char numOfBgs = (mode == 0 ? 4 : 3);
+    // In Mode 0 and Mode 1, all 4 BGs are available for priority sorting.
+    // On GBA hardware, Mode 1 does not disable BG3 — it only forces BG2 to
+    // affine mode.  BG3 remains usable as a regular text-mode BG.
+    unsigned char numOfBgs = (mode <= 1 ? 4 : 3);
     int bgnum, prnum;
     struct scanlineData scanline;
     unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
@@ -1791,13 +1799,17 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
 
             break;
         case 1:
-            // BG2 is affine
+            // BG2 is affine; BG0, BG1, BG3 are text mode.
+            // On GBA hardware BG3 is still rendered in Mode 1 as a regular
+            // text BG (confirmed by mGBA and hardware tests).
             bgnum = 2;
             if (isbgEnabled(bgnum)) {
                 RenderRotScaleBGScanline(bgnum, scanline.bgcnts[bgnum], REG_BG2X, REG_BG2Y, vcount, scanline.layers[bgnum]);
             }
-            // BG0 and BG1 are text mode
-            for (bgnum = 1; bgnum >= 0; bgnum--) {
+            // BG0, BG1, and BG3 are text mode
+            for (bgnum = 3; bgnum >= 0; bgnum--) {
+                if (bgnum == 2)
+                    continue; // already rendered as affine above
                 if (isbgEnabled(bgnum)) {
                     uint16_t bghoffs = *(uint16_t *)(REG_ADDR_BG0HOFS + bgnum * 4);
                     uint16_t bgvoffs = *(uint16_t *)(REG_ADDR_BG0VOFS + bgnum * 4);

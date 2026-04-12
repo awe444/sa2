@@ -67,6 +67,8 @@ Temporary Items
 *.dump
 build
 build_cmake
+build_debug
+build_release
 tools/agbcc
 # **/sound/*/songs/midi/*.s
 **/songs/midi/*.s

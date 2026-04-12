@@ -22,17 +22,14 @@ C_DECL(gUnknown_084ACDC0):
     mAlignData
     .global C_DECL(gUnknown_084ACDD2)
 C_DECL(gUnknown_084ACDD2):
-    .incbin "baserom_sa1.gba", 0x004ACDD2, 0x2
-
-    mAlignData
-    .global C_DECL(gUnknown_084ACDD4)
-C_DECL(gUnknown_084ACDD4):
-    .incbin "baserom_sa1.gba", 0x004ACDD4, 0x4
-
-    mAlignData
-    .global C_DECL(gUnknown_084ACDD8)
-C_DECL(gUnknown_084ACDD8):
-    .incbin "baserom_sa1.gba", 0x004ACDD8, 0x3A
+    // C code declares this as u16[8][2][2] = 64 bytes (0x40).
+    // The original ROM data spans 0x4ACDD2..0x4ACE12 contiguously.
+    // Previously this was split into three separate .incbin directives
+    // (gUnknown_084ACDD2: 0x2, gUnknown_084ACDD4: 0x4, gUnknown_084ACDD8: 0x3A)
+    // with mAlignData between them, which inserted 16-byte alignment padding
+    // on x86_64 and broke the contiguous array layout — causing boss 3 pipe
+    // sprites to read garbage variant IDs and segfault.
+    .incbin "baserom_sa1.gba", 0x004ACDD2, 0x40
 
     mAlignData
     .global C_DECL(gUnknown_084ACE12)

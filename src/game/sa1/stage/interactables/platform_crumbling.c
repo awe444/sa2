@@ -222,7 +222,7 @@ void Task_8025190(void)
     }
 
     oam_ptr = gRefSpriteTables->oamData[s->graphics.anim];
-    oam = &oam_ptr[s->dimensions->oamIndex * 3];
+    oam = &oam_ptr[s->dimensions->oamIndex * OAM_DATA_COUNT_NO_AFFINE];
 
     r6 = 0;
     for (y = 0; y < 4; y++) {
@@ -262,32 +262,32 @@ void Task_8025190(void)
             if (iwram_end == pointer)
                 return;
 
-#if !EXTENDED_OAM
-            pointer->all.attr0 = ((s16)(r4 + ((y * TILE_WIDTH) + s->y))) & 0xFF;
-
-            if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
-                pointer->all.attr1 = ((s->x - x * TILE_WIDTH - 8) & 0x1FF) | 0x1000;
-            } else {
-                pointer->all.attr1 = (s->x + x * TILE_WIDTH) & 0x1FF;
-            }
-#else
-            pointer->split.y = (r4 + ((y * TILE_WIDTH) + s->y));
+            OAM_INIT_Y(pointer, (r4 + ((y * TILE_WIDTH) + s->y)));
+#if EXTENDED_OAM
             pointer->split.affineMode = 0;
             pointer->split.objMode = 0;
             pointer->split.mosaic = 0;
             pointer->split.bpp = 0;
             pointer->split.shape = 0;
-
-            if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
-                pointer->split.x = (s->x - x * TILE_WIDTH - 8);
-                pointer->split.matrixNum = 0x8; // x-flip, actually
-            } else {
-                pointer->split.x = (s->x + x * TILE_WIDTH);
-            }
 #endif
 
+            if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
+                OAM_INIT_X(pointer, (s->x - x * TILE_WIDTH - 8), TRUE);
+            } else {
+                OAM_INIT_X(pointer, (s->x + x * TILE_WIDTH), FALSE);
+            }
+#if EXTENDED_OAM
+            pointer->split.size = 0;
+#endif
+
+#if !EXTENDED_OAM
             pointer->all.attr2
                 = (((oam[2] + s->palId) & ~0xFFF) | (SPRITE_FLAG_GET(s, PRIORITY) << 10) | (u16)(GET_TILE_NUM(s->graphics.dest) + r6));
+#else
+            pointer->split.paletteNum = (oam[OAM_DATA_COUNT_NO_AFFINE - 1] >> 12) + s->palId;
+            pointer->split.priority = SPRITE_FLAG_GET(s, PRIORITY);
+            pointer->split.tileNum = GET_TILE_NUM(s->graphics.dest) + r6;
+#endif
         }
     }
 }
@@ -322,7 +322,7 @@ void Task_8025400(void)
     }
 
     oam_ptr = gRefSpriteTables->oamData[s->graphics.anim];
-    oam = &oam_ptr[s->dimensions->oamIndex * 3];
+    oam = &oam_ptr[s->dimensions->oamIndex * OAM_DATA_COUNT_NO_AFFINE];
 
     r6 = 0;
     for (y = 0; y < 4; y++) {
@@ -347,16 +347,32 @@ void Task_8025400(void)
                 return;
             }
 
-            pointer->all.attr0 = ((s16)(r4 + ((y * TILE_WIDTH) + s->y))) & 0xFF;
+            OAM_INIT_Y(pointer, (r4 + ((y * TILE_WIDTH) + s->y)));
+#if EXTENDED_OAM
+            pointer->split.affineMode = 0;
+            pointer->split.objMode = 0;
+            pointer->split.mosaic = 0;
+            pointer->split.bpp = 0;
+            pointer->split.shape = 0;
+#endif
 
-            if (s->frameFlags & 0x400) {
-                pointer->all.attr1 = ((s->x - x * TILE_WIDTH - 8) & 0x1FF) | 0x1000;
+            if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
+                OAM_INIT_X(pointer, (s->x - x * TILE_WIDTH - 8), TRUE);
             } else {
-                pointer->all.attr1 = (s->x + x * TILE_WIDTH) & 0x1FF;
+                OAM_INIT_X(pointer, (s->x + x * TILE_WIDTH), FALSE);
             }
+#if EXTENDED_OAM
+            pointer->split.size = 0;
+#endif
 
+#if !EXTENDED_OAM
             pointer->all.attr2
-                = (((oam[2] + s->palId) & ~0xFFF) | ((s->frameFlags & 0x3000) >> 2) | (u16)(GET_TILE_NUM(s->graphics.dest) + r6));
+                = (((oam[2] + s->palId) & ~0xFFF) | (SPRITE_FLAG_GET(s, PRIORITY) << 10) | (u16)(GET_TILE_NUM(s->graphics.dest) + r6));
+#else
+            pointer->split.paletteNum = (oam[OAM_DATA_COUNT_NO_AFFINE - 1] >> 12) + s->palId;
+            pointer->split.priority = SPRITE_FLAG_GET(s, PRIORITY);
+            pointer->split.tileNum = GET_TILE_NUM(s->graphics.dest) + r6;
+#endif
         }
     }
 }
