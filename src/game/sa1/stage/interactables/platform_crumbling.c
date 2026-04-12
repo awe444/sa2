@@ -347,16 +347,32 @@ void Task_8025400(void)
                 return;
             }
 
+#if !EXTENDED_OAM
             pointer->all.attr0 = ((s16)(r4 + ((y * TILE_WIDTH) + s->y))) & 0xFF;
 
-            if (s->frameFlags & 0x400) {
+            if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
                 pointer->all.attr1 = ((s->x - x * TILE_WIDTH - 8) & 0x1FF) | 0x1000;
             } else {
                 pointer->all.attr1 = (s->x + x * TILE_WIDTH) & 0x1FF;
             }
+#else
+            pointer->split.y = (r4 + ((y * TILE_WIDTH) + s->y));
+            pointer->split.affineMode = 0;
+            pointer->split.objMode = 0;
+            pointer->split.mosaic = 0;
+            pointer->split.bpp = 0;
+            pointer->split.shape = 0;
+
+            if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
+                pointer->split.x = (s->x - x * TILE_WIDTH - 8);
+                pointer->split.matrixNum = 0x8; // x-flip
+            } else {
+                pointer->split.x = (s->x + x * TILE_WIDTH);
+            }
+#endif
 
             pointer->all.attr2
-                = (((oam[2] + s->palId) & ~0xFFF) | ((s->frameFlags & 0x3000) >> 2) | (u16)(GET_TILE_NUM(s->graphics.dest) + r6));
+                = (((oam[2] + s->palId) & ~0xFFF) | (SPRITE_FLAG_GET(s, PRIORITY) << 10) | (u16)(GET_TILE_NUM(s->graphics.dest) + r6));
         }
     }
 }

@@ -511,8 +511,30 @@ END_NONMATCH
 // Not actually unused (SA1 Boss 1 calls it)
 NONMATCH("asm/non_matching/engine/UnusedTransform.inc", void UnusedTransform(Sprite *sprite, SpriteTransform *transform))
 {
-    // TEMP
-    TransformSprite(sprite, transform);
+    // Like TransformSprite but incorporates parent position/rotation/scale globals
+    SpriteTransform tf;
+    s16 angle = SA2_LABEL(gUnknown_03001944);
+    s16 scaleX = SA2_LABEL(gUnknown_030017F0);
+    s16 scaleY = SA2_LABEL(gUnknown_03005394);
+    s32 cosA = COS_24_8(angle & ONE_CYCLE);
+    s32 sinA = SIN_24_8(angle & ONE_CYCLE);
+
+    // Build parent rotation+scale matrix (unk18)
+    s16 m00 = (cosA * scaleX) >> 8;
+    s16 m01 = (-sinA * scaleX) >> 8;
+    s16 m10 = (sinA * scaleY) >> 8;
+    s16 m11 = (cosA * scaleY) >> 8;
+
+    // Compute rotated and translated position
+    tf.x = (m00 * transform->x + m01 * transform->y + ((s32)SA2_LABEL(gUnknown_0300194C) << 8)) >> 8;
+    tf.y = (m10 * transform->x + m11 * transform->y + ((s32)SA2_LABEL(gUnknown_03002820) << 8)) >> 8;
+
+    // Combined rotation and scale
+    tf.rotation = (transform->rotation + angle) & ONE_CYCLE;
+    tf.qScaleX = (transform->qScaleX * scaleX) >> 8;
+    tf.qScaleY = (transform->qScaleY * scaleY) >> 8;
+
+    TransformSprite(sprite, &tf);
 }
 END_NONMATCH
 
