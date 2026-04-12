@@ -263,12 +263,22 @@ void Task_8025190(void)
                 return;
 
             OAM_INIT_Y(pointer, (r4 + ((y * TILE_WIDTH) + s->y)));
+#if EXTENDED_OAM
+            pointer->split.affineMode = 0;
+            pointer->split.objMode = 0;
+            pointer->split.mosaic = 0;
+            pointer->split.bpp = 0;
+            pointer->split.shape = 0;
+#endif
 
             if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
                 OAM_INIT_X(pointer, (s->x - x * TILE_WIDTH - 8), TRUE);
             } else {
                 OAM_INIT_X(pointer, (s->x + x * TILE_WIDTH), FALSE);
             }
+#if EXTENDED_OAM
+            pointer->split.size = 0;
+#endif
 
 #if !EXTENDED_OAM
             pointer->all.attr2
@@ -338,12 +348,22 @@ void Task_8025400(void)
             }
 
             OAM_INIT_Y(pointer, (r4 + ((y * TILE_WIDTH) + s->y)));
+#if EXTENDED_OAM
+            pointer->split.affineMode = 0;
+            pointer->split.objMode = 0;
+            pointer->split.mosaic = 0;
+            pointer->split.bpp = 0;
+            pointer->split.shape = 0;
+#endif
 
             if (s->frameFlags & SPRITE_FLAG_MASK_X_FLIP) {
                 OAM_INIT_X(pointer, (s->x - x * TILE_WIDTH - 8), TRUE);
             } else {
                 OAM_INIT_X(pointer, (s->x + x * TILE_WIDTH), FALSE);
             }
+#if EXTENDED_OAM
+            pointer->split.size = 0;
+#endif
 
 #if !EXTENDED_OAM
             pointer->all.attr2
