@@ -2223,7 +2223,11 @@ void Player_8043970(Player *p)
         }
 
         if (!(p->moveState & (MOVESTATE_800000 | MOVESTATE_8000))) {
-            if (p->charState != 22) {
+            if (p->charState != 22
+#ifdef BUG_FIX
+                && p->charState != CHARSTATE_14
+#endif
+            ) {
                 p->charState = CHARSTATE_WALK_A;
 
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
@@ -2289,7 +2293,11 @@ void Player_8043A2C(Player *p)
         }
 
         if (!(p->moveState & (MOVESTATE_800000 | MOVESTATE_8000))) {
-            if (p->charState != 22) {
+            if (p->charState != 22
+#ifdef BUG_FIX
+                && p->charState != CHARSTATE_14
+#endif
+            ) {
                 p->charState = CHARSTATE_WALK_A;
 
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
