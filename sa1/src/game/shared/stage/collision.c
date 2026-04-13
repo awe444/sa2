@@ -1361,15 +1361,35 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Itembox.inc"
     }
 #ifdef BUG_FIX
     else if (!(result & COLL_FLAG_20)) {
-        // Add side collision for grounded players walking into item boxes.
-        // Only apply push-back when the player is NOT in an attack state
-        // (i.e. hitboxes[1] did not fire). Attack-state players (rolling,
-        // spinning, Knuckles glide, Amy hammer, etc.) should break the box
-        // and keep their momentum — the caller handles the break via the
-        // 0x20 flag that was already set above.
-        u32 sideResult = 0;
-        sub_800CBBC(s, worldX, worldY, (Rect8 *)&rectDataPlayerA[0], 0, p, &sideResult);
-        result |= (sideResult & (COLL_FLAG_20000 | COLL_FLAG_40000));
+        // Grounded side collision for item boxes: clamp position and zero
+        // speed to prevent the player from walking through the box.
+        // Unlike sub_800CBBC (used for walls/gates), we intentionally do
+        // NOT set push state (MOVESTATE_20 / CHARSTATE_14) or clear
+        // MOVESTATE_SPIN_ATTACK, so the player remains free to initiate
+        // attacks (B-button, spin dash, etc.) while standing next to the box.
+        Rect8 *rectA = (Rect8 *)&rectDataPlayerA[0];
+
+        if (!((((s32)(p->rotation + 0x20) & 0xC0) >> 6) & 0x1)
+            && HB_COLLISION(worldX, worldY, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectA))) {
+
+            s32 shbMiddleH = worldX + ((s->hitboxes[0].b.left + s->hitboxes[0].b.right) >> 1);
+
+            if (I(p->qWorldX) <= shbMiddleH) {
+                if (p->qSpeedAirX > 0)
+                    p->qSpeedAirX = 0;
+                if (p->qSpeedGround > 0)
+                    p->qSpeedGround = 0;
+                p->qWorldX = Q(worldX + s->hitboxes[0].b.left - rectA->right);
+                result |= COLL_FLAG_20000;
+            } else {
+                if (p->qSpeedAirX < 0)
+                    p->qSpeedAirX = 0;
+                if (p->qSpeedGround < 0)
+                    p->qSpeedGround = 0;
+                p->qWorldX = Q(worldX + s->hitboxes[0].b.right - rectA->left + 1);
+                result |= COLL_FLAG_40000;
+            }
+        }
     }
 #endif
 
