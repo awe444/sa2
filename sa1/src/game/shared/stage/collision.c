@@ -1361,33 +1361,64 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Itembox.inc"
     }
 #ifdef BUG_FIX
     else if (!(result & COLL_FLAG_20)) {
-        // Grounded side collision for item boxes: clamp position and zero
-        // speed to prevent the player from walking through the box.
-        // Unlike sub_800CBBC (used for walls/gates), we intentionally do
-        // NOT set push state (MOVESTATE_20 / CHARSTATE_14) or clear
-        // MOVESTATE_SPIN_ATTACK, so the player remains free to initiate
-        // attacks (B-button, spin dash, etc.) while standing next to the box.
-        Rect8 *rectA = (Rect8 *)&rectDataPlayerA[0];
+        // Grounded side collision for item boxes.
+        //
+        // When the player is in an attack state (rolling, spin dashing,
+        // B-button attacks, etc.) we skip clamping entirely so the player
+        // can overlap the box and the hitboxes[1] check above can fire
+        // on the next frame to break it.  This also preserves momentum
+        // for rolling/spin dash attacks.
+        //
+        // When NOT attacking we clamp position and zero speed to prevent
+        // the player from walking through the box.  We do NOT set
+        // MOVESTATE_20 (unlike sub_800CBBC) because all characters
+        // check that flag to gate B-button attacks, and the push-state
+        // charState override (CHARSTATE_14) would block crouching/spin
+        // dash initiation.  Instead we conditionally set push animation
+        // only when the player is actively pressing toward the box.
 
-        if (!((((s32)(p->rotation + 0x20) & 0xC0) >> 6) & 0x1)
-            && HB_COLLISION(worldX, worldY, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectA))) {
+        bool32 inAttackState = (p->spriteInfoBody->s.hitboxes[1].index != -1)
+                            || (p->moveState & MOVESTATE_SPIN_ATTACK);
 
-            s32 shbMiddleH = worldX + ((s->hitboxes[0].b.left + s->hitboxes[0].b.right) >> 1);
+        if (!inAttackState) {
+            Rect8 *rectA = (Rect8 *)&rectDataPlayerA[0];
 
-            if (I(p->qWorldX) <= shbMiddleH) {
-                if (p->qSpeedAirX > 0)
-                    p->qSpeedAirX = 0;
-                if (p->qSpeedGround > 0)
-                    p->qSpeedGround = 0;
-                p->qWorldX = Q(worldX + s->hitboxes[0].b.left - rectA->right);
-                result |= COLL_FLAG_20000;
-            } else {
-                if (p->qSpeedAirX < 0)
-                    p->qSpeedAirX = 0;
-                if (p->qSpeedGround < 0)
-                    p->qSpeedGround = 0;
-                p->qWorldX = Q(worldX + s->hitboxes[0].b.right - rectA->left + 1);
-                result |= COLL_FLAG_40000;
+            if (!((((s32)(p->rotation + 0x20) & 0xC0) >> 6) & 0x1)
+                && HB_COLLISION(worldX, worldY, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectA))) {
+
+                s32 shbMiddleH = worldX + ((s->hitboxes[0].b.left + s->hitboxes[0].b.right) >> 1);
+
+                if (I(p->qWorldX) <= shbMiddleH) {
+                    if (p->qSpeedAirX > 0)
+                        p->qSpeedAirX = 0;
+                    if (p->qSpeedGround > 0)
+                        p->qSpeedGround = 0;
+                    p->qWorldX = Q(worldX + s->hitboxes[0].b.left - rectA->right);
+                    result |= COLL_FLAG_20000;
+
+                    if ((p->heldInput & DPAD_RIGHT)
+                        && p->charState != CHARSTATE_CROUCH
+                        && !(p->moveState & MOVESTATE_SPINDASH)) {
+                        p->charState = CHARSTATE_14;
+                        p->moveState &= ~MOVESTATE_FACING_LEFT;
+                        PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
+                    }
+                } else {
+                    if (p->qSpeedAirX < 0)
+                        p->qSpeedAirX = 0;
+                    if (p->qSpeedGround < 0)
+                        p->qSpeedGround = 0;
+                    p->qWorldX = Q(worldX + s->hitboxes[0].b.right - rectA->left + 1);
+                    result |= COLL_FLAG_40000;
+
+                    if ((p->heldInput & DPAD_LEFT)
+                        && p->charState != CHARSTATE_CROUCH
+                        && !(p->moveState & MOVESTATE_SPINDASH)) {
+                        p->charState = CHARSTATE_14;
+                        p->moveState |= MOVESTATE_FACING_LEFT;
+                        PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
+                    }
+                }
             }
         }
     }
