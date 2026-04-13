@@ -2400,6 +2400,13 @@ bool32 sub_800CBBC(Sprite *s, s32 x, s32 y, Rect8 *rectPlayer, u32 UNUSED param4
         }
         p->qWorldX = Q(x + shbLeft - rectPlayer->right);
         *param6 |= COLL_FLAG_20000;
+
+        if (!(p->moveState & MOVESTATE_IN_AIR)) {
+            p->moveState = (p->moveState | MOVESTATE_20) & ~MOVESTATE_SPIN_ATTACK;
+            *param6 = (*param6 | MOVESTATE_20) & ~MOVESTATE_SPIN_ATTACK;
+            p->moveState &= ~MOVESTATE_FACING_LEFT;
+            p->charState = CHARSTATE_14;
+        }
     } else {
         // Player is to the right of the sprite
         if (p->qSpeedAirX < 0) {
@@ -2410,6 +2417,13 @@ bool32 sub_800CBBC(Sprite *s, s32 x, s32 y, Rect8 *rectPlayer, u32 UNUSED param4
         }
         p->qWorldX = Q(x + shbRight - rectPlayer->left + 1);
         *param6 |= COLL_FLAG_40000;
+
+        if (!(p->moveState & MOVESTATE_IN_AIR)) {
+            p->moveState = (p->moveState | MOVESTATE_20) & ~MOVESTATE_SPIN_ATTACK;
+            *param6 = (*param6 | MOVESTATE_20) & ~MOVESTATE_SPIN_ATTACK;
+            p->moveState |= MOVESTATE_FACING_LEFT;
+            p->charState = CHARSTATE_14;
+        }
     }
 
     PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);

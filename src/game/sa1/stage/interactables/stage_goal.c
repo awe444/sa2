@@ -75,6 +75,16 @@ void CreateEntity_StageGoal(MapEntity *me, u16 regionX, u16 regionY, u8 id)
         s->frameFlags = SPRITE_FLAG(PRIORITY, 2);
 
         UpdateSpriteAnimation(s);
+
+#ifdef BUG_FIX
+        // Set an explicit hitbox for side collision so Coll_Player_Platform works.
+        // The animation data may not define one for the capsule.
+        s->hitboxes[0].index = 0;
+        s->hitboxes[0].b.left = -14;
+        s->hitboxes[0].b.top = -24;
+        s->hitboxes[0].b.right = +14;
+        s->hitboxes[0].b.bottom = 0;
+#endif
     }
 }
 
