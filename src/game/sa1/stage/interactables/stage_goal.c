@@ -4,7 +4,6 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/shared/stage/entities_manager.h"
-#include "game/shared/stage/collision.h"
 #include "game/shared/stage/mp_finish.h"
 #include "game/shared/stage/mp_player.h"
 #include "game/shared/stage/mp_event_mgr.h"
