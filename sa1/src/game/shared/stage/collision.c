@@ -1378,7 +1378,8 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Itembox.inc"
         // only when the player is actively pressing toward the box.
 
         bool32 inAttackState = (p->spriteInfoBody->s.hitboxes[1].index != -1)
-                            || (p->moveState & MOVESTATE_SPIN_ATTACK);
+                            || (p->moveState & MOVESTATE_SPIN_ATTACK)
+                            || (p->SA2_LABEL(unk62) != 0);
 
         if (!inAttackState) {
             Rect8 *rectA = (Rect8 *)&rectDataPlayerA[0];
