@@ -1362,7 +1362,13 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Itembox.inc"
 #ifdef BUG_FIX
     else {
         // Add side collision for grounded players walking into item boxes.
-        sub_800CBBC(s, worldX, worldY, (Rect8 *)&rectDataPlayerA[0], 0, p, &result);
+        // Use a separate result so that MOVESTATE_20 (0x20) written by
+        // sub_800CBBC is not misinterpreted as COLL_FLAG_20 (attack hit)
+        // by the caller, which would incorrectly break the item box.
+        // Attack-based breaks are already handled by the hitboxes[1] check above.
+        u32 sideResult = 0;
+        sub_800CBBC(s, worldX, worldY, (Rect8 *)&rectDataPlayerA[0], 0, p, &sideResult);
+        result |= (sideResult & (COLL_FLAG_20000 | COLL_FLAG_40000));
     }
 #endif
 
