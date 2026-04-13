@@ -4,6 +4,7 @@
 #include "malloc_vram.h"
 #include "lib/m4a/m4a.h"
 #include "game/shared/stage/entities_manager.h"
+#include "game/shared/stage/collision.h"
 #include "game/shared/stage/mp_finish.h"
 #include "game/shared/stage/mp_player.h"
 #include "game/shared/stage/mp_event_mgr.h"
@@ -105,6 +106,12 @@ NONMATCH("asm/non_matching/game/sa1/stage/interactables/stage_goal__Task_StageGo
 
     s->x = worldX - gCamera.x;
     s->y = worldY - gCamera.y;
+
+#ifdef BUG_FIX
+    // Prevent the player from walking through the capsule from the side.
+    // The player must jump on top to open it.
+    Coll_Player_Platform(s, worldX, worldY, &gPlayer);
+#endif
 
     if (gGameMode == GAME_MODE_MULTI_PLAYER || gGameMode == GAME_MODE_TEAM_PLAY) {
         bool32 sp08 = TRUE;

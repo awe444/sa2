@@ -1403,6 +1403,9 @@ u32 Coll_Player_SkatingStone(Sprite *s, CamCoord worldX, CamCoord worldY, Player
     s32 var_sb;
 
     s8 rectPlayer[4] = { -p->spriteOffsetX, -p->spriteOffsetY, +p->spriteOffsetX, +p->spriteOffsetY };
+#ifdef BUG_FIX
+    s8 rectOffset[4] = { -(p->spriteOffsetX + 5), (1 - p->spriteOffsetY), (p->spriteOffsetX + 5), (p->spriteOffsetY - 1) };
+#endif
 
     u32 result;
 
@@ -1420,8 +1423,14 @@ u32 Coll_Player_SkatingStone(Sprite *s, CamCoord worldX, CamCoord worldY, Player
         var_sb = 1;
     }
 
+#ifdef BUG_FIX
+    if (((moveState == 0) || !sub_800C934(s, worldX, worldY, (Rect8 *)rectPlayer, var_sb, p, &result))
+        && !sub_800CBBC(s, worldX, worldY, (Rect8 *)rectOffset, var_sb, p, &result)
+        && !sub_800C934(s, worldX, worldY, (Rect8 *)rectPlayer, var_sb, p, &result)) {
+#else
     if (((moveState == 0) || !sub_800C934(s, worldX, worldY, (Rect8 *)rectPlayer, var_sb, p, &result))
         && !sub_800C934(s, worldX, worldY, (Rect8 *)rectPlayer, var_sb, p, &result)) {
+#endif
         if (var_sb) {
             if (!(p->moveState & MOVESTATE_STOOD_ON_OBJ)) {
                 p->moveState = (p->moveState & ~MOVESTATE_20) | MOVESTATE_IN_AIR;
@@ -2365,6 +2374,49 @@ END_NONMATCH
 
 // TODO: Check type of x/y!
 // INCOMPLETE!
+#ifdef BUG_FIX
+bool32 sub_800CBBC(Sprite *s, s32 x, s32 y, Rect8 *rectPlayer, u32 UNUSED param4, Player *p, u32 *param6)
+{
+    s32 shbLeft = s->hitboxes[0].b.left;
+    s32 shbRight = s->hitboxes[0].b.right;
+    s32 shbMiddleH = x + ((shbLeft + shbRight) >> 1);
+
+    // Skip side collision when player is on a slope
+    if ((((s32)(p->rotation + 0x20) & 0xC0) >> 6) & 0x1) {
+        return FALSE;
+    }
+
+    if (!HB_COLLISION(x, y, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectPlayer))) {
+        return FALSE;
+    }
+
+    if (I(p->qWorldX) <= shbMiddleH) {
+        // Player is to the left of the sprite
+        if (p->qSpeedAirX > 0) {
+            p->qSpeedAirX = 0;
+        }
+        if (!(p->moveState & MOVESTATE_IN_AIR) && p->qSpeedGround > 0) {
+            p->qSpeedGround = 0;
+        }
+        p->qWorldX = Q(x + shbLeft - rectPlayer->right);
+        *param6 |= COLL_FLAG_20000;
+    } else {
+        // Player is to the right of the sprite
+        if (p->qSpeedAirX < 0) {
+            p->qSpeedAirX = 0;
+        }
+        if (!(p->moveState & MOVESTATE_IN_AIR) && p->qSpeedGround < 0) {
+            p->qSpeedGround = 0;
+        }
+        p->qWorldX = Q(x + shbRight - rectPlayer->left + 1);
+        *param6 |= COLL_FLAG_40000;
+    }
+
+    PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
+
+    return TRUE;
+}
+#else
 NONMATCH("asm/non_matching/game/shared/stage/collision__sub_800CBBC.inc",
          bool32 sub_800CBBC(Sprite *s, s32 x, s32 y, Rect8 *rectPlayer, u32 UNUSED param4, Player *p, u32 *param6))
 {
@@ -2386,6 +2438,7 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__sub_800CBBC.inc",
     return FALSE;
 }
 END_NONMATCH
+#endif
 
 #endif // (GAME == GAME_SA1)
 
