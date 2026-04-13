@@ -1359,6 +1359,12 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Itembox.inc"
             }
         }
     }
+#ifdef BUG_FIX
+    else {
+        // Add side collision for grounded players walking into item boxes.
+        sub_800CBBC(s, worldX, worldY, (Rect8 *)&rectDataPlayerA[0], 0, p, &result);
+    }
+#endif
 
     return result;
 }
