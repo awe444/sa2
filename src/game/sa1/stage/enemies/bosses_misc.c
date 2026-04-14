@@ -784,7 +784,7 @@ struct Task *Bosses_SetCamBounds(CamCoord minY, CamCoord maxY, CamCoord minX, Ca
     gCamera.minX = gCamera.x;
     gCamera.maxX = maxX;
     if (temp_r2->unk2 > gCamera.maxY) {
-        gCamera.maxY = gCamera.y + 320;
+        gCamera.maxY = gCamera.y + (DISPLAY_HEIGHT * 2);
     }
     return t;
 }
@@ -938,7 +938,7 @@ struct Task *CreatePreBossCameraPan(s16 yMin, s16 yMax)
     gCamera.minY = (s16)(u16)gCamera.y;
     gCamera.maxY = gCamera.y + DISPLAY_HEIGHT;
     if ((s32)pan->unk2 > gCamera.maxY) {
-        gCamera.maxY = gCamera.y + 320;
+        gCamera.maxY = gCamera.y + (DISPLAY_HEIGHT * 2);
     }
     return (struct Task *)t;
 }
