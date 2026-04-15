@@ -595,12 +595,7 @@ void SA2_LABEL(sub_808267C)(void)
     }
 }
 
-#if (GAME == GAME_SA1)
-// (99.30%) https://decomp.me/scratch/yvxpr
-NONMATCH("asm/non_matching/game/sa1/stage/results_2__sa2__sub_8082788.inc", void SA2_LABEL(sub_8082788)(void))
-#else
 void SA2_LABEL(sub_8082788)(void)
-#endif
 {
     u32 i;
 
@@ -612,9 +607,13 @@ void SA2_LABEL(sub_8082788)(void)
 
     for (i = 0; i < 4; i++) {
         if (!(gMultiSioStatusFlags & MULTI_SIO_RECV_ID(i + 8))) {
-#if (GAME == GAME_SA1) && !defined(NON_MATCHING)
-            u32 unk = gMultiplayerRanks[i] & 0x1;
-            asm("" ::"r"(unk));
+#if (GAME == GAME_SA1)
+            if (gMultiplayerRanks[i] & 0x1) {
+                // I guess there was some log in here or something
+#ifndef NON_MATCHING
+                i++, i--;
+#endif
+            }
 #endif
             SA2_LABEL(sub_80078D4)(3, i * 40, (i + 1) * 40, 0, DISPLAY_HEIGHT - i * 40);
         } else {
@@ -643,13 +642,6 @@ void SA2_LABEL(sub_8082788)(void)
                     // TODO: Fix type
                     temp = Base10DigitsToHexNibbles(gMultiplayerCharRings[i]);
                     s = &resultsScreen->unk160[((temp) >> 8) & 0xF];
-
-#if (GAME == GAME_SA1) && !defined(NON_MATCHING)
-                    {
-                        register s32 r7 asm("r7");
-                        asm("" : "=r"(r7));
-                    }
-#endif
 
                     if (s != &resultsScreen->unk160[0]) {
                         s->x = 160;
@@ -704,9 +696,6 @@ void SA2_LABEL(sub_8082788)(void)
         }
     }
 }
-#if (GAME == GAME_SA1)
-END_NONMATCH
-#endif
 
 void SA2_LABEL(sub_8082AA8)(void)
 {
