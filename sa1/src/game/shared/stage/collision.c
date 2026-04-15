@@ -1207,14 +1207,11 @@ u32 Coll_AmyHammer_Spring(Sprite *s, s16 worldX, s16 worldY, Player *p)
     return isColliding;
 }
 
-// (99.68%) https://decomp.me/scratch/jajQw
-// TODO: Does this actually return a moveState?
-NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Spring_Sideways.inc",
-         u32 Coll_Player_Spring_Sideways(Sprite *s, CamCoord worldX, CamCoord worldY, Player *p))
+u32 Coll_Player_Spring_Sideways(Sprite *s, CamCoord worldX, CamCoord worldY, Player *p)
 {
     s8 rectDataPlayerA[4] = { -(p->spriteOffsetX + 5), (1 - p->spriteOffsetY), (p->spriteOffsetX + 5), (p->spriteOffsetY - 1) };
     s8 rectDataPlayerB[4] = { -(p->spriteOffsetX + 0), (0 - p->spriteOffsetY), (p->spriteOffsetX + 0), (p->spriteOffsetY + 0) };
-    Rect8 *rectPlayerB = (Rect8 *)&rectDataPlayerB[0];
+    Rect8 *rectPlayerB;
 
     u32 moveState = 0;
     bool32 stoodOnCurrent = 0;
@@ -1228,6 +1225,7 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Spring_Sidew
     }
 
     moveState = p->moveState & MOVESTATE_IN_AIR;
+    rectPlayerB = (Rect8 *)&rectDataPlayerB[0];
     if ((p->moveState & MOVESTATE_STOOD_ON_OBJ) && (p->stoodObj == s)) {
         p->moveState &= ~MOVESTATE_STOOD_ON_OBJ;
         moveState |= MOVESTATE_IN_AIR;
@@ -1280,7 +1278,6 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Spring_Sidew
 
     return moveState;
 }
-END_NONMATCH
 
 // (99.92%) https://decomp.me/scratch/GFpFd
 NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Itembox.inc",
