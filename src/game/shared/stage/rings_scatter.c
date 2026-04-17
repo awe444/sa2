@@ -14,8 +14,13 @@
 #include "game/shared/stage/collect_ring_effect.h"
 #include "game/shared/stage/rings_manager.h"
 
+#if (GAME == GAME_SA1)
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
+#elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
 #include "constants/sa2/songs.h"
+#endif
 
 #if (GAME == GAME_SA1)
 #define UNK10_CONDITION 1
@@ -115,19 +120,19 @@ void InitPlayerHitRingsScatter(void)
         | SPRITE_FLAG_MASK_18 | SPRITE_FLAG_MASK_MOSAIC
 #endif
         ;
-    rs->unk2B6 = 0;
+    rs->SA2_LABEL(unk2B6) = 0;
 
 #if (GAME == GAME_SA1)
     if (!IS_EXTRA_STAGE(gCurrentLevel)) {
-        rs->unk2B4 = 0xE0;
-        rs->unk2B0 = 0x12;
+        rs->SA2_LABEL(unk2B4) = 0xE0;
+        rs->SA2_LABEL(unk2B0) = 0x12;
     } else {
-        rs->unk2B4 = 0xE0;
-        rs->unk2B0 = 7;
+        rs->SA2_LABEL(unk2B4) = 0xE0;
+        rs->SA2_LABEL(unk2B0) = 7;
     }
 #else
-    rs->unk2B4 = 0x94;
-    rs->unk2B0 = 0x12;
+    rs->SA2_LABEL(unk2B4) = 0x94;
+    rs->SA2_LABEL(unk2B0) = 0x12;
 #endif
 
     dmaDest = rs->rings;
@@ -163,7 +168,6 @@ void InitScatteringRings(s32 x, s32 y, s32 numRings)
     r3 = Q(4.53125); // 0x488
 
     for (i = 0, ip = 0; i < (signed)ARRAY_COUNT(rs->rings); ring++, i++) {
-
         if (ring->unkC == 0) {
 #if (GAME == GAME_SA1)
             ring->unkC = 256;
@@ -208,11 +212,13 @@ void InitScatteringRings(s32 x, s32 y, s32 numRings)
                 r3 += 0x10;
                 r3 |= 0x80;
             }
+
 #ifndef COLLECT_RINGS_ROM
             r2 = 0;
 #endif
             ring->velX = velX;
             ring->velY = velY;
+
 #ifndef COLLECT_RINGS_ROM
             if (GRAVITY_IS_INVERTED) {
                 ring->velY = -velY;
@@ -244,14 +250,14 @@ void InitScatteringRings(s32 x, s32 y, s32 numRings)
         }
     }
 }
-#ifndef COLLECT_RINGS_ROM
 
+#ifndef COLLECT_RINGS_ROM
 #if (GAME == GAME_SA1)
 // TODO: Either not in SA2, or in a different place!
 //       Most of the structure is the same as InitScatteringRings,
 //       but it uses random values in more places.
-
-void sub_8040C1C(s32 x, s32 y, s32 numRings)
+// TODO: Seems to be specifically for the Extra Boss ring capsules.
+void InitScatteringRings_ExtraBossCapsule(s32 x, s32 y, s32 numRings)
 {
     RingsScatter *rs = TASK_DATA(gRingsScatterTask);
     ScatterRing *ring = &rs->rings[0];
@@ -321,16 +327,21 @@ void sub_8040C1C(s32 x, s32 y, s32 numRings)
         }
     }
 }
-
 #endif
 
+#if (GAME == GAME_SA1)
+// (99.52%) https://decomp.me/scratch/mlP3E
+NONMATCH("asm/non_matching/game/sa1/stage/rings_scatter/RingsScatterSingleplayer_FlippedGravity.inc",
+         void RingsScatterSingleplayer_FlippedGravity(void))
+#else
 void RingsScatterSingleplayer_FlippedGravity(void)
+#endif
 {
     RingsScatter *rs = TASK_DATA(gCurTask);
     ScatterRing *ring = &rs->rings[0];
     Sprite *s = &rs->sprRing;
-    s32 sp08 = rs->unk2B0;
-    s32 sp0C = rs->unk2B4;
+    s32 sp08 = rs->SA2_LABEL(unk2B0);
+    s32 sp0C = rs->SA2_LABEL(unk2B4);
     bool32 sp10 = FALSE;
     s32 i;
     s32 ringIntX, ringIntY;
@@ -351,8 +362,11 @@ void RingsScatterSingleplayer_FlippedGravity(void)
         ringIntX = I(ring->x);
         ringIntY = I(ring->y);
         {
+#if (GAME == GAME_SA1) && !(defined(NON_MATCHING))
+            register Camera *cam asm("r4") = &gCamera;
+#else
             Camera *cam = &gCamera;
-
+#endif
             screenX = ringIntX - cam->x;
 #if (GAME == GAME_SA2) && !(defined(NON_MATCHING))
             screenY = ({
@@ -371,10 +385,17 @@ void RingsScatterSingleplayer_FlippedGravity(void)
         p = &gPlayer;
         hb = &p->spriteInfoBody->s.hitboxes[0];
 
-        if (ring->unkC <= sp0C && (p->charState != SA2_CHAR_ANIM_20 || p->timerInvulnerability == 0) && IS_ALIVE(p)) {
-            Rect8 *rect = (Rect8 *)&hb->b.left;
-
+#if (GAME == GAME_SA1)
+        if (ring->unkC <= sp0C && (p->charState != 15 || p->timerInvulnerability == 0) && (p->charState != 40) && IS_ALIVE(p))
+#elif (GAME == GAME_SA2)
+        if (ring->unkC <= sp0C && (p->charState != SA2_CHAR_ANIM_20 || p->timerInvulnerability == 0) && IS_ALIVE(p))
+#endif
+        {
+            Rect8 *rect = &hb->b;
             if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), ringIntX, ringIntY, rect)) {
+                s32 oldRingCount;
+                // _0801FF70
+
                 CreateCollectRingEffect(ringIntX, ringIntY);
 
                 INCREMENT_RINGS(1);
@@ -391,6 +412,35 @@ void RingsScatterSingleplayer_FlippedGravity(void)
             }
         }
 
+#if (GAME == GAME_SA1)
+        // "Cheat Code" Tails
+        if (gNumSingleplayerCharacters == 2) {
+            Player *p = &gPartner;
+            hb = &p->spriteInfoBody->s.hitboxes[0];
+            if (ring->unkC <= sp0C && (p->charState != 15 || p->timerInvulnerability == 0) && (p->charState != 40) && IS_ALIVE(p)) {
+                Rect8 *rect = &hb->b;
+                if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), ringIntX, ringIntY, rect)) {
+                    s32 oldRingCount;
+                    // _0801FF70
+
+                    CreateCollectRingEffect(ringIntX, ringIntY);
+
+                    INCREMENT_RINGS(1);
+                    // _0801FFC4
+
+                    if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
+                        if (gRingCount > 255) {
+                            gRingCount = 255;
+                        }
+                    }
+
+                    ring->unkC = 0;
+                    continue;
+                }
+            }
+        }
+#endif
+
         if (ring->velY < 0 && UNK10_CONDITION) {
             s32 res = SA2_LABEL(sub_801F100)(ringIntY - (TILE_WIDTH * 2), ringIntX, ring->unkE, -8, SA2_LABEL(sub_801EC3C));
             if (res <= 0) {
@@ -399,7 +449,7 @@ void RingsScatterSingleplayer_FlippedGravity(void)
             }
         }
 
-        if (rs->unk2B6 & 0x1 && ring->velY > 0 && UNK10_CONDITION) {
+        if (rs->SA2_LABEL(unk2B6) & 0x1 && ring->velY > 0 && UNK10_CONDITION) {
             s32 res = SA2_LABEL(sub_801F100)(ringIntY, ringIntX, ring->unkE, 8, SA2_LABEL(sub_801EC3C));
             if (res <= 0) {
                 ring->y += Q_24_8(res);
@@ -444,20 +494,28 @@ void RingsScatterSingleplayer_FlippedGravity(void)
         }
     }
 }
+#if (GAME == GAME_SA1)
+END_NONMATCH
+#endif
 
+#if (GAME == GAME_SA1)
+// (98.01%) https://decomp.me/scratch/iOeRj
+NONMATCH("asm/non_matching/game/sa1/stage/rings_scatter/RingsScatterSingleplayer_NormalGravity.inc",
+         void RingsScatterSingleplayer_NormalGravity(void))
+#elif (GAME == GAME_SA2)
 void RingsScatterSingleplayer_NormalGravity(void)
+#endif
 {
     RingsScatter *rs = TASK_DATA(gCurTask);
     ScatterRing *ring = &rs->rings[0];
     Sprite *s = &rs->sprRing;
-    s32 sp08 = rs->unk2B0;
-    s32 sp0C = rs->unk2B4;
+    s32 sp08 = rs->SA2_LABEL(unk2B0);
+    s32 sp0C = rs->SA2_LABEL(unk2B4);
     bool32 sp10 = FALSE;
     s32 i; // sp14
     s32 ringIntX, ringIntY;
     s32 screenX, screenY;
-    s32 bossWorldX; // Used in SA1 in the Extra Boss stage (apparently; non-matching right now)
-
+    s32 adjustedRingX; // Used in SA1 in the Extra Boss stage (apparently; non-matching right now)
     Player *p;
     Hitbox *hb;
 
@@ -476,9 +534,18 @@ void RingsScatterSingleplayer_NormalGravity(void)
         ring->y += ring->velY + gWorldSpeedY;
 #endif
 
+        adjustedRingX = I(ring->x);
         ringIntX = I(ring->x);
-        bossWorldX = ringIntX;
         ringIntY = I(ring->y);
+
+#if (GAME == GAME_SA1)
+        if (IS_EXTRA_STAGE(gCurrentLevel)) {
+            s32 v = (ringIntX + gStageTime * 8) - 72;
+            if (v >= 2688) {
+                adjustedRingX = Mod(v, 2688) + 72;
+            }
+        }
+#endif
 
         screenX = ringIntX - gCamera.x;
         screenY = ringIntY - gCamera.y;
@@ -486,14 +553,19 @@ void RingsScatterSingleplayer_NormalGravity(void)
         p = &gPlayer;
         hb = &p->spriteInfoBody->s.hitboxes[0];
 
-        if ((ring->unkC <= sp0C) && ((p->charState != SA2_CHAR_ANIM_20) || (p->timerInvulnerability == 0)) && IS_ALIVE(p)) {
 #if (GAME == GAME_SA1)
-            Rect8 *rect = &hb->b;
-#else
-            Rect8 *rect = (Rect8 *)&hb->b.left;
+        if ((ring->unkC <= sp0C) && ((p->charState != 15) || (p->timerInvulnerability == 0)) && (p->charState != 40) && IS_ALIVE(p))
+#elif (GAME == GAME_SA2)
+        if ((ring->unkC <= sp0C) && ((p->charState != SA2_CHAR_ANIM_20) || (p->timerInvulnerability == 0)) && IS_ALIVE(p))
 #endif
+        {
+            Rect8 *rect = &hb->b;
             if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), ringIntX, ringIntY, rect)) {
-                CreateCollectRingEffect(bossWorldX, ringIntY);
+#if (GAME == GAME_SA2)
+                CreateCollectRingEffect(adjustedRingX, ringIntY);
+#else
+                CreateCollectRingEffect(ringIntX, ringIntY);
+#endif
 
                 INCREMENT_RINGS(1);
 
@@ -509,18 +581,51 @@ void RingsScatterSingleplayer_NormalGravity(void)
             }
         }
 
-        if (ring->velY > 0 && UNK10_CONDITION) {
-            s32 res = SA2_LABEL(sub_801F100)(ringIntY, ringIntX, ring->unkE, +8, SA2_LABEL(sub_801EC3C));
+#if (GAME == GAME_SA1)
+        if (gNumSingleplayerCharacters == 2) {
+            p = &gPartner;
+            hb = &p->spriteInfoBody->s.hitboxes[0];
 
+            if ((ring->unkC <= sp0C) && ((p->charState != 15) || (p->timerInvulnerability == 0)) && (p->charState != 40) && IS_ALIVE(p)) {
+                Rect8 *rect = &hb->b;
+
+                if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), ringIntX, ringIntY, rect)) {
+                    CreateCollectRingEffect(ringIntX, ringIntY);
+
+                    INCREMENT_RINGS(1);
+
+                    if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
+                        if (gRingCount > 255) {
+                            gRingCount = 255;
+                        }
+                    }
+
+                    ring->unkC = 0;
+
+                    continue;
+                }
+            }
+        }
+#endif
+
+        if (ring->velY > 0 && UNK10_CONDITION) {
+#if (GAME == GAME_SA1)
+            s32 res = SA2_LABEL(sub_801F100)(ringIntY, adjustedRingX, ring->unkE, +8, SA2_LABEL(sub_801EC3C));
+#elif (GAME == GAME_SA2)
+            s32 res = SA2_LABEL(sub_801F100)(ringIntY, ringIntX, ring->unkE, +8, SA2_LABEL(sub_801EC3C));
+#endif
             if (res <= 0) {
                 ring->y += Q_24_8(res);
                 ring->velY = (ring->velY >> 2) - ring->velY;
             }
         }
 
-        if (rs->unk2B6 & 0x1 && ring->velY < 0 && UNK10_CONDITION) {
+        if (rs->SA2_LABEL(unk2B6) & 0x1 && ring->velY < 0 && UNK10_CONDITION) {
+#if (GAME == GAME_SA1)
+            s32 res = SA2_LABEL(sub_801F100)((ringIntY - 16), adjustedRingX, ring->unkE, -8, SA2_LABEL(sub_801EC3C));
+#elif (GAME == GAME_SA2)
             s32 res = SA2_LABEL(sub_801F100)((ringIntY - 16), ringIntX, ring->unkE, -8, SA2_LABEL(sub_801EC3C));
-
+#endif
             if (res <= 0) {
                 ring->y -= Q_24_8(res);
                 ring->velY = (ring->velY >> 2) - ring->velY;
@@ -564,19 +669,29 @@ void RingsScatterSingleplayer_NormalGravity(void)
         }
     }
 }
+#if (GAME == GAME_SA1)
+END_NONMATCH
+#endif
 
 // NOTE: VERY WRONG!!!
 //       A ton of code is missing here.
 //       (Basically a copy-paste of RingsScatterSingleplayer_FlippedGravity)
+//       (Not aligned with SA2!)
+#if (GAME == GAME_SA1)
+// (56.55%) https://decomp.me/scratch/9xEQf
+NONMATCH("asm/non_matching/game/sa1/stage/rings_scatter/RingsScatterMultipak_FlippedGravity.inc",
+         void RingsScatterMultipak_FlippedGravity(void))
+#elif (GAME == GAME_SA2)
 // (66.09%) https://decomp.me/scratch/qHlN9
 NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_FlippedGravity.inc",
          void RingsScatterMultipak_FlippedGravity(void))
+#endif
 {
     RingsScatter *rs = TASK_DATA(gCurTask);
     ScatterRing *ring = &rs->rings[0];
     Sprite *s = &rs->sprRing;
-    s32 sp08 = rs->unk2B0;
-    s32 sp0C = rs->unk2B4;
+    s32 sp08 = rs->SA2_LABEL(unk2B0);
+    s32 sp0C = rs->SA2_LABEL(unk2B4);
     bool32 sp10 = FALSE;
     s32 i = 0; // sp14
     s32 ringIntX;
@@ -612,7 +727,7 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
 #else
         hb = &p->spriteInfoBody->s.hitboxes[0];
 #endif
-        if ((ring->unkC <= sp0C) && ((p->charState != SA2_CHAR_ANIM_20) || (p->timerInvulnerability == 0)) && (IS_ALIVE(p))
+        if ((ring->unkC <= sp0C) && ((p->charState != 15) || (p->timerInvulnerability == 0)) && (IS_ALIVE(p))
             && ((((ringIntX - TILE_WIDTH) > HB_ALT_LEFT(p, hb)) && (HB_ALT_RIGHT(p, hb) > (ringIntX - TILE_WIDTH)))
                 || ((ringIntX + TILE_WIDTH) >= HB_ALT_LEFT(p, hb))
                 || (((ringIntX - TILE_WIDTH) >= HB_ALT_LEFT(p, hb)) && (HB_ALT_RIGHT(p, hb) >= (ringIntX - TILE_WIDTH))))
@@ -631,8 +746,9 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
             }
 
             ring->unkC = 0;
+            ring++;
         } else {
-            if ((ring->velY < 0) && ((ring->unk10 & 0x7) == 0)) {
+            if ((ring->velY < 0) && UNK10_CONDITION) {
                 s32 res = SA2_LABEL(sub_801F100)((ringIntY - 16), ringIntX, ring->unkE, -8, SA2_LABEL(sub_801EC3C));
                 if (res <= 0) {
                     ring->y -= Q(res);
@@ -640,7 +756,7 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
                 }
             }
 
-            if ((rs->unk2B6 & 0x1) && (ring->velY > 0) && ((ring->unk10 & 0x7) == 0)) {
+            if ((rs->SA2_LABEL(unk2B6) & 0x1) && (ring->velY > 0) && UNK10_CONDITION) {
                 s32 res = SA2_LABEL(sub_801F100)(ringIntY, ringIntX, ring->unkE, 8, SA2_LABEL(sub_801EC3C));
                 if (res <= 0) {
                     ring->y += Q(res);
@@ -666,7 +782,6 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
 
                         if (iwram_end != oamAlloced) {
                             DmaCopy16(3, oam, oamAlloced, sizeof(OamDataShort));
-
                             OAM_SET_Y(oamAlloced, screenY - (u16)s->dimensions->offsetY);
                             OAM_SET_X(oamAlloced, screenX - (u16)s->dimensions->offsetX);
                         }
@@ -674,9 +789,11 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
                 }
             }
             {
+#if (GAME == GAME_SA2)
                 u16 sprFlags = ring->unk10;
                 ring->unk10 &= ~0x3;
                 ring->unk10 |= (sprFlags + 1) & 0x3;
+#endif
                 ring->unkC--;
             }
         }
@@ -687,15 +804,22 @@ END_NONMATCH
 // NOTE: VERY WRONG!!!
 //       A ton of code is missing here.
 //       (Basically a copy-paste of RingsScatterSingleplayer_NormalGravity)
+//       (Not aligned with SA2!)
+#if (GAME == GAME_SA1)
+// (52.71%) https://decomp.me/scratch/6Nvv9
+NONMATCH("asm/non_matching/game/sa1/stage/rings_scatter/RingsScatterMultipak_NormalGravity.inc",
+         void RingsScatterMultipak_NormalGravity(void))
+#elif (GAME == GAME_SA2)
 // (64.03%) https://decomp.me/scratch/KBtBo
 NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_NormalGravity.inc",
          void RingsScatterMultipak_NormalGravity(void))
+#endif
 {
     RingsScatter *rs = TASK_DATA(gCurTask);
     ScatterRing *ring = &rs->rings[0];
     Sprite *s = &rs->sprRing;
-    s32 sp08 = rs->unk2B0;
-    s32 sp0C = rs->unk2B4;
+    s32 sp08 = rs->SA2_LABEL(unk2B0);
+    s32 sp0C = rs->SA2_LABEL(unk2B4);
     bool32 sp10 = FALSE;
     s32 i = 0; // sp14
     s32 ringIntX;
@@ -716,8 +840,13 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
             continue;
         }
 
+#if (GAME == GAME_SA1)
+        ring->x += ring->velX;
+        ring->y += ring->velY;
+#elif (GAME == GAME_SA2)
         ring->x += ring->velX + gWorldSpeedX;
-        ring->y += ring->velY + gWorldSpeedY;
+        ring->y += ring->velY + 0x380;
+#endif
 
         ringIntX = I(ring->x);
         ringIntY = I(ring->y);
@@ -727,11 +856,11 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
         p = &gPlayer;
 
 #if USE_HITBOX_RECT
-        hb = (Rect8 *)&p->spriteInfoBody->s.hitboxes[0].b.left;
+        hb = (Rect8 *)&p->spriteInfoBody->s.hitboxes[0].b;
 #else
         hb = &p->spriteInfoBody->s.hitboxes[0];
 #endif
-        if ((ring->unkC <= sp0C) && ((p->charState != SA2_CHAR_ANIM_20) || (p->timerInvulnerability == 0)) && (IS_ALIVE(p))
+        if ((ring->unkC <= sp0C) && ((p->charState != 15) || (p->timerInvulnerability == 0)) && (IS_ALIVE(p))
             && ((((ringIntX - TILE_WIDTH) > HB_ALT_LEFT(p, hb)) && (HB_ALT_RIGHT(p, hb) > (ringIntX - TILE_WIDTH)))
                 || ((ringIntX + TILE_WIDTH) >= HB_ALT_LEFT(p, hb))
                 || (((ringIntX - TILE_WIDTH) >= HB_ALT_LEFT(p, hb)) && (HB_ALT_RIGHT(p, hb) >= (ringIntX - TILE_WIDTH))))
@@ -752,7 +881,7 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
             ring->unkC = 0;
         } else {
 
-            if ((ring->velY < 0) && ((ring->unk10 & 0x7) == 0)) {
+            if ((ring->velY < 0) && UNK10_CONDITION) {
                 s32 res = SA2_LABEL(sub_801F100)(ringIntY, ringIntX, ring->unkE, +8, SA2_LABEL(sub_801EC3C));
                 if (res <= 0) {
                     ring->y -= Q(res);
@@ -760,7 +889,7 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
                 }
             }
 
-            if ((rs->unk2B6 & 0x1) && (ring->velY > 0) && ((ring->unk10 & 0x7) == 0)) {
+            if ((rs->SA2_LABEL(unk2B6) & 0x1) && (ring->velY > 0) && UNK10_CONDITION) {
                 s32 res = SA2_LABEL(sub_801F100)((ringIntY - 16), ringIntX, ring->unkE, -8, SA2_LABEL(sub_801EC3C));
                 if (res <= 0) {
                     ring->y += Q(res);
@@ -796,18 +925,20 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterMultipak_
             }
 
             {
+#if (GAME == GAME_SA2)
                 u16 sprFlags = ring->unk10;
                 ring->unk10 &= ~0x3;
                 ring->unk10 |= (sprFlags + 1) & 0x3;
+#endif
                 ring->unkC--;
             }
         }
     }
 }
-
 END_NONMATCH
-#endif
+#endif // COLLECT_RINGS_ROM
 
+#if (GAME == GAME_SA2)
 // NOTE: VERY WRONG!!!
 //       A ton of code is missing here.
 //       (Basically a copy-paste of RingsScatterSingleplayer_NormalGravity)
@@ -932,6 +1063,7 @@ NONMATCH("asm/non_matching/game/shared/stage/rings_scatter/RingsScatterSinglepak
     }
 }
 END_NONMATCH
+#endif
 
 void DestroyRingsScatterTask(void)
 {
@@ -959,6 +1091,8 @@ void Task_RingsScatter_MP_Multipak(void)
 }
 #endif
 
+#if (GAME == GAME_SA2)
 void Task_RingsScatter_MP_Singlepak(void) { RingsScatterSinglepakMain(); }
+#endif
 
 void TaskDestructor_RingsScatter(struct Task UNUSED *t) { gRingsScatterTask = NULL; }

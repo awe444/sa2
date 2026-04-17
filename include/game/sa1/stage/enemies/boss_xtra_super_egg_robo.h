@@ -50,18 +50,6 @@ extern ExtraBossTaskData gExtraBossTaskData;
 
 typedef s32 CapsuleState;
 
-typedef struct {
-    /* 0x00 */ s8 pid;
-    /* 0x04 */ u32 unk4; // TODO: Check the type!
-} player_0_Task; /* size: 0x8 */
-
-typedef struct {
-    /* 0x00 */ player_0_Task unk0;
-    /* 0x08 */ s32 unk8; // counter of some kind
-    /* 0x0C */ s32 qXs[16];
-    /* 0x0C */ s32 qYs[16];
-} MaybeSuperSonic; /* size: 0x8C */
-
 s32 ExtraBoss__CapsuleGetCaptureState(SomeTaskManager_7C *mgr, Sprite *s, SuperEggRobo *extraBoss, Player *p);
 
 #define EXTRA_BOSS__INITIAL_RING_COUNT 50

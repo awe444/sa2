@@ -4,31 +4,35 @@
 #include "malloc_vram.h"
 #include "gba/io_reg.h"
 #include "lib/m4a/m4a.h"
-#include "game/shared/stage/amy_attack_heart_effect.h"
-#include "game/shared/stage/mp_player.h"
-#include "game/shared/parameters/characters.h"
+
 #include "game/globals.h"
-#include "game/shared/stage/camera.h"
-#include "game/shared/stage/collision.h"
+
+#include "game/shared/stage/mp_player.h"
 #include "game/shared/stage/music_manager.h"
 #include "game/shared/stage/player.h"
-#include "game/sa1/save.h"
-#include "game/sa1/stage/some_task_manager.h"
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/terrain_collision.h"
-#include "game/shared/stage/dust_effect_braking.h"
-#include "game/shared/stage/dust_effect_spindash.h"
+#include "game/shared/stage/dust_effect_braking.h" // CreateSpindashDustEffect
+#include "game/shared/stage/dust_effect_spindash.h" // CreateSpindashDustEffect
+#include "game/shared/stage/item_tasks.h"
 #include "game/shared/stage/mp_sprite_task.h"
-#include "game/shared/stage/player.h"
+#include "game/shared/stage/rings_scatter.h"
+#include "game/shared/stage/stage.h"
+#include "game/shared/stage/underwater_effects.h"
+#include "game/shared/stage/water_effects.h"
+#include "game/shared/stage/amy_attack_heart_effect.h"
+
+#include "game/shared/parameters/bosses.h"
+#include "game/shared/parameters/characters.h"
+
+#if (GAME == GAME_SA1)
+#include "game/sa1/save.h"
+#include "game/sa1/stage/some_task_manager.h"
 #include "game/sa1/stage/player_controls.h"
 #include "game/sa1/stage/player_sonic.h"
 #include "game/sa1/stage/player_tails.h"
 #include "game/sa1/stage/player_super_sonic.h"
-#include "game/shared/stage/rings_scatter.h"
 #include "game/sa1/stage/spawn_positions.h"
-#include "game/shared/stage/stage.h"
-#include "game/shared/stage/underwater_effects.h"
-#include "game/shared/stage/water_effects.h"
 
 #include "constants/sa1/animations.h"
 #include "constants/sa1/char_states.h"
@@ -36,56 +40,115 @@
 #include "constants/sa1/vram_hardcoded.h"
 #include "constants/sa1/zones.h"
 
-Player ALIGNED(8) gPlayer = {};
-#if (GAME == GAME_SA1)
-Player ALIGNED(8) gPartner = {};
+#elif (GAME == GAME_SA2)
+#include "game/sa2/stage/mp_attack_1_effect.h"
+#include "game/sa2/stage/spawn_positions.h"
+#include "game/sa2/stage/boost_effect.h"
+#include "game/sa2/stage/boost_mode_particles.h" // incl. CreateBoostModeParticles
+#include "game/sa2/stage/bosses/common.h"
+#include "game/sa2/stage/cheese.h"
+#include "game/sa2/stage/heart_particles_effect.h"
+#include "game/sa2/stage/mp_attack_2_effect.h"
+#include "game/sa2/stage/player_controls.h"
+#include "game/sa2/stage/player_super_sonic.h"
+#include "game/sa2/ui/stage_results.h"
+#include "game/sa2/ui/time_attack_results.h" // for Player_VictoryPose
+#include "game/sa2/stage/player_callbacks.h"
+#include "game/sa2/stage/input_buffer.h"
+#include "game/sa2/save.h"
+
+#include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
+#include "constants/sa2/player_transitions.h"
+#include "constants/sa2/songs.h"
+#include "constants/sa2/zones.h"
 #endif
 
-// Potentially some extra space on player for this to be aligned 16 (should be 8)
-#if (GAME == GAME_SA1)
-PlayerSpriteInfo ALIGNED(16) gPartnerLimbsPSI = {};
+// >> acceleration = (sin(angle) * 3) / 32
+#define GET_ROTATED_ACCEL(angle)   ((SIN_24_8((angle)*4) * 3) >> 5)
+#define GET_ROTATED_ACCEL_2(angle) ((SIN_24_8((angle)*4) * 5) >> 5)
+#define GET_ROTATED_ACCEL_3(angle) ((SIN_24_8((angle)*4) * 60))
+
+#if (GAME == GAME_SA2)
+// TODO: Match this without ASM!
+#ifndef COLLECT_RINGS_ROM
+#ifndef NON_MATCHING
+#define PLAYERFN_UPDATE_AIR_FALL_SPEED_B(player)                                                                                           \
+    {                                                                                                                                      \
+        s16 speed = (player->moveState & MOVESTATE_IN_WATER) ? Q_8_8(PLAYER_GRAVITY_UNDER_WATER) : Q_8_8(PLAYER_GRAVITY);                  \
+                                                                                                                                           \
+        if (player->qSpeedAirY < 0) {                                                                                                      \
+            asm("lsl r0, %0, #16\n"                                                                                                        \
+                "\tasr r0, r0, #17\n"                                                                                                      \
+                "\tlsl r0, r0, #16\n"                                                                                                      \
+                "\tlsr %0, r0, #16\n"                                                                                                      \
+                : "=r"(speed)                                                                                                              \
+                : "r"(speed)                                                                                                               \
+                : "r0");                                                                                                                   \
+        }                                                                                                                                  \
+                                                                                                                                           \
+        player->qSpeedAirY += speed;                                                                                                       \
+    }
+#else
+#define PLAYERFN_UPDATE_AIR_FALL_SPEED_B(player)                                                                                           \
+    {                                                                                                                                      \
+        s16 speed = (player->moveState & MOVESTATE_IN_WATER) ? Q_8_8(PLAYER_GRAVITY_UNDER_WATER) : Q_8_8(PLAYER_GRAVITY);                  \
+                                                                                                                                           \
+        if (player->qSpeedAirY < 0) {                                                                                                      \
+            speed /= 2;                                                                                                                    \
+        }                                                                                                                                  \
+                                                                                                                                           \
+        player->qSpeedAirY += speed;                                                                                                       \
+    }
 #endif
-PlayerSpriteInfo ALIGNED(16) gPlayerLimbsPSI = {};
-PlayerSpriteInfo ALIGNED(16) gPlayerBodyPSI = {};
-#if (GAME == GAME_SA1)
-PlayerSpriteInfo ALIGNED(16) gPartnerBodyPSI = {};
+#else
+#define PLAYERFN_UPDATE_AIR_FALL_SPEED_B(player)                                                                                           \
+    {                                                                                                                                      \
+        s16 speed = Q_8_8(PLAYER_GRAVITY);                                                                                                 \
+                                                                                                                                           \
+        if (player->qSpeedAirY < 0) {                                                                                                      \
+            speed /= 2;                                                                                                                    \
+        }                                                                                                                                  \
+                                                                                                                                           \
+        player->qSpeedAirY += speed;                                                                                                       \
+    }
+#endif
 #endif
 
-extern s16 gUnknown_084ADF78[NUM_LEVEL_IDS][2];
-extern s16 gUnknown_084ADFC0[NUM_LEVEL_IDS][2];
-extern s16 gUnknown_084AE188[9];
-extern s16 gUnknown_084AE19A[9];
+#define PLAYERFN_UPDATE_UNK2A(player)                                                                                                      \
+    {                                                                                                                                      \
+        if (player->SA2_LABEL(unk2A) != 0) {                                                                                               \
+            player->SA2_LABEL(unk2A) -= 1;                                                                                                 \
+        } else if ((player->rotation + Q(0.125)) & 0xC0) {                                                                                 \
+            if (ABS(player->qSpeedGround) < Q(1.875)) {                                                                                    \
+                player->qSpeedGround = 0;                                                                                                  \
+                                                                                                                                           \
+                player->moveState |= MOVESTATE_IN_AIR;                                                                                     \
+                player->SA2_LABEL(unk2A) = GBA_FRAMES_PER_SECOND / 2;                                                                      \
+            }                                                                                                                              \
+        }                                                                                                                                  \
+    }
 
-void Player_80447D8(Player *p);
-void Player_HandleInputs(Player *p);
-
-void Player_Sonic_80473AC(Player *p);
-void Player_Tails_8047BA0(Player *p);
-void Player_Knuckles_8049000(Player *p);
-void Player_Amy_80497AC(Player *p);
-
-void Player_Knuckles_GlideInit(Player *p);
-
-void Task_8045AD8(void);
-void Task_8045B38(void);
-void sub_8045DF0(Player *p);
-
-s32 SA2_LABEL(sub_8029BB8)(Player *p, u8 *p1, s32 *out);
-void Task_PlayerMain(void);
-void TaskDestructor_Player(struct Task *);
-void AllocateCharacterStageGfx(Player *p, PlayerSpriteInfo *param2);
-void AllocateCharacterMidAirGfx(Player *p, PlayerSpriteInfo *param2);
-s32 SA2_LABEL(sub_802195C)(Player *p, u8 *p1, s32 *out);
-void SA2_LABEL(sub_802486C)(Player *p, PlayerSpriteInfo *psi);
-void SA2_LABEL(sub_8024B10)(Player *p, PlayerSpriteInfo *psi);
-void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *psi);
+#if (GAME == GAME_SA2)
+#define PLAYERFN_UPDATE_ROTATION(player)                                                                                                   \
+    {                                                                                                                                      \
+        s32 rot = (s8)player->rotation;                                                                                                    \
+        if (rot < 0) {                                                                                                                     \
+            rot = MIN((rot + 2), 0);                                                                                                       \
+        } else if (rot > 0) {                                                                                                              \
+            rot = MAX((rot - 2), 0);                                                                                                       \
+        }                                                                                                                                  \
+        player->rotation = rot;                                                                                                            \
+    }
+#endif
 
 #if (GAME == GAME_SA1)
-#define UPDATE_POS_SPEEDCAP
+#define UPDATE_POS_SPEEDCAP(player) ({});
 #elif (GAME >= GAME_SA2)
-#define UPDATE_POS_SPEEDCAP player->qSpeedAirY = MIN(player->qSpeedAirY, Q(PLAYER_AIR_SPEED_MAX));
+#define UPDATE_POS_SPEEDCAP(player) ({ player->qSpeedAirY = MIN(player->qSpeedAirY, Q(PLAYER_AIR_SPEED_MAX)); })
 #endif
 
+#ifndef COLLECT_RINGS_ROM
 #define PLAYERFN_UPDATE_POSITION(player)                                                                                                   \
     {                                                                                                                                      \
         player->qWorldX += player->qSpeedAirX;                                                                                             \
@@ -94,10 +157,38 @@ void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *psi);
             player->qSpeedAirY = -player->qSpeedAirY;                                                                                      \
         }                                                                                                                                  \
                                                                                                                                            \
-        UPDATE_POS_SPEEDCAP;                                                                                                               \
+        UPDATE_POS_SPEEDCAP(player);                                                                                                       \
                                                                                                                                            \
         player->qWorldY = GRAVITY_IS_INVERTED ? player->qWorldY - player->qSpeedAirY : player->qWorldY + player->qSpeedAirY;               \
     }
+#else
+#define PLAYERFN_UPDATE_POSITION(player)                                                                                                   \
+    {                                                                                                                                      \
+        player->qWorldX += player->qSpeedAirX;                                                                                             \
+                                                                                                                                           \
+        UPDATE_POS_SPEEDCAP(player);                                                                                                       \
+                                                                                                                                           \
+        player->qWorldY = player->qWorldY + player->qSpeedAirY;                                                                            \
+    }
+#endif
+
+#if (GAME == GAME_SA2)
+// TODO(Jace): This name is speculative right now, check for accuracy!
+#define PLAYERFN_MAYBE_TRANSITION_TO_GROUND_BASE(player)                                                                                   \
+    if ((player->moveState & (MOVESTATE_STOOD_ON_OBJ | MOVESTATE_IN_AIR)) == MOVESTATE_STOOD_ON_OBJ) {                                     \
+        gPlayer.callback = Player_TouchGround;                                                                                             \
+                                                                                                                                           \
+        player->qSpeedGround = player->qSpeedAirX;                                                                                         \
+        player->rotation = 0;                                                                                                              \
+    }
+
+// TODO(Jace): This name is speculative right now, check for accuracy!
+#define PLAYERFN_MAYBE_TRANSITION_TO_GROUND(player)                                                                                        \
+    {                                                                                                                                      \
+        SA2_LABEL(sub_8022190)(player);                                                                                                    \
+        PLAYERFN_MAYBE_TRANSITION_TO_GROUND_BASE(player);                                                                                  \
+    }
+#endif
 
 #if (GAME == GAME_SA1)
 #define PLAYERFN_UPDATE_AIR_FALL_SPEED(player)                                                                                             \
@@ -107,14 +198,37 @@ void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *psi);
         player->qSpeedAirY += Q(PLAYER_GRAVITY_UNDER_WATER);                                                                               \
     }
 #elif (GAME == GAME_SA2)
+#ifndef COLLECT_RINGS_ROM
 #define PLAYERFN_UPDATE_AIR_FALL_SPEED(player)                                                                                             \
     if (player->moveState & MOVESTATE_IN_WATER) {                                                                                          \
         player->qSpeedAirY += Q(PLAYER_GRAVITY_UNDER_WATER);                                                                               \
     } else {                                                                                                                               \
         player->qSpeedAirY += Q(PLAYER_GRAVITY);                                                                                           \
     }
+#else
+#define PLAYERFN_UPDATE_AIR_FALL_SPEED(player) player->qSpeedAirY += Q(PLAYER_GRAVITY);
 #endif
 
+#define PLAYERFN_SET_ANIM_SPEED(_p, _s)                                                                                                    \
+    {                                                                                                                                      \
+        s32 speed = _p->qSpeedGround;                                                                                                      \
+        speed = (speed >> 5) + (speed >> 6);                                                                                               \
+                                                                                                                                           \
+        /* TODO: Try ABS macro */                                                                                                          \
+        speed = ABS(speed);                                                                                                                \
+                                                                                                                                           \
+        if (speed >= SPRITE_ANIM_SPEED(0.5)) {                                                                                             \
+            if (speed > SPRITE_ANIM_SPEED(8.0)) {                                                                                          \
+                speed = SPRITE_ANIM_SPEED(8.0);                                                                                            \
+            }                                                                                                                              \
+        } else {                                                                                                                           \
+            speed = SPRITE_ANIM_SPEED(0.5);                                                                                                \
+        }                                                                                                                                  \
+        _s->animSpeed = speed;                                                                                                             \
+    }
+#endif
+
+#ifndef COLLECT_RINGS_ROM
 #define MACRO_8024B10_PSI_UPDATE(p, psi)                                                                                                   \
     ({                                                                                                                                     \
         s32 x, y;                                                                                                                          \
@@ -145,27 +259,431 @@ void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *psi);
         psi->transform.qScaleY = y;                                                                                                        \
         UpdateSpriteAnimation(s);                                                                                                          \
     })
-
-// >> acceleration = (sin(angle) * 3) / 32
-#define GET_ROTATED_ACCEL(angle)   ((SIN_24_8((angle)*4) * 3) >> 5)
-#define GET_ROTATED_ACCEL_2(angle) ((SIN_24_8((angle)*4) * 5) >> 5)
-#define GET_ROTATED_ACCEL_3(angle) ((SIN_24_8((angle)*4) * 60))
-
-#define PLAYERFN_UPDATE_UNK2A(player)                                                                                                      \
-    {                                                                                                                                      \
-        if (player->SA2_LABEL(unk2A) != 0) {                                                                                               \
-            player->SA2_LABEL(unk2A) -= 1;                                                                                                 \
-        } else if ((player->rotation + Q(0.125)) & 0xC0) {                                                                                 \
-            if (ABS(player->qSpeedGround) < Q(1.875)) {                                                                                    \
-                player->qSpeedGround = 0;                                                                                                  \
-                                                                                                                                           \
-                player->moveState |= MOVESTATE_IN_AIR;                                                                                     \
-                player->SA2_LABEL(unk2A) = GBA_FRAMES_PER_SECOND / 2;                                                                      \
-            }                                                                                                                              \
+#else
+#define MACRO_8024B10_PSI_UPDATE(p, psi)                                                                                                   \
+    ({                                                                                                                                     \
+        s32 x, y;                                                                                                                          \
+        if (!(p->moveState & MOVESTATE_FACING_LEFT)) {                                                                                     \
+            psi->transform.qScaleX = -Q(1.0);                                                                                              \
+        } else {                                                                                                                           \
+            psi->transform.qScaleX = +Q(1.0);                                                                                              \
         }                                                                                                                                  \
-    }
+                                                                                                                                           \
+        if (psi->transform.qScaleX < 0) {                                                                                                  \
+            psi->transform.x--;                                                                                                            \
+        }                                                                                                                                  \
+                                                                                                                                           \
+        x = I(psi->transform.qScaleX * p->SA2_LABEL(unk80));                                                                               \
+        y = I(psi->transform.qScaleY * p->SA2_LABEL(unk82));                                                                               \
+        psi->transform.qScaleX = x;                                                                                                        \
+        psi->transform.qScaleY = y;                                                                                                        \
+        UpdateSpriteAnimation(s);                                                                                                          \
+    })
+#endif
 
-void SA2_LABEL(sub_80213C0)(u32 UNUSED characterId, u32 UNUSED levelId, Player *player)
+#if (GAME == GAME_SA2)
+#define TRICK_DIR_UP       0
+#define TRICK_DIR_DOWN     1
+#define TRICK_DIR_FORWARD  2
+#define TRICK_DIR_BACKWARD 3
+#define NUM_TRICK_DIRS     4
+
+#define MASK_80D6992_1  0x1
+#define MASK_80D6992_2  0x2
+#define MASK_80D6992_4  0x4
+#define MASK_80D6992_8  0x8
+#define MASK_80D6992_10 0x10
+#endif
+
+Player ALIGNED(8) gPlayer = {};
+#if (GAME == GAME_SA1)
+Player ALIGNED(8) gPartner = {};
+#endif
+
+// Potentially some extra space on player for this to be aligned 16 (should be 8)
+#if (GAME == GAME_SA1)
+PlayerSpriteInfo ALIGNED(16) gPartnerLimbsPSI = {};
+#endif
+#ifndef COLLECT_RINGS_ROM
+PlayerSpriteInfo ALIGNED(16) gPlayerLimbsPSI = {};
+#endif
+PlayerSpriteInfo ALIGNED(16) gPlayerBodyPSI = {};
+#if (GAME == GAME_SA1)
+PlayerSpriteInfo ALIGNED(16) gPartnerBodyPSI = {};
+#endif
+
+void Task_PlayerMain(void);
+void AllocateCharacterStageGfx(Player *p, PlayerSpriteInfo *param2);
+void AllocateCharacterMidAirGfx(Player *p, PlayerSpriteInfo *param2);
+void TaskDestructor_Player(struct Task *);
+
+void SA2_LABEL(sub_802486C)(Player *p, PlayerSpriteInfo *psi);
+void SA2_LABEL(sub_8024B10)(Player *p, PlayerSpriteInfo *psi);
+s32 SA2_LABEL(sub_8029BB8)(Player *p, u8 *p1, s32 *out);
+void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *psi);
+
+void Player_HandleInputs(Player *p);
+
+#if (GAME == GAME_SA1)
+void Player_80447D8(Player *p);
+
+void Player_Sonic_80473AC(Player *p);
+void Player_Tails_8047BA0(Player *p);
+void Player_Knuckles_8049000(Player *p);
+void Player_Amy_80497AC(Player *p);
+
+void Player_Knuckles_GlideInit(Player *p);
+
+void Task_8045AD8(void);
+void Task_8045B38(void);
+void sub_8045DF0(Player *p);
+#endif
+
+#if (GAME == GAME_SA2)
+void Player_SpinAttack(Player *p);
+void Player_Idle(Player *);
+void Player_Rolling(Player *);
+void Player_InitJump(Player *p);
+void Player_Jumping(Player *);
+void Player_8025F84(Player *);
+void Player_Spindash(Player *);
+void Player_DoGrinding(Player *);
+void Player_PropellorSpring(Player *);
+void Player_Corkscrew(Player *);
+void Player_Hurt(Player *);
+void Player_InitReachedGoal(Player *);
+void Player_GoalSlowdown(Player *);
+void Player_GoalBrake(Player *);
+void Player_InitVictoryPoseTransition(Player *);
+void Player_VictoryPose(Player *);
+void Player_8027B98(Player *);
+void Player_WindupDefaultTrick(Player *);
+void Player_DefaultTrick(Player *);
+void Player_8029074(Player *);
+void Player_8029314(Player *);
+void Player_8026060(Player *p);
+void Player_8026BCC(Player *);
+void Player_InitUncurl(Player *p);
+void Player_InitGrinding(Player *p);
+void Player_InitGrindRailEndGround(Player *p);
+void Player_GrindRailEndAir(Player *p);
+void Player_InitPipeEntry(Player *p);
+void Player_InitPipeExit(Player *p);
+void Player_InitPropellorSpring(Player *p);
+void Player_InitCorkscrew(Player *p);
+void Player_InitHurt(Player *p);
+void Player_InitReachedGoal(Player *p);
+void Player_8028D74(Player *p);
+void Player_TouchNormalSpring(Player *p);
+void Player_InitRampOrDashRing(Player *p);
+void Player_HandleBoostThreshold(Player *p);
+void Player_802A258(Player *p);
+void Player_InitDashRing(Player *p);
+
+bool32 Player_TryMidAirAction(Player *);
+void Player_HandleGroundMovement(Player *);
+bool32 Player_TryTaunt(Player *);
+bool32 Player_TryCrouchOrSpinAttack(Player *);
+bool32 Player_TryInitSpindash(Player *);
+void Player_InitCrouch(Player *);
+void Player_InitIceSlide(Player *);
+void PlayerFn_Cmd_HandlePhysics(Player *);
+void Player_802A3C4(Player *);
+void Player_CameraShift(Player *);
+void Player_InitSpecialStageTransition(Player *);
+void Player_InitKilledBoss(Player *);
+void Player_InitReachedGoalMultiplayer(Player *);
+void Player_Nop(Player *);
+void Player_Skidding(Player *);
+void Player_InitTaunt(Player *);
+void Player_InitAttack(Player *);
+void Player_HandleBoostState(Player *p);
+void Player_ApplyBoostPhysics(Player *p);
+void Player_HandleWalkAnim(Player *p);
+void CallPlayerTransition(Player *p);
+
+void sub_8022218(Player *);
+void sub_8022284(Player *);
+
+#if COLLECT_RINGS_ROM
+void sub_0200DBE0(Player *p);
+#endif
+#endif
+
+#if (GAME == GAME_SA1)
+extern s16 gUnknown_084ADF78[NUM_LEVEL_IDS][2];
+extern s16 gUnknown_084ADFC0[NUM_LEVEL_IDS][2];
+extern s16 gUnknown_084AE188[9];
+extern s16 gUnknown_084AE19A[9];
+#endif
+
+#if (GAME == GAME_SA2)
+const AnimId gPlayerCharacterIdleAnims[] = {
+    SA2_ANIM_CHAR(SA2_CHAR_ANIM_IDLE, CHARACTER_SONIC),
+#ifndef COLLECT_RINGS_ROM
+    SA2_ANIM_CHAR(SA2_CHAR_ANIM_IDLE, CHARACTER_CREAM), // Anti format
+    SA2_ANIM_CHAR(SA2_CHAR_ANIM_IDLE, CHARACTER_TAILS), //
+    SA2_ANIM_CHAR(SA2_CHAR_ANIM_IDLE, CHARACTER_KNUCKLES), //
+    SA2_ANIM_CHAR(SA2_CHAR_ANIM_IDLE, CHARACTER_AMY), //
+#endif
+};
+
+#ifndef COLLECT_RINGS_ROM
+// TODO: This is unaligned in-ROM.
+//       Can we somehow change this to be using a struct instead?
+//
+// TODO: Tidy up the macros, not just here, but everywhere!
+//       This isn't intuitive to read.
+//
+// The index is the same as Player.unk64
+const u16 sCharStateAnimInfo[][2] = {
+    [CHARSTATE_IDLE] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_IDLE, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_TAUNT] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_CROUCH] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_CROUCH, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SPIN_DASH] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_SPIN_DASH, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SPIN_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_SPIN_ATTACK, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_TURN_SLOW] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_5, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_TURN_AFTER_BRAKE] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_6, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_BRAKE] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_BRAKE, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_BRAKE_GOAL] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_BRAKE_GOAL, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_WALK_A] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_WALK, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_JUMP_1] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_JUMP_1, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_JUMP_2] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_JUMP_2, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_HIT_GROUND] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_HIT_GROUND, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_FALLING_VULNERABLE_A] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_FALLING_VULNERABLE, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_FALLING_VULNERABLE_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_FALLING_VULNERABLE, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_BOOSTLESS_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_BOOSTLESS_ATTACK, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_AIR_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_AIR_ATTACK, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_BOOST_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_BOOST_ATTACK, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SOME_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_INSTA_SHIELD_1, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SOME_OTHER_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_INSTA_SHIELD_2, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_HIT_AIR] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_HIT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_HIT_STUNNED] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_HIT, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_DEAD] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_DEAD, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_A] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_GOAL_BRAKE_A] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_GOAL_BRAKE, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_GOAL_BRAKE_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_GOAL_BRAKE, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_GOAL_BRAKE_C] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_GOAL_BRAKE, CHARACTER_SHARED_ANIM), 2 },
+    [CHARSTATE_ACT_CLEAR_A] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_ACT_CLEAR, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_ACT_CLEAR_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_33, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_ACT_CLEAR_C] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_34, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_C] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_ACT_CLEAR_TIME_ATTACK_OR_BOSS] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_35, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_TRICK_UP] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TRICK_UP, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_TRICK_FORWARD] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TRICK_SIDE, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_TRICK_BACKWARD] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_50, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_TRICK_DOWN] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_51, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SPRING_MUSIC_PLANT] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_SPRING_MUSIC_PLANT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SPRING_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_52, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SPRING_C] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_53, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_RAMP_AND_DASHRING] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_54, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_GRINDING] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_GRINDING, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_GRINDING_SONIC_AMY_JUMP_OFF] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_56, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_GRAVITY_FLIP_UNUSED] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_57, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_IN_WHIRLWIND] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_IN_WHIRLWIND, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_GRABBING_HANDLE_A] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_GRABBING_HANDLE_A, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_GRABBING_HANDLE_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_GRABBING_HANDLE_B, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_IN_CORKSCREW] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_68, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_IN_CORKSCREW_3D_RUNNING_DOWN] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_69, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_IN_CORKSCREW_3D_RUNNING_UP] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_69, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_CURLED_IN_AIR] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_70, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_WINDUP_STICK_UPWARDS] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_WINDUP_STICK_UPDOWN, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_WINDUP_STICK_DOWNWARDS] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_WINDUP_STICK_UPDOWN, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_WINDUP_STICK_SINGLE_TURN_UP] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_WINDUP_STICK_SINGLE_TURN_UPDOWN, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_WINDUP_STICK_SINGLE_TURN_DOWN] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_WINDUP_STICK_SINGLE_TURN_UPDOWN, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_HANGING] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_HANGING, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_TURNAROUND_BAR] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TURNAROUND_BAR, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_NOTE_BLOCK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_NOTE_BLOCK, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_FLUTE_EXHAUST] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_FLUTE_EXHAUST, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_WALLRUN_INIT] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_73, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_WALLRUN_TO_WALL] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_73, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_WALLRUN_ON_WALL] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_73, CHARACTER_SHARED_ANIM), 2 },
+    [CHARSTATE_ICE_SLIDE] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_75, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_WALK_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_WALK, CHARACTER_SHARED_ANIM), 2 },
+    [CHARSTATE_LAUNCHER_IN_CART] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_71, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_LAUNCHER_IN_AIR] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_71, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_POLE] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_72, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_CUTSCENE_LOOK_UP_FRAME_0] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_CUTSCENE_LOOK_UP, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_CUTSCENE_LOOK_UP_FRAME_1] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_CUTSCENE_LOOK_UP, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_CUTSCENE_LOOK_UP_FRAME_2] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_CUTSCENE_LOOK_UP, CHARACTER_SHARED_ANIM), 2 },
+    [CHARSTATE_CUTSCENE_LOOK_UP_FRAME_3] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_CUTSCENE_LOOK_UP, CHARACTER_SHARED_ANIM), 3 },
+    [CHARSTATE_UNUSED_D] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_E] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_F] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_G] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_H] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_I] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_J] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_K] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_UNUSED_L] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SONIC_FORWARD_THRUST] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_19, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SONIC_CATCHING_CREAM] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_37, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_SONIC_CAUGHT_CREAM] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_37, CHARACTER_SHARED_ANIM), 1 },
+    [CHARSTATE_CREAM_FLYING] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_19, CHARACTER_CREAM), 0 },
+    [CHARSTATE_CREAM_FLYING_TURNING] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_19, CHARACTER_CREAM), 1 },
+    [CHARSTATE_CREAM_FLYING_TIRED] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_21, CHARACTER_CREAM), 0 },
+    [CHARSTATE_CREAM_ANIM_20] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_20, CHARACTER_CREAM), 0 },
+    [CHARSTATE_CREAM_CHAO_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_22, CHARACTER_CREAM), 0 },
+    [CHARSTATE_TAILS_FLYING] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_20, CHARACTER_TAILS), 0 },
+    [CHARSTATE_TAILS_FLYING_TURNING] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_21, CHARACTER_TAILS), 0 },
+    [CHARSTATE_TAILS_FLYING_TIRED] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_22, CHARACTER_TAILS), 0 },
+    [CHARSTATE_TAILS_ANIM_19] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_19, CHARACTER_TAILS), 0 },
+    [CHARSTATE_KNUCKLES_GLIDE] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_19, CHARACTER_KNUCKLES), 0 },
+    [CHARSTATE_KNUCKLES_GLIDE_FALL] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_22, CHARACTER_KNUCKLES), 0 },
+    [CHARSTATE_KNUCKLES_GLIDE_FALL_HIT] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_22, CHARACTER_KNUCKLES), 1 },
+    [CHARSTATE_KNUCKLES_GLIDE_IMPACT] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_21, CHARACTER_KNUCKLES), 0 },
+    [CHARSTATE_KNUCKLES_GLIDE_TURN_FRAME_A] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_20, CHARACTER_KNUCKLES), 0 },
+    [CHARSTATE_KNUCKLES_GLIDE_TURN_FRAME_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_20, CHARACTER_KNUCKLES), 1 },
+    [CHARSTATE_KNUCKLES_GLIDE_TURN_FRAME_C] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_20, CHARACTER_KNUCKLES), 2 },
+    [CHARSTATE_KNUCKLES_GLIDE_TURN_FRAME_D] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_20, CHARACTER_KNUCKLES), 3 },
+    [CHARSTATE_KNUCKLES_GLIDE_GRAB_WALL] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_23, CHARACTER_KNUCKLES), 0 },
+    [CHARSTATE_KNUCKLES_CLIMB_A] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_24, CHARACTER_KNUCKLES), 2 },
+    [CHARSTATE_KNUCKLES_CLIMB_B] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_24, CHARACTER_KNUCKLES), 0 },
+    [CHARSTATE_KNUCKLES_CLIMB_C] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_24, CHARACTER_KNUCKLES), 1 },
+    [CHARSTATE_KNUCKLES_CLIMB_D] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_24, CHARACTER_KNUCKLES), 3 },
+    [CHARSTATE_KNUCKLES_CLIMB_E] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_24, CHARACTER_KNUCKLES), 4 },
+    [CHARSTATE_KNUCKLES_DRILL_CLAW_INIT] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_51, CHARACTER_KNUCKLES), 0 },
+    [CHARSTATE_KNUCKLES_DRILL_CLAW_MAIN] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_51, CHARACTER_KNUCKLES), 1 },
+    [CHARSTATE_KNUCKLES_DRILL_CLAW_GROUND] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_51, CHARACTER_KNUCKLES), 2 },
+    [CHARSTATE_AMY_SA1_JUMP] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_52, CHARACTER_AMY), 0 },
+    [CHARSTATE_UNUSED_M] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_AMY_HAMMER_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_BOOSTLESS_ATTACK, CHARACTER_AMY), 0 },
+    [CHARSTATE_AMY_SA1_HAMMER_ATTACK] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_19, CHARACTER_AMY), 0 },
+    [CHARSTATE_UNUSED_N] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_TAUNT, CHARACTER_SHARED_ANIM), 0 },
+    [CHARSTATE_AMY_MID_AIR_HAMMER_SWIRL] = { SA2_ANIM_CHAR(SA2_CHAR_ANIM_INSTA_SHIELD_2, CHARACTER_AMY), 0 },
+};
+#else
+// TODO: unify with main game table
+const u16 sCharStateAnimInfo[][2] = {
+    { 0, 0 },  { 1, 0 },  { 2, 0 },  { 3, 0 },  { 4, 0 },  { 5, 0 },  { 6, 0 }, { 7, 0 }, { 8, 0 },  { 9, 0 },  { 10, 0 }, { 11, 0 },
+    { 12, 0 }, { 13, 0 }, { 13, 0 }, { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 }, { 0, 0 }, { 28, 0 }, { 28, 1 }, { 29, 0 }, { 1, 0 },
+    { 1, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 }, { 1, 0 }, { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },
+    { 0, 0 },  { 0, 0 },  { 52, 0 }, { 53, 0 }, { 54, 0 }, { 55, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },
+    { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 }, { 0, 0 }, { 0, 0 },  { 0, 0 },  { 0, 0 },  { 0, 0 },
+    { 0, 0 },  { 0, 0 },  { 0, 0 },  { 9, 2 },  { 0, 0 },  { 0, 0 },  { 0, 0 }, { 0, 0 }, { 0, 0 },  { 0, 0 },  { 0, 0 },  { 1, 0 },
+    { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 }, { 1, 0 }, { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },
+    { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 }, { 1, 0 }, { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },
+    { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 }, { 1, 0 }, { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },
+    { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },  { 1, 0 },
+};
+#endif
+
+static const s16 playerBoostPhysicsTable[5][2] = {
+    { 8, 64 }, { 12, 64 }, { 14, 64 }, { 16, 64 }, { 18, 64 },
+};
+
+static const s16 playerBoostThresholdTable[5] = { Q(8), Q(7.96875), Q(6.5625), Q(5.625), Q(4.21875) };
+
+static const s16 sSpinDashSpeeds[9] = {
+    Q_8_8(6.000 + 0 * (3. / 8.)), //
+    Q_8_8(6.000 + 1 * (3. / 8.)), //
+    Q_8_8(6.000 + 2 * (3. / 8.)), //
+    Q_8_8(6.000 + 3 * (3. / 8.)), //
+    Q_8_8(6.000 + 4 * (3. / 8.)), // Formatter
+    Q_8_8(6.000 + 5 * (3. / 8.)), //
+    Q_8_8(6.000 + 6 * (3. / 8.)), //
+    Q_8_8(6.000 + 7 * (3. / 8.)), //
+    Q_8_8(6.000 + 8 * (3. / 8.)), //
+};
+
+// NOTE(Jace): It appears that they originally planned
+//             to give the player a different amount of score points
+//             depending on the direction of the trick.
+static const u16 sTrickPoints[NUM_TRICK_DIRS]
+    = { [TRICK_DIR_UP] = 100, [TRICK_DIR_DOWN] = 100, [TRICK_DIR_FORWARD] = 100, [TRICK_DIR_BACKWARD] = 100 };
+
+#ifndef COLLECT_RINGS_ROM
+static const s16 sTrickAccel[NUM_TRICK_DIRS][NUM_CHARACTERS][2] = {
+    [TRICK_DIR_UP] = {
+        [CHARACTER_SONIC] = {Q_8_8(0.00), Q_8_8(-6.00)},
+        [CHARACTER_CREAM] = {Q_8_8(0.00), Q_8_8(-6.00)},
+        [CHARACTER_TAILS] = {Q_8_8(0.00), Q_8_8(-6.00)},
+        [CHARACTER_KNUCKLES] = {Q_8_8(0.00), Q_8_8(-6.00)},
+        [CHARACTER_AMY] = {Q_8_8(0.00), Q_8_8(-6.00)},
+    },
+    [TRICK_DIR_DOWN] = {
+        [CHARACTER_SONIC] = {Q_8_8(0.00), Q_8_8(1.00)},
+        [CHARACTER_CREAM] = {Q_8_8(0.00), Q_8_8(0.50)},
+        [CHARACTER_TAILS] = {Q_8_8(0.00), Q_8_8(0.50)},
+        [CHARACTER_KNUCKLES] = {Q_8_8(0.00), Q_8_8(1.00)},
+        [CHARACTER_AMY] = {Q_8_8(0.00), Q_8_8(1.00)},
+    },
+    [TRICK_DIR_FORWARD] = {
+        [CHARACTER_SONIC] = {Q_8_8(6.00), Q_8_8(0.00)},
+        [CHARACTER_CREAM] = {Q_8_8(4.00), Q_8_8(-2.50)},
+        [CHARACTER_TAILS] = {Q_8_8(4.00), Q_8_8(-2.50)},
+        [CHARACTER_KNUCKLES] = {Q_8_8(6.00), Q_8_8(0.00)},
+        [CHARACTER_AMY] = {Q_8_8(6.00), Q_8_8(0.00)},
+    },
+    [TRICK_DIR_BACKWARD] = {
+        [CHARACTER_SONIC] = {Q_8_8(-5.00), Q_8_8(-3.50)},
+        [CHARACTER_CREAM] = {Q_8_8(-3.50), Q_8_8(-3.00)},
+        [CHARACTER_TAILS] = {Q_8_8(-3.50), Q_8_8(-3.00)},
+        [CHARACTER_KNUCKLES] = {Q_8_8(-5.00), Q_8_8(0.00)},
+        [CHARACTER_AMY] = {Q_8_8(-3.50), Q_8_8(-2.00)},
+    },
+};
+
+static const u16 sTrickDirToCharstate[NUM_TRICK_DIRS]
+    = { CHARSTATE_TRICK_UP, CHARSTATE_TRICK_DOWN, CHARSTATE_TRICK_FORWARD, CHARSTATE_TRICK_BACKWARD };
+
+static const u8 sTrickMasks[NUM_TRICK_DIRS][NUM_CHARACTERS] = {
+    [TRICK_DIR_UP] = {
+        [CHARACTER_SONIC]    = MASK_80D6992_1,
+        [CHARACTER_CREAM]    = MASK_80D6992_1,
+        [CHARACTER_TAILS]    = MASK_80D6992_1,
+        [CHARACTER_KNUCKLES] = (MASK_80D6992_2 | MASK_80D6992_1),
+        [CHARACTER_AMY]      = MASK_80D6992_1,
+    },
+    [TRICK_DIR_DOWN] = {
+        [CHARACTER_SONIC]    = 0,
+        [CHARACTER_CREAM]    = 0,
+        [CHARACTER_TAILS]    = 0,
+        [CHARACTER_KNUCKLES] = 0,
+        [CHARACTER_AMY]      = 0,
+    },
+    [TRICK_DIR_FORWARD] = {
+        [CHARACTER_SONIC]    = MASK_80D6992_8,
+        [CHARACTER_CREAM]    = MASK_80D6992_10,
+        [CHARACTER_TAILS]    = (MASK_80D6992_10 | MASK_80D6992_1),
+        [CHARACTER_KNUCKLES] = MASK_80D6992_4,
+        [CHARACTER_AMY]      = MASK_80D6992_8,
+    },
+    [TRICK_DIR_BACKWARD] = {
+        [CHARACTER_SONIC]    = 0,
+        [CHARACTER_CREAM]    = (MASK_80D6992_10 | MASK_80D6992_1),
+        [CHARACTER_TAILS]    = (MASK_80D6992_10 | MASK_80D6992_1),
+        [CHARACTER_KNUCKLES] = MASK_80D6992_4,
+        [CHARACTER_AMY]      = 0,
+    },
+};
+
+static const u16 gUnknown_080D69A6[2][3] = {
+    [0] = { 32, SA2_ANIM_CHAR(SA2_CHAR_ANIM_TRICK_SIDE, CHARACTER_SONIC), SA2_CHAR_ANIM_VARIANT_TRICK_SIDE_PARTICLE_FX },
+    [1] = { 24, SA2_ANIM_CHAR(SA2_CHAR_ANIM_TRICK_UP, CHARACTER_KNUCKLES), SA2_CHAR_ANIM_VARIANT_TRICK_UP_PARTICLE_FX },
+};
+#endif
+
+static const s16 sSpringAccelY[4] = {
+    Q_8_8(7.5),
+    Q_8_8(9.0),
+    Q_8_8(10.5),
+    Q_8_8(12.0),
+};
+
+static const s16 sSpringAccelX[4] = {
+    Q_8_8(7.5),
+    Q_8_8(9.0),
+    Q_8_8(10.5),
+    Q_8_8(12.0),
+};
+
+static const u8 disableTrickTimerTable[4] = { 4, 3, 2, 2 };
+#endif
+
+#ifndef COLLECT_RINGS_ROM
+void CreatePlayer(u32 UNUSED characterId, u32 levelId, Player *player)
 {
     struct Task *t;
     player_0_Task *gt;
@@ -180,12 +698,14 @@ void SA2_LABEL(sub_80213C0)(u32 UNUSED characterId, u32 UNUSED levelId, Player *
 #if (GAME == GAME_SA1)
         if (IS_EXTRA_STAGE(levelId)) {
             p->spriteTask = TaskCreate(Task_8049898, sizeof(MaybeSuperSonic), 0x3000, 0, TaskDestructor_Player);
-        } else {
+        } else
+#endif
+        {
             p->spriteTask = TaskCreate(Task_PlayerMain, sizeof(player_0_Task), 0x3000, 0, TaskDestructor_Player);
         }
-#endif
+
         // NOTE: For this to work MaybeSuperSonic NEEDS to have a player_0_Task as first element!
-        gt = (player_0_Task *)TASK_DATA(p->spriteTask);
+        gt = TASK_DATA(p->spriteTask);
         gt->pid = playerID;
         gt->unk4 = 0;
 
@@ -252,6 +772,7 @@ void SA2_LABEL(sub_80213C0)(u32 UNUSED characterId, u32 UNUSED levelId, Player *
     }
 #endif
 }
+#endif
 
 void AllocateCharacterStageGfx(Player *p, PlayerSpriteInfo *psi)
 {
@@ -262,7 +783,11 @@ void AllocateCharacterStageGfx(Player *p, PlayerSpriteInfo *psi)
         s->graphics.dest = (void *)OBJ_VRAM0;
     } else {
         // TODO: Maybe find out biggest char anim size through preprocessing in the future?
+#if (GAME == GAME_SA1)
         s->graphics.dest = ALLOC_TILES(SA1_ANIM_SONIC_RUN);
+#elif (GAME == GAME_SA2)
+        s->graphics.dest = VramMalloc(64);
+#endif
     }
 
     s->graphics.size = 0;
@@ -290,7 +815,10 @@ void AllocateCharacterStageGfx(Player *p, PlayerSpriteInfo *psi)
 
     s->frameFlags = SPRITE_FLAG(PRIORITY, 2);
 
-    if (IS_MULTI_PLAYER) {
+#ifndef COLLECT_RINGS_ROM
+    if (IS_MULTI_PLAYER)
+#endif
+    {
         s->frameFlags |= (SPRITE_FLAG_MASK_18 | SPRITE_FLAG_MASK_19);
     }
     SPRITE_FLAG_SET(s, ROT_SCALE_ENABLE);
@@ -306,6 +834,7 @@ void AllocateCharacterStageGfx(Player *p, PlayerSpriteInfo *psi)
     psi->transform.y = 0;
 }
 
+#ifndef COLLECT_RINGS_ROM
 // Allocate VRAM for Tails' tails and Cream's ears while mid-air
 void AllocateCharacterMidAirGfx(Player *p, PlayerSpriteInfo *param2)
 {
@@ -372,6 +901,7 @@ void SetStageSpawnPos(u32 character, u32 level, u32 playerID, Player *p)
     p->playerID = playerID;
     p->character = character;
 
+#if (GAME == GAME_SA1)
     if (IS_SINGLE_PLAYER || (gGameMode == GAME_MODE_RACE) || (gGameMode == GAME_MODE_MULTI_PLAYER)) {
         p->checkPointX = gSpawnPositions[level][0];
         p->checkPointY = gSpawnPositions[level][1];
@@ -426,19 +956,42 @@ void SetStageSpawnPos(u32 character, u32 level, u32 playerID, Player *p)
             } break;
         }
     }
+#elif (GAME == GAME_SA2)
+    if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
+        p->checkPointX = gSpawnPositions[level][0];
+        p->checkPointY = gSpawnPositions[level][1];
+    } else {
+        p->checkPointX = 360 - (SIO_MULTI_CNT->id * 20);
+        p->checkPointY = 177;
+        p->qWorldX = -1;
+        p->qWorldY = -1;
+    }
+#endif
 
     p->SA2_LABEL(unk98) = 0;
-
     p->checkpointTime = 0;
 
-    if (playerID == 0) {
+#if (GAME == GAME_SA1)
+    if (playerID == 0)
+#endif
+    {
         p->spriteInfoBody = &gPlayerBodyPSI;
         p->spriteInfoLimbs = &gPlayerLimbsPSI;
-    } else {
+    }
+#if (GAME == GAME_SA1)
+    else {
         p->spriteInfoBody = &gPartnerBodyPSI;
         p->spriteInfoLimbs = &gPartnerLimbsPSI;
     }
+#endif
 }
+#endif
+
+#if (GAME == GAME_SA1)
+#define ALL_PLAYER_CONTROLS gPlayerControls.jump | gPlayerControls.attack
+#elif (GAME == GAME_SA2)
+#define ALL_PLAYER_CONTROLS gPlayerControls.jump | gPlayerControls.attack | gPlayerControls.trick
+#endif
 
 void InitializePlayer(Player *p)
 {
@@ -446,23 +999,29 @@ void InitializePlayer(Player *p)
 #if DEBUG
     p->character = gSelectedCharacter;
 #endif
+#endif
 
+#if (GAME == GAME_SA1)
     p->qWorldX = Q(p->checkPointX);
-    p->qWorldY = Q(p->checkPointY);
-    p->heldInput = gPlayerControls.jump | gPlayerControls.attack;
-    p->frameInput = gPlayerControls.jump | gPlayerControls.attack;
 #elif (GAME == GAME_SA2)
-    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) && (((p->qWorldX & p->qWorldY) + 1) != 0)) {
+    if (
+#ifndef COLLECT_RINGS_ROM
+        (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) &&
+#endif
+        (((p->qWorldX & p->qWorldY) + 1) != 0)) {
         p->qWorldX = Q(460);
     } else {
         p->qWorldX = Q(p->checkPointX);
     }
+#endif
     p->qWorldY = Q(p->checkPointY);
 
+#if (GAME == GAME_SA2)
     p->callback = Player_TouchGround;
-    p->heldInput = gPlayerControls.jump | gPlayerControls.attack | gPlayerControls.trick;
-    p->frameInput = gPlayerControls.jump | gPlayerControls.attack | gPlayerControls.trick;
 #endif
+
+    p->heldInput = ALL_PLAYER_CONTROLS;
+    p->frameInput = ALL_PLAYER_CONTROLS;
 
     p->qSpeedAirX = 0;
     p->qSpeedAirY = 0;
@@ -479,6 +1038,7 @@ void InitializePlayer(Player *p)
     p->maxSpeed = Q(4.5);
 #elif (GAME == GAME_SA2)
     p->maxSpeed = Q(9.0);
+    p->topSpeed = Q(6.0);
 #endif
 
 #if (GAME == GAME_SA1)
@@ -527,15 +1087,17 @@ void InitializePlayer(Player *p)
     p->unk70 = FALSE;
     p->disableTrickTimer = 0;
 
+#ifndef COLLECT_RINGS_ROM
     sub_8015750();
     sub_801561C();
+#endif
     Player_HandleBoostThreshold(p);
 #endif
 
     {
         u32 *ptr = (u32 *)(&p->SA2_LABEL(unk99)[0]);
         s32 i = 3;
-#if (GAME == GAME_SA2) && !defined(NON_MATCHING)
+#if (GAME == GAME_SA2) && !defined(COLLECT_RINGS_ROM) && !defined(NON_MATCHING)
         register u8 *u99_r6 asm("r6") = (void *)ptr;
 #endif
         do {
@@ -544,13 +1106,14 @@ void InitializePlayer(Player *p)
             //       >> writes unk98 - unk99[14]
             *ptr++ = 0;
         } while (i-- != 0);
-#if (GAME == GAME_SA2) && !defined(NON_MATCHING)
+#if (GAME == GAME_SA2) && !defined(COLLECT_RINGS_ROM) && !defined(NON_MATCHING)
         *u99_r6 = 0x7F;
 #else
         p->SA2_LABEL(unk99)[0] = 0x7F;
 #endif
     }
 
+#ifndef COLLECT_RINGS_ROM
     if ((p->playerID == PLAYER_1) && IS_SINGLE_PLAYER) {
         if (gCourseTime >= MAX_COURSE_TIME) {
             gCheckpointTime = 0;
@@ -593,9 +1156,19 @@ void InitializePlayer(Player *p)
             p->w.af.flags = 0;
         } break;
     }
+#if (GAME == GAME_SA2)
+    gShouldSpawnMPAttackEffect = FALSE;
+#endif
+#endif
+
+#if (GAME == GAME_SA2)
+    gMPAttackEffect2Regs = NULL;
+    gShouldSpawnMPAttack2Effect = FALSE;
+#endif
 }
 
 #if (GAME == GAME_SA2)
+#ifndef COLLECT_RINGS_ROM
 // Called anytime the player actively jumps, "autojumps" through touching an IA,
 // touches a Boost Pad or a Rotating Handle, touches the ground, etc.
 // TODO: Find a better name.
@@ -627,10 +1200,24 @@ void Player_TransitionCancelFlyingAndBoost(Player *p)
         p->moveState &= ~MOVESTATE_BOOST_EFFECT_ON;
     }
 }
+#else
+static inline void Player_TransitionCancelBoost(Player *p)
+{
+    p->moveState &= ~(MOVESTATE_SOME_ATTACK | MOVESTATE_10000000 | MOVESTATE_1000000 | MOVESTATE_80000 | MOVESTATE_40000 | MOVESTATE_20000
+                      | MOVESTATE_8000 | MOVESTATE_4000 | MOVESTATE_2000 | MOVESTATE_SPINDASH | MOVESTATE_200 | MOVESTATE_100 | MOVESTATE_20
+                      | MOVESTATE_FLIP_WITH_MOVE_DIR);
+
+    p->SA2_LABEL(unk61) = 0;
+    p->SA2_LABEL(unk62) = 0;
+    p->SA2_LABEL(unk63) = 0;
+    p->unk71 = 0;
+    p->unk70 = FALSE;
+}
+#endif
 #endif
 
-// Very similar to SA2_LABEL(sub_8029BB8)
-s32 SA2_LABEL(sub_802195C)(Player *p, u8 *p1, s32 *out)
+// Very similar to sub_8029BB8
+s32 SA2_LABEL(sub_802195C)(Player *p, u8 *rot, s32 *out)
 {
     u8 dummy;
     s32 dummyInt;
@@ -641,8 +1228,8 @@ s32 SA2_LABEL(sub_802195C)(Player *p, u8 *p1, s32 *out)
     s32 r5, r1;
     s32 result;
 
-    if (p1 == NULL)
-        p1 = &dummy;
+    if (rot == NULL)
+        rot = &dummy;
     if (out == NULL)
         out = &dummyInt;
 
@@ -668,11 +1255,11 @@ s32 SA2_LABEL(sub_802195C)(Player *p, u8 *p1, s32 *out)
 
     if (r5 < r1) {
         result = r5;
-        *p1 = anotherByte;
+        *rot = anotherByte;
         *out = r1;
     } else {
         result = r1;
-        *p1 = anotherByte2;
+        *rot = anotherByte2;
         *out = r5;
     }
 
@@ -680,7 +1267,7 @@ s32 SA2_LABEL(sub_802195C)(Player *p, u8 *p1, s32 *out)
 }
 
 // Very similar to SA2_LABEL(sub_802195C)
-s32 SA2_LABEL(sub_8021A34)(Player *p, u8 *p1, s32 *out)
+s32 SA2_LABEL(sub_8021A34)(Player *p, u8 *rot, s32 *out)
 {
     u8 dummy;
     s32 dummyInt;
@@ -691,8 +1278,8 @@ s32 SA2_LABEL(sub_8021A34)(Player *p, u8 *p1, s32 *out)
     s32 r5, r1;
     s32 result;
 
-    if (p1 == NULL)
-        p1 = &dummy;
+    if (rot == NULL)
+        rot = &dummy;
     if (out == NULL)
         out = &dummyInt;
 
@@ -718,11 +1305,11 @@ s32 SA2_LABEL(sub_8021A34)(Player *p, u8 *p1, s32 *out)
 
     if (r5 < r1) {
         result = r5;
-        *p1 = anotherByte;
+        *rot = anotherByte;
         *out = r1;
     } else {
         result = r1;
-        *p1 = anotherByte2;
+        *rot = anotherByte2;
         *out = r5;
     }
 
@@ -730,7 +1317,7 @@ s32 SA2_LABEL(sub_8021A34)(Player *p, u8 *p1, s32 *out)
 }
 
 // Very similar to SA2_LABEL(sub_802195C)
-s32 SA2_LABEL(sub_8021B08)(Player *p, u8 *p1, s32 *out)
+s32 SA2_LABEL(sub_8021B08)(Player *p, u8 *rot, s32 *out)
 {
     u8 dummy;
     s32 dummyInt;
@@ -741,8 +1328,8 @@ s32 SA2_LABEL(sub_8021B08)(Player *p, u8 *p1, s32 *out)
     s32 r5, r1;
     s32 result;
 
-    if (p1 == NULL)
-        p1 = &dummy;
+    if (rot == NULL)
+        rot = &dummy;
     if (out == NULL)
         out = &dummyInt;
 
@@ -768,26 +1355,27 @@ s32 SA2_LABEL(sub_8021B08)(Player *p, u8 *p1, s32 *out)
 
     if (r5 < r1) {
         result = r5;
-        *p1 = anotherByte;
+        *rot = anotherByte;
         *out = r1;
     } else {
         result = r1;
-        *p1 = anotherByte2;
+        *rot = anotherByte2;
         *out = r5;
     }
 
     return result;
 }
 
-// NOTE: Not aligned with SA2!
 void SA2_LABEL(sub_8021BE0)(Player *p)
 {
     if (!(p->moveState & MOVESTATE_200)) {
         if (!(p->moveState & MOVESTATE_800000)) {
-#if (GAME == GAME_SA2)
-            PLAYERFN_SET(Player_TouchGround);
-#endif
+#if (GAME == GAME_SA1)
             p->charState = 4;
+#elif (GAME == GAME_SA2)
+            PLAYERFN_SET(Player_TouchGround);
+            p->moveState &= ~(MOVESTATE_FLIP_WITH_MOVE_DIR | MOVESTATE_IN_AIR);
+#endif
         }
 
         if (p->moveState & MOVESTATE_SPIN_ATTACK) {
@@ -796,7 +1384,13 @@ void SA2_LABEL(sub_8021BE0)(Player *p)
         }
         PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 14);
     }
+#if (GAME == GAME_SA2)
+    else {
+        p->moveState &= ~(MOVESTATE_FLIP_WITH_MOVE_DIR | MOVESTATE_IN_AIR);
+    }
+#endif
 
+#if (GAME == GAME_SA1)
     p->moveState &= ~(MOVESTATE_20);
     p->moveState &= ~(MOVESTATE_100);
     p->moveState &= ~(MOVESTATE_SPINDASH);
@@ -814,6 +1408,7 @@ void SA2_LABEL(sub_8021BE0)(Player *p)
     if (p->character == CHARACTER_AMY) {
         p->moveState &= ~(MOVESTATE_4000000 | MOVESTATE_2000000);
     }
+#endif
 
     p->defeatScoreIndex = 0;
 
@@ -867,9 +1462,12 @@ void SA2_LABEL(sub_8021C4C)(Player *p)
     }
 
     ptr = &fnOut;
+#ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
         result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
-    } else {
+    } else
+#endif
+    {
         result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
     }
 
@@ -883,9 +1481,11 @@ void SA2_LABEL(sub_8021C4C)(Player *p)
             s32 airY;
             p->rotation = rotation;
 
+#ifndef COLLECT_RINGS_ROM
             if (GRAVITY_IS_INVERTED) {
                 result = -result;
             }
+#endif
 
             p->qWorldY += result << 8;
 
@@ -963,16 +1563,21 @@ void SA2_LABEL(sub_8021DB8)(Player *p)
     }
 
     ptr = &fnOut;
+#ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
         result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
-    } else {
+    } else
+#endif
+    {
         result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             result = -result;
         }
+#endif
 
         p->qWorldY -= result << 8;
 
@@ -996,14 +1601,11 @@ void SA2_LABEL(sub_8021DB8)(Player *p)
     }
 }
 
-// NOTE: Not aligned with SA2!
 void SA2_LABEL(sub_8021EE4)(Player *p)
 {
     u8 rotation;
     s32 fnOut;
     s32 result;
-    s32 playerX, playerY;
-    s32 playerX2, playerY2;
     s32 *ptr;
     u16 gravity;
 
@@ -1011,21 +1613,35 @@ void SA2_LABEL(sub_8021EE4)(Player *p)
     u32 mask2 = p->layer;
 
     gravity = GRAVITY_IS_INVERTED;
-    if (!gravity) {
-        playerX = I(p->qWorldX) - (3 + p->spriteOffsetX);
-        playerY = I(p->qWorldY);
+#if (GAME == GAME_SA2)
+#ifndef COLLECT_RINGS_ROM
+    if (gravity) {
+        s32 playerX = I(p->qWorldX) - (3 + p->spriteOffsetX);
+        s32 playerY = I(p->qWorldY);
+        result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask2, -8, NULL, SA2_LABEL(sub_801ED24));
+    } else
+#endif
+#endif
+#ifndef COLLECT_RINGS_ROM
+        if (!gravity)
+#endif
+    {
+        s32 playerX = I(p->qWorldX) - (3 + p->spriteOffsetX);
+        s32 playerY = I(p->qWorldY);
 
         mask = mask2;
         if (p->qSpeedAirY < Q(3.0)) {
             mask |= 0x80;
         }
         result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, -8, NULL, SA2_LABEL(sub_801ED24));
-    } else {
-        playerX2 = I(p->qWorldX) - (3 + p->spriteOffsetX);
-        playerY2 = I(p->qWorldY);
-
-        result = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask2, -8, NULL, SA2_LABEL(sub_801ED24));
     }
+#if (GAME == GAME_SA1)
+    else {
+        s32 playerX = I(p->qWorldX) - (3 + p->spriteOffsetX);
+        s32 playerY = I(p->qWorldY);
+        result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask2, -8, NULL, SA2_LABEL(sub_801ED24));
+    }
+#endif
 
     if (result <= 0) {
         p->qWorldX -= Q(result);
@@ -1034,16 +1650,21 @@ void SA2_LABEL(sub_8021EE4)(Player *p)
     }
 
     ptr = &fnOut;
+#ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
         result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
-    } else {
+    } else
+#endif
+    {
         result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             result = -result;
         }
+#endif
 
         p->qWorldY -= Q(result);
 
@@ -1051,16 +1672,21 @@ void SA2_LABEL(sub_8021EE4)(Player *p)
             p->qSpeedAirY = 0;
         }
     } else if (p->qSpeedAirY >= 0) {
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             result = SA2_LABEL(sub_8029AC0)(p, &rotation, &fnOut);
-        } else {
+        } else
+#endif
+        {
             result = SA2_LABEL(sub_8029B0C)(p, &rotation, &fnOut);
         }
 
         if (result <= 0) {
+#ifndef COLLECT_RINGS_ROM
             if (GRAVITY_IS_INVERTED) {
                 result = -result;
             }
+#endif
 
             p->qWorldY += Q(result);
 
@@ -1073,6 +1699,7 @@ void SA2_LABEL(sub_8021EE4)(Player *p)
     }
 }
 
+// ALIGNED UP TO HERE
 // NOTE: Not aligned with SA2!
 void SA2_LABEL(sub_802203C)(Player *p)
 {
