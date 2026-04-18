@@ -403,7 +403,7 @@ void Player_HandleWalkAnim(Player *p);
 void CallPlayerTransition(Player *p);
 
 void sub_8022218(Player *);
-void sub_8022284(Player *);
+void SA2_LABEL(sub_8022284)(Player *);
 
 #if COLLECT_RINGS_ROM
 void sub_0200DBE0(Player *p);
@@ -1699,15 +1699,11 @@ void SA2_LABEL(sub_8021EE4)(Player *p)
     }
 }
 
-// ALIGNED UP TO HERE
-// NOTE: Not aligned with SA2!
 void SA2_LABEL(sub_802203C)(Player *p)
 {
     u8 rotation;
     s32 fnOut;
     s32 result;
-    s32 playerX, playerY;
-    s32 playerX2, playerY2;
     s32 *ptr;
     u16 gravity;
 
@@ -1715,22 +1711,33 @@ void SA2_LABEL(sub_802203C)(Player *p)
     u32 mask2 = p->layer;
 
     gravity = GRAVITY_IS_INVERTED;
-    if (!gravity) {
-        playerX = I(p->qWorldX) + (3 + p->spriteOffsetX);
-        playerY = I(p->qWorldY);
+#if (GAME == GAME_SA2) && !defined(COLLECT_RINGS_ROM)
+    if (gravity) {
+        s32 playerX = I(p->qWorldX) + (3 + p->spriteOffsetX);
+        s32 playerY = I(p->qWorldY);
+        result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask2, +8, NULL, SA2_LABEL(sub_801ED24));
+    } else
+#elif (GAME == GAME_SA1)
+    if (!gravity)
+#endif
+    {
+        s32 playerX = I(p->qWorldX) + (3 + p->spriteOffsetX);
+        s32 playerY = I(p->qWorldY);
 
         mask = mask2;
         if (p->qSpeedAirY < Q(3.0)) {
             mask |= 0x80;
         }
-
         result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask, +8, NULL, SA2_LABEL(sub_801ED24));
-    } else {
-        playerX2 = I(p->qWorldX) + (3 + p->spriteOffsetX);
-        playerY2 = I(p->qWorldY);
-
-        result = SA2_LABEL(sub_801E4E4)(playerX2, playerY2, mask2, +8, NULL, SA2_LABEL(sub_801ED24));
     }
+#if (GAME == GAME_SA1)
+    else
+    {
+        s32 playerX = I(p->qWorldX) + (3 + p->spriteOffsetX);
+        s32 playerY = I(p->qWorldY);
+        result = SA2_LABEL(sub_801E4E4)(playerX, playerY, mask2, +8, NULL, SA2_LABEL(sub_801ED24));
+    }
+#endif
 
     if (result <= 0) {
         p->qWorldX += Q(result);
@@ -1739,16 +1746,21 @@ void SA2_LABEL(sub_802203C)(Player *p)
     }
 
     ptr = &fnOut;
+#ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
         result = SA2_LABEL(sub_8029B0C)(p, &rotation, ptr);
-    } else {
+    } else
+#endif
+    {
         result = SA2_LABEL(sub_8029AC0)(p, &rotation, ptr);
     }
 
     if (result <= 0) {
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             result = -result;
         }
+#endif
 
         p->qWorldY -= Q(result);
 
@@ -1756,17 +1768,21 @@ void SA2_LABEL(sub_802203C)(Player *p)
             p->qSpeedAirY = 0;
         }
     } else if (p->qSpeedAirY >= 0) {
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             result = SA2_LABEL(sub_8029AC0)(p, &rotation, &fnOut);
-        } else {
+        } else
+#endif
+        {
             result = SA2_LABEL(sub_8029B0C)(p, &rotation, &fnOut);
         }
 
         if (result <= 0) {
+#ifndef COLLECT_RINGS_ROM
             if (GRAVITY_IS_INVERTED) {
                 result = -result;
             }
-
+#endif
             p->qWorldY += Q(result);
 
             p->rotation = rotation;
@@ -1778,10 +1794,18 @@ void SA2_LABEL(sub_802203C)(Player *p)
     }
 }
 
-void SA2_LABEL(sub_8022190)(Player *p)
+#if COLLECT_RINGS_ROM
+static inline
+#endif
+    void
+    SA2_LABEL(sub_8022190)(Player *p)
 {
     s16 airY = p->qSpeedAirY;
+#ifndef COLLECT_RINGS_ROM
     u8 arcResult = (GRAVITY_IS_INVERTED) ? 0x80 : 0;
+#else
+    u8 arcResult = 0;
+#endif
     s16 airX = p->qSpeedAirX;
 
     if (airX || airY) {
@@ -1810,6 +1834,7 @@ void SA2_LABEL(sub_8022190)(Player *p)
 }
 
 #if (GAME == GAME_SA2)
+#ifndef COLLECT_RINGS_ROM
 void sub_8022218(Player *p)
 {
     u8 rotation;
@@ -1838,6 +1863,7 @@ void sub_8022218(Player *p)
         p->qSpeedGround = p->qSpeedAirX;
     }
 }
+#endif
 
 void SA2_LABEL(sub_8022284)(Player *p)
 {
@@ -1848,17 +1874,21 @@ void SA2_LABEL(sub_8022284)(Player *p)
 
     // u8 *pRot = &rotation;
     s32 *pSp04 = &sp04;
-
+#ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
         res = SA2_LABEL(sub_8029B0C)(p, &rotation, pSp04);
-    } else {
+    } else
+#endif
+    {
         res = SA2_LABEL(sub_8029AC0)(p, &rotation, pSp04);
     }
 
     if (res <= 0) {
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             res = -res;
         }
+#endif
 
         p->qWorldY -= Q(res);
         p->rotation = rotation;
@@ -1881,13 +1911,45 @@ void SA2_LABEL(sub_8022284)(Player *p)
 }
 #endif
 
-// TODO: This seems to be called only after Knuckles hits the ground after gliding?
+#if COLLECT_RINGS_ROM
+void sub_0200DBE0(Player *p)
+{
+    u8 rotation;
+    s32 sp04;
+    s32 sp08;
+    s32 res;
+    if (p->qSpeedAirY >= 0) {
+        res = SA2_LABEL(sub_8029B0C)(p, &rotation, &sp04);
+        if (res <= 0) {
+            p->qWorldY += Q(res);
+            p->rotation = rotation;
+            SA2_LABEL(sub_8021BE0)(p);
+            p->qSpeedAirY = 0;
+            p->qSpeedGround = p->qSpeedAirX;
+        }
+        SA2_LABEL(sub_8022284)(p);
+    } else {
+        SA2_LABEL(sub_8022284)(p);
+        res = SA2_LABEL(sub_8029B0C)(p, &rotation, &sp08);
+        if (res <= 0) {
+            p->qWorldY += Q(res);
+            p->rotation = rotation;
+            SA2_LABEL(sub_8021BE0)(p);
+            p->qSpeedAirY = 0;
+            p->qSpeedGround = p->qSpeedAirX;
+        }
+    }
+}
+#endif
+
+#ifndef COLLECT_RINGS_ROM
 void SA2_LABEL(sub_8022318)(Player *p)
 {
     s32 offsetY;
 
     if (!(p->moveState & MOVESTATE_SPIN_ATTACK)) {
-        PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 14);
+        p->spriteOffsetX = 6;
+        p->spriteOffsetY = 14;
     } else {
         p->moveState &= ~MOVESTATE_SPIN_ATTACK;
         p->charState = CHARSTATE_IDLE;
@@ -1902,7 +1964,8 @@ void SA2_LABEL(sub_8022318)(Player *p)
             offsetY = -offsetY;
         }
 
-        PLAYERFN_SET_SHIFT_OFFSETS(p, 6, 14);
+        p->spriteOffsetX = 6;
+        p->spriteOffsetY = 14;
 
         p->qWorldY += Q(offsetY);
     }
@@ -1990,7 +2053,7 @@ void SA2_LABEL(sub_80223BC)(Player *p)
     }
 }
 
-// Similar to SA2_LABEL(sub_80223BC)
+// Similar to sub_80223BC
 void SA2_LABEL(sub_80224DC)(Player *p)
 {
     u8 rotation;
@@ -2120,7 +2183,7 @@ void SA2_LABEL(sub_80225E8)(Player *p)
     }
 }
 
-// Similar to SA2_LABEL(sub_80225E8)
+// Similar to sub_80225E8
 void SA2_LABEL(sub_8022710)(Player *p)
 {
     u8 rotation;
@@ -2222,25 +2285,29 @@ void SA2_LABEL(sub_8022838)(Player *p)
         }
     }
 }
+#endif
 
-// NOTE: Not aligned with SA2!
 void SA2_LABEL(sub_80228C0)(Player *p)
 {
     s32 val;
-#if (GAME == GAME_SA1)
-#endif
     u8 *p29;
     s32 resultB;
 #ifndef NON_MATCHING
+#if (GAME == GAME_SA1)
     register s32 resultA asm("sl");
-    register u32 r1 asm("r1");
     register u32 r0 asm("r0");
     register s32 playerX asm("r4") = p->qWorldX;
     register s32 playerY asm("r9") = p->qWorldY;
     register s32 rot asm("r6") = p->rotation;
+#elif (GAME == GAME_SA2)
+    register s32 resultA asm("r6");
+    register u32 r0 asm("r0");
+    register s32 playerX asm("r4") = p->qWorldX;
+    register s32 playerY asm("sl") = p->qWorldY;
+    register s32 rot asm("r1");
+#endif
 #else
     s32 resultA;
-    u32 r1;
     u32 r0;
     s32 playerX = p->qWorldX;
     s32 playerY = p->qWorldY;
@@ -2296,17 +2363,19 @@ void SA2_LABEL(sub_80228C0)(Player *p)
                 if (resultA < resultB) {
                     r0 = p->SA2_LABEL(unk28);
                 } else {
-                    r0 = *p29;
+                    r0 = p->SA2_LABEL(unk29);
                 }
                 rot = r0;
-            } else {
+            } else
+#if (GAME == GAME_SA1)
                 if (p->moveState & MOVESTATE_ICE_SLIDE) {
-                    playerY += Q(val);
-                } else {
-                    p->moveState |= MOVESTATE_IN_AIR;
-                    p->moveState &= ~MOVESTATE_20;
-                    return;
-                }
+                playerY += Q(val);
+            } else
+#endif
+            {
+                p->moveState |= MOVESTATE_IN_AIR;
+                p->moveState &= ~MOVESTATE_20;
+                return;
             }
         }
     } else {
@@ -2323,7 +2392,7 @@ void SA2_LABEL(sub_80228C0)(Player *p)
     if (!(rot & 0x1)) {
         vu8 *pRot = &p->rotation;
         *pRot = rot;
-
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             // TODO: CLEANUP (effectively *pRot = -r1)
             rot = *pRot;
@@ -2339,10 +2408,11 @@ void SA2_LABEL(sub_80228C0)(Player *p)
 
             *pRot = r0;
         }
+#endif
     }
 }
 
-// Similar to sub_80228C0, sub_8022B18
+// Similar to SA2_LABEL(sub_80228C0), SA2_LABEL(sub_8022B18)
 void SA2_LABEL(sub_80229EC)(Player *p)
 {
     s32 val;
@@ -2436,7 +2506,7 @@ void SA2_LABEL(sub_80229EC)(Player *p)
     if (!(r1 & 0x1)) {
         vu8 *pRot = &p->rotation;
         *pRot = r1;
-
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             // TODO: CLEANUP (effectively *pRot = 128-r1)
             r1 = *pRot;
@@ -2452,10 +2522,11 @@ void SA2_LABEL(sub_80229EC)(Player *p)
 
             *pRot = r0;
         }
+#endif
     }
 }
 
-// Similar to sub_80228C0, sub_80229EC
+// Similar to SA2_LABEL(sub_80228C0), SA2_LABEL(sub_80229EC)
 void SA2_LABEL(sub_8022B18)(Player *p)
 {
     s32 val;
@@ -2549,7 +2620,7 @@ void SA2_LABEL(sub_8022B18)(Player *p)
     if (!(r1 & 0x1)) {
         vu8 *pRot = &p->rotation;
         *pRot = r1;
-
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
             // TODO: CLEANUP (effectively *pRot = 128-r1)
             r1 = *pRot;
@@ -2565,10 +2636,11 @@ void SA2_LABEL(sub_8022B18)(Player *p)
 
             *pRot = r0;
         }
+#endif
     }
 }
 
-// Similar to sub_80228C0, sub_80229EC, sub_8022B18
+// Similar to SA2_LABEL(sub_80228C0), SA2_LABEL(sub_80229EC), SA2_LABEL(sub_8022B18)
 void SA2_LABEL(sub_8022C44)(Player *p)
 {
     s32 val;
@@ -2660,7 +2732,7 @@ void SA2_LABEL(sub_8022C44)(Player *p)
     if (!(r1 & 0x1)) {
         vu8 *pRot = &p->rotation;
         *pRot = r1;
-
+#ifndef COLLECT_RINGS_ROM
         if (GRAVITY_IS_INVERTED) {
 #ifndef NON_MATCHING
             r1 = *pRot;
@@ -2679,6 +2751,7 @@ void SA2_LABEL(sub_8022C44)(Player *p)
             *pRot = 128 - r1;
 #endif
         }
+#endif
     }
 }
 
@@ -2696,7 +2769,7 @@ void SA2_LABEL(sub_8022D6C)(Player *p)
     }
 
     // NOTE/TODO: Not in SA1, but likely in SA3, so assuming >= GAME_SA2!
-#if (GAME >= GAME_SA2)
+#if (GAME >= GAME_SA2) && !defined(COLLECT_RINGS_ROM)
     if ((gCurrentLevel == 0) && (gWater.isActive == TRUE)) {
         s32 r5 = Q(p->qWorldY) >> 16;
         u32 mask = ~0x3;
@@ -2736,6 +2809,7 @@ void SA2_LABEL(sub_8022D6C)(Player *p)
     }
 #endif
 
+#ifndef COLLECT_RINGS_ROM
     if (GRAVITY_IS_INVERTED) {
         s8 rot = p->rotation;
         rot += 0x40;
@@ -2773,7 +2847,9 @@ void SA2_LABEL(sub_8022D6C)(Player *p)
                 SA2_LABEL(sub_8022C44)(p);
             } break;
         }
-    } else {
+    } else
+#endif
+    {
         s8 rot = p->rotation;
 
         if (rot + 0x20 > 0) {
@@ -3146,12 +3222,10 @@ void SA2_LABEL(sub_8023128)(Player *p)
                 p->qWorldX -= r2;
                 p->qSpeedAirX = 0;
                 p->moveState |= MOVESTATE_20;
-
 #if (GAME == GAME_SA1)
                 p->moveState &= ~MOVESTATE_SPIN_ATTACK;
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
 #endif
-
                 p->qSpeedGround = 0;
             } break;
 
@@ -3165,12 +3239,10 @@ void SA2_LABEL(sub_8023128)(Player *p)
                 p->qWorldX += r2;
                 p->qSpeedAirX = 0;
                 p->moveState |= MOVESTATE_20;
-
 #if (GAME == GAME_SA1)
                 p->moveState &= ~MOVESTATE_SPIN_ATTACK;
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
 #endif
-
                 p->qSpeedGround = 0;
             } break;
         }
@@ -3231,7 +3303,6 @@ void SA2_LABEL(sub_80231C0)(Player *p)
                 p->moveState &= ~MOVESTATE_SPIN_ATTACK;
 
                 PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
-
                 p->qSpeedGround = 0;
             } break;
         }
@@ -3240,7 +3311,6 @@ void SA2_LABEL(sub_80231C0)(Player *p)
 
 // These don't appear to be in SA2
 #if (GAME == GAME_SA1)
-
 void Player_8043DDC(Player *p)
 {
     if (p->SA2_LABEL(unk2A) == 0) {
@@ -3327,7 +3397,39 @@ void Player_8043DDC(Player *p)
     Player_80470AC(p);
     SA2_LABEL(sub_8023128)(p);
 }
+#endif
 
+#if (GAME == GAME_SA2)
+void SA2_LABEL(sub_8023260)(Player *p)
+{
+    s32 maxSpeed = p->maxSpeed;
+
+    if (p->qSpeedGround > (s16)maxSpeed) {
+        p->qSpeedGround = +maxSpeed;
+    } else {
+        s32 speedX = p->qSpeedGround;
+        if (speedX < -(s16)maxSpeed) {
+            p->qSpeedGround = -maxSpeed;
+        }
+    }
+
+    maxSpeed = p->qSpeedGround;
+
+    {
+        s16 rot = p->rotation;
+
+        p->qSpeedAirX = I(COS_24_8(rot * 4) * maxSpeed);
+
+        if (!(p->moveState & MOVESTATE_IN_AIR)) {
+            p->qSpeedAirY = 0;
+        }
+
+        p->qSpeedAirY += I(SIN_24_8(rot * 4) * maxSpeed);
+    }
+}
+#endif
+
+// ALIGNED UP TO HERE
 // TODO: Check how this differs from SA2 func sub_80232D0!
 // (98.94%) https://decomp.me/scratch/KZphy
 NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_8043EC0.inc", void SA2_LABEL(sub_80232D0)(Player *p))
@@ -3434,6 +3536,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/Player__Player_8043EC0.inc", void SA2_
 }
 END_NONMATCH
 
+#if (GAME == GAME_SA1)
 bool32 Player_TrySpindash(Player *p)
 {
     if (!(p->moveState & MOVESTATE_SPINDASH)) {
@@ -3526,7 +3629,6 @@ bool32 Player_TrySpindash(Player *p)
 
     return TRUE;
 }
-
 #endif // (GAME == GAME_SA1)
 
 bool32 Player_TryJump(Player *p)
