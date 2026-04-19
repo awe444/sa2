@@ -185,7 +185,7 @@
 #define CHARSTATE_WALLRUN_TO_WALL               60
 #define CHARSTATE_WALLRUN_ON_WALL               61
 #define CHARSTATE_ICE_SLIDE                     62
-#define CHARSTATE_WALK_B                        63
+#define CHARSTATE_BOUNCE                        63
 #define CHARSTATE_LAUNCHER_IN_CART              64
 #define CHARSTATE_LAUNCHER_IN_AIR               65
 #define CHARSTATE_POLE                          66
