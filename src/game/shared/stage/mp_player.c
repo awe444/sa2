@@ -7,7 +7,6 @@
 #include "game/globals.h"
 #include "game/shared/stage/collision.h"
 
-#include "game/sa2/stage/spawn_positions.h"
 #include "game/shared/stage/terrain_collision.h"
 #include "game/shared/stage/stage.h"
 #include "game/shared/stage/player.h"
@@ -18,18 +17,25 @@
 #include "game/shared/stage/item_tasks.h"
 
 #include "game/shared/stage/mp_event_mgr.h"
-#include "game/sa2/stage/mp_attack_1_effect.h"
 #if (GAME == GAME_SA1)
-#include "game/sa2/multiplayer/chao.h"
+#include "game/sa1/stage/mp_chao.h"
+#include "game/sa1/stage/spawn_positions.h"
+
+#include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
+#include "constants/sa1/move_states.h"
+#include "constants/sa1/songs.h"
 #elif (GAME == GAME_SA2)
+#include "game/sa2/stage/mp_attack_1_effect.h"
 #include "game/sa2/stage/mp_attack_2_effect.h"
-#endif
+#include "game/sa2/stage/spawn_positions.h"
 #include "game/sa2/multiplayer/multipak_connection.h"
 
 #include "constants/sa2/animations.h"
 #include "constants/sa2/char_states.h"
 #include "constants/sa2/move_states.h"
 #include "constants/sa2/songs.h"
+#endif
 
 // TODO: Names
 #if (GAME == GAME_SA1)
@@ -111,7 +117,6 @@ void CreateMultiplayerPlayer(u8 id)
     mpp->pos.y = 0;
 
 #if (GAME == GAME_SA1)
-#ifndef COLLECT_RINGS_ROM
     if (IS_SINGLE_PLAYER || gGameMode == GAME_MODE_RACE || gGameMode == GAME_MODE_MULTI_PLAYER) {
         mpp->pos.x = gSpawnPositions[gCurrentLevel][0];
         mpp->pos.y = gSpawnPositions[gCurrentLevel][1];
@@ -145,31 +150,6 @@ void CreateMultiplayerPlayer(u8 id)
             mpp->pos.y = gSpawnPositions_Modes_4_and_5[gCurrentLevel - NUM_LEVEL_IDS_SP][outerBit][1];
         }
     } else
-#endif // COLLECT_RINGS_ROM
-    {
-        switch (SIO_MULTI_CNT->id) {
-            case 0: {
-                mpp->pos.x = 232;
-                mpp->pos.y = 829;
-                break;
-            }
-            case 1: {
-                mpp->pos.x = 1585;
-                mpp->pos.y = 926;
-                break;
-            }
-            case 2: {
-                mpp->pos.x = 232;
-                mpp->pos.y = 348;
-                break;
-            }
-            case 3: {
-                mpp->pos.x = 1585;
-                mpp->pos.y = 279;
-                break;
-            }
-        }
-    }
 #elif (GAME == GAME_SA2)
 #ifndef COLLECT_RINGS_ROM
     if (IS_SINGLE_PLAYER || gGameMode == GAME_MODE_MULTI_PLAYER || gGameMode == GAME_MODE_TEAM_PLAY) {
@@ -177,6 +157,7 @@ void CreateMultiplayerPlayer(u8 id)
         mpp->pos.y = gSpawnPositions[gCurrentLevel][1];
     } else
 #endif
+#endif
     {
         switch (SIO_MULTI_CNT->id) {
             case 0: {
@@ -184,6 +165,23 @@ void CreateMultiplayerPlayer(u8 id)
                 mpp->pos.y = 829;
                 break;
             }
+#if (GAME == GAME_SA1)
+            case 1: {
+                mpp->pos.x = 1585;
+                mpp->pos.y = 926;
+                break;
+            }
+            case 2: {
+                mpp->pos.x = 232;
+                mpp->pos.y = 348;
+                break;
+            }
+            case 3: {
+                mpp->pos.x = 1585;
+                mpp->pos.y = 279;
+                break;
+            }
+#elif (GAME == GAME_SA2)
             case 1: {
                 mpp->pos.x = 1585;
                 mpp->pos.y = 279;
@@ -199,9 +197,9 @@ void CreateMultiplayerPlayer(u8 id)
                 mpp->pos.y = 348;
                 break;
             }
+#endif
         }
     }
-#endif
 
     s = &mpp->s;
     tf = &mpp->transform;
@@ -255,7 +253,7 @@ void CreateMultiplayerPlayer(u8 id)
 
 // TODO: Match and merge the SA1 and SA2 versions.
 // (89.44%) https://decomp.me/scratch/ldYoR
-NONMATCH("asm/non_matching/game/sa2/multiplayer/sa1_mp_player__Task_CreateMultiplayerPlayer.inc", void Task_CreateMultiplayerPlayer())
+NONMATCH("asm/non_matching/game/shared/stage/sa1_mp_player__Task_CreateMultiplayerPlayer.inc", void Task_CreateMultiplayerPlayer())
 {
     SpriteTransform *tf;
     MultiplayerPlayer *sp4;
@@ -409,7 +407,7 @@ NONMATCH("asm/non_matching/game/sa2/multiplayer/sa1_mp_player__Task_CreateMultip
         if (mpp->unk61++ > 30) {
             TasksDestroyAll();
             PAUSE_BACKGROUNDS_QUEUE();
-            sa2__gBgSpritesCount = 0;
+            gBgSpritesCount = 0;
             PAUSE_GRAPHICS_QUEUE();
 #ifndef NON_MATCHING
             // NOTE: LinkCommunicationError() does NOT take any arguments, neither in SA1 nor the others.
@@ -438,7 +436,7 @@ block_57:
     }
     UpdateSpriteAnimation(&mpp->s);
     sp4 = TASK_DATA(gMultiplayerPlayerTasks[SIO_MULTI_CNT->id]);
-    if (((gGameMode == 3) || (gGameMode == 5)) && (sa2__gMultiplayerRanks[SIO_MULTI_CNT->id] == -1)) {
+    if (((gGameMode == 3) || (gGameMode == 5)) && (gMultiplayerRanks[SIO_MULTI_CNT->id] == -1)) {
         var_sl = 1;
         for (var_r4 = 0; var_r4 < 4 && (gMultiplayerPlayerTasks[var_r4] != NULL); var_r4++) {
             u32 connection = gMultiplayerConnections;
@@ -490,7 +488,7 @@ block_57:
     } else {
     block_101:
         if ((0x80 & gPlayer.itemEffect) || (0x80 & mpp->unk57) || (gPlayer.timerInvulnerability != 0) || (gPlayer.moveState & 0x80)
-            || (sa2__gMultiplayerRanks[mpp->unk56] != -1)) {
+            || (gMultiplayerRanks[mpp->unk56] != -1)) {
         block_106:
             if (gGameMode != 6) {
                 if (mpp->unk56 != SIO_MULTI_CNT->id) {
@@ -523,7 +521,7 @@ block_57:
     }
     if (1 & mpp->unk54) {
         s->frameFlags &= ~0x1F;
-        s->frameFlags |= (SA2_LABEL(gOamMatrixIndex)++ | 0x20);
+        s->frameFlags |= (gOamMatrixIndex++ | 0x20);
         if (2 & mpp->unk54) {
             tf->qScaleX = -Q(1.0);
         } else {
@@ -555,7 +553,7 @@ block_57:
         return;
     }
 
-    if ((gStageTime & 2) || (0x20 & mpp->unk57) || (((1 & mpp->unk5C) != 0)) || (sa2__gMultiplayerRanks[mpp->unk56] != -1)
+    if ((gStageTime & 2) || (0x20 & mpp->unk57) || (((1 & mpp->unk5C) != 0)) || (gMultiplayerRanks[mpp->unk56] != -1)
         || ((mpp->unk60 == 0) && !(4 & mpp->unk54) && !(mpp->unk5C & 2))) {
         s->oamFlags = (mpp->unk54 & 0x80) ? 0x440 : 0x400;
         s->frameFlags &= ~0x180;
@@ -1428,7 +1426,7 @@ void SA2_LABEL(sub_801707C)(void)
 // NOTE: Matches in SA2!
 // (99.36%) https://decomp.me/scratch/cjmw6
 #if (GAME == GAME_SA1)
-NONMATCH("asm/non_matching/game/sa2/multiplayer/sa1_mp_player__sa2__sub_8017670.inc", void SA2_LABEL(sub_8017670)(void))
+NONMATCH("asm/non_matching/game/shared/stage/sa1_mp_player__sa2__sub_8017670.inc", void SA2_LABEL(sub_8017670)(void))
 #else
 void SA2_LABEL(sub_8017670)(void)
 #endif

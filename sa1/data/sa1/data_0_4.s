@@ -13,14 +13,12 @@ C_DECL(gSpawnPositions):
 C_DECL(gSpawnPositions_Modes_4_and_5):
     .incbin "baserom_sa1.gba", 0x004ADF38, 0x40
 
-    mAlignData
-    .global C_DECL(gUnknown_084ADF78)
-C_DECL(gUnknown_084ADF78):
+    .global C_DECL(sa2__gUnknown_080D650C)
+C_DECL(sa2__gUnknown_080D650C):
     .incbin "baserom_sa1.gba", 0x004ADF78, 0x48
 
-    mAlignData
-    .global C_DECL(gUnknown_084ADFC0)
-C_DECL(gUnknown_084ADFC0):
+    .global C_DECL(sa2__gUnknown_080D661C)
+C_DECL(sa2__gUnknown_080D661C):
     .incbin "baserom_sa1.gba", 0x004ADFC0, 0x48
 
     mAlignData

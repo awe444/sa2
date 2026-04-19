@@ -48,7 +48,7 @@ SECTIONS {
         sa2/src/game/sa1/save.o(.text);
 
         sa2/src/game/shared/stage/unused_flash_task.o(.text);
-        src/game/shared/stage/mp_player.o(.text);
+        sa2/src/game/shared/stage/mp_player.o(.text);
         sa2/src/game/shared/stage/mp_indicators.o(.text);
         sa2/src/game/sa1/stage/enemies/bosses_egg_mobile.o(.text);
         sa2/src/game/sa1/stage/enemies/bosses_misc.o(.text);
@@ -133,7 +133,7 @@ SECTIONS {
         sa2/src/game/shared/stage/dust_effect_braking.o(.text);
         sa2/src/game/shared/stage/dust_effect_spindash.o(.text);
         sa2/src/game/shared/stage/grind_effect_1.o(.text);
-        src/game/shared/stage/rings_scatter.o(.text);
+        sa2/src/game/shared/stage/rings_scatter.o(.text);
         src/game/shared/stage/player.o(.text);
         sa2/src/game/sa1/stage/player_sonic.o(.text);
         sa2/src/game/sa1/stage/player_tails.o(.text);

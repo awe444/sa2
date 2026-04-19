@@ -280,6 +280,8 @@ set(SA2_SHARED_SRCS
     src/game/shared/stage/mp_event_recv_mgr.c
     src/game/shared/stage/spot_lights_manager.c
     src/game/shared/stage/mp_event_mgr.c
+    src/game/shared/stage/mp_player.c
+    src/game/shared/stage/rings_scatter.c
     src/game/shared/multiplayer/communication_outcome.c
     src/game/sa1/ui/game_2_0.c
     src/game/sa1/ui/game_2_1.c

@@ -51,7 +51,7 @@ extern void CreateStageWaterTask(s32 waterLevel, u32 p1, u32 mask);
 extern struct Task *CreateMultiplayerChao(u8, u8);
 void SA2_LABEL(sub_801F044)(void);
 #if (GAME == GAME_SA1)
-void SA2_LABEL(sub_80213C0)(u32 UNUSED characterId, u32 UNUSED levelId, Player *player);
+void CreatePlayer(u32 UNUSED characterId, u32 UNUSED levelId, Player *player);
 
 void StageInit_Zone1Act1(void);
 void StageInit_Zone1Act2(void);
@@ -184,14 +184,14 @@ void CreateGameStage(void)
     }
 
     if (IS_MULTI_PLAYER) {
-        SA2_LABEL(sub_80213C0)(gSelectedCharacter, gCurrentLevel, &gPlayer);
+        CreatePlayer(gSelectedCharacter, gCurrentLevel, &gPlayer);
     } else if (IS_EXTRA_STAGE(gCurrentLevel)) {
-        SA2_LABEL(sub_80213C0)(gSelectedCharacter, gCurrentLevel, &gPlayer);
+        CreatePlayer(gSelectedCharacter, gCurrentLevel, &gPlayer);
     } else {
-        SA2_LABEL(sub_80213C0)(gSelectedCharacter, gCurrentLevel, &gPlayer);
+        CreatePlayer(gSelectedCharacter, gCurrentLevel, &gPlayer);
 
         if (gNumSingleplayerCharacters == 2) {
-            SA2_LABEL(sub_80213C0)(PARTNER_CHARACTER, gCurrentLevel, &gPartner);
+            CreatePlayer(PARTNER_CHARACTER, gCurrentLevel, &gPartner);
         }
     }
 
