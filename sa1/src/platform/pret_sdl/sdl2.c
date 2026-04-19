@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -340,6 +341,23 @@ void VBlankIntrWait(void)
                     deltaTime = (double)((curGameTime - lastGameTime) / (double)SDL_GetPerformanceFrequency());
                     if (deltaTime > (dt * 5))
                         deltaTime = dt * 5;
+#ifdef __ANDROID__
+                    // Frame-time snapping: when the measured per-frame delta is within
+                    // a small tolerance of an integer multiple of the fixed timestep,
+                    // snap it to that exact multiple. This eliminates the slow
+                    // accumulator drift (and the resulting periodic double/skipped
+                    // ticks) caused by Android displays whose refresh rate is close
+                    // to, but not exactly, 60 Hz (e.g. 59.94 Hz panels).
+                    {
+                        const double snapTolerance = dt * 0.10; // ~1.67 ms at 60 Hz
+                        for (int k = 1; k <= 4; k++) {
+                            if (fabs(deltaTime - (double)k * dt) < snapTolerance) {
+                                deltaTime = (double)k * dt;
+                                break;
+                            }
+                        }
+                    }
+#endif
                 }
                 lastGameTime = curGameTime;
 
