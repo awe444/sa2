@@ -224,7 +224,22 @@ int main(int argc, char **argv)
     }
 #endif
 
+#ifdef __ANDROID__
+    // Prefer the hardware-accelerated OpenGL ES 2 backend on Android.
+    // SDL chooses the first available driver when none is hinted; this
+    // hint guarantees we use a GPU-backed renderer instead of silently
+    // falling back to anything else if the driver order ever changes.
+    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengles2");
+    sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (sdlRenderer == NULL) {
+        // Retry without forcing acceleration so we never end up unable
+        // to create any renderer at all on unusual devices.
+        SDL_Log("Accelerated renderer unavailable, falling back: %s", SDL_GetError());
+        sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
+    }
+#else
     sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
+#endif
     if (sdlRenderer == NULL) {
         SDL_Log("Renderer could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
