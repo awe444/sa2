@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -223,7 +224,22 @@ int main(int argc, char **argv)
     }
 #endif
 
+#ifdef __ANDROID__
+    // Prefer the hardware-accelerated OpenGL ES 2 backend on Android.
+    // SDL chooses the first available driver when none is hinted; this
+    // hint guarantees we use a GPU-backed renderer instead of silently
+    // falling back to anything else if the driver order ever changes.
+    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengles2");
+    sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (sdlRenderer == NULL) {
+        // Retry without forcing acceleration so we never end up unable
+        // to create any renderer at all on unusual devices.
+        SDL_Log("Accelerated renderer unavailable, falling back: %s", SDL_GetError());
+        sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
+    }
+#else
     sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
+#endif
     if (sdlRenderer == NULL) {
         SDL_Log("Renderer could not be created! SDL_Error: %s", SDL_GetError());
         return 1;
@@ -340,6 +356,23 @@ void VBlankIntrWait(void)
                     deltaTime = (double)((curGameTime - lastGameTime) / (double)SDL_GetPerformanceFrequency());
                     if (deltaTime > (dt * 5))
                         deltaTime = dt * 5;
+#ifdef __ANDROID__
+                    // Frame-time snapping: when the measured per-frame delta is within
+                    // a small tolerance of an integer multiple of the fixed timestep,
+                    // snap it to that exact multiple. This eliminates the slow
+                    // accumulator drift (and the resulting periodic double/skipped
+                    // ticks) caused by Android displays whose refresh rate is close
+                    // to, but not exactly, 60 Hz (e.g. 59.94 Hz panels).
+                    {
+                        const double snapTolerance = dt * 0.10; // ~1.67 ms at 60 Hz
+                        for (int k = 1; k <= 4; k++) {
+                            if (fabs(deltaTime - (double)k * dt) < snapTolerance) {
+                                deltaTime = (double)k * dt;
+                                break;
+                            }
+                        }
+                    }
+#endif
                 }
                 lastGameTime = curGameTime;
 
