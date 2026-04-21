@@ -34,9 +34,9 @@
 #define CHARSTATE_SPRING_B        21
 #define CHARSTATE_22              22
 #define CHARSTATE_BOUNCE          23
-#define CHARSTATE_24              24 // Halfpipe run?
-#define CHARSTATE_25              25 // Halfpipe run?
-#define CHARSTATE_26              26 // Halfpipe run?
+#define CHARSTATE_WALLRUN_INIT    24 // Halfpipe run?
+#define CHARSTATE_WALLRUN_TO_WALL 25 // Halfpipe run?
+#define CHARSTATE_WALLRUN_ON_WALL 26 // Halfpipe run?
 #define CHARSTATE_27              27
 #define CHARSTATE_28              28
 
