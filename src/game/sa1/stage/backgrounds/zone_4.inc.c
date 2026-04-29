@@ -17,8 +17,8 @@ void StageBgUpdate_Zone4Acts12(s32 x, s32 y)
     gBldRegs.bldCnt = (BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND | BLDCNT_TGT1_BG0);
     gBldRegs.bldAlpha = BLDALPHA_BLEND(16, 16);
 
-    x -= cam->sa2__unk20;
-    y -= cam->sa2__unk24;
+    x -= cam->SA2_LABEL(unk20);
+    y -= cam->SA2_LABEL(unk24);
 
     // Snow layer
     bg = &gStageBackgroundsRam.unk0;
@@ -32,11 +32,11 @@ void StageBgUpdate_Zone4Acts12(s32 x, s32 y)
     coll = gRefCollision;
 
     xSub = Div(x << 4, coll->pxWidth - DISPLAY_WIDTH);
-    cam->sa2__unk52 = xSub;
+    cam->SA2_LABEL(unk52) = xSub;
     gBgScrollRegs[3][0] = xSub;
 
     ySub = Div(((y << 8) + (y << 6) + (y << 5)), coll->pxHeight - DISPLAY_HEIGHT);
-    cam->sa2__unk54 = ySub;
+    cam->SA2_LABEL(unk54) = ySub;
     gBgScrollRegs[3][1] = ySub;
 
     if (gWater.SA2_LABEL(unk1) == 0) {

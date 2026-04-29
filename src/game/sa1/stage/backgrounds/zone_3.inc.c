@@ -43,8 +43,8 @@ void Task_UpdateFireworkAnimation(void)
         return;
     }
 
-    s->x = firework->qWorldX - cam->sa2__unk52;
-    s->y = firework->qWorldY - cam->sa2__unk54;
+    s->x = firework->qWorldX - cam->SA2_LABEL(unk52);
+    s->y = firework->qWorldY - cam->SA2_LABEL(unk54);
 
     s->frameFlags &= ~(SPRITE_FLAG(18, 1) | SPRITE_FLAG(19, 1));
     UpdateSpriteAnimation(s);
@@ -74,8 +74,8 @@ void StageBgUpdate_Zone3Acts12(s32 x, s32 y)
     u32 *ptr;
     s32 i;
 
-    x -= cam->sa2__unk20;
-    y -= cam->sa2__unk24;
+    x -= cam->SA2_LABEL(unk20);
+    y -= cam->SA2_LABEL(unk24);
 
     collision = gRefCollision;
 

@@ -523,7 +523,7 @@ void Task_80638B0(void)
     chaoHuntStageId = strc5C->unk55;
     gCurrentLevel = NUM_LEVEL_IDS_SP + chaoHuntStageId;
 
-    ApplyGameStageSettings();
+    ApplyGameStageSettingsAndStart();
     TaskDestroy(strc5C->taskC);
     TaskDestroy(strc5C->task10);
     TaskDestroy(gCurTask);

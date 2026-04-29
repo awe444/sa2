@@ -274,6 +274,13 @@ SA2_C_FILES := \
 	src/game/shared/stage/player.c \
 	src/game/shared/collect_rings/results.c \
 	src/game/shared/menus/unused_level_select.c \
+	src/game/shared/stage/collision_1.c \
+	src/game/shared/stage/collision_2.c \
+	src/game/shared/stage/collision_3.c \
+	src/game/shared/stage/water_effects.c \
+	src/game/shared/stage/spot_light_beam_task.c \
+	src/game/shared/stage/camera.c \
+	src/game/shared/stage/stage.c \
 	src/game/sa1/ui/game_2_0.c \
 	src/game/sa1/ui/game_2_1.c \
 	src/game/sa1/ui/stage_results.c \
@@ -397,21 +404,6 @@ SA2_C_FILES := \
 	src/game/sa1/stage/player_tails.c \
   	src/game/sa1/stage/player_super_sonic.c \
 	src/game/sa1/stage/mp_chao.c \
-	src/game/sa1/stage/camera_destroy.c \
-	src/game/sa1/stage/backgrounds/zone_5_init.c \
-	src/game/sa1/stage/backgrounds/zone_4.c \
-	src/game/sa1/stage/backgrounds/zone_3_firework.c \
-	src/game/sa1/stage/backgrounds/zone_3.c \
-	src/game/sa1/stage/backgrounds/zone_2_interior.c \
-	src/game/sa1/stage/backgrounds/zone_7_act_2.c \
-	src/game/sa1/stage/backgrounds/zone_4_init.c \
-	src/game/sa1/stage/backgrounds/zone_2.c \
-	src/game/sa1/stage/backgrounds/zone_6_hblank.c \
-	src/game/sa1/stage/backgrounds/zone_6.c \
-	src/game/sa1/stage/backgrounds/zone_7_act_1.c \
-	src/game/sa1/stage/backgrounds/zone_1.c \
-	src/game/sa1/stage/backgrounds/zone_7_act_2_init.c \
-	src/game/sa1/stage/backgrounds/zone_5.c \
 	src/game/sa1/stage/trapped_animals.c \
 	src/game/sa1/stage/stage_ui_z.c \
 	src/game/sa1/stage/stage_ui.c \

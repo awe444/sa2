@@ -848,7 +848,7 @@ void sub_8032F58(void)
                         gPlayer.heldInput = DPAD_LEFT;
                     }
 
-                    gCamera.sa2__unk8 = 0;
+                    gCamera.SA2_LABEL(unk8) = 0;
                     gCamera.maxX = gCamera.x + 480;
                 } else {
                     gPlayer.heldInput = 0;

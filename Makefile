@@ -171,20 +171,21 @@ OBJ_TILES_4BPP_SUBDIR = graphics/sa2/obj_tiles/4bpp
 TILESETS_SUBDIR = graphics/sa2/tilesets/
 
 ifeq ($(PLATFORM),gba)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/*")
+C_SRCS_IN := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/*")
 else ifeq ($(PLATFORM),sdl)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
+C_SRCS_IN := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
 else ifeq ($(PLATFORM),sdl_psp)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
+C_SRCS_IN := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
 else ifeq ($(PLATFORM),ps2)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/pret_sdl/*")
+C_SRCS_IN := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/pret_sdl/*")
 else ifeq ($(PLATFORM),sdl_win32)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
+C_SRCS_IN := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/win32/*" -not -path "*/platform/ps2/*")
 else ifeq ($(PLATFORM),win32)
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/pret_sdl/*" -not -path "*/platform/ps2/*")
+C_SRCS_IN := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*" -not -path "*/platform/pret_sdl/*" -not -path "*/platform/ps2/*")
 else
-C_SRCS := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*")
+C_SRCS_IN := $(shell find $(C_SUBDIR) -name "*.c" -not -path "*/sa1/*")
 endif
+C_SRCS := $(foreach src,$(C_SRCS_IN),$(if $(findstring .inc.c,$(src)),,$(src)))
 C_OBJS := $(patsubst $(C_SUBDIR)/%.c,$(C_BUILDDIR)/%.o,$(C_SRCS))
 
 ifeq ($(PLATFORM),gba)

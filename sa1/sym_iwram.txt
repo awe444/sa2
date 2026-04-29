@@ -52,7 +52,7 @@ sa2/src/game/sa1/multiplayer/chao_message.o(.bss);
 sa2/src/game/dummy_task.o(.data);
 
 . = 0x000058C0;
-src/game/shared/stage/stage.o(.data);
+sa2/src/game/shared/stage/stage.o(.data);
 
 . = 0x000058D0; gStageBackgroundsRam  = .;
 . = 0x000059D0; gCamera = .;
@@ -66,7 +66,7 @@ sa2/src/game/sa1/stage/player_super_sonic.o(.data);
 sa2/src/game/shared/stage/underwater_effects.o(.data);
 
 . = 0x00005C80;
-src/game/shared/stage/water_effects.o(.data);
+sa2/src/game/shared/stage/water_effects.o(.data);
 
 . = 0x000060D0;
 sa2/src/input_recorder.o(.data);

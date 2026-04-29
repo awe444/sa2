@@ -835,7 +835,7 @@ void Task_8056AC8(void)
             gBgSpritesCount = 0;
             PAUSE_GRAPHICS_QUEUE();
 
-            ApplyGameStageSettings();
+            ApplyGameStageSettingsAndStart();
         } else {
             TasksDestroyAll();
 

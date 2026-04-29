@@ -208,7 +208,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/stage_results__CreateStageResults.inc"
     LOADED_SAVE->score += ringCount2;
     gStageFlags |= 0x20;
     if (gCurrentLevel == 0xA) {
-        gCamera.sa2__unk50 |= 0x2000;
+        gCamera.SA2_LABEL(unk50) |= 0x2000;
     }
     if (gGameMode == 1) {
         CreateTimeAttackResult(courseTime);
@@ -488,8 +488,8 @@ void Task_8057888(void)
     goto block_inc_return;
 
 blk_else : {
-    cam->sa2__unk8 = 0;
-    cam->sa2__unkC = 0;
+    cam->SA2_LABEL(unk8) = 0;
+    cam->SA2_LABEL(unkC) = 0;
 
     if (((u32)I(p->qWorldX) - cam->x) + 0x40 > (DISPLAY_WIDTH + 128)) {
         gPlayer.qSpeedAirX = 0;

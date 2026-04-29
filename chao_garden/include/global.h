@@ -47,6 +47,11 @@
 #define INCBIN_S8  INCBIN
 #define INCBIN_S16 INCBIN
 #define INCBIN_S32 INCBIN
+
+#define INCPAL(...)                                                                                                                        \
+    {                                                                                                                                      \
+        0                                                                                                                                  \
+    }
 #endif // IDE support
 
 #define ARRAY_COUNT(array) (sizeof(array) / sizeof((array)[0]))

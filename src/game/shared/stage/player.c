@@ -314,7 +314,7 @@ void Player_Tails_8047BA0(Player *p);
 void Player_Knuckles_8049000(Player *p);
 void Player_Amy_80497AC(Player *p);
 
-void Player_Knuckles_GlideInit(Player *p);
+void Player_Knuckles_InitGlide(Player *p);
 
 void Task_8045AD8(void);
 void Task_8045B38(void);
@@ -4022,7 +4022,7 @@ void Player_8044670(Player *p)
                     } break;
 
                     case CHARACTER_KNUCKLES: {
-                        Player_Knuckles_GlideInit(p);
+                        Player_Knuckles_InitGlide(p);
                     } break;
 
                     case CHARACTER_AMY: {

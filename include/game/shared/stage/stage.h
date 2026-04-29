@@ -10,8 +10,12 @@
 #include "constants/sa2/zones.h"
 #endif
 
+#if (GAME == GAME_SA1)
+void ApplyGameStageSettingsAndStart(void);
+#elif (GAME == GAME_SA2)
 void ApplyGameStageSettings(void);
 void GameStageStart(void);
+#endif
 void CreateGameStage(void);
 void GoToNextLevel(void);
 

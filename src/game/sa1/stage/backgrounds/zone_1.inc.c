@@ -1,6 +1,6 @@
 #include "global.h"
 #include "flags.h"
-#include "game/shared/stage/camera.h"
+
 #include "game/globals.h"
 #include "game/shared/stage/camera.h"
 
@@ -12,12 +12,12 @@ void StageBgUpdate_Zone1Acts12(s32 x, s32 UNUSED y)
     s32 i;
     s32 r3;
 
-    x -= cam->sa2__unk20;
+    x -= cam->SA2_LABEL(unk20);
 
     bg = &gStageBackgroundsRam.unkC0;
 
-    gBgScrollRegs[3][0] = cam->sa2__unk52 = 0;
-    gBgScrollRegs[3][1] = cam->sa2__unk54 = 0;
+    gBgScrollRegs[3][0] = cam->SA2_LABEL(unk52) = 0;
+    gBgScrollRegs[3][1] = cam->SA2_LABEL(unk54) = 0;
 
     bg->scrollX = 0;
     bg->scrollY = 0;

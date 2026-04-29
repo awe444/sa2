@@ -26,6 +26,15 @@ typedef struct {
 void Task_RingsMgrMain(void);
 void TaskDestructor_RingsMgr(struct Task *);
 
+#if COLLECT_RINGS_ROM
+#define RECT_TOUCHING_RING_NON_MATCH(t, posX, posY, ringIntX, ringIntY, rect)                                                              \
+    ((((ringIntX - TILE_WIDTH) <= RECT_LEFT((posX), rect) && (ringIntX + TILE_WIDTH) >= RECT_LEFT((posX), rect))                           \
+      || ((ringIntX - TILE_WIDTH) >= RECT_LEFT((posX), rect) && RECT_RIGHT((posX), rect) >= (ringIntX - TILE_WIDTH)))                      \
+     && ((((ringIntY - (TILE_WIDTH * 2)) <= ((t) = RECT_TOP((posY), rect)) && ringIntY >= (t))                                             \
+          || ((ringIntY - (TILE_WIDTH * 2)) >= (t) && ((t) + RECT_HEIGHT(rect)) >= (ringIntY - (TILE_WIDTH * 2))))))
+
+#endif
+
 #define READ_START_INDEX(p, hrc, rx, ry) (*((u32 *)((((u8 *)(p)) + (((hrc) * (ry)) * (sizeof(u32)))) + ((rx) * (sizeof(u32))))))
 #define DATA_START(data)                 (void *)((u8 *)(data) - (sizeof(u32) * 2))
 
@@ -143,12 +152,10 @@ void CreateStageRingsManager(void)
     s->frameFlags = (SPRITE_FLAG_MASK_18 | SPRITE_FLAG(PRIORITY, 2) | SPRITE_FLAG_MASK_MOSAIC);
 }
 
-#ifndef COLLECT_RINGS_ROM
+// Links since there are lots of fake matches here
+// SA2: https://decomp.me/scratch/wY4hY
+// SA2 Collect rings: https://decomp.me/scratch/1ad61
 void Task_RingsMgrMain(void)
-#else
-// 99.84% (stack issues): https://decomp.me/scratch/1u9Ce
-NONMATCH("asm/non_matching/game/shared/stage/Task_RingsMgrMain_collect_rings.inc", void Task_RingsMgrMain(void))
-#endif
 {
     bool32 sp08;
 
@@ -169,7 +176,13 @@ NONMATCH("asm/non_matching/game/shared/stage/Task_RingsMgrMain_collect_rings.inc
 
     if (!(gStageFlags & STAGE_FLAG__2)) {
         Player *p;
-        s16 leftIndex;
+
+#if (defined(NON_MATCHING) || COLLECT_RINGS_ROM) || (GAME != GAME_SA2)
+        const // Only needs to be a real var in SA2 matching
+#endif
+            // required for match
+            s16 leftIndex
+            = 0;
 
         rings = *(u32 **)(TASK_DATA(gCurTask) + offsetof(RingsManager, rings));
 
@@ -209,9 +222,6 @@ NONMATCH("asm/non_matching/game/shared/stage/Task_RingsMgrMain_collect_rings.inc
         dimensions = s->dimensions;
         rings++;
 
-        // required for match
-        leftIndex = 0;
-
         h_regionCount = (u16)*rings++;
         v_regionCount = (u16)*rings++;
 
@@ -229,14 +239,21 @@ NONMATCH("asm/non_matching/game/shared/stage/Task_RingsMgrMain_collect_rings.inc
                     meRing = DATA_START(rings) + offset;
 
                     while (meRing->x != (u8)MAP_ENTITY_STATE_ARRAY_END) {
-                        if (meRing->x != (u8)MAP_ENTITY_STATE_INITIALIZED) {
+                        bool32 shouldSpawn = meRing->x != (u8)MAP_ENTITY_STATE_INITIALIZED;
+                        if (shouldSpawn) {
                             // _080080D6
                             rx = TO_WORLD_POS(meRing->x, regionX);
                             ry = TO_WORLD_POS(meRing->y, regionY);
 
                             if (sp08 != FALSE
                                 || (gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53) && !(p->moveState & MOVESTATE_DEAD))) {
-                                if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), rx, ry, (Rect8 *)rect)) {
+#if COLLECT_RINGS_ROM && !defined(NON_MATCHING)
+                                s32 top;
+                                if (RECT_TOUCHING_RING_NON_MATCH(top, I(p->qWorldX), I(p->qWorldY), rx, ry, (Rect8 *)rect))
+#else
+                                if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), rx, ry, (Rect8 *)rect))
+#endif
+                                {
 #ifndef COLLECT_RINGS_ROM
                                     INCREMENT_RINGS(1);
 #else
@@ -436,6 +453,9 @@ NONMATCH("asm/non_matching/game/shared/stage/Task_RingsMgrMain_collect_rings.inc
                                     if (iwram_end == oamAllocated)
                                         return;
 
+#ifndef NON_MATCHING
+                                    meRing->x += 0;
+#endif
                                     DmaCopy16(3, oamDat, oamAllocated, sizeof(OamDataShort));
 
 #if !EXTENDED_OAM
@@ -459,9 +479,6 @@ NONMATCH("asm/non_matching/game/shared/stage/Task_RingsMgrMain_collect_rings.inc
         }
     }
 }
-#if COLLECT_RINGS_ROM
-END_NONMATCH
-#endif
 
 #ifndef COLLECT_RINGS_ROM
 void TaskDestructor_RingsMgr(struct Task *t)
