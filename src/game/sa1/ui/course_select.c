@@ -731,11 +731,11 @@ void Task_8062540()
                     if (level == 0) {
                         gCurrentLevel = 0;
                         gMultiplayerCurrentLevel = 0;
-                        ApplyGameStageSettings();
+                        ApplyGameStageSettingsAndStart();
                     } else if ((u32)level < 19) {
                         gCurrentLevel = level - 1;
                         gMultiplayerCurrentLevel = gCurrentLevel;
-                        ApplyGameStageSettings();
+                        ApplyGameStageSettingsAndStart();
                     }
 
                     TaskDestroy(state->task18);
@@ -840,11 +840,11 @@ void Task_80629E8()
     if (level == 0) {
         gCurrentLevel = 0;
         gMultiplayerCurrentLevel = 0;
-        ApplyGameStageSettings();
+        ApplyGameStageSettingsAndStart();
     } else if (level < 19) {
         gCurrentLevel = state->level - 1;
         gMultiplayerCurrentLevel = gCurrentLevel;
-        ApplyGameStageSettings();
+        ApplyGameStageSettingsAndStart();
     }
 
     TaskDestroy(state->task18);

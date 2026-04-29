@@ -874,7 +874,7 @@ void Task_805AAF8()
                 if ((gGameMode == GAME_MODE_SINGLE_PLAYER) && (LOADED_SAVE->unlockedLevels[gSelectedCharacter] == 0)) {
                     gCurrentLevel = 0;
                     gMultiplayerCurrentLevel = 0;
-                    ApplyGameStageSettings();
+                    ApplyGameStageSettingsAndStart();
                     return;
                 }
             }

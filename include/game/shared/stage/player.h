@@ -293,6 +293,7 @@ typedef struct {
 } MaybeSuperSonic; /* size: 0x8C */
 #endif
 
+void CreatePlayer(u32 UNUSED characterId, u32 levelId, Player *player);
 s32 SA2_LABEL(sub_8022F58)(u8 param0, Player *p);
 
 extern Player gPlayer;

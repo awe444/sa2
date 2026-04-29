@@ -168,6 +168,16 @@ void InitCamera(u32);
 void UpdateCamera(void);
 void DestroyCameraMovementTask(void);
 
+// TODO: move to camera_hblank_callbacks.c
+#if (GAME == GAME_SA2)
+void HBlankCB_801E454(int_vcount vcount);
+void sub_801E3F0(void);
+void HBlankCB_801E434(int_vcount vcount);
+void nullsub_801E494(void);
+void HBlankCB_BgUpdateZone5ActBoss(int_vcount vcount);
+void HBlankCB_BgUpdateZoneFinalActXX(int_vcount vcount);
+#endif
+
 #if (GAME == GAME_SA1)
 // TODO: should be included from terrain_collision.h
 extern const Collision *gRefCollision;

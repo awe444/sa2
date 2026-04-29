@@ -272,6 +272,13 @@ set(SA2_SHARED_SRCS
     src/game/shared/stage/mp_finish.c
     src/game/shared/stage/music_manager.c
     src/game/shared/stage/mp_sprite_task.c
+    src/game/shared/stage/camera.c
+    src/game/shared/stage/stage.c
+    src/game/shared/stage/water_effects.c
+    src/game/shared/stage/spot_light_beam_task.c
+    src/game/shared/stage/collision_1.c
+    src/game/shared/stage/collision_2.c
+    src/game/shared/stage/collision_3.c
     src/game/shared/stage/dust_effect_spindash.c
     src/game/shared/stage/amy_attack_heart_effect.c
     src/game/shared/stage/mp_indicators.c
@@ -409,21 +416,6 @@ set(SA2_SHARED_SRCS
     src/game/sa1/stage/player_tails.c
     src/game/sa1/stage/player_super_sonic.c
     src/game/sa1/stage/mp_chao.c
-    src/game/sa1/stage/camera_destroy.c
-    src/game/sa1/stage/backgrounds/zone_5_init.c
-    src/game/sa1/stage/backgrounds/zone_4.c
-    src/game/sa1/stage/backgrounds/zone_3_firework.c
-    src/game/sa1/stage/backgrounds/zone_3.c
-    src/game/sa1/stage/backgrounds/zone_2_interior.c
-    src/game/sa1/stage/backgrounds/zone_7_act_2.c
-    src/game/sa1/stage/backgrounds/zone_4_init.c
-    src/game/sa1/stage/backgrounds/zone_2.c
-    src/game/sa1/stage/backgrounds/zone_6_hblank.c
-    src/game/sa1/stage/backgrounds/zone_6.c
-    src/game/sa1/stage/backgrounds/zone_7_act_1.c
-    src/game/sa1/stage/backgrounds/zone_1.c
-    src/game/sa1/stage/backgrounds/zone_7_act_2_init.c
-    src/game/sa1/stage/backgrounds/zone_5.c
     src/game/sa1/stage/trapped_animals.c
     src/game/sa1/stage/stage_ui_z.c
     src/game/sa1/stage/stage_ui.c

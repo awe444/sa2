@@ -32,7 +32,7 @@ C_DECL(gUnknown_0868B6B8):
     mAlignData
     .global C_DECL(gUnknown_0868B6C4)
 C_DECL(gUnknown_0868B6C4):
-    mPtr C_DECL(ApplyGameStageSettings)
+    mPtr C_DECL(ApplyGameStageSettingsAndStart)
     mPtr C_DECL(sub_806A66C)
     mPtr C_DECL(sub_806A680)
     mPtr C_DECL(sub_806A68C)

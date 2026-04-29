@@ -204,7 +204,7 @@ void SA2_LABEL(sub_8081200)(void)
         gMultiplayerPlayerTasks[i] = NULL;
     };
 
-    ApplyGameStageSettings();
+    ApplyGameStageSettingsAndStart();
 #ifndef COLLECT_RINGS_ROM
     gStageFlags &= ~STAGE_FLAG__ACT_START;
     gPlayer.moveState &= ~MOVESTATE_IGNORE_INPUT;

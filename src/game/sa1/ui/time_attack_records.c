@@ -307,7 +307,7 @@ NONMATCH("asm/non_matching/game/sa1/ui/time_attack_records__Task_806BBC0.inc", v
         gBldRegs.bldCnt = 0;
         gBldRegs.bldY = 0;
         TaskDestroy(gCurTask);
-        ApplyGameStageSettings();
+        ApplyGameStageSettingsAndStart();
         return;
     }
     if (var_r7 == 0xD0) {

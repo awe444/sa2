@@ -2,54 +2,108 @@
 #include "core.h"
 #include "sprite.h"
 
+#include "lib/m4a/m4a.h"
+
+#include "game/globals.h"
 #include "game/shared/stage/entities_manager.h"
 #include "game/shared/stage/music_manager.h"
 #include "game/shared/stage/palette_loader.h"
 #include "game/shared/stage/pause_menu.h"
 #include "game/shared/stage/rings_manager.h"
-#include "game/sa2/save.h"
-#include "game/sa2/ui/game_over.h"
-#include "game/sa2/stage/cheese.h"
-#include "game/sa2/stage/player_controls.h"
-#include "game/sa2/stage/player_super_sonic.h"
-#include "game/sa2/stage/race_progress.h"
+
 #include "game/shared/stage/screen_shake.h"
 #include "game/shared/stage/stage.h"
 #include "game/shared/stage/player.h"
 #include "game/shared/stage/camera.h"
-#include "game/sa2/ui/time_attack_lobby.h"
-#if (GAME == GAME_SA1)
-#include "game/time_over.h"
-#endif
+
 #include "game/shared/stage/mp_finish.h"
 #include "game/shared/stage/mp_indicators.h"
-#include "game/sa2/collect_rings/time_display.h"
+#include "game/shared/stage/mp_event_mgr.h"
 #include "game/shared/stage/mp_player.h"
+#include "game/shared/stage/spot_lights_manager.h"
 
-#include "lib/m4a/m4a.h"
+#if (GAME == GAME_SA1)
+#include "game/sa1/save.h"
+#include "game/sa1/ui/game_over.h"
+#include "game/sa1/ui/time_attack_lobby.h"
+#include "game/sa1/ui/time_over.h"
+#include "game/sa1/stage/mp_chao.h"
+#include "game/sa1/stage/player_controls.h"
+#include "game/sa1/parameters/stage.h"
+
+#include "constants/sa1/characters.h"
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
+#elif (GAME == GAME_SA2)
+#include "game/sa2/save.h"
+#include "game/sa2/ui/game_over.h"
+#include "game/sa2/ui/time_attack_lobby.h"
+#include "game/sa2/stage/cheese.h"
+#include "game/sa2/stage/player_controls.h"
+#include "game/sa2/stage/player_super_sonic.h"
+#include "game/sa2/stage/race_progress.h"
+#include "game/sa2/collect_rings/time_display.h"
 
 #include "constants/sa2/animations.h"
 #include "constants/sa2/characters.h"
 #include "constants/sa2/songs.h"
 #include "constants/sa2/zones.h"
-
-#include "game/shared/stage/mp_event_mgr.h"
+#endif
 
 #define BOSS_RINGS_DEFAULT_RESPAWN_COUNT 10
 
 struct Task *gGameStageTask = NULL;
 
 void Task_GameStage(void);
-
-void TaskDestructor_GameStage(struct Task *);
-
-void CreatePlayer(u32, u32, Player *);
-void CreateBossRunManager(u8);
+void TaskDestructor_GameStage(struct Task *t);
 void StageInit_CollectRings(void);
 
-void SetupStageIntro(void);
+extern void CreateStageWaterTask(s32 waterLevel, u32 p1, u32 mask);
+#if (GAME == GAME_SA1)
+extern struct Task *CreateMultiplayerChao(u8, u8);
+extern struct Task *sub_80550F8(void);
+// stage_ui_z.c
+typedef struct Struct_sub_80550F8 {
+    u8 filler0[0x27];
+    bool8 screenBlank;
+} Struct_sub_80550F8; /* size: 0x28 */
+extern void CreateChaoHuntHUD();
 
-void CreateStageWaterTask(u32, u32, u32);
+void StageInit_Zone1Act1(void);
+void StageInit_Zone1Act2(void);
+void StageInit_Zone2Act1(void);
+void StageInit_Zone2Act2(void);
+void StageInit_Zone3Act1(void);
+void StageInit_Zone3Act2(void);
+void StageInit_Zone4Act1(void);
+void StageInit_Zone4Act2(void);
+void StageInit_Zone5Act1(void);
+void StageInit_Zone5Act2(void);
+void StageInit_Zone6Act1(void);
+void StageInit_Zone6Act2(void);
+void StageInit_Zone7Act1(void);
+void StageInit_Zone7Act2(void);
+void StageInit_ForestChaoGarden(void);
+void StageInit_FactoryChaoGarden(void);
+void StageInit_PinballChaoGarden(void);
+void StageInit_SpaceChaoGarden(void);
+
+const VoidFn sStageInitProcs[NUM_LEVEL_IDS] = {
+    StageInit_Zone1Act1,         StageInit_Zone1Act2, //
+    StageInit_Zone2Act1,         StageInit_Zone2Act2, //
+    StageInit_Zone3Act1,         StageInit_Zone3Act2, //
+    StageInit_Zone4Act1,         StageInit_Zone4Act2, //
+    StageInit_Zone5Act1,         StageInit_Zone5Act2, //
+    StageInit_Zone6Act1,         StageInit_Zone6Act2, //
+    StageInit_Zone7Act1,         StageInit_Zone7Act2, //
+    StageInit_ForestChaoGarden,  StageInit_FactoryChaoGarden, //
+    StageInit_PinballChaoGarden, StageInit_SpaceChaoGarden,
+};
+#elif (GAME == GAME_SA2)
+// TODO: stage_intro.h
+extern void SetupStageIntro(void);
+// TODO: in boss run header
+extern void CreateBossRunManager(u8);
 
 void StageInit_Zone1Act1(void);
 void StageInit_Zone3Act1(void);
@@ -79,6 +133,7 @@ void StageInit_31(void);
 void StageInit_32(void);
 void StageInit_33(void);
 void StageInit_Dummy(void);
+
 #ifndef COLLECT_RINGS_ROM
 // NOTE(Jace): Many of these call copies of the exact same procedure,
 //             so for non-matching builds we could just exclude
@@ -120,11 +175,10 @@ const VoidFn sStageInitProcs[NUM_LEVEL_IDS] = { StageInit_Zone1Act1,
 #else
 extern const VoidFn sStageInitProcs[NUM_LEVEL_IDS];
 #endif
-extern const s8 CollHeightMap_zone_1_act_1_fg[];
-extern const u8 CollTileRot_zone_1_act_1_fg[];
-extern const u8 CollFlags_zone_1_act_1_fg[];
+#endif
 
 #ifndef COLLECT_RINGS_ROM
+#if (GAME == GAME_SA2)
 void ApplyGameStageSettings(void)
 {
     gLevelScore = 0;
@@ -149,19 +203,35 @@ void ApplyGameStageSettings(void)
         SetPlayerControls(LOADED_SAVE->buttonConfig.jump, LOADED_SAVE->buttonConfig.attack, LOADED_SAVE->buttonConfig.trick);
     }
 }
+#endif
 
 void GameStageStart(void)
 {
     gTrappedAnimalVariant = 0;
     gBossIndex = 0;
     gRingCount = 0;
-
-    // Unused leftover var from SA1, used for CPU "Partner" Tails
     gNumSingleplayerCharacters = 1;
 
-    if (gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53)) {
+#if (GAME == GAME_SA1)
+    if (IS_MULTI_PLAYER) {
         CallSetStageSpawnPos(gSelectedCharacter, gCurrentLevel, 0, &gPlayer);
-        gCheese = NULL;
+    } else if (IS_EXTRA_STAGE(gCurrentLevel)) {
+        CallSetStageSpawnPos(gSelectedCharacter, gCurrentLevel, 0, &gPlayer);
+    } else
+#endif
+    {
+        if (!IS_EXTRA_STAGE(gCurrentLevel)) {
+            CallSetStageSpawnPos(gSelectedCharacter, gCurrentLevel, 0, &gPlayer);
+
+#if (GAME == GAME_SA1)
+            if (gTailsEnabled && (gSelectedCharacter == CHARACTER_SONIC)) {
+                gNumSingleplayerCharacters = 2;
+                CallSetStageSpawnPos(CHARACTER_TAILS, gCurrentLevel, 1, &gPartner);
+            }
+#elif (GAME == GAME_SA2)
+            gCheese = NULL;
+#endif
+        }
     }
 
     gStageTime = 0;
@@ -173,11 +243,21 @@ void GameStageStart(void)
 
     gCheckpointTime = TIME(0, 0);
 
+#if (GAME == GAME_SA1)
+    if ((gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) || (gGameMode == GAME_MODE_CHAO_HUNT)) {
+        gCourseTime = TIME(3, 0);
+    } else if (gGameMode == GAME_MODE_TEAM_PLAY) {
+        gCourseTime = TIME(5, 0);
+    } else {
+        gCourseTime = TIME(0, 0);
+    }
+#elif (GAME == GAME_SA2)
     if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
         gCourseTime = TIME(0, 0);
     } else {
         gCourseTime = TIME(3, 0);
     }
+#endif
 
     CreateGameStage();
 }
@@ -186,24 +266,101 @@ void GameStageStart(void)
 void CreateGameStage(void)
 {
     u8 i;
+    u32 j;
+#if (GAME == GAME_SA1)
+    struct Task *someTask;
+#ifdef BUG_FIX
+    someTask = NULL;
+#endif
+#endif
     gGameStageTask = TaskCreate(Task_GameStage, 0, 0xff00, 0, TaskDestructor_GameStage);
     gActiveCollectRingEffectCount = 0;
+#if (GAME == GAME_SA2)
     gSpecialRingCount = 0;
-    gFinalBossActive = FALSE;
+    gFinalBossActive = 0;
+#endif
 
     gStageFlags |= (STAGE_FLAG__DISABLE_PAUSE_MENU | STAGE_FLAG__ACT_START);
     gStageFlags &= ~STAGE_FLAG__GRAVITY_INVERTED;
 
+#if (GAME == GAME_SA2)
     gBossRingsShallRespawn = FALSE;
     gBossRingsRespawnCount = BOSS_RINGS_DEFAULT_RESPAWN_COUNT;
     gBoostEffectTasksCreated = 0;
+#endif
 
-    sub_801F044();
+    SA2_LABEL(sub_801F044)();
+
+#if (GAME == GAME_SA1)
+    CreateStageMusicManager();
+
+    if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
+        someTask = sub_80550F8();
+    }
+
+    gSpikesUnknownTimer = 0;
+
+    if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
+        CreateChaoHuntHUD();
+    }
+
+    if (IS_MULTI_PLAYER) {
+        CreatePlayer(gSelectedCharacter, gCurrentLevel, &gPlayer);
+    } else if (IS_EXTRA_STAGE(gCurrentLevel)) {
+        CreatePlayer(gSelectedCharacter, gCurrentLevel, &gPlayer);
+    } else {
+        CreatePlayer(gSelectedCharacter, gCurrentLevel, &gPlayer);
+
+        if (gNumSingleplayerCharacters == 2) {
+            CreatePlayer(PARTNER_CHARACTER, gCurrentLevel, &gPartner);
+        }
+    }
+
+    if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
+        InitCamera(gCurrentLevel);
+    } else {
+        InitCamera(LEVEL_INDEX(ZONE_1, ACT_1));
+    }
+
+    gStageFlags &= ~STAGE_FLAG__2;
+    gStageFlags &= ~STAGE_FLAG__TIMER_REVERSED;
+
+    if ((gGameMode != GAME_MODE_SINGLE_PLAYER) && (gGameMode != GAME_MODE_TIME_ATTACK) && (gGameMode != GAME_MODE_RACE)
+        && (gGameMode != GAME_MODE_MULTI_PLAYER)) {
+        gStageFlags |= STAGE_FLAG__TIMER_REVERSED;
+    }
+
+    CreateStageRingsManager();
+    CreateStageEntitiesManager();
+
+    if (LEVEL_TO_ZONE(gCurrentLevel) != ZONE_4) {
+        CreateStageWaterTask(-1, 0, 0);
+    }
+
+    if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
+        sStageInitProcs[gCurrentLevel]();
+
+        if (gCurrentLevel == LEVEL_INDEX(ZONE_2, ACT_1)) {
+            if (CreateSpotlightsManager()) {
+#ifdef BUG_FIX
+                if (someTask != NULL)
+#endif
+                {
+                    Struct_sub_80550F8 *strc = TASK_DATA(someTask);
+                    strc->screenBlank = 1;
+                }
+            }
+        }
+    } else {
+        StageInit_CollectRings();
+    }
+#elif (GAME == GAME_SA2)
     gSpikesUnknownTimer = 0;
 
     if (!IS_EXTRA_STAGE(gCurrentLevel)) {
         CreatePlayer(gSelectedCharacter, gCurrentLevel, &gPlayer);
     }
+
 #ifndef COLLECT_RINGS_ROM
     if (IS_BOSS_STAGE(gCurrentLevel)) {
         gBossCameraClampYLower = gBossCameraYClamps[LEVEL_TO_ZONE(gCurrentLevel)][0];
@@ -252,6 +409,7 @@ void CreateGameStage(void)
 
     CreateStageRingsManager();
     CreateStageEntitiesManager();
+#endif
 
     SA2_LABEL(gUnknown_03001944) = 0;
     SA2_LABEL(gUnknown_030017F0) = 0x100;
@@ -271,20 +429,37 @@ void CreateGameStage(void)
         for (i = 0; i < MULTI_SIO_PLAYERS_MAX; i++) {
             gMultiplayerCharRings[i] = 0;
 
-            if (CONNECTION_REGISTERED(i)) {
+            if (GetBit(gMultiplayerConnections, i)) {
                 CreateMultiplayerPlayer(i);
                 if (i != SIO_MULTI_CNT->id) {
                     CreateOpponentPositionIndicator(i);
-                } else {
+                }
+#if (GAME == GAME_SA2)
+                else {
                     CreateSelfPositionIndicator();
                 }
+#endif
             }
 
             gMultiplayerRanks[i] = -1;
+
             if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
                 gMultiplayerCharacters[i] = i;
             }
         }
+
+#if (GAME == GAME_SA1)
+        if (gGameMode == GAME_MODE_CHAO_HUNT || gGameMode == GAME_MODE_TEAM_PLAY) {
+            for (j = 0; j < ARRAY_COUNT(gChaoTasks); j++) {
+                gChaoTasks[j] = CreateMultiplayerChao((u8)(uintptr_t)gChaoTasks[j], j);
+
+                if (gGameMode == GAME_MODE_CHAO_HUNT) {
+                    // TODO: This check does not make sense!
+                    break;
+                }
+            }
+        }
+#endif
 
         if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
             gPlayer.itemEffect |= PLAYER_ITEM_EFFECT__TELEPORT;
@@ -297,6 +472,7 @@ void CreateGameStage(void)
         }
     }
 
+#if (GAME == GAME_SA2)
     gCheese = NULL;
 
     if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
@@ -306,6 +482,7 @@ void CreateGameStage(void)
     if (IS_MULTI_PLAYER && gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
         CreateRaceProgressIndicator();
     }
+#endif
 #endif
 }
 
@@ -476,6 +653,7 @@ void Task_GameStage(void)
 #endif
 }
 
+#if (GAME == GAME_SA2)
 #if COLLECT_RINGS_ROM
 void ApplyGameStageSettings(void)
 {
@@ -515,6 +693,7 @@ void GameStageStart(void)
 
     CreateGameStage();
 }
+#endif
 #endif
 
 #ifndef COLLECT_RINGS_ROM
@@ -564,7 +743,93 @@ void HandleLifeLost(void)
         }
     }
 }
+#endif
 
+#if (GAME == GAME_SA1)
+void HandleDeath(void)
+{
+    gStageFlags |= STAGE_FLAG__DISABLE_PAUSE_MENU;
+
+    if (GAME_MODE_IS_TIME_ATTACK) {
+        TasksDestroyAll();
+        PAUSE_BACKGROUNDS_QUEUE();
+
+        gBgSpritesCount = 0;
+
+        PAUSE_GRAPHICS_QUEUE();
+        CreateTimeAttackLobbyScreen();
+    } else if (--gNumLives == 0) {
+        if (SA2_LABEL(gUnknown_0300543C) > 0) {
+            SA2_LABEL(gUnknown_0300543C)--;
+            CreateGameOverScreen(OVER_CAUSE_ZERO_LIVES);
+        } else {
+            s32 score = (gLevelScore < LOADED_SAVE->unk420) ? LOADED_SAVE->unk420 : gLevelScore;
+
+            LOADED_SAVE->unk420 = score;
+
+            CreateGameOverScreen(OVER_CAUSE_TIME_UP);
+        }
+    } else {
+        CreateTimeOver();
+    }
+}
+
+void GoToNextLevel(void)
+{
+    u16 irqEnable, irqMasterEnable, dispStat;
+
+    TasksDestroyAll();
+    PAUSE_BACKGROUNDS_QUEUE();
+    gBgSpritesCount = 0;
+    PAUSE_GRAPHICS_QUEUE();
+
+    m4aMPlayAllStop();
+    m4aSoundVSyncOff();
+
+    gFlags |= FLAGS_8000;
+    irqEnable = REG_IE;
+    irqMasterEnable = REG_IME;
+    dispStat = REG_DISPSTAT;
+
+    REG_IE = 0;
+    REG_IE;
+    REG_IME = 0;
+    REG_IME;
+    REG_DISPSTAT = 0;
+    REG_DISPSTAT;
+
+    gFlags &= ~FLAGS_EXECUTE_HBLANK_COPY;
+
+    SlowDmaStop(0);
+    SlowDmaStop(1);
+    SlowDmaStop(2);
+    SlowDmaStop(3);
+
+    WriteSaveGame();
+
+    REG_IE = irqEnable;
+    REG_IE;
+    REG_IME = irqMasterEnable;
+    REG_IME;
+    REG_DISPSTAT = dispStat;
+    REG_DISPSTAT;
+
+    m4aSoundVSyncOn();
+
+    gFlags &= ~FLAGS_8000;
+
+    if (gGameMode != GAME_MODE_TIME_ATTACK) {
+        if (++gCurrentLevel < NUM_LEVEL_IDS) {
+            GameStageStart();
+        }
+    } else {
+        CreateTimeAttackLobbyScreen();
+    }
+}
+#endif
+
+#ifndef COLLECT_RINGS_ROM
+#if (GAME == GAME_SA2)
 // NOTE: It's kind of redundant to check whether we are in Zone 5's boss stage
 //       on every single stage init. (for changing music to Knuckles' fight BGM)
 //
@@ -582,7 +847,9 @@ static inline void StageInit_SetMusic_inline(u16 level)
         m4aSongNumStart(MUS_VS_2);
     }
 }
+#endif
 
+#if (GAME == GAME_SA2)
 void StageInit_Zone1Act1(void)
 {
     CreateStageWaterTask(0x830, 0x7F207F20, 0);
@@ -590,25 +857,59 @@ void StageInit_Zone1Act1(void)
 
     StageInit_SetMusic_inline(gCurrentLevel);
 }
+#endif
 
 void StageInit_Zone3Act1(void)
 {
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 816, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 817, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 818, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 824, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 825, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 827, 0, 0); // TODO/BUG?: Should this be 826?
+    CreatePaletteLoaderTask(0x2000, 827, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 828, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 843, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 844, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 826, 0, 0); // Chao Stage removes this loader
+
+    m4aSongNumStart(MUS_CASINO_PARADISE__ACT_1);
+#elif (GAME == GAME_SA2)
     CreatePaletteLoaderTask(0x2000, 900, 0, NULL);
     CreatePaletteLoaderTask(0x2000, 900, 1, NULL);
     CreatePaletteLoaderTask(0x2000, 900, 2, NULL);
 
     StageInit_SetMusic_inline(gCurrentLevel);
+#endif
 }
 
 void StageInit_Zone3Act2(void)
 {
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 816, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 817, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 818, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 824, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 825, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 827, 0, 0); // TODO/BUG?: Should this be 826?
+    CreatePaletteLoaderTask(0x2000, 827, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 828, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 843, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 844, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 826, 0, 0);
+
+    m4aSongNumStart(MUS_CASINO_PARADISE__ACT_2);
+#elif (GAME == GAME_SA2)
     CreatePaletteLoaderTask(0x2000, 900, 0, NULL);
     CreatePaletteLoaderTask(0x2000, 900, 1, NULL);
     CreatePaletteLoaderTask(0x2000, 900, 2, NULL);
 
     StageInit_SetMusic_inline(gCurrentLevel);
+#endif
 }
 
+#if (GAME == GAME_SA2)
 void StageInit_Zone4Act1(void)
 {
     CreatePaletteLoaderTask(0x2000, 906, 2, NULL);
@@ -628,9 +929,58 @@ void StageInit_Zone4Act2(void)
 
     StageInit_SetMusic_inline(gCurrentLevel);
 }
+#endif
 
 void StageInit_Zone6Act1(void)
 {
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 839, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 840, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 841, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 842, 0, 0);
+
+    m4aSongNumStart(MUS_EGG_ROCKET);
+
+    if (gBossIndex > 0) {
+        // This section only gets called after hitting a checkpoint!
+        //
+        // Rocket "started", so don't allow player to leave.
+        gCamera.minX = EGG_ROCKET_LAUNCH_MIN_X;
+        gCamera.SA2_LABEL(unk50) |= 0x8000;
+        gBgCntRegs[3] &= ~(BGCNT_TXT512x512);
+
+        if (gGameMode == GAME_MODE_SINGLE_PLAYER) {
+            gStageFlags |= STAGE_FLAG__TIMER_REVERSED;
+            gCourseTime = TIME(5, 0);
+        }
+    }
+
+    if (gBossIndex > 1) {
+        // Rocket booster removed
+        //
+        // 'maxY' set because we are "climbing" the rocket and positive Y goes down.
+        gCamera.maxY = EGG_ROCKET_BOOSTER_DEPART_MAX_Y;
+        gCamera.SA2_LABEL(unk50) |= 0x8000;
+        gBgCntRegs[3] &= ~(BGCNT_TXT512x512);
+
+        if (gGameMode == GAME_MODE_SINGLE_PLAYER) {
+            gStageFlags |= STAGE_FLAG__TIMER_REVERSED;
+            gCourseTime = TIME(5, 0);
+        }
+    }
+
+    if (gBossIndex > 2) {
+        gBgCntRegs[3] &= ~(BGCNT_TXT512x512);
+        gCamera.SA2_LABEL(unk50) |= 0x4000;
+        gCamera.SA2_LABEL(unk50) &= ~0x8000;
+        gCamera.maxY = EGG_ROCKET_MIDDLE_DEPART_MAX_Y;
+
+        if (gGameMode == GAME_MODE_SINGLE_PLAYER) {
+            gStageFlags |= STAGE_FLAG__TIMER_REVERSED;
+            gCourseTime = TIME(5, 0);
+        }
+    }
+#elif (GAME == GAME_SA2)
     CreatePaletteLoaderTask(0x2000, 940, 0, NULL);
     CreatePaletteLoaderTask(0x2000, 940, 1, NULL);
     CreatePaletteLoaderTask(0x2000, 940, 2, NULL);
@@ -644,8 +994,10 @@ void StageInit_Zone6Act1(void)
     CreatePaletteLoaderTask(0x2000, 940, 11, NULL);
 
     StageInit_SetMusic_inline(gCurrentLevel);
+#endif
 }
 
+#if (GAME == GAME_SA2)
 void StageInit_Zone6Act2(void)
 {
     CreatePaletteLoaderTask(0x2000, 940, 0, NULL);
@@ -700,6 +1052,48 @@ void StageInit_Zone7ActBoss(void)
 }
 #endif
 
+#if (GAME == GAME_SA1)
+void StageInit_PinballChaoGarden(void)
+{
+    CreatePaletteLoaderTask(0x2000, 816, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 817, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 818, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 824, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 825, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 827, 0, 0); // TODO/BUG?: Should this be 826?
+    CreatePaletteLoaderTask(0x2000, 827, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 828, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 843, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 844, 0, 0);
+    // Regular Casino Paradise loads palette anim 826 here.
+
+    m4aSongNumStart(MUS_CASINO_PARADISE__ACT_1);
+}
+#endif
+#endif
+
+#if (GAME == GAME_SA1)
+void ApplyGameStageSettingsAndStart(void)
+{
+    gLevelScore = 0;
+    gNumLives = 3;
+    gFinalBossActive = gCurrentLevel;
+
+    if (IS_MULTI_PLAYER) {
+        gNumLives = 1;
+    }
+
+    if ((gGameMode == GAME_MODE_TIME_ATTACK || (gGameMode == GAME_MODE_RACE) || (gGameMode == GAME_MODE_MULTI_PLAYER))
+        || (gStageFlags & STAGE_FLAG__DEMO_RUNNING)) {
+        gDifficultyLevel = LOADED_SAVE->difficultyLevel;
+        LOADED_SAVE->difficultyLevel = DIFFICULTY_NORMAL;
+    }
+
+    SetPlayerControls(LOADED_SAVE->btnConfig);
+    GameStageStart();
+}
+#endif
+
 void DestroyStageTasks(void)
 {
     TaskDestroy(gGameStageTask);
@@ -715,6 +1109,7 @@ void DestroyStageTasks(void)
     DestroyCameraMovementTask();
 }
 
+#if (GAME == GAME_SA2)
 #ifndef COLLECT_RINGS_ROM
 void HandleDeath(void)
 {
@@ -748,61 +1143,15 @@ void GoToNextLevel(void)
     gBgSpritesCount = 0;
     PAUSE_GRAPHICS_QUEUE();
 
-#if (GAME == GAME_SA1)
-    m4aMPlayAllStop();
-    m4aSoundVSyncOff();
-
-    gFlags |= FLAGS_8000;
-    irqEnable = REG_IE;
-    irqMasterEnable = REG_IME;
-    dispStat = REG_DISPSTAT;
-
-    REG_IE = 0;
-    REG_IE;
-    REG_IME = 0;
-    REG_IME;
-    REG_DISPSTAT = 0;
-    REG_DISPSTAT;
-
-    gFlags &= ~FLAGS_EXECUTE_HBLANK_COPY;
-
-    SlowDmaStop(0);
-    SlowDmaStop(1);
-    SlowDmaStop(2);
-    SlowDmaStop(3);
-#endif
-
     WriteSaveGame();
 
-#if (GAME == GAME_SA1)
-    REG_IE = irqEnable;
-    REG_IE;
-    REG_IME = irqMasterEnable;
-    REG_IME;
-    REG_DISPSTAT = dispStat;
-    REG_DISPSTAT;
-
-    m4aSoundVSyncOn();
-
-    gFlags &= ~FLAGS_8000;
-#endif
-
-#if (GAME == GAME_SA1)
-    if (gGameMode != GAME_MODE_TIME_ATTACK)
-#elif (GAME == GAME_SA2)
-    if (gGameMode == GAME_MODE_SINGLE_PLAYER)
-#endif
-    {
+    if (gGameMode == GAME_MODE_SINGLE_PLAYER) {
         if (++gCurrentLevel < NUM_LEVEL_IDS) {
             GameStageStart();
         }
     }
-#if (GAME == GAME_SA1)
-    else {
-        CreateTimeAttackLobbyScreen();
-    }
-#endif
 }
+#endif
 #endif
 
 void TaskDestructor_GameStage(struct Task *t)
@@ -820,38 +1169,155 @@ void TaskDestructor_GameStage(struct Task *t)
 }
 
 #ifndef COLLECT_RINGS_ROM
+#if (GAME == GAME_SA1)
+void StageInit_Zone1Act1(void)
+{
+    CreatePaletteLoaderTask(0x2000, 814, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 815, 0, 0);
+
+    m4aSongNumStart(MUS_NEO_GREEN_HILL__ACT_1);
+}
+#endif
+
 void StageInit_Zone1Act2(void)
 {
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 814, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 815, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 820, 1, 0);
+    CreatePaletteLoaderTask(0x2000, 820, 0, 0);
+
+    if (IS_SINGLE_PLAYER) {
+        gCamera.maxX = gRefCollision->pxWidth - 768;
+    }
+
+    m4aSongNumStart(MUS_NEO_GREEN_HILL__ACT_2);
+#elif (GAME == GAME_SA2)
     CreatePaletteLoaderTask(0x2000, 897, 0, NULL);
 
     StageInit_SetMusic_inline(gCurrentLevel);
+#endif
 }
 
+#if (GAME == GAME_SA2)
 void StageInit_Zone1ActBoss(void) { StageInit_SetMusic_inline(gCurrentLevel); }
+#endif
 
-void StageInit_Zone2Act1(void) { StageInit_SetMusic_inline(gCurrentLevel); }
+void StageInit_Zone2Act1(void)
+{
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 819, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 845, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 849, 0, 0);
 
-void StageInit_Zone2Act2(void) { StageInit_SetMusic_inline(gCurrentLevel); }
+    m4aSongNumStart(MUS_SECRET_BASE__ACT_1);
+#elif (GAME == GAME_SA2)
+    StageInit_SetMusic_inline(gCurrentLevel);
+#endif
+}
+
+void StageInit_Zone2Act2(void)
+{
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 819, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 845, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 849, 0, 0);
+
+    m4aSongNumStart(MUS_SECRET_BASE__ACT_2);
+#elif (GAME == GAME_SA2)
+    StageInit_SetMusic_inline(gCurrentLevel);
+#endif
+}
+
+#if (GAME == GAME_SA2)
 
 void StageInit_Zone2ActBoss(void) { StageInit_SetMusic_inline(gCurrentLevel); }
 
 void StageInit_Zone3ActBoss(void) { StageInit_SetMusic_inline(gCurrentLevel); }
+#endif
 
+#if (GAME == GAME_SA1)
+void StageInit_Zone4Act1(void)
+{
+    CreatePaletteLoaderTask(0x2000, 822, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 821, 0, 0);
+    CreateStageWaterTask(INITIAL_WATERLEVEL_ZONE_4_ACT_1, 0x7F207F20, 0);
+
+    m4aSongNumStart(MUS_ICE_MOUNTAIN__ACT_1);
+}
+
+void StageInit_Zone4Act2(void)
+{
+    CreatePaletteLoaderTask(0x2000, 822, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 821, 0, 0);
+    CreateStageWaterTask(INITIAL_WATERLEVEL_ZONE_4_ACT_2, 0x7F207F20, 0);
+
+    m4aSongNumStart(MUS_ICE_MOUNTAIN__ACT_2);
+}
+#endif
+
+#if (GAME == GAME_SA2)
 void StageInit_Zone4ActBoss(void) { StageInit_SetMusic_inline(gCurrentLevel); }
+#endif
 
-void StageInit_Zone5Act1(void) { StageInit_SetMusic_inline(gCurrentLevel); }
+void StageInit_Zone5Act1(void)
+{
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 823, 0, 0);
 
-void StageInit_Zone5Act2(void) { StageInit_SetMusic_inline(gCurrentLevel); }
+    m4aSongNumStart(MUS_ANGEL_ISLAND__ACT_1);
+#elif (GAME == GAME_SA2)
+    StageInit_SetMusic_inline(gCurrentLevel);
+#endif
+}
 
+void StageInit_Zone5Act2(void)
+{
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 823, 0, 0);
+
+    m4aSongNumStart(MUS_ANGEL_ISLAND__ACT_2);
+#elif (GAME == GAME_SA2)
+    StageInit_SetMusic_inline(gCurrentLevel);
+#endif
+}
+
+#if (GAME == GAME_SA2)
 void StageInit_Zone5ActBoss(void)
 {
     CreatePaletteLoaderTask(0x2000, 686, 0, NULL);
 
     StageInit_SetMusic_inline(gCurrentLevel);
 }
+#endif
 
+#if (GAME == GAME_SA1)
+void StageInit_Zone6Act2(void)
+{
+    CreatePaletteLoaderTask(0x2000, 829, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 830, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 831, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 850, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 851, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 848, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 846, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 847, 0, 0);
+
+    m4aSongNumStart(MUS_COSMIC_ANGEL);
+}
+#endif
+
+#if (GAME == GAME_SA2)
 void StageInit_Zone6ActBoss(void) { StageInit_SetMusic_inline(gCurrentLevel); }
+#endif
 
+#if (GAME == GAME_SA1)
+void StageInit_Zone7Act1(void) { m4aSongNumStart(MUS_X_ZONE); }
+
+void StageInit_Zone7Act2(void) { m4aSongNumStart(MUS_EXTRA_BOSS); }
+#endif
+
+#if (GAME == GAME_SA2)
 void StageInit_ZoneFinalActXX(void)
 {
     CreatePaletteLoaderTask(0x2000, 686, 0, NULL);
@@ -872,15 +1338,61 @@ void StageInit_33(void) { StageInit_SetMusic_inline(gCurrentLevel); }
 void StageInit_Dummy(void) { StageInit_SetMusic_inline(gCurrentLevel); }
 #endif
 
+#if (GAME == GAME_SA1)
+void StageInit_ForestChaoGarden(void)
+{
+    CreatePaletteLoaderTask(0x2000, 814, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 815, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 820, 1, 0);
+    CreatePaletteLoaderTask(0x2000, 820, 0, 0);
+
+    m4aSongNumStart(MUS_NEO_GREEN_HILL__ACT_1);
+}
+
+void StageInit_FactoryChaoGarden(void)
+{
+    CreatePaletteLoaderTask(0x2000, 819, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 845, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 849, 0, 0);
+
+    m4aSongNumStart(MUS_SECRET_BASE__ACT_1);
+}
+
+void StageInit_SpaceChaoGarden(void)
+{
+    CreatePaletteLoaderTask(0x2000, 829, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 830, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 831, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 850, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 851, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 848, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 846, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 847, 0, 0);
+
+    m4aSongNumStart(MUS_COSMIC_ANGEL);
+}
+#endif
+#endif
+
 void StageInit_CollectRings(void)
 {
+#if (GAME == GAME_SA1)
+    CreatePaletteLoaderTask(0x2000, 814, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 815, 0, 0);
+    CreatePaletteLoaderTask(0x2000, 820, 1, 0);
+    CreatePaletteLoaderTask(0x2000, 820, 0, 0);
+
+    m4aSongNumStart(MUS_VS_RING_RUSH_MODE);
+#elif (GAME == GAME_SA2)
 #ifndef COLLECT_RINGS_ROM
     StageInit_SetMusic_inline(gCurrentLevel);
 #else
     m4aSongNumStart(MUS_VS_2);
 #endif
+#endif
 }
 
+#if (GAME == GAME_SA2)
 #if COLLECT_RINGS_ROM
 // ??
 void StageInit_CollectRingsRom(void) { m4aSongNumStart(MUS_VS_2); }
@@ -888,4 +1400,5 @@ void StageInit_CollectRingsRom(void) { m4aSongNumStart(MUS_VS_2); }
 
 #ifndef COLLECT_RINGS_ROM
 void StageInit_SetMusic(u16 level) { StageInit_SetMusic_inline(level); }
+#endif
 #endif

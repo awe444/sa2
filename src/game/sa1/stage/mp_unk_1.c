@@ -260,7 +260,7 @@ void Task_801CD80()
                 CreateUnusedLevelSelect();
             } else if ((gGameMode == 0) && (LOADED_SAVE->unlockedLevels[gSelectedCharacter] == 0)) {
                 gCurrentLevel = 0;
-                ApplyGameStageSettings();
+                ApplyGameStageSettingsAndStart();
             } else {
                 CreateCourseSelect(0U);
             }

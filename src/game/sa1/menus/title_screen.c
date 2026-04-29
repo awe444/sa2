@@ -828,7 +828,7 @@ void Task_SwitchToDemoInit(void)
     gGameMode = GAME_MODE_SINGLE_PLAYER;
 
     CreateDemoManager();
-    ApplyGameStageSettings();
+    ApplyGameStageSettingsAndStart();
 }
 
 void Task_SwitchToMainMenu(void)
