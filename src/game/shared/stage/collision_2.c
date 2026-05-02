@@ -11,9 +11,11 @@
 
 #if (GAME == GAME_SA1)
 #include "constants/sa1/animations.h"
+#include "constants/sa1/char_states.h"
 #include "constants/sa1/songs.h"
 #elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
+#include "constants/sa2/char_states.h"
 #include "constants/sa2/player_transitions.h"
 #include "constants/sa2/songs.h"
 #endif
@@ -296,6 +298,63 @@ END_NONMATCH
 
 // TODO: Check type of x/y!
 // INCOMPLETE!
+#ifdef BUG_FIX
+bool32 sub_800CBBC(Sprite *s, s32 x, s32 y, Rect8 *rectPlayer, u32 UNUSED param4, Player *p, u32 *param6)
+{
+    s32 shbLeft = s->hitboxes[0].b.left;
+    s32 shbRight = s->hitboxes[0].b.right;
+    s32 shbMiddleH = x + ((shbLeft + shbRight) >> 1);
+
+    // Skip side collision when player is on a slope
+    if ((((s32)(p->rotation + 0x20) & 0xC0) >> 6) & 0x1) {
+        return FALSE;
+    }
+
+    if (!HB_COLLISION(x, y, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectPlayer))) {
+        return FALSE;
+    }
+
+    if (I(p->qWorldX) <= shbMiddleH) {
+        // Player is to the left of the sprite
+        if (p->qSpeedAirX > 0) {
+            p->qSpeedAirX = 0;
+        }
+        if (!(p->moveState & MOVESTATE_IN_AIR) && p->qSpeedGround > 0) {
+            p->qSpeedGround = 0;
+        }
+        p->qWorldX = Q(x + shbLeft - rectPlayer->right);
+        *param6 |= COLL_FLAG_20000;
+
+        if (!(p->moveState & MOVESTATE_IN_AIR)) {
+            p->moveState = (p->moveState | MOVESTATE_20) & ~MOVESTATE_SPIN_ATTACK;
+            *param6 = (*param6 | MOVESTATE_20) & ~MOVESTATE_SPIN_ATTACK;
+            p->moveState &= ~MOVESTATE_FACING_LEFT;
+            p->charState = CHARSTATE_14;
+        }
+    } else {
+        // Player is to the right of the sprite
+        if (p->qSpeedAirX < 0) {
+            p->qSpeedAirX = 0;
+        }
+        if (!(p->moveState & MOVESTATE_IN_AIR) && p->qSpeedGround < 0) {
+            p->qSpeedGround = 0;
+        }
+        p->qWorldX = Q(x + shbRight - rectPlayer->left + 1);
+        *param6 |= COLL_FLAG_40000;
+
+        if (!(p->moveState & MOVESTATE_IN_AIR)) {
+            p->moveState = (p->moveState | MOVESTATE_20) & ~MOVESTATE_SPIN_ATTACK;
+            *param6 = (*param6 | MOVESTATE_20) & ~MOVESTATE_SPIN_ATTACK;
+            p->moveState |= MOVESTATE_FACING_LEFT;
+            p->charState = CHARSTATE_14;
+        }
+    }
+
+    PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
+
+    return TRUE;
+}
+#else
 NONMATCH("asm/non_matching/game/shared/stage/collision__sub_800CBBC.inc",
          bool32 sub_800CBBC(Sprite *s, s32 x, s32 y, Rect8 *rectPlayer, u32 UNUSED param4, Player *p, u32 *param6))
 {
@@ -317,6 +376,7 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__sub_800CBBC.inc",
     return FALSE;
 }
 END_NONMATCH
+#endif
 #endif // (GAME == GAME_SA1)
 
 u32 Coll_Player_Entity_Intersection(Sprite *s, CamCoord x, CamCoord y, Player *p)
