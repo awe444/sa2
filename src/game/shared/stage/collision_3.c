@@ -214,6 +214,71 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Itembox.inc"
             }
         }
     }
+#ifdef BUG_FIX
+    else if (!(result & COLL_FLAG_20)) {
+        // Grounded side collision for item boxes.
+        //
+        // When the player is in an attack state (rolling, spin dashing,
+        // B-button attacks, etc.) we skip clamping entirely so the player
+        // can overlap the box and the hitboxes[1] check above can fire
+        // on the next frame to break it.  This also preserves momentum
+        // for rolling/spin dash attacks.
+        //
+        // When NOT attacking we clamp position and zero speed to prevent
+        // the player from walking through the box.  We do NOT set
+        // MOVESTATE_20 (unlike sub_800CBBC) because all characters
+        // check that flag to gate B-button attacks, and the push-state
+        // charState override (CHARSTATE_14) would block crouching/spin
+        // dash initiation.  Instead we conditionally set push animation
+        // only when the player is actively pressing toward the box.
+
+        bool32 inAttackState = (p->spriteInfoBody->s.hitboxes[1].index != -1)
+                            || (p->moveState & MOVESTATE_SPIN_ATTACK)
+                            || (p->SA2_LABEL(unk62) != 0);
+
+        if (!inAttackState) {
+            Rect8 *rectA = (Rect8 *)&rectDataPlayerA[0];
+
+            if (!((((s32)(p->rotation + 0x20) & 0xC0) >> 6) & 0x1)
+                && HB_COLLISION(worldX, worldY, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectA))) {
+
+                s32 shbMiddleH = worldX + ((s->hitboxes[0].b.left + s->hitboxes[0].b.right) >> 1);
+
+                if (I(p->qWorldX) <= shbMiddleH) {
+                    if (p->qSpeedAirX > 0)
+                        p->qSpeedAirX = 0;
+                    if (p->qSpeedGround > 0)
+                        p->qSpeedGround = 0;
+                    p->qWorldX = Q(worldX + s->hitboxes[0].b.left - rectA->right);
+                    result |= COLL_FLAG_20000;
+
+                    if ((p->heldInput & DPAD_RIGHT)
+                        && p->charState != CHARSTATE_CROUCH
+                        && !(p->moveState & MOVESTATE_SPINDASH)) {
+                        p->charState = CHARSTATE_14;
+                        p->moveState &= ~MOVESTATE_FACING_LEFT;
+                        PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
+                    }
+                } else {
+                    if (p->qSpeedAirX < 0)
+                        p->qSpeedAirX = 0;
+                    if (p->qSpeedGround < 0)
+                        p->qSpeedGround = 0;
+                    p->qWorldX = Q(worldX + s->hitboxes[0].b.right - rectA->left + 1);
+                    result |= COLL_FLAG_40000;
+
+                    if ((p->heldInput & DPAD_LEFT)
+                        && p->charState != CHARSTATE_CROUCH
+                        && !(p->moveState & MOVESTATE_SPINDASH)) {
+                        p->charState = CHARSTATE_14;
+                        p->moveState |= MOVESTATE_FACING_LEFT;
+                        PLAYERFN_CHANGE_SHIFT_OFFSETS(p, 6, 14);
+                    }
+                }
+            }
+        }
+    }
+#endif
 
     return result;
 }
@@ -258,6 +323,9 @@ u32 Coll_Player_SkatingStone(Sprite *s, CamCoord worldX, CamCoord worldY, Player
     s32 var_sb;
 
     s8 rectPlayer[4] = { -p->spriteOffsetX, -p->spriteOffsetY, +p->spriteOffsetX, +p->spriteOffsetY };
+#ifdef BUG_FIX
+    s8 rectOffset[4] = { -(p->spriteOffsetX + 5), (1 - p->spriteOffsetY), (p->spriteOffsetX + 5), (p->spriteOffsetY - 1) };
+#endif
 
     u32 result;
 
@@ -275,8 +343,14 @@ u32 Coll_Player_SkatingStone(Sprite *s, CamCoord worldX, CamCoord worldY, Player
         var_sb = 1;
     }
 
+#ifdef BUG_FIX
+    if (((moveState == 0) || !sub_800C934(s, worldX, worldY, (Rect8 *)rectPlayer, var_sb, p, &result))
+        && !sub_800CBBC(s, worldX, worldY, (Rect8 *)rectOffset, var_sb, p, &result)
+        && !sub_800C934(s, worldX, worldY, (Rect8 *)rectPlayer, var_sb, p, &result)) {
+#else
     if (((moveState == 0) || !sub_800C934(s, worldX, worldY, (Rect8 *)rectPlayer, var_sb, p, &result))
         && !sub_800C934(s, worldX, worldY, (Rect8 *)rectPlayer, var_sb, p, &result)) {
+#endif
         if (var_sb) {
             if (!(p->moveState & MOVESTATE_STOOD_ON_OBJ)) {
                 p->moveState = (p->moveState & ~MOVESTATE_20) | MOVESTATE_IN_AIR;
