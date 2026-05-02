@@ -236,12 +236,17 @@ NONMATCH("asm/non_matching/game/shared/stage/collision__Coll_Player_Itembox.inc"
                             || (p->moveState & MOVESTATE_SPIN_ATTACK)
                             || (p->SA2_LABEL(unk62) != 0);
 
-        if (!inAttackState) {
+        // Skip side collision entirely while standing on a slope; matches
+        // sub_800CBBC. Acts as an early-exit so the body-vs-box overlap
+        // check below isn't reached on slopes.
+        if (!inAttackState && (((((s32)(p->rotation + 0x20) & 0xC0) >> 6) & 0x1) == 0)) {
             Rect8 *rectA = (Rect8 *)&rectDataPlayerA[0];
 
-            if (!((((s32)(p->rotation + 0x20) & 0xC0) >> 6) & 0x1)
-                && HB_COLLISION(worldX, worldY, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectA))) {
-
+            // Explicit body-vs-box overlap guard: only clamp when the player's
+            // body hitbox actually overlaps the item box. Without this guard,
+            // the clamp would run every frame the player is grounded near the
+            // item box's column.
+            if (HB_COLLISION(worldX, worldY, s->hitboxes[0].b, I(p->qWorldX), I(p->qWorldY), (*rectA))) {
                 s32 shbMiddleH = worldX + ((s->hitboxes[0].b.left + s->hitboxes[0].b.right) >> 1);
 
                 if (I(p->qWorldX) <= shbMiddleH) {
