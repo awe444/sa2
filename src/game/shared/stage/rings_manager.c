@@ -8,15 +8,19 @@
 #include "game/shared/stage/collect_ring_effect.h"
 #include "game/shared/stage/magnetic_ring.h"
 #include "game/shared/stage/rings_manager.h"
-
-#include "game/shared/stage/entity.h"
-#include "game/sa2/stage/player_super_sonic.h"
-
 #include "game/shared/stage/mp_player.h"
+#include "game/shared/stage/entity.h"
 
+#if (GAME == GAME_SA1)
+#include "game/sa1/assets/compressed/entities.h"
+
+#include "constants/sa1/animations.h"
+#elif (GAME == GAME_SA2)
+#include "game/sa2/stage/player_super_sonic.h"
 #include "game/sa2/assets/compressed/entities.h"
 
 #include "constants/sa2/animations.h"
+#endif
 
 typedef struct {
     Sprite s;
@@ -47,6 +51,10 @@ void TaskDestructor_RingsMgr(struct Task *);
         TO_REGION(a + b + offset);                                                                                                         \
     })
 
+#if (GAME == GAME_SA1)
+// NOT SWAPPED IN SA1 :o
+#define REGION_UPPER(posX, bound, offset) REGION_LOWER(posX, bound, offset)
+#else
 // Swapped for the region upper calc??
 #define REGION_UPPER(posX, bound, offset)                                                                                                  \
     ({                                                                                                                                     \
@@ -54,7 +62,27 @@ void TaskDestructor_RingsMgr(struct Task *);
         s32 b = (bound);                                                                                                                   \
         TO_REGION(b + a + offset);                                                                                                         \
     })
+#endif
 
+#define REGION_OFFSET_TOP  0
+#define REGION_OFFSET_LEFT (-TILE_WIDTH)
+#if (GAME == GAME_SA1)
+#define REGION_OFFSET_BOTTOM (-TILE_WIDTH * 2)
+#define REGION_OFFSET_RIGHT  (-TILE_WIDTH)
+#elif (GAME == GAME_SA2)
+#define REGION_OFFSET_BOTTOM (TILE_WIDTH)
+#define REGION_OFFSET_RIGHT  (TILE_WIDTH * 2)
+#endif
+
+#if (GAME == GAME_SA1)
+#define CHAR_ANIM_HIT_OR_DEAD(anim) ((anim) == SA1_CHAR_ANIM_HIT || (anim) == SA1_CHAR_ANIM_DEAD)
+#elif (GAME == GAME_SA2)
+#define CHAR_ANIM_HIT_OR_DEAD(anim) ((anim) == SA2_CHAR_ANIM_HIT || (anim) == SA2_CHAR_ANIM_DEAD)
+#endif
+
+#if (GAME == GAME_SA1)
+extern const u8 *const gSpritePosData_rings[];
+#elif (GAME == GAME_SA2)
 #ifndef COLLECT_RINGS_ROM
 const u8 *const gSpritePosData_rings[NUM_LEVEL_IDS] = {
     zone1_act1_rings,
@@ -92,6 +120,7 @@ const u8 *const gSpritePosData_rings[NUM_LEVEL_IDS] = {
     NULL,
     NULL,
 };
+#endif
 #endif
 
 void CreateStageRingsManager(void)
@@ -142,50 +171,68 @@ void CreateStageRingsManager(void)
     s->graphics.dest = RESERVED_RING_TILES_VRAM;
     s->oamFlags = SPRITE_OAM_ORDER(20);
     s->graphics.size = 0;
+#if (GAME == GAME_SA1)
+    s->graphics.anim = SA1_ANIM_RING;
+#elif (GAME == GAME_SA2)
     s->graphics.anim = SA2_ANIM_RING;
+#elif (GAME == GAME_SA3)
+    s->graphics.anim = SA3_ANIM_RING;
+#endif
     s->variant = 0;
     s->animCursor = 0;
     s->qAnimDelay = 0;
     s->prevVariant = -1;
     s->animSpeed = 0x10;
     s->palId = 0;
-    s->frameFlags = (SPRITE_FLAG_MASK_18 | SPRITE_FLAG(PRIORITY, 2) | SPRITE_FLAG_MASK_MOSAIC);
+    s->frameFlags = SPRITE_FLAG(PRIORITY, 2)
+#if (GAME == GAME_SA2)
+        | SPRITE_FLAG_MASK_18 | SPRITE_FLAG_MASK_MOSAIC
+#endif
+        ;
 }
 
 // Links since there are lots of fake matches here
+// SA1: https://decomp.me/scratch/vWBeh
 // SA2: https://decomp.me/scratch/wY4hY
 // SA2 Collect rings: https://decomp.me/scratch/1ad61
 void Task_RingsMgrMain(void)
 {
     bool32 sp08;
-
-    u32 h_regionCount, v_regionCount;
     RingsManager *rm;
-    u32 *rings;
-
+#ifndef COLLECT_RINGS_ROM
     u16 regionX, regionY;
+    u32 h_regionCount, v_regionCount;
+#else
+    // TODO: this is unlikely to be swapped but trying to find a match with it the right way
+    u32 h_regionCount, v_regionCount;
+    u16 regionX, regionY;
+#endif
+    u32 *rings;
     Sprite *s;
     u8 drawCount = 0;
 
-    s32 rx, ry;
+    CamCoord rx, ry;
 
     const SpriteOffset *dimensions;
     MapEntity_Ring *meRing;
 
     s8 rect[4] = { -gPlayer.spriteOffsetX, -gPlayer.spriteOffsetY, gPlayer.spriteOffsetX, gPlayer.spriteOffsetY };
 
+#if (GAME == GAME_SA1)
+    s32 r4 = 0;
+#endif
+
     if (!(gStageFlags & STAGE_FLAG__2)) {
         Player *p;
-
 #if (defined(NON_MATCHING) || COLLECT_RINGS_ROM) || (GAME != GAME_SA2)
         const // Only needs to be a real var in SA2 matching
 #endif
             // required for match
             s16 leftIndex
             = 0;
-
         rings = *(u32 **)(TASK_DATA(gCurTask) + offsetof(RingsManager, rings));
 
+#if (GAME == GAME_SA2)
 #ifndef COLLECT_RINGS_ROM
         if (IS_BOSS_STAGE(gCurrentLevel)) {
             if (gBossRingsShallRespawn && gBossRingsRespawnCount > 0) {
@@ -213,6 +260,7 @@ void Task_RingsMgrMain(void)
             rect[3] = +10;
         }
 #endif
+#endif
 
         rings = *(u32 **)(TASK_DATA(gCurTask) + offsetof(RingsManager, rings));
         rm = TASK_DATA(gCurTask);
@@ -225,68 +273,80 @@ void Task_RingsMgrMain(void)
         h_regionCount = (u16)*rings++;
         v_regionCount = (u16)*rings++;
 
-        p = &gPlayer;
+#if (GAME == GAME_SA1)
+        do
+#endif
+        {
+            p = &PLAYER(r4);
 
-        // Handle collisions
-        for (regionY = REGION_LOWER(I(p->qWorldY), rect[1], 0);
-             regionY <= REGION_UPPER(I(p->qWorldY), rect[3], TILE_WIDTH) && regionY < v_regionCount; regionY++) {
+            // Handle collisions
+            for (regionY = REGION_LOWER(I(p->qWorldY), rect[1], REGION_OFFSET_TOP);
+                 regionY <= REGION_UPPER(I(p->qWorldY), rect[3], REGION_OFFSET_BOTTOM) && regionY < v_regionCount; regionY++) {
 
-            for (regionX = REGION_LOWER(I(p->qWorldX), rect[leftIndex], -TILE_WIDTH);
-                 regionX <= REGION_UPPER(I(p->qWorldX), rect[2], TILE_WIDTH * 2) && regionX < h_regionCount; regionX++) {
+                for (regionX = REGION_LOWER(I(p->qWorldX), rect[leftIndex], REGION_OFFSET_LEFT);
+                     regionX <= REGION_UPPER(I(p->qWorldX), rect[2], REGION_OFFSET_RIGHT) && regionX < h_regionCount; regionX++) {
 
-                u32 offset = READ_START_INDEX(rings, h_regionCount, regionX, regionY);
-                if (offset) {
-                    meRing = DATA_START(rings) + offset;
+                    u32 offset = READ_START_INDEX(rings, h_regionCount, regionX, regionY);
+                    if (offset) {
+                        meRing = DATA_START(rings) + offset;
 
-                    while (meRing->x != (u8)MAP_ENTITY_STATE_ARRAY_END) {
-                        bool32 shouldSpawn = meRing->x != (u8)MAP_ENTITY_STATE_INITIALIZED;
-                        if (shouldSpawn) {
-                            // _080080D6
-                            rx = TO_WORLD_POS(meRing->x, regionX);
-                            ry = TO_WORLD_POS(meRing->y, regionY);
+                        while (meRing->x != (u8)MAP_ENTITY_STATE_ARRAY_END) {
+                            bool32 shouldSpawn = meRing->x != (u8)MAP_ENTITY_STATE_INITIALIZED;
+                            if (shouldSpawn) {
+                                // _080080D6
+                                rx = TO_WORLD_POS(meRing->x, regionX);
+                                ry = TO_WORLD_POS(meRing->y, regionY);
 
-                            if (sp08 != FALSE
-                                || (gCurrentLevel != LEVEL_INDEX(ZONE_FINAL, ACT_TRUE_AREA_53) && !(p->moveState & MOVESTATE_DEAD))) {
-#if COLLECT_RINGS_ROM && !defined(NON_MATCHING)
-                                s32 top;
-                                if (RECT_TOUCHING_RING_NON_MATCH(top, I(p->qWorldX), I(p->qWorldY), rx, ry, (Rect8 *)rect))
-#else
-                                if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), rx, ry, (Rect8 *)rect))
+#if (GAME == GAME_SA1)
+                                if ((IS_ALIVE(p) && (p->charState != 15 || p->timerInvulnerability == 0)))
+#elif (GAME == GAME_SA2)
+                                if (sp08 != FALSE || (!IS_EXTRA_STAGE(gCurrentLevel) && IS_ALIVE(p)))
 #endif
                                 {
-#ifndef COLLECT_RINGS_ROM
-                                    INCREMENT_RINGS(1);
+#if COLLECT_RINGS_ROM && !defined(NON_MATCHING)
+                                    s32 top;
+                                    if (RECT_TOUCHING_RING_NON_MATCH(top, I(p->qWorldX), I(p->qWorldY), rx, ry, (Rect8 *)rect))
 #else
+                                    if (RECT_TOUCHING_RING(I(p->qWorldX), I(p->qWorldY), rx, ry, (Rect8 *)rect))
+#endif
                                     {
-                                        s32 prevLives, newLives;
-                                        s32 oldRings = gRingCount;
-                                        gRingCount += 1;
-                                        if (!(IS_EXTRA_STAGE(gCurrentLevel))) {
-                                            newLives = Div(gRingCount, 100);
-                                            prevLives = Div(oldRings, 100);
-                                            if ((newLives != prevLives) && (gGameMode == GAME_MODE_SINGLE_PLAYER)) {
-                                                if (gNumLives < 255) {
-                                                    gNumLives++;
-                                                };
+#ifndef COLLECT_RINGS_ROM
+                                        INCREMENT_RINGS(1);
+#else
+                                        {
+                                            s32 prevLives, newLives;
+                                            s32 oldRings = gRingCount;
+                                            gRingCount += 1;
+                                            if (!(IS_EXTRA_STAGE(gCurrentLevel))) {
+                                                newLives = Div(gRingCount, 100);
+                                                prevLives = Div(oldRings, 100);
+                                                if ((newLives != prevLives) && (gGameMode == GAME_MODE_SINGLE_PLAYER)) {
+                                                    if (gNumLives < 255) {
+                                                        gNumLives++;
+                                                    };
+                                                }
                                             }
                                         }
-                                    }
 #endif
 
-                                    if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS && gRingCount > 255) {
-                                        gRingCount = 255;
-                                    }
+                                        if (gGameMode == GAME_MODE_MULTI_PLAYER_COLLECT_RINGS && gRingCount > 255) {
+                                            gRingCount = 255;
+                                        }
 
-                                    CreateCollectRingEffect(rx, ry);
-                                    meRing->x = (u8)MAP_ENTITY_STATE_INITIALIZED;
+                                        CreateCollectRingEffect(rx, ry);
+                                        meRing->x = (u8)MAP_ENTITY_STATE_INITIALIZED;
+                                    }
                                 }
                             }
+                            meRing++;
                         }
-                        meRing++;
                     }
                 }
             }
         }
+#if (GAME == GAME_SA1)
+        while (++r4 < gNumSingleplayerCharacters);
+#endif
 
         // Handle other player collisions
         if (IS_MULTI_PLAYER) {
@@ -296,12 +356,13 @@ void Task_RingsMgrMain(void)
                 if (i != id && gMultiplayerPlayerTasks[i] != NULL) {
                     MultiplayerPlayer *mpp = TASK_DATA(gMultiplayerPlayerTasks[i]);
 
-                    for (regionY = REGION_LOWER(mpp->pos.y, mpp->s.hitboxes[0].b.top, 0);
-                         regionY <= REGION_UPPER(mpp->pos.y, mpp->s.hitboxes[0].b.bottom, TILE_WIDTH) && regionY < v_regionCount;
+                    for (regionY = REGION_LOWER(mpp->pos.y, mpp->s.hitboxes[0].b.top, REGION_OFFSET_TOP);
+                         regionY <= REGION_UPPER(mpp->pos.y, mpp->s.hitboxes[0].b.bottom, REGION_OFFSET_BOTTOM) && regionY < v_regionCount;
                          regionY++) {
 
-                        for (regionX = REGION_LOWER(mpp->pos.x, mpp->s.hitboxes[0].b.left, -TILE_WIDTH);
-                             regionX <= REGION_UPPER(mpp->pos.x, mpp->s.hitboxes[0].b.right, TILE_WIDTH * 2) && regionX < h_regionCount;
+                        for (regionX = REGION_LOWER(mpp->pos.x, mpp->s.hitboxes[0].b.left, REGION_OFFSET_LEFT);
+                             regionX <= REGION_UPPER(mpp->pos.x, mpp->s.hitboxes[0].b.right, REGION_OFFSET_RIGHT)
+                             && regionX < h_regionCount;
                              regionX++) {
 
                             u32 offset = READ_START_INDEX(rings, h_regionCount, regionX, regionY);
@@ -319,7 +380,7 @@ void Task_RingsMgrMain(void)
                                         u8 pAnim = mpp->s.graphics.anim;
                                         u8 anims = gPlayerCharacterIdleAnims[gMultiplayerCharacters[mpp->unk56]];
                                         u8 anim = pAnim - anims;
-                                        if ((anim != SA2_CHAR_ANIM_HIT && anim != SA2_CHAR_ANIM_DEAD) || !(mpp->unk54 & 0x4)) {
+                                        if (!CHAR_ANIM_HIT_OR_DEAD(anim) || !(mpp->unk54 & 0x4)) {
                                             CreateCollectRingEffect(rx, ry);
                                             meRing->x = (u8)MAP_ENTITY_STATE_INITIALIZED;
                                         }
@@ -359,7 +420,7 @@ void Task_RingsMgrMain(void)
                             }
 
                             rx = TO_WORLD_POS(meRing->x, regionX);
-#ifndef NON_MATCHING
+#if (GAME == GAME_SA2) && !defined(NON_MATCHING)
                             // Required for stack fixes
                             ({ s32 *new_var = &ry; });
 #endif
@@ -422,8 +483,8 @@ void Task_RingsMgrMain(void)
 #endif
                 for (regionX = TO_REGION(gCamera.x); TO_WORLD_POS(0, regionX) < gCamera.x + DISPLAY_WIDTH && regionX < h_regionCount;
                      regionX++) {
-                    u32 offset = READ_START_INDEX(rings, h_regionCount, regionX, regionY);
 
+                    u32 offset = READ_START_INDEX(rings, h_regionCount, regionX, regionY);
                     if (offset != 0) {
                         meRing = DATA_START(rings) + offset;
                         while (meRing->x != (u8)MAP_ENTITY_STATE_ARRAY_END) {
@@ -452,7 +513,6 @@ void Task_RingsMgrMain(void)
 
                                     if (iwram_end == oamAllocated)
                                         return;
-
 #ifndef NON_MATCHING
                                     meRing->x += 0;
 #endif

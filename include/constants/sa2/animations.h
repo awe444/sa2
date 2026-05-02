@@ -21,8 +21,9 @@
 #define SA1_CHAR_ANIM_WALK             4
 #define SA1_CHAR_ANIM_RUN              5
 #define SA1_CHAR_ANIM_SPIN_ATTACK      8
+#define SA1_CHAR_ANIM_HIT              19
 #define SA1_CHAR_ANIM_20               20
-#define SA1_CHAR_ANIM_21               21
+#define SA1_CHAR_ANIM_DEAD             21
 #define SA1_CHAR_ANIM_22               22
 #define SA1_CHAR_ANIM_23               23
 #define SA1_CHAR_ANIM_24               24
