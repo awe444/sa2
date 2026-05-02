@@ -26,7 +26,7 @@ SECTIONS {
         sa2/src/sio32_multi_load.o(.text);
 
         /* Game */
-        src/game/shared/stage/rings_manager.o(.text);
+        sa2/src/game/shared/stage/rings_manager.o(.text);
         src/game/shared/stage/entities_manager.o(.text);
         sa2/src/game/shared/stage/collision_1.o(.text);
         sa2/src/game/shared/stage/collision_3.o(.text);
