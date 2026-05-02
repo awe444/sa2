@@ -289,6 +289,7 @@ set(SA2_SHARED_SRCS
     src/game/shared/stage/mp_event_mgr.c
     src/game/shared/stage/mp_player.c
     src/game/shared/stage/rings_scatter.c
+    src/game/shared/stage/rings_manager.c
     src/game/shared/stage/player.c
     src/game/shared/collect_rings/results.c
     src/game/shared/menus/unused_level_select.c
