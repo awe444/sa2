@@ -69,8 +69,8 @@ set(MID2AGB "${SA2_ROOT}/tools/mid2agb/mid2agb${CMAKE_EXECUTABLE_SUFFIX}")
 
 # ── Step 2: Convert .pal → .gbapal ─────────────────────────────────────────
 file(GLOB_RECURSE PAL_FILES
-    "${SA1_DIR}/graphics/*.pal"
-    "${SA1_DIR}/data/*.pal"
+    "${SA2_ROOT}/graphics/*.pal"
+    "${SA2_ROOT}/data/*.pal"
 )
 foreach(PAL ${PAL_FILES})
     string(REGEX REPLACE "\\.pal$" ".gbapal" GBAPAL "${PAL}")
@@ -95,8 +95,8 @@ endforeach()
 #     causing sprite tiling glitches.
 #   - tileset images need -ignore_trailing.
 file(GLOB_RECURSE PNG_FILES
-    "${SA1_DIR}/graphics/*.png"
-    "${SA1_DIR}/data/*.png"
+    "${SA2_ROOT}/graphics/*.png"
+    "${SA2_ROOT}/data/*.png"
 )
 foreach(PNG ${PNG_FILES})
     # Images under an "8bpp" directory must be converted to .8bpp, not .4bpp
@@ -130,7 +130,7 @@ foreach(PNG ${PNG_FILES})
 endforeach()
 
 # ── Step 4: Convert entity .csv → .bin → .bin.rl ──────────────────────────
-file(GLOB_RECURSE CSV_FILES "${SA1_DIR}/data/sa1/maps/*/*/entities/*.csv")
+file(GLOB_RECURSE CSV_FILES "${SA2_ROOT}/data/sa1/maps/*/*/entities/*.csv")
 foreach(CSV ${CSV_FILES})
     get_filename_component(CSV_NAME "${CSV}" NAME_WE)
     string(REGEX REPLACE "\\.csv$" ".bin" BIN "${CSV}")
@@ -176,7 +176,7 @@ foreach(CSV ${CSV_FILES})
 endforeach()
 
 # ── Step 5: Convert .aif → .bin (sound samples) ───────────────────────────
-file(GLOB AIF_FILES "${SA1_DIR}/sound/sa1/direct_sound_samples/*.aif")
+file(GLOB AIF_FILES "${SA2_ROOT}/sound/sa1/direct_sound_samples/*.aif")
 foreach(AIF ${AIF_FILES})
     string(REGEX REPLACE "\\.aif$" ".bin" BIN "${AIF}")
     if("${AIF}" IS_NEWER_THAN "${BIN}")
@@ -386,7 +386,7 @@ set(MID2AGB_FLAGS_song305           -R0 -G7 -V110)
 set(MID2AGB_FLAGS_song306           -R0 -G7 -V110)
 set(MID2AGB_FLAGS_song307           -R0 -G0 -V120)
 
-file(GLOB MID_FILES "${SA1_DIR}/sound/sa1/songs/midi/*.mid")
+file(GLOB MID_FILES "${SA2_ROOT}/sound/sa1/songs/midi/*.mid")
 foreach(MID ${MID_FILES})
     string(REGEX REPLACE "\\.mid$" ".s" MID_S "${MID}")
     if("${MID}" IS_NEWER_THAN "${MID_S}")

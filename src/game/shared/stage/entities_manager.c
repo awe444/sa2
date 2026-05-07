@@ -8,10 +8,16 @@
 
 #include "game/shared/stage/camera.h"
 #include "game/shared/stage/entity.h"
-#include "game/sa2/stage/itembox.h"
 #include "game/shared/stage/entities_manager.h"
 #include "game/shared/stage/enemy_defeat_score.h"
 
+#if (GAME == GAME_SA1)
+#include "game/sa1/stage/itembox.h"
+
+#include "constants/sa1/songs.h"
+#include "constants/sa1/zones.h"
+#elif (GAME == GAME_SA2)
+#include "game/sa2/stage/itembox.h"
 #include "game/sa2/stage/interactables/platform_thin.h"
 #include "game/sa2/stage/interactables/ceiling_slope.h"
 #include "game/sa2/stage/interactables/grind_rail.h"
@@ -115,13 +121,15 @@
 #include "constants/sa2/zones.h"
 #include "constants/sa2/songs.h"
 
+#endif
+
 #if (GAME == GAME_SA1)
 #define RANGE_INIT(var)  CamCoord(var)[4]
 #define RANGE_xLow(var)  (var)[0]
 #define RANGE_yLow(var)  (var)[1]
 #define RANGE_xHigh(var) (var)[2]
 #define RANGE_yHigh(var) (var)[3]
-typedef u16 region;
+typedef u16 region_t;
 #else
 typedef struct {
     CamCoord xLow, yLow;
@@ -133,11 +141,11 @@ typedef struct {
 #define RANGE_yLow(var)  (var).yLow
 #define RANGE_xHigh(var) (var).xHigh
 #define RANGE_yHigh(var) (var).yHigh
-typedef u32 region;
+typedef u32 region_t;
 #endif
 
-#define NUM_ENEMY_DEFEAT_SCORES          5
 #define READ_START_INDEX(p, hrc, rx, ry) (*((u32 *)((((u8 *)(p)) + (((hrc) * (ry)) * (sizeof(u32)))) + ((rx) * (sizeof(u32))))))
+#define NUM_ENEMY_DEFEAT_SCORES          5
 
 typedef struct Task *(*StagePreInitFunc)(void);
 typedef void (*MapEntityInit)(MapEntity *, u16, u16, u8);
@@ -146,7 +154,366 @@ static void SA2_LABEL(Task_8008DCC)(void);
 
 #ifndef COLLECT_RINGS_ROM
 static void TaskDestructor_EntitiesManager(struct Task *);
+#endif
 
+#if (GAME == GAME_SA1)
+// TODO: move to header files
+extern const RLCompressed *const gSpritePosData_interactables[NUM_LEVEL_IDS];
+extern const RLCompressed *const gSpritePosData_itemboxes[NUM_LEVEL_IDS];
+extern const RLCompressed *const gSpritePosData_enemies[NUM_LEVEL_IDS];
+
+extern void CreateEntity_StageGoal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Down(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_HidingUp(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_HidingDown(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Checkpoint(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Normal_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Normal_Down(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Big_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Big_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Small_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Small_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Decoration(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Toggle_PlayerLayer(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Toggle_PlayerLayer(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_GrindRail_Start(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_GrindRail_End(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PlatformThin(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PlatformThin_Falling(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Trampoline(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PlatformCrumbling(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BounceBlock(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_InclineRamp(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Waterfall(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_HalfPipeStart(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_HalfPipeEnd(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Shrubbery(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Booster(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Booster_SlightLeft(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Booster_SlightRight(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Interactable034(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MiniLoop_Base(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MiniLoop_StartBoost(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MiniLoop_Exit(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MiniLoop_Entrance(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Interactable039(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_WaterBridge(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_ToBeContinuedText(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_RedFlag(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_WaterBridgeSplash(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_WallPole_Left(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_WallPole_Right(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_ForcedSlide(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Booster_Wall(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BumperHexagon(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BumperRound_LinearMov(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BumperRound_CircularMov(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BumperTriHorizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BumperTriVertical(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BumperTriBig(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Flipper(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Platform_Square(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Flipper_Vertical(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BarrelOfDoomMini(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SegaSonicLetter(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PartyBalloon(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_ShipSwing(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Platform_Spiked(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Bowl(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PanelGate_Vertical(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PanelGate_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MarbleTrack_Dir(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MarbleTrack_Pipe(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MarbleTrack_Entrance(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MarbleTrack_Exit(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_ConveyorBelt(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Toggle_PlayerVisibility(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_WallBumper(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_TeleportOrb(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Flipper_SmallBlue(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Carousel(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_HookRail(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SwingingHook(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SecurityGate(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SwingRope(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SteamExhaust(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_CraneClaw(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MovingSpring(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_IronBall(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_HangBar(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SkatingStone(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Platform_SlowDescent(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_RunWheel(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Torch(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Lift(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Platform089(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Toggle_PlayerFloat(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_FerrisWheel(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BoulderSpawner(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SpikedBarrel(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_AirBubbles(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_IceBlock(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Interactable096(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Interactable097(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_UnderwaterLavaPlatform(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_ConveyorBeltObject(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Booster_Steep(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Booster_Steep2(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SpecialSpring(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Propeller(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SmallFallBlock(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Lava(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Track(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Interactable107(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Hiding(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_ToggleGravity(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PipeEntrance(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PipeExit(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_TrackAirCorner(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Interactable113(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_BreakableWall(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MysteryItemBox(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+
+const MapEntityInit gSpriteInits_Interactables[116] = {
+    /* 000 */ CreateEntity_StageGoal,
+    /* 001 */ CreateEntity_Spikes_Up,
+    /* 002 */ CreateEntity_Spikes_Down,
+    /* 003 */ CreateEntity_Spikes_Horizontal, // Left
+    /* 004 */ CreateEntity_Spikes_Horizontal, // Right
+    /* 005 */ CreateEntity_Spikes_HidingUp,
+    /* 006 */ CreateEntity_Spikes_HidingDown,
+    /* 007 */ CreateEntity_Checkpoint,
+    /* 008 */ CreateEntity_Spring_Normal_Up,
+    /* 009 */ CreateEntity_Spring_Normal_Down,
+    /* 010 */ CreateEntity_Spring_Horizontal, // Left
+    /* 011 */ CreateEntity_Spring_Horizontal, // Right
+    /* 012 */ CreateEntity_Spring_Big_Up, // Up-Left
+    /* 013 */ CreateEntity_Spring_Big_Up, // Up-Right
+    /* 014 */ CreateEntity_Spring_Small_Up, // Up-Left
+    /* 015 */ CreateEntity_Spring_Small_Up, // Up-Right
+    /* 016 */ CreateEntity_Decoration,
+    /* 017 */ CreateEntity_Toggle_PlayerLayer,
+    /* 018 */ CreateEntity_Toggle_PlayerLayer,
+    /* 019 */ CreateEntity_GrindRail_Start,
+    /* 020 */ CreateEntity_GrindRail_End,
+    /* 021 */ CreateEntity_PlatformThin,
+    /* 022 */ CreateEntity_PlatformThin_Falling,
+    /* 023 */ CreateEntity_Trampoline,
+    /* 024 */ CreateEntity_PlatformCrumbling,
+    /* 025 */ CreateEntity_BounceBlock,
+    /* 026 */ CreateEntity_InclineRamp,
+    /* 027 */ CreateEntity_Waterfall, // Only particles, used for "Sand Falls", too.
+    /* 028 */ CreateEntity_HalfPipeStart,
+    /* 029 */ CreateEntity_HalfPipeEnd,
+    /* 030 */ CreateEntity_Shrubbery,
+    /* 031 */ CreateEntity_Booster,
+    /* 032 */ CreateEntity_Booster_SlightLeft,
+    /* 033 */ CreateEntity_Booster_SlightRight,
+    /* 034 */ CreateEntity_Interactable034,
+    /* 035 */ CreateEntity_MiniLoop_Base,
+    /* 036 */ CreateEntity_MiniLoop_StartBoost,
+    /* 037 */ CreateEntity_MiniLoop_Exit,
+    /* 038 */ CreateEntity_MiniLoop_Entrance,
+    /* 039 */ CreateEntity_Interactable039,
+    /* 040 */ CreateEntity_WaterBridge,
+    /* 041 */ CreateEntity_ToBeContinuedText,
+    /* 042 */ CreateEntity_RedFlag,
+    /* 043 */ CreateEntity_WaterBridgeSplash,
+    /* 044 */ CreateEntity_WallPole_Left,
+    /* 045 */ CreateEntity_WallPole_Right,
+    /* 046 */ CreateEntity_ForcedSlide,
+    /* 047 */ CreateEntity_Booster_Wall,
+    /* 048 */ CreateEntity_BumperHexagon,
+    /* 049 */ CreateEntity_BumperRound_LinearMov,
+    /* 050 */ CreateEntity_BumperRound_CircularMov,
+    /* 051 */ CreateEntity_BumperTriHorizontal,
+    /* 052 */ CreateEntity_BumperTriVertical,
+    /* 053 */ CreateEntity_BumperTriBig,
+    /* 054 */ CreateEntity_Flipper,
+    /* 055 */ CreateEntity_Platform_Square,
+    /* 056 */ CreateEntity_Flipper_Vertical,
+    /* 057 */ CreateEntity_BarrelOfDoomMini,
+    /* 058 */ CreateEntity_SegaSonicLetter,
+    /* 059 */ CreateEntity_PartyBalloon,
+    /* 060 */ CreateEntity_ShipSwing,
+    /* 061 */ CreateEntity_Platform_Spiked,
+    /* 062 */ CreateEntity_Bowl,
+    /* 063 */ CreateEntity_PanelGate_Vertical,
+    /* 064 */ CreateEntity_PanelGate_Horizontal,
+    /* 065 */ CreateEntity_MarbleTrack_Dir,
+    /* 066 */ CreateEntity_MarbleTrack_Pipe,
+    /* 067 */ CreateEntity_MarbleTrack_Entrance,
+    /* 068 */ CreateEntity_MarbleTrack_Exit,
+    /* 069 */ CreateEntity_ConveyorBelt, // 069 Also used for snow in Ice Paradise
+    /* 070 */ CreateEntity_Toggle_PlayerVisibility, // data[0]: 0 = Visible, 1 = Invisible
+    /* 071 */ CreateEntity_WallBumper,
+    /* 072 */ CreateEntity_TeleportOrb, // Casino Paradise
+    /* 073 */ CreateEntity_Flipper_SmallBlue,
+    /* 074 */ CreateEntity_Carousel,
+    /* 075 */ CreateEntity_HookRail,
+    /* 076 */ CreateEntity_SwingingHook,
+    /* 077 */ CreateEntity_SecurityGate,
+    /* 078 */ CreateEntity_SwingRope,
+    /* 079 */ CreateEntity_SteamExhaust,
+    /* 080 */ CreateEntity_CraneClaw,
+    /* 081 */ CreateEntity_MovingSpring, // 081 Moving Spring
+    /* 082 */ CreateEntity_IronBall,
+    /* 083 */ CreateEntity_HangBar,
+    /* 084 */ CreateEntity_SkatingStone,
+    /* 085 */ CreateEntity_Platform_SlowDescent,
+    /* 086 */ CreateEntity_RunWheel,
+    /* 087 */ CreateEntity_Torch, // Cosmic Angel: Antigravity field elements
+    /* 088 */ CreateEntity_Lift,
+    /* 089 */ CreateEntity_Platform089,
+    /* 090 */ CreateEntity_Toggle_PlayerFloat, // data[0]: 0 = Whirlwind, 1 = Antigravity
+    /* 091 */ CreateEntity_FerrisWheel,
+    /* 092 */ CreateEntity_BoulderSpawner,
+    /* 093 */ CreateEntity_SpikedBarrel,
+    /* 094 */ CreateEntity_AirBubbles,
+    /* 095 */ CreateEntity_IceBlock,
+    /* 096 */ CreateEntity_Interactable096,
+    /* 097 */ CreateEntity_Interactable097,
+    /* 098 */ CreateEntity_UnderwaterLavaPlatform,
+    /* 099 */ CreateEntity_ConveyorBeltObject,
+    /* 100 */ CreateEntity_Booster_Steep,
+    /* 101 */ CreateEntity_Booster_Steep2,
+    /* 102 */ CreateEntity_SpecialSpring,
+    /* 103 */ CreateEntity_Propeller,
+    /* 104 */ CreateEntity_SmallFallBlock, // 104 (X-Zone)
+    /* 105 */ CreateEntity_Lava,
+    /* 106 */ CreateEntity_Track,
+    /* 107 */ CreateEntity_Interactable107,
+    /* 108 */ CreateEntity_Spring_Hiding,
+    /* 109 */ CreateEntity_ToggleGravity,
+    /* 110 */ CreateEntity_PipeEntrance,
+    /* 111 */ CreateEntity_PipeExit,
+    /* 112 */ CreateEntity_TrackAirCorner,
+    /* 113 */ CreateEntity_Interactable113,
+    /* 114 */ CreateEntity_BreakableWall,
+    /* 115 */ CreateEntity_MysteryItemBox,
+};
+
+extern void CreateEntity_Kiki(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Buzzer(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_GamiGami(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Rhinotank(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_KeroKero(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Senbon(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Tentou(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Fireball(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Hanabii(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Slot(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Pierrot(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Leon(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Mirror(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Wamu(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Oct(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Mole(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Yukimaru(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Yukimaru_Wall(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Drisame(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Kuraa(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PenMk1(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggHammerTank_Intro(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggHammerTank(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggPress(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggBall(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggSpider(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MechaKnuckles(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggSnake(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggWrecker(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggDrillster(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_EggX(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_SuperEggRobot(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+
+const MapEntityInit gSpriteInits_Enemies[32] = {
+    /* 000 */ CreateEntity_Kiki,
+    /* 001 */ CreateEntity_Buzzer,
+    /* 002 */ CreateEntity_GamiGami,
+    /* 003 */ CreateEntity_Rhinotank,
+    /* 004 */ CreateEntity_KeroKero,
+    /* 005 */ CreateEntity_Senbon,
+    /* 006 */ CreateEntity_Tentou,
+    /* 007 */ CreateEntity_Fireball,
+    /* 008 */ CreateEntity_Hanabii,
+    /* 009 */ CreateEntity_Slot,
+    /* 010 */ CreateEntity_Pierrot,
+    /* 011 */ CreateEntity_Leon,
+    /* 012 */ CreateEntity_Mirror,
+    /* 013 */ CreateEntity_Wamu,
+    /* 014 */ CreateEntity_Oct,
+    /* 015 */ CreateEntity_Mole,
+    /* 016 */ CreateEntity_Yukimaru,
+    /* 017 */ CreateEntity_Yukimaru_Wall,
+    /* 018 */ CreateEntity_Drisame,
+    /* 019 */ CreateEntity_Kuraa,
+    /* 020 */ CreateEntity_PenMk1,
+
+    // Bosses
+    /* 021 */ CreateEntity_EggHammerTank_Intro,
+    /* 022 */ CreateEntity_EggHammerTank,
+    /* 023 */ CreateEntity_EggPress,
+    /* 024 */ CreateEntity_EggBall,
+    /* 025 */ CreateEntity_EggSpider,
+    /* 026 */ CreateEntity_MechaKnuckles,
+    /* 027 */ CreateEntity_EggSnake,
+    /* 028 */ CreateEntity_EggWrecker,
+    /* 029 */ CreateEntity_EggDrillster,
+    /* 030 */ CreateEntity_EggX,
+    /* 031 */ CreateEntity_SuperEggRobot,
+};
+
+const u16 enemyDefeatScores[NUM_ENEMY_DEFEAT_SCORES] = {
+    100, 200, 400, 800, 1000,
+};
+
+extern void CreateEntity_Spikes_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Down(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spikes_Down(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Normal_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Normal_Down(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Horizontal(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Big_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Spring_Big_Up(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Toggle_PlayerLayer(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_Toggle_PlayerLayer(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PlatformThin(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_PlatformThin_Falling(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_WaterBridge(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+extern void CreateEntity_MysteryItemBox(MapEntity *me, u16 regionX, u16 regionY, u8 id);
+
+// Used for the Single Pak, "Collect Rings" stage
+const MapEntityInit gSpriteInits_CollectRingsInteractables[] = {
+    /* 000 */ CreateEntity_Spikes_Up,
+    /* 001 */ CreateEntity_Spikes_Down,
+    /* 002 */ CreateEntity_Spikes_Horizontal,
+    /* 003 */ CreateEntity_Spikes_Horizontal,
+    /* 004 */ CreateEntity_Spikes_Up,
+    /* 005 */ CreateEntity_Spikes_Down,
+    /* 006 */ CreateEntity_Spring_Normal_Up,
+    /* 007 */ CreateEntity_Spring_Normal_Down,
+    /* 008 */ CreateEntity_Spring_Horizontal,
+    /* 009 */ CreateEntity_Spring_Horizontal,
+    /* 010 */ CreateEntity_Spring_Big_Up,
+    /* 011 */ CreateEntity_Spring_Big_Up,
+    /* 012 */ CreateEntity_Toggle_PlayerLayer,
+    /* 013 */ CreateEntity_Toggle_PlayerLayer,
+    /* 014 */ CreateEntity_PlatformThin,
+    /* 015 */ CreateEntity_PlatformThin_Falling,
+    /* 016 */ CreateEntity_WaterBridge,
+    /* 017 */ CreateEntity_MysteryItemBox,
+};
+#elif (GAME == GAME_SA2)
+#ifndef COLLECT_RINGS_ROM
 const RLCompressed *const gSpritePosData_interactables[NUM_LEVEL_IDS] = {
     (void *)&zone1_act1_interactables,
     (void *)&zone1_act2_interactables,
@@ -444,7 +811,10 @@ const StagePreInitFunc gSpriteTileInits_PreStageEntry[] = {
     NULL,        NULL,        NULL, NULL, // Final Zone
     NULL,        NULL,
 };
+#endif
+#endif
 
+#ifndef COLLECT_RINGS_ROM
 void CreateStageEntitiesManager(void)
 {
     void *decompBuf;
@@ -471,11 +841,13 @@ void CreateStageEntitiesManager(void)
         RLUnCompWram(gSpritePosData_enemies[gCurrentLevel], decompBuf);
         em->enemies = decompBuf;
 
+#if (GAME == GAME_SA2)
         em->preInit = NULL;
 
         if (gSpriteTileInits_PreStageEntry[gCurrentLevel]) {
             em->preInit = gSpriteTileInits_PreStageEntry[gCurrentLevel]();
         }
+#endif
     } else {
         decompBuf = (void *)EWRAM_START + 0x3F000;
         RLUnCompWram(*(void **)((void *)EWRAM_START + 0x3300C), decompBuf);
@@ -484,7 +856,7 @@ void CreateStageEntitiesManager(void)
 
     em->prevCamX = gCamera.x;
     em->prevCamY = gCamera.y;
-    em->unk14 = 1;
+    em->SA2_LABEL(unk14) = 1;
     gEntitiesManagerTask = t;
 }
 #endif
@@ -497,7 +869,7 @@ static void SpawnMapEntities()
 #endif
     if ((gStageFlags & 2) == 0) {
         u32 i;
-        region regionX, regionY;
+        region_t regionX, regionY;
         RANGE_INIT(range);
         u32 h_regionCount, v_regionCount;
 
@@ -539,25 +911,25 @@ static void SpawnMapEntities()
             RANGE_yHigh(range) = 0;
         }
 
-        if ((u32)RANGE_xLow(range) >= Q(h_regionCount)) {
-            RANGE_xLow(range) = Q(h_regionCount) - 1;
+        if (RANGE_xLow(range) >= TO_WORLD_POS(0, h_regionCount)) {
+            RANGE_xLow(range) = TO_WORLD_POS(0, h_regionCount) - 1;
         }
-        if ((u32)RANGE_yLow(range) >= Q(v_regionCount)) {
-            RANGE_yLow(range) = Q(v_regionCount) - 1;
-        }
-
-        if ((u32)RANGE_xHigh(range) >= Q(h_regionCount)) {
-            RANGE_xHigh(range) = Q(h_regionCount) - 1;
+        if (RANGE_yLow(range) >= TO_WORLD_POS(0, v_regionCount)) {
+            RANGE_yLow(range) = TO_WORLD_POS(0, v_regionCount) - 1;
         }
 
-        if ((u32)RANGE_yHigh(range) >= Q(v_regionCount)) {
-            RANGE_yHigh(range) = Q(v_regionCount) - 1;
+        if (RANGE_xHigh(range) >= TO_WORLD_POS(0, h_regionCount)) {
+            RANGE_xHigh(range) = TO_WORLD_POS(0, h_regionCount) - 1;
         }
 
-        regionY = I(RANGE_yLow(range));
-        while (Q(regionY) < (u32)RANGE_yHigh(range) && regionY < v_regionCount) {
-            regionX = I(RANGE_xLow(range));
-            while (Q(regionX) < (u32)RANGE_xHigh(range) && regionX < h_regionCount) {
+        if (RANGE_yHigh(range) >= TO_WORLD_POS(0, v_regionCount)) {
+            RANGE_yHigh(range) = TO_WORLD_POS(0, v_regionCount) - 1;
+        }
+
+        regionY = TO_REGION(RANGE_yLow(range));
+        while (TO_WORLD_POS(0, regionY) < RANGE_yHigh(range) && regionY < v_regionCount) {
+            regionX = TO_REGION(RANGE_xLow(range));
+            while (TO_WORLD_POS(0, regionX) < RANGE_xHigh(range) && regionX < h_regionCount) {
 #ifndef COLLECT_RINGS_ROM
                 if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
                     i = READ_START_INDEX(interactables, h_regionCount, regionX, regionY);
@@ -565,8 +937,8 @@ static void SpawnMapEntities()
                         MapEntity *me = ((void *)interactables + (i - 8));
                         for (i = 0; (s8)me->x != -1; me++, i++) {
                             if ((s8)me->x >= -2) {
-                                s32 x = TO_WORLD_POS(me->x, regionX);
-                                s32 y = TO_WORLD_POS(me->y, regionY);
+                                CamCoord x = TO_WORLD_POS(me->x, regionX);
+                                CamCoord y = TO_WORLD_POS(me->y, regionY);
                                 if (x >= RANGE_xLow(range) && x <= RANGE_xHigh(range) && y >= RANGE_yLow(range)
                                     && y <= RANGE_yHigh(range)) {
                                     gSpriteInits_Interactables[me->index](me, regionX, regionY, i);
@@ -580,8 +952,8 @@ static void SpawnMapEntities()
                         MapEntity_Itembox *me = ((void *)itemBoxPositions + (i - 8));
                         for (i = 0; (s8)me->x != -1; me++, i++) {
                             if ((s8)me->x >= -2) {
-                                s32 x = TO_WORLD_POS(me->x, regionX);
-                                s32 y = TO_WORLD_POS(me->y, regionY);
+                                CamCoord x = TO_WORLD_POS(me->x, regionX);
+                                CamCoord y = TO_WORLD_POS(me->y, regionY);
                                 if (x >= RANGE_xLow(range) && x <= RANGE_xHigh(range) && y >= RANGE_yLow(range)
                                     && y <= RANGE_yHigh(range)) {
                                     CreateEntity_ItemBox((void *)me, regionX, regionY, i);
@@ -596,8 +968,8 @@ static void SpawnMapEntities()
                         for (i = 0; (s8)me->x != -1; me++, i++) {
 
                             if ((s8)me->x >= -2) {
-                                s32 x = TO_WORLD_POS(me->x, regionX);
-                                s32 y = TO_WORLD_POS(me->y, regionY);
+                                CamCoord x = TO_WORLD_POS(me->x, regionX);
+                                CamCoord y = TO_WORLD_POS(me->y, regionY);
                                 if (x >= RANGE_xLow(range) && x <= RANGE_xHigh(range) && y >= RANGE_yLow(range)
                                     && y <= RANGE_yHigh(range)) {
                                     gSpriteInits_Enemies[me->index](me, regionX, regionY, i);
@@ -619,8 +991,8 @@ static void SpawnMapEntities()
                         MapEntity *me = ((void *)interactables + (i - 8));
                         for (i = 0; (s8)me->x != -1; me++, i++) {
                             if ((s8)me->x >= -2) {
-                                s32 x = TO_WORLD_POS(me->x, regionX);
-                                s32 y = TO_WORLD_POS(me->y, regionY);
+                                CamCoord x = TO_WORLD_POS(me->x, regionX);
+                                CamCoord y = TO_WORLD_POS(me->y, regionY);
                                 if (x >= RANGE_xLow(range) && x <= RANGE_xHigh(range) && y >= RANGE_yLow(range)
                                     && y <= RANGE_yHigh(range)) {
                                     gSpriteInits_CollectRingsInteractables[me->index](me, regionX, regionY, i);
@@ -771,18 +1143,18 @@ static void SA2_LABEL(Task_8008DCC)(void)
             RANGE_xHigh(range1) = 0;
         }
 
-        if (range1.yHigh < 0) {
+        if (RANGE_yHigh(range1) < 0) {
             RANGE_yHigh(range1) = 0;
         }
 
         temp2 = RANGE_xLow(range1);
-        temp = Q(h_regionCount);
+        temp = TO_WORLD_POS(0, h_regionCount);
         if (temp2 >= temp) {
             RANGE_xLow(range1) = temp - 1;
         }
 
         temp3 = RANGE_yLow(range1);
-        temp4 = Q(v_regionCount);
+        temp4 = TO_WORLD_POS(0, v_regionCount);
 
         if (temp3 >= temp4) {
             RANGE_yLow(range1) = temp4 - 1;
@@ -792,7 +1164,7 @@ static void SA2_LABEL(Task_8008DCC)(void)
             RANGE_xHigh(range1) = temp - 1;
         }
 
-        if (range1.yHigh >= temp4) {
+        if (RANGE_yHigh(range1) >= temp4) {
             RANGE_yHigh(range1) = temp4 - 1;
         }
 
@@ -828,12 +1200,12 @@ static void SA2_LABEL(Task_8008DCC)(void)
             RANGE_yHigh(range2) = temp4 - 1;
         }
 
-        if (gCamera.x != em->prevCamX && RANGE_xLow(range1) != RANGE_xHigh(range1) && RANGE_yLow(range1) != range1.yHigh) {
-            regionY = I(RANGE_yLow(range1));
+        if (gCamera.x != em->prevCamX && RANGE_xLow(range1) != RANGE_xHigh(range1) && RANGE_yLow(range1) != RANGE_yHigh(range1)) {
+            regionY = TO_REGION(RANGE_yLow(range1));
 
-            while (Q(regionY) < range1.yHigh && regionY < v_regionCount) {
-                regionX = I(RANGE_xLow(range1));
-                while (Q(regionX) < RANGE_xHigh(range1) && regionX < h_regionCount) {
+            while (TO_WORLD_POS(0, regionY) < RANGE_yHigh(range1) && regionY < v_regionCount) {
+                regionX = TO_REGION(RANGE_xLow(range1));
+                while (TO_WORLD_POS(0, regionX) < RANGE_xHigh(range1) && regionX < h_regionCount) {
 #ifndef COLLECT_RINGS_ROM
                     if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
                         i = READ_START_INDEX(interactables, h_regionCount, regionX, regionY);
@@ -844,7 +1216,7 @@ static void SA2_LABEL(Task_8008DCC)(void)
                                     CamCoord x = TO_WORLD_POS(me->x, regionX);
                                     CamCoord y = TO_WORLD_POS(me->y, regionY);
                                     if (x >= RANGE_xLow(range1) && x <= RANGE_xHigh(range1) && y >= RANGE_yLow(range1)
-                                        && y <= range1.yHigh) {
+                                        && y <= RANGE_yHigh(range1)) {
                                         gSpriteInits_Interactables[me->index](me, regionX, regionY, i);
                                     }
                                 }
@@ -859,7 +1231,7 @@ static void SA2_LABEL(Task_8008DCC)(void)
                                     CamCoord x = TO_WORLD_POS(me->x, regionX);
                                     CamCoord y = TO_WORLD_POS(me->y, regionY);
                                     if (x >= RANGE_xLow(range1) && x <= RANGE_xHigh(range1) && y >= RANGE_yLow(range1)
-                                        && y <= range1.yHigh) {
+                                        && y <= RANGE_yHigh(range1)) {
                                         CreateEntity_ItemBox((MapEntity *)me, regionX, regionY, i);
                                     }
                                 }
@@ -874,7 +1246,7 @@ static void SA2_LABEL(Task_8008DCC)(void)
                                     CamCoord x = TO_WORLD_POS(me->x, regionX);
                                     CamCoord y = TO_WORLD_POS(me->y, regionY);
                                     if (x >= RANGE_xLow(range1) && x <= RANGE_xHigh(range1) && y >= RANGE_yLow(range1)
-                                        && y <= range1.yHigh) {
+                                        && y <= RANGE_yHigh(range1)) {
                                         gSpriteInits_Enemies[me->index](me, regionX, regionY, i);
                                     }
                                 }
@@ -897,7 +1269,7 @@ static void SA2_LABEL(Task_8008DCC)(void)
                                     CamCoord x = TO_WORLD_POS(me->x, regionX);
                                     CamCoord y = TO_WORLD_POS(me->y, regionY);
                                     if (x >= RANGE_xLow(range1) && x <= RANGE_xHigh(range1) && y >= RANGE_yLow(range1)
-                                        && y <= range1.yHigh) {
+                                        && y <= RANGE_yHigh(range1)) {
                                         gSpriteInits_CollectRingsInteractables[me->index](me, regionX, regionY, i);
                                     }
                                 }
@@ -911,10 +1283,10 @@ static void SA2_LABEL(Task_8008DCC)(void)
         }
 
         if (((gCamera.y != em->prevCamY) && (RANGE_yLow(range2) != RANGE_yHigh(range2))) && (RANGE_xLow(range2) != RANGE_xHigh(range2))) {
-            regionY = I(RANGE_yLow(range2));
-            while (({ Q(regionY); }) < RANGE_yHigh(range2) && regionY < v_regionCount) {
-                regionX = I(RANGE_xLow(range2));
-                while (Q(regionX) < RANGE_xHigh(range2) && regionX < h_regionCount) {
+            regionY = TO_REGION(RANGE_yLow(range2));
+            while (({ TO_WORLD_POS(0, regionY); }) < RANGE_yHigh(range2) && regionY < v_regionCount) {
+                regionX = TO_REGION(RANGE_xLow(range2));
+                while (TO_WORLD_POS(0, regionX) < RANGE_xHigh(range2) && regionX < h_regionCount) {
 #ifndef COLLECT_RINGS_ROM
                     if (gGameMode != GAME_MODE_MULTI_PLAYER_COLLECT_RINGS) {
                         i = READ_START_INDEX(interactables, h_regionCount, regionX, regionY);
@@ -1033,7 +1405,7 @@ void CreateEnemyDefeatScoreAndManageLives(s16 x, s16 y)
     }
 }
 
-void TaskDestructor_80095E8(struct Task *t)
+void TaskDestructor_EntityShared(struct Task *t)
 {
     Sprite_Entity *s = TASK_DATA(t);
     VramFree(s->displayed.graphics.dest);
@@ -1047,5 +1419,4 @@ static void TaskDestructor_EntitiesManager(struct Task *t)
     EwramFree(em->enemies);
     gEntitiesManagerTask = NULL;
 }
-
 #endif

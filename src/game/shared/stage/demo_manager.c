@@ -67,7 +67,7 @@ void CreateDemoManager(void)
 #else
     AnimId arr[2];
 #endif
-    memcpy(&arr, gPressStartTiles, sizeof(arr));
+    memcpy((void *)&arr, gPressStartTiles, sizeof(arr));
 #endif
     blendCtrl = gBldRegs.bldCnt & 0xC0;
 #if (GAME == GAME_SA2)
