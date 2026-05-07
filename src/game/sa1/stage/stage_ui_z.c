@@ -757,7 +757,15 @@ void Task_8055B18()
 {
     // TODO: Inline the mem calls!
     // const u8 arr0[16] = { /* data here */ };
+#ifdef NON_MATCHING
+    // The original declaration is `const u8 arr0[22 + 5]`, but writing through
+    // a cast that strips `const` is undefined behavior. On x86_64 (clang/gcc),
+    // the array can be placed in read-only memory, causing the memcpy below to
+    // SIGSEGV. Drop the `const` for non-matching/portable builds.
+    u8 arr0[22 + 5];
+#else
     const u8 arr0[22 + 5];
+#endif
     memcpy((void *)arr0, &gUnknown_086883CC[0], sizeof(arr0) - 5);
     memset((void *)(arr0 + 22), 0, 5);
 
