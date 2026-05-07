@@ -18,7 +18,7 @@ typedef bool32 (*VBlankProcessFunc)(void);
 IntrFunc gIntrTable[16] = {};
 u32 gIntrMainBuf[0x80] = {};
 struct Task gTasks[MAX_TASK_NUM] = {};
-u16 SA2_LABEL(gUnknown_030017F0) ALIGNED(4) = 0;
+u16 gSpriteTransformScaleX ALIGNED(4) = 0;
 Vec2_16 gSpriteOffset ALIGNED(4) = {};
 Background *gBackgroundsCopyQueue[16] ALIGNED(16) = {};
 u32 gFlags = 0;
@@ -45,9 +45,9 @@ u8 gNextFreeAffineIndex = 0;
 #endif
 BgAffineReg gBgAffineRegs[NUM_AFFINE_BACKGROUNDS] ALIGNED(16) = {};
 void *gVramHeapStartAddr = NULL;
-u16 SA2_LABEL(gUnknown_03001944) ALIGNED(4) = 0;
+u16 gSpriteTransformRotation ALIGNED(4) = 0;
 u8 gNumVBlankIntrs ALIGNED(4) = 0;
-s16 SA2_LABEL(gUnknown_0300194C) ALIGNED(4) = 0;
+s16 gSpriteTransformX ALIGNED(4) = 0;
 
 #if (ENGINE >= ENGINE_3)
 u8 gUnknown_03002C60 ALIGNED(4) = 0;
@@ -114,7 +114,7 @@ struct GraphicsData *gVramGraphicsCopyQueue[32] ALIGNED(16) = {};
 #if (ENGINE == ENGINE_3)
 VoidFn gUnknown_03003C08 = NULL;
 #endif
-s16 SA2_LABEL(gUnknown_03002820) = 0;
+s16 gSpriteTransformY = 0;
 s16 gBgScrollRegs[NUM_BACKGROUNDS][2] ALIGNED(16) = {};
 u16 gDispCnt = 0;
 u8 gKeysContinuedRepeatIntervals[10] ALIGNED(16) = {};
@@ -161,8 +161,8 @@ u8 gBgSprites_Unknown1[16] = {};
 OamData gOamBuffer[OAM_ENTRY_COUNT] ALIGNED(16) = {};
 u16 gVramHeapState[OBJ_VRAM_TOTAL_SIZE / VRAM_HEAP_SEGMENT_SIZE] = {};
 u8 gBgSpritesCount ALIGNED(4) = 0;
-u16 SA2_LABEL(gUnknown_03005394) ALIGNED(4) = 0;
-u16 SA2_LABEL(gUnknown_03005398) ALIGNED(4) = 0;
+u16 gSpriteTransformScaleY ALIGNED(4) = 0;
+u16 gSpriteTransformScaleUnknown ALIGNED(4) = 0;
 IntrFunc gVBlankIntrs[4] ALIGNED(16) = {};
 const u8 *gInputPlaybackData = NULL;
 bool8 gExecSoundMain ALIGNED(4) = FALSE;
@@ -388,14 +388,14 @@ void EngineInit(void)
 #if (ENGINE >= ENGINE_3)
     gNextFreeAffineIndex = 0;
 #endif
-    SA2_LABEL(gUnknown_03001944) = 0;
-    SA2_LABEL(gUnknown_030017F0) = 0x100;
-    SA2_LABEL(gUnknown_03005394) = 0x100;
+    gSpriteTransformRotation = 0;
+    gSpriteTransformScaleX = 0x100;
+    gSpriteTransformScaleY = 0x100;
     SA2_LABEL(gUnknown_03002A8C) = 0;
     SA2_LABEL(gUnknown_03004D58) = 0;
-    SA2_LABEL(gUnknown_0300194C) = 0;
-    SA2_LABEL(gUnknown_03002820) = 0;
-    SA2_LABEL(gUnknown_03005398) = 0x100;
+    gSpriteTransformX = 0;
+    gSpriteTransformY = 0;
+    gSpriteTransformScaleUnknown = 0x100;
 
     gWinRegs[WINREG_WIN0H] = 0;
     gWinRegs[WINREG_WIN1H] = 0;

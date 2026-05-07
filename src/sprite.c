@@ -513,9 +513,9 @@ NONMATCH("asm/non_matching/engine/UnusedTransform.inc", void UnusedTransform(Spr
 {
     // Like TransformSprite but incorporates parent position/rotation/scale globals
     SpriteTransform tf;
-    s16 angle = SA2_LABEL(gUnknown_03001944);
-    s16 scaleX = SA2_LABEL(gUnknown_030017F0);
-    s16 scaleY = SA2_LABEL(gUnknown_03005394);
+    s16 angle = gSpriteTransformRotation;
+    s16 scaleX = gSpriteTransformScaleX;
+    s16 scaleY = gSpriteTransformScaleY;
     s32 cosA = COS_24_8(angle & ONE_CYCLE);
     s32 sinA = SIN_24_8(angle & ONE_CYCLE);
 
@@ -526,8 +526,8 @@ NONMATCH("asm/non_matching/engine/UnusedTransform.inc", void UnusedTransform(Spr
     s16 m11 = (cosA * scaleY) >> 8;
 
     // Compute rotated and translated position
-    tf.x = (m00 * transform->x + m01 * transform->y + ((s32)SA2_LABEL(gUnknown_0300194C) << 8)) >> 8;
-    tf.y = (m10 * transform->x + m11 * transform->y + ((s32)SA2_LABEL(gUnknown_03002820) << 8)) >> 8;
+    tf.x = (m00 * transform->x + m01 * transform->y + ((s32)gSpriteTransformX << 8)) >> 8;
+    tf.y = (m10 * transform->x + m11 * transform->y + ((s32)gSpriteTransformY << 8)) >> 8;
 
     // Combined rotation and scale
     tf.rotation = (transform->rotation + angle) & ONE_CYCLE;
