@@ -1,0 +1,11 @@
+/home/awaszczak/git/sa2/sa1/CMakeLists.txt
+/home/awaszczak/git/sa2/sa1/android/app/jni/CMakeLists.txt
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/CMakeLists.txt
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/cmake/CheckCPUArchitecture.cmake
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/cmake/macros.cmake
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/cmake/sdlchecks.cmake
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/cmake/sdlfind.cmake
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/cmake/sdlplatform.cmake
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/cmake_uninstall.cmake.in
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/include/SDL_config.h.cmake
+/home/awaszczak/git/sa2/sa1/android/app/jni/SDL2/include/SDL_revision.h.cmake
