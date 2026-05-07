@@ -7,6 +7,22 @@ option(SA1_ENABLE_AUDIO "Enable audio support" ON)
 set(SA1_GAME_REGION "EUROPE" CACHE STRING "Game region (EUROPE or USA)")
 set(SA2_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." CACHE PATH "Path to the SA2 root directory")
 
+# ── Locate baserom ───────────────────────────────────────────────────────────
+# Upstream commit cc2110e8 ("Move SA1 to root") changed the working directory
+# for asm preprocessing/assembly to the sa2 root, so .incbin "baserom_sa1.gba"
+# now resolves to ${SA2_ROOT}/baserom_sa1.gba.  The fork has historically
+# documented placing the ROM at sa1/baserom_sa1.gba (see INSTALL.md), so to
+# preserve that convention we mirror the file from sa1/ to the sa2 root if
+# only the sa1/ copy exists.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/baserom_sa1.gba"
+        AND NOT EXISTS "${SA2_ROOT}/baserom_sa1.gba")
+    message(STATUS "Mirroring sa1/baserom_sa1.gba → ${SA2_ROOT}/baserom_sa1.gba")
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/baserom_sa1.gba"
+        "${SA2_ROOT}/baserom_sa1.gba"
+        COPYONLY)
+endif()
+
 # ── Host tool: preproc ───────────────────────────────────────────────────────
 # The preproc tool converts INCBIN_* macros into C array initialisers by
 # reading binary asset files at build time.  It must run on the *host*, so
@@ -156,7 +172,7 @@ function(sa1_preprocess OUTPUT_VAR)
                 -DPREPROC_EXE=${PREPROC}
                 -DPP_INPUT=${PP_I}
                 -DPP_OUTPUT=${PP_C}
-                -DWORK_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+                -DWORK_DIR=${SA2_ROOT}
                 -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_preproc.cmake"
             DEPENDS "${SRC}" ${PREPROC_DEP} "${ASSET_STAMP}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -177,26 +193,40 @@ if(NOT ANDROID)
     pkg_check_modules(SDL2 REQUIRED sdl2)
 endif()
 
-# ── SA1 sources (same set as the Makefile "sdl" platform) ────────────────────
+# ── SA1 sources ─────────────────────────────────────────────────────────────
+# Upstream commit cc2110e8 ("Move SA1 to root") moved sa1/src/data/sa1/* and
+# sa1/src/game/sa1/* to the sa2 root.  The SA1-specific game and ui sources
+# at src/game/sa1/* are already listed explicitly in SA2_SHARED_SRCS below
+# (mirroring sa1/Makefile's SA2_C_FILES), but the data tables under
+# src/data/sa1/* are not — pick them up via a glob here.
 file(GLOB_RECURSE SA1_GAME_SRCS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/game/*.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/data/*.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib/*.c"
+    "${SA2_ROOT}/src/data/sa1/*.c"
 )
 
-set(SA1_PLATFORM_SRCS
+# Fork-local platform sources (sa1/-prefixed).
+# - pret_sdl/sdl2.c is fork-modified (Android/portable tweaks) and also now
+#   contains the LZ77UnComp* / RLUnComp* helpers that previously lived in
+#   compression.c and ext/gbagfx/{lz,rl}.c (which upstream removed).
+# - audio/{cgb_audio,m4a_sound_mixer}.c are fork-synced copies of the sa2 root
+#   versions, kept here for consistency with sa1/include/platform/shared/audio/*.
+set(SA1_PLATFORM_SRCS_LOCAL
     src/platform/pret_sdl/sdl2.c
+    src/platform/shared/audio/cgb_audio.c
+    src/platform/shared/audio/m4a_sound_mixer.c
+)
+list(TRANSFORM SA1_PLATFORM_SRCS_LOCAL PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+
+# Shared platform sources from the sa2 root (moved out of sa1/ by upstream
+# commit cc2110e8 "Move SA1 to root").
+set(SA1_PLATFORM_SRCS_SHARED
     src/platform/shared/common.c
-    src/platform/shared/compression.c
     src/platform/shared/dma.c
     src/platform/shared/input.c
     src/platform/shared/stub.c
-    src/platform/shared/audio/cgb_audio.c
-    src/platform/shared/audio/m4a_sound_mixer.c
-    src/platform/ext/gbagfx/lz.c
-    src/platform/ext/gbagfx/rl.c
 )
-list(TRANSFORM SA1_PLATFORM_SRCS PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+list(TRANSFORM SA1_PLATFORM_SRCS_SHARED PREPEND "${SA2_ROOT}/")
+
+set(SA1_PLATFORM_SRCS ${SA1_PLATFORM_SRCS_LOCAL} ${SA1_PLATFORM_SRCS_SHARED})
 
 # SA2 shared C sources that SA1 depends on (mirrors SA2_C_FILES in Makefile)
 set(SA2_SHARED_SRCS
@@ -267,6 +297,7 @@ set(SA2_SHARED_SRCS
     src/game/shared/stage/pause_menu.c
     src/game/shared/stage/item_tasks.c
     src/game/shared/stage/demo_manager.c
+    src/game/shared/stage/entities_manager.c
     src/game/shared/stage/enemy_defeat_score.c
     src/game/shared/stage/magnetic_ring.c
     src/game/shared/stage/mp_finish.c
@@ -486,15 +517,15 @@ sa1_preprocess(PP_SRCS
 #   preproc file.s sdl ""  →  expand .include / .string / .braille
 #   cc -x assembler-with-cpp -c  →  preprocess #ifdef macros, then assemble
 
-file(GLOB SA1_DATA_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/data/sa1/*.s")
+file(GLOB SA1_DATA_ASM_SRCS CONFIGURE_DEPENDS "${SA2_ROOT}/data/sa1/*.s")
 
 # Song assembly files (hand-written .s files in sound/songs/)
-file(GLOB SA1_SONG_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/sa1/songs/*.s")
+file(GLOB SA1_SONG_ASM_SRCS CONFIGURE_DEPENDS "${SA2_ROOT}/sound/sa1/songs/*.s")
 
 # MIDI songs: mid2agb converts .mid → .s during asset generation.
 # Derive the expected .s paths from the .mid files so CMake knows about them
 # at configure time, even though they're generated at build time.
-file(GLOB SA1_MID_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/sa1/songs/midi/*.mid")
+file(GLOB SA1_MID_FILES CONFIGURE_DEPENDS "${SA2_ROOT}/sound/sa1/songs/midi/*.mid")
 set(SA1_MID_ASM_SRCS "")
 foreach(MID ${SA1_MID_FILES})
     string(REGEX REPLACE "\\.mid$" ".s" MID_S "${MID}")
@@ -519,7 +550,7 @@ endif()
 
 set(ASM_OBJS "")
 foreach(ASM_SRC ${SA1_ALL_ASM_SRCS})
-    file(RELATIVE_PATH REL "${CMAKE_CURRENT_SOURCE_DIR}" "${ASM_SRC}")
+    file(RELATIVE_PATH REL "${SA2_ROOT}" "${ASM_SRC}")
     set(ASM_OBJ     "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.o")
     set(ASM_PREPROC "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.S")
     get_filename_component(ASM_OBJ_DIR "${ASM_OBJ}" DIRECTORY)
@@ -542,7 +573,7 @@ foreach(ASM_SRC ${SA1_ALL_ASM_SRCS})
             -DASM_INPUT=${ASM_SRC}
             -DASM_PREPROC=${ASM_PREPROC}
             -DASM_OUTPUT=${ASM_OBJ}
-            -DWORK_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+            -DWORK_DIR=${SA2_ROOT}
             -DCC=${CMAKE_C_COMPILER}
             -DCC_TARGET=${CMAKE_C_COMPILER_TARGET}
             -DCC_SYSROOT=${CMAKE_SYSROOT}

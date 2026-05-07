@@ -257,6 +257,7 @@ SA2_C_FILES := \
 	src/game/shared/stage/pause_menu.c \
 	src/game/shared/stage/item_tasks.c \
 	src/game/shared/stage/demo_manager.c \
+	src/game/shared/stage/entities_manager.c \
 	src/game/shared/stage/enemy_defeat_score.c \
 	src/game/shared/stage/mp_finish.c \
 	src/game/shared/stage/music_manager.c \
