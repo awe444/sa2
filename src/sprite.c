@@ -513,9 +513,9 @@ NONMATCH("asm/non_matching/engine/UnusedTransform.inc", void UnusedTransform(Spr
 {
     // Like TransformSprite but incorporates parent position/rotation/scale globals
     SpriteTransform tf;
-    s16 angle = SA2_LABEL(gUnknown_03001944);
-    s16 scaleX = SA2_LABEL(gUnknown_030017F0);
-    s16 scaleY = SA2_LABEL(gUnknown_03005394);
+    s16 angle = gSpriteTransformRotation;
+    s16 scaleX = gSpriteTransformScaleX;
+    s16 scaleY = gSpriteTransformScaleY;
     s32 cosA = COS_24_8(angle & ONE_CYCLE);
     s32 sinA = SIN_24_8(angle & ONE_CYCLE);
 
@@ -526,8 +526,8 @@ NONMATCH("asm/non_matching/engine/UnusedTransform.inc", void UnusedTransform(Spr
     s16 m11 = (cosA * scaleY) >> 8;
 
     // Compute rotated and translated position
-    tf.x = (m00 * transform->x + m01 * transform->y + ((s32)SA2_LABEL(gUnknown_0300194C) << 8)) >> 8;
-    tf.y = (m10 * transform->x + m11 * transform->y + ((s32)SA2_LABEL(gUnknown_03002820) << 8)) >> 8;
+    tf.x = (m00 * transform->x + m01 * transform->y + ((s32)gSpriteTransformX << 8)) >> 8;
+    tf.y = (m10 * transform->x + m11 * transform->y + ((s32)gSpriteTransformY << 8)) >> 8;
 
     // Combined rotation and scale
     tf.rotation = (transform->rotation + angle) & ONE_CYCLE;
@@ -550,10 +550,10 @@ NONMATCH("asm/non_matching/engine/sa2__sub_8004E14.inc", void SA2_LABEL(sub_8004
         us.affineIndex = sprite->frameFlags & SPRITE_FLAG_MASK_ROT_SCALE;
         affine = (u16 *)&gOamBuffer[us.affineIndex * 4].all.affineParam;
 
-        us.qDirX = COS_24_8((transform->rotation + SA2_LABEL(gUnknown_03001944)) & ONE_CYCLE);
-        us.qDirY = SIN_24_8((transform->rotation + SA2_LABEL(gUnknown_03001944)) & ONE_CYCLE);
-        us.unkC[0] = I(transform->qScaleX * SA2_LABEL(gUnknown_030017F0));
-        us.unkC[1] = I(transform->qScaleY * SA2_LABEL(gUnknown_03005394));
+        us.qDirX = COS_24_8((transform->rotation + gSpriteTransformRotation) & ONE_CYCLE);
+        us.qDirY = SIN_24_8((transform->rotation + gSpriteTransformRotation) & ONE_CYCLE);
+        us.unkC[0] = I(transform->qScaleX * gSpriteTransformScaleX);
+        us.unkC[1] = I(transform->qScaleY * gSpriteTransformScaleY);
 
         affine[0 * OAM_DATA_COUNT_AFFINE] = I(Div(Q(256), us.unkC[0]) * us.qDirX);
         affine[1 * OAM_DATA_COUNT_AFFINE] = I(Div(Q(256), us.unkC[0]) * us.qDirY);
@@ -561,12 +561,12 @@ NONMATCH("asm/non_matching/engine/sa2__sub_8004E14.inc", void SA2_LABEL(sub_8004
         affine[3 * OAM_DATA_COUNT_AFFINE] = I(Div(Q(256), us.unkC[1]) * us.qDirX);
 
         if (transform->qScaleX < 0) {
-            us.unkC[0] = I(-transform->qScaleX * SA2_LABEL(gUnknown_030017F0));
+            us.unkC[0] = I(-transform->qScaleX * gSpriteTransformScaleX);
         }
         // _08004F48
 
         if (transform->qScaleY < 0) {
-            us.unkC[1] = I(-transform->qScaleY * SA2_LABEL(gUnknown_03005394));
+            us.unkC[1] = I(-transform->qScaleY * gSpriteTransformScaleY);
         }
         // _08004F6A
 
@@ -578,17 +578,17 @@ NONMATCH("asm/non_matching/engine/sa2__sub_8004E14.inc", void SA2_LABEL(sub_8004
         // 2D Rotation matrix:
         // { +cos(a), -sin(a) }
         // { +sin(a), +cos(a) }
-        us.unk18[0][0] = I((Q(+COS_24_8(SA2_LABEL(gUnknown_03001944))) * SA2_LABEL(gUnknown_030017F0)) >> 16)
-            * (Q(us.unkC[0] * SA2_LABEL(gUnknown_03005398) >> 16));
-        us.unk18[0][1] = I((Q(-SIN_24_8(SA2_LABEL(gUnknown_03001944))) * SA2_LABEL(gUnknown_030017F0)) >> 16)
-            * (Q(us.unkC[0] * SA2_LABEL(gUnknown_03005398) >> 16));
-        us.unk18[1][0] = I((Q(+SIN_24_8(SA2_LABEL(gUnknown_03001944))) * SA2_LABEL(gUnknown_03005394)) >> 16)
-            * (Q(us.unkC[1] * SA2_LABEL(gUnknown_03005398) >> 16));
-        us.unk18[1][1] = I((Q(+COS_24_8(SA2_LABEL(gUnknown_03001944))) * SA2_LABEL(gUnknown_03005394)) >> 16)
-            * (Q(us.unkC[1] * SA2_LABEL(gUnknown_03005398) >> 16));
+        us.unk18[0][0] = I((Q(+COS_24_8(gSpriteTransformRotation)) * gSpriteTransformScaleX) >> 16)
+            * (Q(us.unkC[0] * gSpriteTransformScaleUnknown >> 16));
+        us.unk18[0][1] = I((Q(-SIN_24_8(gSpriteTransformRotation)) * gSpriteTransformScaleX) >> 16)
+            * (Q(us.unkC[0] * gSpriteTransformScaleUnknown >> 16));
+        us.unk18[1][0] = I((Q(+SIN_24_8(gSpriteTransformRotation)) * gSpriteTransformScaleY) >> 16)
+            * (Q(us.unkC[1] * gSpriteTransformScaleUnknown >> 16));
+        us.unk18[1][1] = I((Q(+COS_24_8(gSpriteTransformRotation)) * gSpriteTransformScaleY) >> 16)
+            * (Q(us.unkC[1] * gSpriteTransformScaleUnknown >> 16));
 
-        us.posX = I(transform->x * us.unk18[0][0] + transform->y * us.unk18[0][1] + Q(SA2_LABEL(gUnknown_0300194C)));
-        us.posY = I(transform->x * us.unk18[1][0] + transform->y * us.unk18[1][1] + Q(SA2_LABEL(gUnknown_03002820)));
+        us.posX = I(transform->x * us.unk18[0][0] + transform->y * us.unk18[0][1] + Q(gSpriteTransformX));
+        us.posY = I(transform->x * us.unk18[1][0] + transform->y * us.unk18[1][1] + Q(gSpriteTransformY));
 
         {
             u16 width, height;

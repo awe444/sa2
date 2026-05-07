@@ -319,15 +319,15 @@ extern Background *gBackgroundsCopyQueue[16];
 // This is used to buffer the xy-shift for each background scanline
 extern void *gBgOffsetsHBlankPrimary;
 
-extern u16 SA2_LABEL(gUnknown_030017F0);
+extern u16 gSpriteTransformScaleX;
 extern Vec2_16 gSpriteOffset;
 extern u8 gOamMallocOrders_StartIndex[32];
 extern IntrFunc gVBlankCallbacks[4];
 
 extern u8 gOamFreeIndex;
-extern u16 SA2_LABEL(gUnknown_03001944);
+extern u16 gSpriteTransformRotation;
 extern u8 gNumVBlankIntrs;
-extern s16 SA2_LABEL(gUnknown_0300194C);
+extern s16 gSpriteTransformX;
 
 extern Tilemap **gTilemapsRef;
 extern u8 gBgSprites_Unknown2[4][4];
@@ -387,7 +387,7 @@ extern void *gBgOffsetsSecondary;
 extern s16 gMosaicReg;
 extern u8 gUnknown_030026F4;
 #endif
-extern s16 SA2_LABEL(gUnknown_03002820);
+extern s16 gSpriteTransformY;
 extern u8 gVCountSetting;
 extern void *gHBlankCopyTarget;
 extern u8 gBackgroundsCopyQueueIndex;
@@ -404,8 +404,8 @@ extern u16 SA2_LABEL(gUnknown_03004D58);
 extern u8 gVramGraphicsCopyCursor;
 extern u8 gOamMallocOrders_EndIndex[0x20];
 extern u8 gBgSpritesCount;
-extern u16 SA2_LABEL(gUnknown_03005394);
-extern u16 SA2_LABEL(gUnknown_03005398);
+extern u16 gSpriteTransformScaleY;
+extern u16 gSpriteTransformScaleUnknown;
 extern IntrFunc gVBlankIntrs[4];
 extern s32 gPseudoRandom;
 extern u8 gOamMallocCopiedOrder[128];

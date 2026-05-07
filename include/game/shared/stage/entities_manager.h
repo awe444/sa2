@@ -49,7 +49,7 @@ void CreateStageEntitiesManager(void);
 void CreateEnemyDefeatScoreAndManageLives(s16 x, s16 y);
 
 // TaskDestructor_SpriteEntity
-void TaskDestructor_80095E8(struct Task *);
+void TaskDestructor_EntityShared(struct Task *);
 // The same as above, should align the name
 void TaskDestructor_EntityShared(struct Task *);
 
