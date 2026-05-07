@@ -1,1 +1,0 @@
-/home/awaszczak/git/sa2/sa1/android/app/build/intermediates/cxx/RelWithDebInfo/2n4s4e5g/obj/arm64-v8a
