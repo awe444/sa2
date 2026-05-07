@@ -3,6 +3,7 @@
 
 	mSectionRodata
 
+    mAlignData
     .global C_DECL(sBounceBlockAnims)
 C_DECL(sBounceBlockAnims):
     .short 0x01CE @ SA1_ANIM_BOUNCE_BLOCK_1   @ Neo Green Hill 1
@@ -24,6 +25,7 @@ C_DECL(sBounceBlockAnims):
     .short 0x021F @ SA1_ANIM_BOUNCE_BLOCK_5   @ 2-Player Casino Paradise
     .short 0x0259 @ SA1_ANIM_BOUNCE_BLOCK_6_2 @ 2-Player Cosmic Angel
 
+    mAlignData
     .global C_DECL(gUnknown_086CED28)
 C_DECL(gUnknown_086CED28):
     .short 0x01D0 @ SA1_ANIM_WATER_SPLASH_1  @ Neo Green Hill 1
