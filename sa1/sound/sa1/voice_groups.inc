@@ -1,0 +1,8 @@
+.include "sound/sa1/voicegroups/voicegroup000.inc"
+.include "sound/sa1/voicegroups/voicegroup001.inc"
+.include "sound/sa1/voicegroups/voicegroup002.inc"
+.include "sound/sa1/voicegroups/voicegroup003.inc"
+.include "sound/sa1/voicegroups/voicegroup004.inc"
+.include "sound/sa1/voicegroups/voicegroup005.inc"
+.include "sound/sa1/voicegroups/voicegroup006.inc"
+.include "sound/sa1/voicegroups/voicegroup007.inc"

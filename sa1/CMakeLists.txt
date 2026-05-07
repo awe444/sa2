@@ -1,0 +1,635 @@
+cmake_minimum_required(VERSION 3.13)
+project(sa1 C CXX)
+
+# ── Options ──────────────────────────────────────────────────────────────────
+option(SA1_ENABLE_AUDIO "Enable audio support" ON)
+
+set(SA1_GAME_REGION "EUROPE" CACHE STRING "Game region (EUROPE or USA)")
+set(SA2_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." CACHE PATH "Path to the SA2 root directory")
+
+# ── Host tool: preproc ───────────────────────────────────────────────────────
+# The preproc tool converts INCBIN_* macros into C array initialisers by
+# reading binary asset files at build time.  It must run on the *host*, so
+# when cross-compiling (e.g. for Android) we build it with the host C++
+# compiler, or the caller may supply a pre-built binary via
+# -DPREPROC_EXECUTABLE=<path>.
+
+set(PREPROC_TOOL_DIR "${SA2_ROOT}/tools/preproc")
+
+set(PREPROC_SRCS
+    ${PREPROC_TOOL_DIR}/asm_file.cpp
+    ${PREPROC_TOOL_DIR}/c_file.cpp
+    ${PREPROC_TOOL_DIR}/charmap.cpp
+    ${PREPROC_TOOL_DIR}/preproc.cpp
+    ${PREPROC_TOOL_DIR}/string_parser.cpp
+    ${PREPROC_TOOL_DIR}/utf8.cpp
+    ${PREPROC_TOOL_DIR}/ext/gbagfx/jasc_pal.cpp
+)
+
+if(PREPROC_EXECUTABLE)
+    set(PREPROC "${PREPROC_EXECUTABLE}")
+    set(PREPROC_DEP "")
+    message(STATUS "Using supplied preproc: ${PREPROC}")
+elseif(CMAKE_CROSSCOMPILING)
+    # preproc must run on the host during the build.  When cross-compiling
+    # (e.g. for Android) we cannot use the target toolchain, so compile it
+    # directly with the host C++ compiler.
+    # NO_CMAKE_PATH prevents find_program from searching in
+    # CMAKE_PROGRAM_PATH, which the Android NDK toolchain file populates
+    # with its own bin/ directory — that would find the NDK's clang++
+    # instead of the host system's compiler.
+    find_program(HOST_CXX NAMES c++ g++ clang++
+        NO_CMAKE_PATH
+        REQUIRED
+    )
+    set(PREPROC_HOST_BIN "${CMAKE_CURRENT_BINARY_DIR}/preproc_host")
+    add_custom_command(
+        OUTPUT "${PREPROC_HOST_BIN}"
+        COMMAND "${HOST_CXX}" -std=c++11 -O2
+            "-I${PREPROC_TOOL_DIR}/ext/gbagfx"
+            ${PREPROC_SRCS}
+            -o "${PREPROC_HOST_BIN}"
+        DEPENDS ${PREPROC_SRCS}
+        COMMENT "Building host preproc tool"
+        VERBATIM
+    )
+    set(PREPROC "${PREPROC_HOST_BIN}")
+    set(PREPROC_DEP "${PREPROC_HOST_BIN}")
+else()
+    add_executable(preproc ${PREPROC_SRCS})
+    target_include_directories(preproc PRIVATE ${PREPROC_TOOL_DIR}/ext/gbagfx)
+    target_compile_features(preproc PRIVATE cxx_std_11)
+    set(PREPROC "$<TARGET_FILE:preproc>")
+    set(PREPROC_DEP preproc)
+endif()
+
+# ── Binary asset generation ──────────────────────────────────────────────────
+# The preproc tool reads binary files referenced by INCBIN_* macros.  These
+# binary assets (.gbapal, .4bpp, .bin.rl) are generated from source files
+# (.pal, .png, .csv) using the gbagfx and entity_positions host tools.
+# We invoke a CMake script at build time that builds those tools (via their
+# Makefiles) and converts every source asset in the tree.
+
+# mid2agb (C++) needs a host C++ compiler.  When not cross-compiling,
+# CMAKE_CXX_COMPILER is already the host compiler; when cross-compiling,
+# HOST_CXX was discovered above.
+if(NOT HOST_CXX)
+    set(HOST_CXX "${CMAKE_CXX_COMPILER}")
+endif()
+
+set(ASSET_STAMP "${CMAKE_CURRENT_BINARY_DIR}/assets.stamp")
+add_custom_command(
+    OUTPUT "${ASSET_STAMP}"
+    COMMAND ${CMAKE_COMMAND}
+        -DSA1_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+        -DSA2_ROOT=${SA2_ROOT}
+        -DHOST_CXX=${HOST_CXX}
+        -DSTAMP_FILE=${ASSET_STAMP}
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/generate_assets.cmake"
+    COMMENT "Generating binary assets (gbapal, 4bpp, entity bins)"
+    VERBATIM
+)
+
+# ── preproc helper function ──────────────────────────────────────────────────
+# sa1_preprocess(<output_list_var>  SOURCES src1.c src2.c ...)
+#
+# For each source file, run:
+#     cc -E <flags> src.c -o src.i
+#     preproc src.i sdl "" > src.pp.c
+#
+# The preprocessed .pp.c files are collected in <output_list_var> and should
+# be compiled *instead of* the original sources.
+
+function(sa1_preprocess OUTPUT_VAR)
+    cmake_parse_arguments(PP "" "" "SOURCES;INCLUDE_DIRS;SYSTEM_INCLUDE_DIRS;DEFINITIONS" ${ARGN})
+
+    # Build the -I and -D flags that the C preprocessor step needs
+    set(CPP_FLAGS "")
+    # When cross-compiling (e.g. Android NDK), the -E step must target the
+    # same architecture as the final compile.  CMake stores the target triple
+    # and sysroot separately from CMAKE_C_FLAGS, so we must pass them
+    # explicitly.  Without --target the NDK clang defaults to the host arch
+    # (x86_64), defines __MMX__/__SSE__, and SDL_cpuinfo.h expands x86
+    # intrinsics that then fail to compile on ARM64.
+    if(CMAKE_C_COMPILER_TARGET)
+        list(APPEND CPP_FLAGS "--target=${CMAKE_C_COMPILER_TARGET}")
+    endif()
+    if(CMAKE_SYSROOT)
+        list(APPEND CPP_FLAGS "--sysroot=${CMAKE_SYSROOT}")
+    endif()
+    if(CMAKE_C_FLAGS)
+        separate_arguments(_c_flags NATIVE_COMMAND "${CMAKE_C_FLAGS}")
+        list(APPEND CPP_FLAGS ${_c_flags})
+    endif()
+    foreach(dir ${PP_INCLUDE_DIRS})
+        list(APPEND CPP_FLAGS "-iquote" "${dir}")
+    endforeach()
+    # System include dirs use -I so that #include <...> (angle brackets) works
+    foreach(dir ${PP_SYSTEM_INCLUDE_DIRS})
+        list(APPEND CPP_FLAGS "-I" "${dir}")
+    endforeach()
+    foreach(def ${PP_DEFINITIONS})
+        list(APPEND CPP_FLAGS "-D" "${def}")
+    endforeach()
+
+    set(PP_OUTPUTS "")
+    foreach(SRC ${PP_SOURCES})
+        # Derive a stable output path inside the build tree
+        file(RELATIVE_PATH REL "${CMAKE_CURRENT_SOURCE_DIR}" "${SRC}")
+        # Sources outside sa1/ (SA2 shared) get a prefix
+        if(REL MATCHES "^\\.\\.")
+            file(RELATIVE_PATH REL "${SA2_ROOT}" "${SRC}")
+            set(REL "sa2/${REL}")
+        endif()
+        set(PP_I  "${CMAKE_CURRENT_BINARY_DIR}/pp/${REL}.i")
+        set(PP_C  "${CMAKE_CURRENT_BINARY_DIR}/pp/${REL}")
+
+        get_filename_component(PP_I_DIR "${PP_I}" DIRECTORY)
+        get_filename_component(PP_C_DIR "${PP_C}" DIRECTORY)
+
+        add_custom_command(
+            OUTPUT "${PP_C}"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${PP_I_DIR}"
+            COMMAND ${CMAKE_C_COMPILER} -E ${CPP_FLAGS} "${SRC}" -o "${PP_I}"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${PP_C_DIR}"
+            COMMAND ${CMAKE_COMMAND}
+                -DPREPROC_EXE=${PREPROC}
+                -DPP_INPUT=${PP_I}
+                -DPP_OUTPUT=${PP_C}
+                -DWORK_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+                -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_preproc.cmake"
+            DEPENDS "${SRC}" ${PREPROC_DEP} "${ASSET_STAMP}"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+            COMMENT "preproc ${REL}"
+            VERBATIM
+        )
+        # Tell CMake this generated file is C (it has no extension CMake recognises).
+        set_source_files_properties("${PP_C}" PROPERTIES LANGUAGE C)
+        list(APPEND PP_OUTPUTS "${PP_C}")
+    endforeach()
+
+    set(${OUTPUT_VAR} ${PP_OUTPUTS} PARENT_SCOPE)
+endfunction()
+
+# ── Locate SDL2 ──────────────────────────────────────────────────────────────
+if(NOT ANDROID)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(SDL2 REQUIRED sdl2)
+endif()
+
+# ── SA1 sources (same set as the Makefile "sdl" platform) ────────────────────
+file(GLOB_RECURSE SA1_GAME_SRCS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/game/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/data/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib/*.c"
+)
+
+set(SA1_PLATFORM_SRCS
+    src/platform/pret_sdl/sdl2.c
+    src/platform/shared/common.c
+    src/platform/shared/compression.c
+    src/platform/shared/dma.c
+    src/platform/shared/input.c
+    src/platform/shared/stub.c
+    src/platform/shared/audio/cgb_audio.c
+    src/platform/shared/audio/m4a_sound_mixer.c
+    src/platform/ext/gbagfx/lz.c
+    src/platform/ext/gbagfx/rl.c
+)
+list(TRANSFORM SA1_PLATFORM_SRCS PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+
+# SA2 shared C sources that SA1 depends on (mirrors SA2_C_FILES in Makefile)
+set(SA2_SHARED_SRCS
+    src/lib/m4a/m4a.c
+    src/lib/m4a/m4a_tables.c
+    src/lib/agb_flash/agb_flash.c
+    src/lib/agb_flash/agb_flash_at_512k.c
+    src/lib/agb_flash/agb_flash_le_512k.c
+    src/lib/agb_flash/agb_flash_mx_512k.c
+    src/multi_sio.c
+    src/sio32_multi_load.c
+    src/multi_boot.c
+    src/core.c
+    src/main.c
+    src/task.c
+    src/sprite.c
+    src/trig.c
+    src/malloc_vram.c
+    src/malloc_ewram.c
+    src/bg_triangles.c
+    src/input_recorder.c
+    src/background.c
+    src/game/globals.c
+    src/game/dummy_task.c
+    src/game/game.c
+    src/game/decomp_credits.c
+    src/game/sa1/ui/time_attack_record.c
+    src/game/sa1/ui/multiplayer_continue_screen.c
+    src/game/sa1/ui/vs_record.c
+    src/game/sa1/ui/edit_language_screen.c
+    src/game/sa1/ui/sound_test.c
+    src/game/sa1/ui/time_attack_records.c
+    src/game/sa1/ui/time_over.c
+    src/game/sa1/ui/game_2_3.c
+    src/game/sa1/ui/time_attack_results.c
+    src/game/sa1/ui/time_attack_lobby.c
+    src/game/sa1/ui/special_stage_intro.c
+    src/game/sa1/ui/player_name_input_menu.c
+    src/game/sa1/ui/course_select.c
+    src/game/sa1/ui/staff_credits.c
+    src/game/sa1/ui/collect_chaos_emeralds_msg.c
+    src/game/sa1/ui/game_over.c
+    src/game/sa1/ui/character_select.c
+    src/game/sa1/ui/extra_stage_results.c
+    src/game/sa1/menus/time_attack.c
+    src/game/sa1/menus/mp_mode_select.c
+    src/game/sa1/menus/player_data.c
+    src/game/sa1/menus/options.c
+    src/game/sa1/stage/mp_unk_1.c
+    src/game/sa1/stage/mp_results.c
+    src/game/sa1/stage/player_controls.c
+    src/game/sa1/stage/to_be_continued_screen.c
+    src/game/sa1/stage/mp_results_b.c
+    src/game/sa1/stage/mp_hud.c
+    src/game/sa1/stage/ui_rendering.c
+    src/game/sa1/stage/mp_unk_0.c
+    src/game/sa1/stage/nuts_and_bolts_task.c
+    src/game/sa1/stage/some_task_manager.c
+    src/game/sa1/save.c
+    src/game/sa1/multiplayer/chao_message.c
+    src/game/shared/stage/palette_loader.c
+    src/game/shared/stage/terrain_collision.c
+    src/game/shared/stage/screen_shake.c
+    src/game/shared/stage/dust_effect_braking.c
+    src/game/shared/stage/dust_cloud.c
+    src/game/shared/stage/collect_ring_effect.c
+    src/game/shared/stage/unused_flash_task.c
+    src/game/shared/stage/pause_menu.c
+    src/game/shared/stage/item_tasks.c
+    src/game/shared/stage/demo_manager.c
+    src/game/shared/stage/enemy_defeat_score.c
+    src/game/shared/stage/magnetic_ring.c
+    src/game/shared/stage/mp_finish.c
+    src/game/shared/stage/music_manager.c
+    src/game/shared/stage/mp_sprite_task.c
+    src/game/shared/stage/camera.c
+    src/game/shared/stage/stage.c
+    src/game/shared/stage/water_effects.c
+    src/game/shared/stage/spot_light_beam_task.c
+    src/game/shared/stage/collision_1.c
+    src/game/shared/stage/collision_2.c
+    src/game/shared/stage/collision_3.c
+    src/game/shared/stage/dust_effect_spindash.c
+    src/game/shared/stage/amy_attack_heart_effect.c
+    src/game/shared/stage/mp_indicators.c
+    src/game/shared/stage/underwater_effects.c
+    src/game/shared/stage/grind_effect_1.c
+    src/game/shared/stage/mp_event_recv_mgr.c
+    src/game/shared/stage/spot_lights_manager.c
+    src/game/shared/stage/mp_event_mgr.c
+    src/game/shared/stage/mp_player.c
+    src/game/shared/stage/rings_scatter.c
+    src/game/shared/stage/rings_manager.c
+    src/game/shared/stage/player.c
+    src/game/shared/collect_rings/results.c
+    src/game/shared/menus/unused_level_select.c
+    src/game/shared/multiplayer/communication_outcome.c
+    src/game/sa1/ui/game_2_0.c
+    src/game/sa1/ui/game_2_1.c
+    src/game/sa1/ui/stage_results.c
+    src/game/sa1/menus/mp_mode_select_2.c
+    src/game/sa1/special_stage/main.c
+    src/game/sa1/stage/egg_rocket_transitions.c
+    src/game/sa1/stage/temporary_sound_play_task.c
+    src/game/sa1/stage/itembox.c
+    src/game/sa1/menus/title_screen.c
+    src/game/sa1/stage/interactables/special_spring.c
+    src/game/sa1/stage/interactables/toggle_gravity.c
+    src/game/sa1/stage/interactables/half_pipe.c
+    src/game/sa1/stage/interactables/conveyor_belt_movement.c
+    src/game/sa1/stage/interactables/track.c
+    src/game/sa1/stage/interactables/water_bridge_splash.c
+    src/game/sa1/stage/interactables/updraft.c
+    src/game/sa1/stage/interactables/bounce_block.c
+    src/game/sa1/stage/interactables/pipe.c
+    src/game/sa1/stage/interactables/wall_bumper.c
+    src/game/sa1/stage/interactables/flippers.c
+    src/game/sa1/stage/interactables/ferris_wheel.c
+    src/game/sa1/stage/interactables/platform_square.c
+    src/game/sa1/stage/interactables/booster.c
+    src/game/sa1/stage/interactables/ship_swing.c
+    src/game/sa1/stage/interactables/maze_air_corner.c
+    src/game/sa1/stage/interactables/113.c
+    src/game/sa1/stage/interactables/toggle_player_visibility.c
+    src/game/sa1/stage/interactables/flipper_small_blue.c
+    src/game/sa1/stage/interactables/air_bubbles.c
+    src/game/sa1/stage/interactables/spring.c
+    src/game/sa1/stage/interactables/spikes.c
+    src/game/sa1/stage/interactables/decoration.c
+    src/game/sa1/stage/interactables/hook_rail.c
+    src/game/sa1/stage/interactables/platforms_085_089.c
+    src/game/sa1/stage/interactables/107.c
+    src/game/sa1/stage/interactables/mini_loop.c
+    src/game/sa1/stage/interactables/boulder_spawner.c
+    src/game/sa1/stage/interactables/lava.c
+    src/game/sa1/stage/interactables/fadein_to_be_continued.c
+    src/game/sa1/stage/interactables/039.c
+    src/game/sa1/stage/interactables/checkpoint.c
+    src/game/sa1/stage/interactables/marble_track.c
+    src/game/sa1/stage/interactables/moving_spring.c
+    src/game/sa1/stage/interactables/platform_crumbling.c
+    src/game/sa1/stage/interactables/hang_bar.c
+    src/game/sa1/stage/interactables/shrubbery.c
+    src/game/sa1/stage/interactables/steam_exhaust.c
+    src/game/sa1/stage/interactables/propeller.c
+    src/game/sa1/stage/interactables/spiked_barrel.c
+    src/game/sa1/stage/interactables/stage_goal.c
+    src/game/sa1/stage/interactables/platform_spiked.c
+    src/game/sa1/stage/interactables/conveyor_belt_object.c
+    src/game/sa1/stage/interactables/toggle_player_float.c
+    src/game/sa1/stage/interactables/grind_rail.c
+    src/game/sa1/stage/interactables/party_balloon.c
+    src/game/sa1/stage/interactables/skating_stone.c
+    src/game/sa1/stage/interactables/teleport_orb.c
+    src/game/sa1/stage/interactables/breakable_wall.c
+    src/game/sa1/stage/interactables/trampoline.c
+    src/game/sa1/stage/interactables/waterfall.c
+    src/game/sa1/stage/interactables/spring_hiding.c
+    src/game/sa1/stage/interactables/forced_slide.c
+    src/game/sa1/stage/interactables/platform_thin.c
+    src/game/sa1/stage/interactables/small_fall_block.c
+    src/game/sa1/stage/interactables/crane_claw_and_lift.c
+    src/game/sa1/stage/interactables/incline_ramp.c
+    src/game/sa1/stage/interactables/security_gate.c
+    src/game/sa1/stage/interactables/toggle_player_layer.c
+    src/game/sa1/stage/interactables/bowl.c
+    src/game/sa1/stage/interactables/iron_ball.c
+    src/game/sa1/stage/interactables/034.c
+    src/game/sa1/stage/interactables/run_wheel.c
+    src/game/sa1/stage/interactables/ice_block.c
+    src/game/sa1/stage/interactables/torch.c
+    src/game/sa1/stage/interactables/swinging_hook.c
+    src/game/sa1/stage/interactables/red_flag_and_pole.c
+    src/game/sa1/stage/interactables/underwater_lava_platform.c
+    src/game/sa1/stage/interactables/mini_loop_boost.c
+    src/game/sa1/stage/interactables/sega_sonic_letters.c
+    src/game/sa1/stage/interactables/water_bridge.c
+    src/game/sa1/stage/interactables/096.c
+    src/game/sa1/stage/interactables/panel_gate.c
+    src/game/sa1/stage/interactables/carousel.c
+    src/game/sa1/stage/interactables/swing_rope.c
+    src/game/sa1/stage/interactables/bumpers.c
+    src/game/sa1/stage/enemies/wamu.c
+    src/game/sa1/stage/enemies/bosses_egg_mobile.c
+    src/game/sa1/stage/enemies/tentou.c
+    src/game/sa1/stage/enemies/boss_1_egg_hammer_tank.c
+    src/game/sa1/stage/enemies/gamigami.c
+    src/game/sa1/stage/enemies/boss_4_egg_spider.c
+    src/game/sa1/stage/enemies/kerokero.c
+    src/game/sa1/stage/enemies/boss_3_egg_ball.c
+    src/game/sa1/stage/enemies/pen_mk1.c
+    src/game/sa1/stage/enemies/bosses_misc.c
+    src/game/sa1/stage/enemies/drisame.c
+    src/game/sa1/stage/enemies/leon.c
+    src/game/sa1/stage/enemies/slot.c
+    src/game/sa1/stage/enemies/buzzer.c
+    src/game/sa1/stage/enemies/boss_xtra_super_egg_robot.c
+    src/game/sa1/stage/enemies/oct.c
+    src/game/sa1/stage/enemies/boss_x1_egg_wrecker.c
+    src/game/sa1/stage/enemies/fireball.c
+    src/game/sa1/stage/enemies/pierrot.c
+    src/game/sa1/stage/enemies/kiki.c
+    src/game/sa1/stage/enemies/boss_2_egg_press.c
+    src/game/sa1/stage/enemies/boss_x3_egg_x.c
+    src/game/sa1/stage/enemies/mole.c
+    src/game/sa1/stage/enemies/boss_x2_egg_drillster.c
+    src/game/sa1/stage/enemies/senbon.c
+    src/game/sa1/stage/enemies/rhinotank.c
+    src/game/sa1/stage/enemies/mirror.c
+    src/game/sa1/stage/enemies/kuraa.c
+    src/game/sa1/stage/enemies/boss_5_mecha_knuckles.c
+    src/game/sa1/stage/enemies/boss_6_egg_snake.c
+    src/game/sa1/stage/enemies/yukimaru.c
+    src/game/sa1/stage/enemies/hanabii.c
+    src/game/sa1/stage/player_sonic.c
+    src/game/sa1/stage/player_amy.c
+    src/game/sa1/stage/player_knuckles.c
+    src/game/sa1/stage/player_tails.c
+    src/game/sa1/stage/player_super_sonic.c
+    src/game/sa1/stage/mp_chao.c
+    src/game/sa1/stage/trapped_animals.c
+    src/game/sa1/stage/stage_ui_z.c
+    src/game/sa1/stage/stage_ui.c
+    src/game/sa1/stage/mystery_itembox.c
+    src/game/sa1/ui/intro_animation.c
+)
+list(TRANSFORM SA2_SHARED_SRCS PREPEND "${SA2_ROOT}/")
+
+# ── Common compile definitions and include directories ───────────────────────
+set(SA1_INCLUDE_DIRS
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${SA2_ROOT}/include"
+)
+
+set(SA1_DEFINITIONS
+    GAME=GAME_SA1
+    PLATFORM_GBA=0
+    PLATFORM_SDL=1
+    PLATFORM_WIN32=0
+    CPU_ARCH_X86=0
+    CPU_ARCH_ARM=0
+    PORTABLE=1
+    NON_MATCHING=1
+    ENABLE_DECOMP_CREDITS=1
+    DEBUG=0
+    TITLE_BAR=sa1.sdl
+    ${SA1_GAME_REGION}
+)
+
+# ── Preprocess all sources through preproc ────────────────────────────────────
+# The preproc tool converts INCBIN_* macros (which can appear in headers
+# included by any source) into C array initialisers.  The Makefile builds
+# pipe every .c through preproc; we do the same here.
+
+# SDL2 headers are included with angle brackets (#include <SDL.h>) so we need
+# -I flags (not -iquote) for the preprocessing step.
+if(ANDROID AND TARGET SDL2)
+    get_target_property(_sdl2_source_dir SDL2 SOURCE_DIR)
+    get_target_property(_sdl2_binary_dir SDL2 BINARY_DIR)
+    set(SDL2_PP_INCLUDE_DIRS "")
+    if(_sdl2_source_dir)
+        list(APPEND SDL2_PP_INCLUDE_DIRS "${_sdl2_source_dir}/include")
+    endif()
+    if(_sdl2_binary_dir)
+        list(APPEND SDL2_PP_INCLUDE_DIRS
+            "${_sdl2_binary_dir}/include"
+            "${_sdl2_binary_dir}/include/SDL2"
+        )
+    endif()
+elseif(SDL2_INCLUDE_DIRS)
+    set(SDL2_PP_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
+else()
+    set(SDL2_PP_INCLUDE_DIRS "")
+endif()
+
+sa1_preprocess(PP_SRCS
+    SOURCES            ${SA1_GAME_SRCS} ${SA1_PLATFORM_SRCS} ${SA2_SHARED_SRCS}
+    INCLUDE_DIRS       ${SA1_INCLUDE_DIRS}
+    SYSTEM_INCLUDE_DIRS ${SDL2_PP_INCLUDE_DIRS}
+    DEFINITIONS        ${SA1_DEFINITIONS}
+)
+
+# ── Assembly data files ──────────────────────────────────────────────────────
+# The Makefile compiles sa1/data/*.s assembly files that define data symbols
+# (gObjTiles_4bpp, gObjTiles_8bpp, gUnknown_*, sLangScreenReturnProcs, etc.)
+# referenced by the C code.  The pipeline matches the Makefile:
+#   preproc file.s sdl ""  →  expand .include / .string / .braille
+#   cc -x assembler-with-cpp -c  →  preprocess #ifdef macros, then assemble
+
+file(GLOB SA1_DATA_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/data/sa1/*.s")
+
+# Song assembly files (hand-written .s files in sound/songs/)
+file(GLOB SA1_SONG_ASM_SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/sa1/songs/*.s")
+
+# MIDI songs: mid2agb converts .mid → .s during asset generation.
+# Derive the expected .s paths from the .mid files so CMake knows about them
+# at configure time, even though they're generated at build time.
+file(GLOB SA1_MID_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sound/sa1/songs/midi/*.mid")
+set(SA1_MID_ASM_SRCS "")
+foreach(MID ${SA1_MID_FILES})
+    string(REGEX REPLACE "\\.mid$" ".s" MID_S "${MID}")
+    list(APPEND SA1_MID_ASM_SRCS "${MID_S}")
+endforeach()
+
+# Combine all assembly sources
+set(SA1_ALL_ASM_SRCS ${SA1_DATA_ASM_SRCS} ${SA1_SONG_ASM_SRCS} ${SA1_MID_ASM_SRCS})
+
+# Definitions the assembly macros need (portable.inc checks CPU_ARCH_X86).
+# Pipe-delimited because CMake lists (semicolons) are lost when passed via -D;
+# the values (KEY=0/1) never contain pipes.
+string(REPLACE ";" "|" _asm_defs "${SA1_DEFINITIONS}")
+
+# When building a shared library (Android), the assembly .o files must be
+# position-independent.  CMake adds -fPIC automatically for C targets but
+# not for objects produced by custom commands, so we pass it explicitly.
+set(_asm_cc_flags "${CMAKE_C_FLAGS}")
+if(ANDROID)
+    string(APPEND _asm_cc_flags " -fPIC")
+endif()
+
+set(ASM_OBJS "")
+foreach(ASM_SRC ${SA1_ALL_ASM_SRCS})
+    file(RELATIVE_PATH REL "${CMAKE_CURRENT_SOURCE_DIR}" "${ASM_SRC}")
+    set(ASM_OBJ     "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.o")
+    set(ASM_PREPROC "${CMAKE_CURRENT_BINARY_DIR}/asm/${REL}.S")
+    get_filename_component(ASM_OBJ_DIR "${ASM_OBJ}" DIRECTORY)
+
+    # For MIDI-derived .s files (generated at build time by mid2agb), we can't
+    # list them in DEPENDS because they don't exist at configure time and Ninja
+    # has no rule to produce them individually.  The ASSET_STAMP dependency
+    # already ensures asset generation (including mid2agb) runs first.
+    if(ASM_SRC IN_LIST SA1_MID_ASM_SRCS)
+        set(_src_dep "")
+    else()
+        set(_src_dep "${ASM_SRC}")
+    endif()
+
+    add_custom_command(
+        OUTPUT "${ASM_OBJ}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${ASM_OBJ_DIR}"
+        COMMAND ${CMAKE_COMMAND}
+            -DPREPROC_EXE=${PREPROC}
+            -DASM_INPUT=${ASM_SRC}
+            -DASM_PREPROC=${ASM_PREPROC}
+            -DASM_OUTPUT=${ASM_OBJ}
+            -DWORK_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+            -DCC=${CMAKE_C_COMPILER}
+            -DCC_TARGET=${CMAKE_C_COMPILER_TARGET}
+            -DCC_SYSROOT=${CMAKE_SYSROOT}
+            "-DCC_FLAGS=${_asm_cc_flags}"
+            "-DDEFS=${_asm_defs}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/run_asm.cmake"
+        DEPENDS ${_src_dep} ${PREPROC_DEP} "${ASSET_STAMP}"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "asm ${REL}"
+        VERBATIM
+    )
+    list(APPEND ASM_OBJS "${ASM_OBJ}")
+endforeach()
+
+# Mark the .o files as external pre-compiled objects
+set_source_files_properties(${ASM_OBJS} PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+
+set(ALL_SRCS ${PP_SRCS} ${ASM_OBJS})
+
+# ── Target ───────────────────────────────────────────────────────────────────
+if(ANDROID)
+    add_library(main SHARED ${ALL_SRCS})
+    set(SA1_TARGET main)
+else()
+    add_executable(sa1_sdl ${ALL_SRCS})
+    set(SA1_TARGET sa1_sdl)
+endif()
+
+# ── Include paths & preprocessor defines ─────────────────────────────────────
+# Intentionally absent: target_include_directories / target_compile_definitions.
+#
+# Every C source is compiled from its .pp.c form, which has already been
+# fully preprocessed (cc -E with all -D and -iquote flags, then preproc).
+# The Makefile pipeline works the same way — CC1 receives NO -D or -I
+# flags when compiling the preproc output:
+#
+#   $(PREPROC) file.i sdl "" | $(CC1) $(CC1FLAGS) -o file.s -
+#
+# Adding target-level -D / -I flags to the .pp.c compilation is harmless
+# but unnecessary, and keeping them out makes the CMake pipeline an exact
+# match of the Makefile pipeline.
+
+# ── Compiler flags ───────────────────────────────────────────────────────────
+string(TOUPPER "${CMAKE_BUILD_TYPE}" _BUILD_TYPE_UPPER)
+if(_BUILD_TYPE_UPPER STREQUAL "DEBUG")
+    set(SA1_OPT_FLAG -O0)
+else()
+    set(SA1_OPT_FLAG -O2)
+endif()
+
+target_compile_options(${SA1_TARGET} PRIVATE
+    -Wimplicit
+    -Wparentheses
+    ${SA1_OPT_FLAG}
+    # Strict aliasing optimizations can miscompile type-punned pointer accesses
+    # common in GBA decompilation code (e.g. OamData union accessed via u16*
+    # attr writes and u32 bitfield reads).  Applies to both GCC and Clang,
+    # matching the sa2 root Makefile which adds this for all non-GBA compilers.
+    -fno-strict-aliasing
+)
+
+# Clang-specific flags (GCC does not recognise these)
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+    target_compile_options(${SA1_TARGET} PRIVATE
+        -Wno-parentheses-equality
+        -Wno-unused-value
+        # Clang emits .addrsig directives that GNU as does not understand.
+        -fno-addrsig
+    )
+endif()
+
+# ── Link SDL2 ────────────────────────────────────────────────────────────────
+if(ANDROID)
+    target_link_libraries(${SA1_TARGET} PRIVATE
+        SDL2
+        SDL2main
+        GLESv1_CM
+        GLESv2
+        log
+        android
+    )
+else()
+    # SDL2 include dirs are not needed here — .pp.c files are already
+    # preprocessed with SDL2 headers expanded (via SYSTEM_INCLUDE_DIRS
+    # in the sa1_preprocess() call above).
+    target_link_libraries(${SA1_TARGET} PRIVATE ${SDL2_LIBRARIES})
+endif()
+
+# NOTE: No C_STANDARD is set here, matching the Makefile which does not pass
+# -std= and lets the compiler default (gnu17 for modern GCC/Clang).
