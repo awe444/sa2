@@ -4,6 +4,7 @@
 	mSectionRodata
     .align 2 , 0
 
+    mAlignData
     .global C_DECL(gUnknown_080BB544)
 C_DECL(gUnknown_080BB544):
     .short 0x022F, 0x022F
