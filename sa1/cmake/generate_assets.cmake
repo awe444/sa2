@@ -176,7 +176,12 @@ foreach(CSV ${CSV_FILES})
 endforeach()
 
 # ── Step 5: Convert .aif → .bin (sound samples) ───────────────────────────
-file(GLOB AIF_FILES "${SA2_ROOT}/sound/sa1/direct_sound_samples/*.aif")
+# After upstream's "de-duplicate shared samples" change, sa1's sound .inc
+# files reference samples in both sound/sa1/ (sa1-only) and sound/shared/
+# (shared with sa2).  Process both trees so every .incbin target exists.
+file(GLOB_RECURSE AIF_FILES
+    "${SA2_ROOT}/sound/sa1/direct_sound_samples/*.aif"
+    "${SA2_ROOT}/sound/shared/direct_sound_samples/*.aif")
 foreach(AIF ${AIF_FILES})
     string(REGEX REPLACE "\\.aif$" ".bin" BIN "${AIF}")
     if("${AIF}" IS_NEWER_THAN "${BIN}")
