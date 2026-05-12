@@ -1,6 +1,15 @@
 .macro mSectionRodata
 #if (!CPU_ARCH_X86 && defined(__APPLE__)) // On macos, native compilation uses this name for the rodata section
   .section __DATA,__data
+#elif defined(__ANDROID__)
+  // On Android we link a position-independent shared library (libmain.so).
+  // Many of these data files contain absolute pointers to other symbols
+  // (mPtr → .quad sym), which would generate R_AARCH64_ABS64 relocations.
+  // The aarch64 dynamic linker refuses such relocations in read-only
+  // sections (".rodata"), so we place the data in .data.rel.ro instead.
+  // The dynamic linker resolves the pointers via R_AARCH64_RELATIVE at
+  // load time and the section is then protected read-only via RELRO.
+  .section .data.rel.ro,"aw",%progbits
 #else
   .section .rodata
 #endif
