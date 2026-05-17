@@ -14,12 +14,12 @@
 #include "game/sa1/stage/mp_unk_0.h"
 #include "constants/sa1/char_states.h"
 #include "constants/sa1/songs.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 #elif (GAME == GAME_SA2)
 #include "game/sa2/stage/mp_attack_1_effect.h"
 #include "constants/sa2/char_states.h"
 #include "constants/sa2/songs.h"
-#include "constants/sa2/zones.h"
+#include "constants/zones.h"
 #endif
 
 typedef void (*RoomEventHandler)(union MultiSioData *recv, u8 i);
@@ -375,7 +375,7 @@ void ReceiveRoomEvent_ReachedStageGoal(union MultiSioData *recv, u8 i)
         }
 
         if (!somebool) {
-            CreateMultiplayerFinishHandler();
+            CreateMultiplayerFinishTransition();
         }
     }
 }
@@ -384,9 +384,9 @@ END_NONMATCH
 #endif
 #endif
 
-struct Task *CreateMultiplayerSendEventMgr(void)
+Task *CreateMultiplayerSendEventMgr(void)
 {
-    struct Task *t = TaskCreate(Task_MultiplayerEventMgr_Send, 0, -2, 0, NULL);
+    Task *t = TaskCreate(Task_MultiplayerEventMgr_Send, 0, -2, 0, NULL);
     DmaFill32(3, 0, &gMultiSioSend, sizeof(gMultiSioSend));
     DmaFill32(3, 0, &gMultiSioRecv, sizeof(gMultiSioRecv));
     DmaFill32(3, 0, &gRoomEventQueue, sizeof(gRoomEventQueue));
@@ -394,9 +394,9 @@ struct Task *CreateMultiplayerSendEventMgr(void)
     return t;
 }
 
-struct Task *CreateMultiplayerReceiveEventMgr(void)
+Task *CreateMultiplayerReceiveEventMgr(void)
 {
-    struct Task *t = TaskCreate(Task_MultiplayerEventMgr_Receive, 0, 1, 0, NULL);
+    Task *t = TaskCreate(Task_MultiplayerEventMgr_Receive, 0, 1, 0, NULL);
     DmaFill32(3, 0, &gMultiSioSend, sizeof(gMultiSioSend));
     DmaFill32(3, 0, &gMultiSioRecv, sizeof(gMultiSioRecv));
     DmaFill32(3, 0, &gRoomEventQueue, sizeof(gRoomEventQueue));

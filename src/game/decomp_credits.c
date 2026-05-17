@@ -13,6 +13,26 @@
 #include "constants/sa1/animations.h"
 #include "constants/sa1/characters.h"
 #include "constants/sa1/songs.h"
+
+// decomp_credits.c uses the SA2_ANIM_CHAR / SA2_CHAR_ANIM_* constants
+// unconditionally (i.e. outside of `#if (GAME == GAME_SA2)` guards).
+// Historically these were duplicated into `constants/sa1/animations.h`,
+// but upstream commit c4b9962f2 ("de-duplicate constants") removed the
+// SA1 copies, leaving only `constants/sa2/animations.h`.  Re-include the
+// SA2 anim macros here so SA1 builds (e.g. the Android port with
+// ENABLE_DECOMP_CREDITS=1) still compile.  Both SA1 and SA2 animations
+// headers share the same `GUARD_ANIMATIONS_SA1_H` include guard (an
+// upstream copy-paste bug), so we just define the few symbols we need
+// locally instead of including the SA2 header directly.
+#ifndef SA2_NUM_PLAYER_CHAR_ANIMATIONS
+#define SA2_NUM_PLAYER_CHAR_ANIMATIONS (91)
+#define SA2_ANIM_CHAR(anim, character)                                                                                                     \
+    ((anim) + character * SA2_NUM_PLAYER_CHAR_ANIMATIONS)
+#define SA2_CHAR_ANIM_TAUNT      1
+#define SA2_CHAR_ANIM_BRAKE_GOAL 8
+#define SA2_CHAR_ANIM_WALK       9
+#define SA2_CHAR_ANIM_34         34
+#endif
 #elif (GAME == GAME_SA2)
 #include "game/sa2/save.h"
 #include "game/sa2/options_screen.h"
@@ -45,7 +65,7 @@ typedef struct {
 } DCCredits;
 
 void Task_DecompCreditsFirst();
-void TaskDestructor_DecompCredits(struct Task *t);
+void TaskDestructor_DecompCredits(Task *t);
 
 void customHBlank(void);
 
@@ -69,7 +89,7 @@ s32 logoOllieMove(s32 frameNum)
 
 void CreateDecompCreditsScreen(bool32 hasProfile)
 {
-    struct Task *t;
+    Task *t;
     DCCredits *cred;
     Sprite *s;
 
@@ -272,7 +292,7 @@ void Task_SonicArrived(void)
     cred->sonicArrivedT0++;
 }
 
-void TaskDestructor_DecompCredits(struct Task *t)
+void TaskDestructor_DecompCredits(Task *t)
 {
     DCCredits *cred = TASK_DATA(t);
 

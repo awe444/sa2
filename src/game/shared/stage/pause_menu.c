@@ -11,8 +11,8 @@
 #include "game/sa1/save.h"
 #include "game/sa1/ui/time_attack_lobby.h"
 
-#include "constants/sa2/animations.h"
-#include "constants/sa2/songs.h"
+#include "constants/sa1/animations.h"
+#include "constants/sa1/songs.h"
 #elif (GAME == GAME_SA2)
 #include "game/sa2/save.h"
 #include "game/sa2/ui/time_attack_lobby.h"
@@ -52,11 +52,11 @@ const TileInfo sAnimInfoPauseMenu[] = {
 #endif
 
 void Task_PauseMenuInit(void);
-void TaskDestructor_PauseMenu(struct Task *);
+void TaskDestructor_PauseMenu(Task *);
 
 void CreatePauseMenu(void)
 {
-    struct Task *t;
+    Task *t;
     PauseMenu *pm;
     Sprite *s;
 
@@ -335,7 +335,7 @@ void Task_PauseMenuInit(void)
     gCurTask->main = Task_PauseMenuUpdate;
 }
 
-void TaskDestructor_PauseMenu(struct Task *t)
+void TaskDestructor_PauseMenu(Task *t)
 {
     PauseMenu *pm = TASK_DATA(t);
 #if (GAME == GAME_SA1)

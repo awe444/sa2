@@ -10,7 +10,7 @@
 #include "constants/sa1/animations.h"
 #include "constants/sa1/char_states.h"
 #include "constants/sa1/songs.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 typedef struct {
     /* 0x00 */ MapEntity *me;
@@ -32,13 +32,13 @@ typedef struct {
 
 void Task_Waterfall(void);
 void Task_WaterfallZone5(void);
-void TaskDestructor_Waterfall(struct Task *t);
+void TaskDestructor_Waterfall(Task *t);
 
 extern AnimId gUnknown_086CED28[NUM_LEVEL_IDS];
 
 void CreateEntity_Waterfall(MapEntity *me, u16 regionX, u16 regionY, u8 id)
 {
-    struct Task *t;
+    Task *t;
     Sprite *s;
     Waterfall *waterfall;
     s32 zero;
@@ -325,4 +325,4 @@ void Task_WaterfallZone5(void)
     TASK_SET_MEMBER(Waterfall, gCurTask, u8, unk3E, unk3E);
 }
 
-void TaskDestructor_Waterfall(struct Task *t) { VramFree((&TASK_GET_MEMBER(Waterfall, t, Sprite, s))->graphics.dest); }
+void TaskDestructor_Waterfall(Task *t) { VramFree((&TASK_GET_MEMBER(Waterfall, t, Sprite, s))->graphics.dest); }

@@ -11,11 +11,11 @@
 #include "constants/sa1/anim_sizes.h"
 #include "constants/sa1/songs.h"
 #include "constants/sa1/vram_hardcoded.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 /* TODO: Maybe inline this file into bosses_misc.c ? */
 
-typedef struct PostBossEggMobile {
+typedef struct {
     /* 0x00 */ Sprite s;
     /* 0x30 */ Sprite s2;
     /* 0x60 */ CamCoord worldX;
@@ -38,7 +38,7 @@ void Task_EggMobileEscape(void);
 
 void CreatePostBossEggMobile(CamCoord worldX, CamCoord worldY)
 {
-    struct Task *t;
+    Task *t;
     PostBossEggMobile *eggMobile;
     Sprite *s;
 

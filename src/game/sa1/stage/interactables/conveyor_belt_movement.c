@@ -3,7 +3,7 @@
 #include "game/shared/stage/entity.h"
 #include "game/shared/stage/terrain_collision.h"
 
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -114,7 +114,7 @@ void Task_SlowingSnow(void)
 
 void CreateEntity_ConveyorBelt(MapEntity *me, u16 regionX, u16 regionY, u8 id)
 {
-    struct Task *t;
+    Task *t;
     ConveyorBeltMvt *mvt;
     u8 zone;
 

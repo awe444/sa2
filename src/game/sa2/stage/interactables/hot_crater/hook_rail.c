@@ -15,7 +15,7 @@
 #include "constants/sa2/char_states.h"
 #include "constants/sa2/player_transitions.h"
 #include "constants/sa2/songs.h"
-#include "constants/sa2/zones.h"
+#include "constants/zones.h"
 
 typedef struct {
     s32 x;
@@ -34,7 +34,7 @@ typedef struct {
 } Sprite_HookRail;
 
 static void sub_8072F38(void);
-static void sub_8072FD4(struct Task *);
+static void sub_8072FD4(Task *);
 static void sub_8072F8C(void);
 static void sub_8073088(Sprite_HookRail *);
 static void sub_8073048(Sprite_HookRail *);
@@ -64,7 +64,7 @@ static void sub_8072BB8(void);
 
 void CreateEntity_HookRail(u32 triggerType, MapEntity *me, u16 spriteRegionX, u16 spriteRegionY, u8 spriteY)
 {
-    struct Task *t;
+    Task *t;
     Sprite_HookRail *hookRail;
     switch (triggerType) {
         case 0:
@@ -272,7 +272,7 @@ static void sub_8072F8C(void)
     }
 }
 
-static void sub_8072FD4(struct Task *unused)
+static void sub_8072FD4(Task *unused)
 {
     // unused
 }

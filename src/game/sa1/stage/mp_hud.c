@@ -9,18 +9,18 @@
 #include "constants/sa1/songs.h"
 #include "constants/sa1/text.h"
 #include "constants/sa1/tilemaps.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 /*   Used by Chao Hunt and Collect Rings as HUD task   */
 
-typedef struct ChaoHuntHUD {
+typedef struct {
     Sprite s0;
     Sprite spritesA[11];
     Sprite spritesB[11];
 } ChaoHuntHUD;
 
 void Task_ChaoHuntHUD(void);
-void TaskDestructor_ChaoHuntHUD(struct Task *t);
+void TaskDestructor_ChaoHuntHUD(Task *t);
 
 const u8 SA2_LABEL(gUnknown_080E0234)[] = {
     0,   2,   3,   5,   7,   8,   16,  18,  19,  21,  23,  24,  32,  34,  35,  37,  39,  40,  48,  50,
@@ -228,7 +228,7 @@ NONMATCH("asm/non_matching/game/sa1/stage/results_2__Task_ChaoHuntHUD.inc", void
 }
 END_NONMATCH
 
-void TaskDestructor_ChaoHuntHUD(struct Task *t)
+void TaskDestructor_ChaoHuntHUD(Task *t)
 {
     ChaoHuntHUD *hud = TASK_DATA(t);
 

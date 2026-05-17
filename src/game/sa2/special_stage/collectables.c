@@ -9,7 +9,7 @@
 #include "trig.h"
 #include "game/math.h"
 #include "constants/sa2/songs.h"
-#include "constants/sa2/zones.h"
+#include "constants/zones.h"
 
 // Maybe same as SpecialStageCollectables_UNK874 or UNK_806CB84
 struct UNK_806DEA4 {
@@ -555,10 +555,10 @@ void sub_806E584(s16 index, struct SpecialStageCollectables_UNK874 *unk874)
     }
 }
 
-struct Task *CreateSpecialStageCollectables(struct SpecialStage *stage)
+Task *CreateSpecialStageCollectables(struct SpecialStage *stage)
 {
     s16 unkF6CC[7];
-    struct Task *t;
+    Task *t;
     struct SpecialStageCollectables *collectables;
     memcpy(unkF6CC, gUnknown_080DF6CC, sizeof(unkF6CC));
 

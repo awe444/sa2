@@ -38,7 +38,7 @@
 #include "constants/sa1/char_states.h"
 #include "constants/sa1/songs.h"
 #include "constants/sa1/vram_hardcoded.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 #elif (GAME == GAME_SA2)
 #include "game/sa2/stage/mp_attack_1_effect.h"
@@ -61,7 +61,7 @@
 #include "constants/sa2/char_states.h"
 #include "constants/sa2/player_transitions.h"
 #include "constants/sa2/songs.h"
-#include "constants/sa2/zones.h"
+#include "constants/zones.h"
 #endif
 
 // >> acceleration = (sin(angle) * 3) / 32
@@ -297,7 +297,7 @@ PlayerSpriteInfo ALIGNED(16) gPartnerBodyPSI = {};
 void Task_PlayerMain(void);
 void AllocateCharacterStageGfx(Player *p, PlayerSpriteInfo *param2);
 void AllocateCharacterMidAirGfx(Player *p, PlayerSpriteInfo *param2);
-void TaskDestructor_Player(struct Task *);
+void TaskDestructor_Player(Task *);
 
 void SA2_LABEL(sub_802486C)(Player *p, PlayerSpriteInfo *psi);
 void SA2_LABEL(sub_8024B10)(Player *p, PlayerSpriteInfo *psi);
@@ -665,7 +665,7 @@ static const u8 disableTrickTimerTable[4] = { 4, 3, 2, 2 };
 #ifndef COLLECT_RINGS_ROM
 void CreatePlayer(u32 UNUSED characterId, u32 levelId, Player *player)
 {
-    struct Task *t;
+    Task *t;
     player_0_Task *gt;
 
     Player *p = player;
@@ -4834,7 +4834,7 @@ void Task_PlayerHandleDeath(void)
     }
 }
 
-static inline bool32 DeadPlayerLeftScreen(Player *p, struct Camera *cam, s32 playerY)
+static inline bool32 DeadPlayerLeftScreen(Player *p, Camera *cam, s32 playerY)
 {
     if (p->moveState & MOVESTATE_80000000) {
         return FALSE;
@@ -4956,7 +4956,7 @@ void Task_PlayerMain(void)
 #endif
 
     if (p->moveState & MOVESTATE_DEAD) {
-        struct Camera *cam = &gCamera;
+        Camera *cam = &gCamera;
         gCurTask->main = Task_PlayerDied;
         p->charState = CHARSTATE_DEAD;
         p->qSpeedAirX = 0;
@@ -6053,7 +6053,7 @@ void SA2_LABEL(sub_8024B10)(Player *p, PlayerSpriteInfo *inPsi)
     Sprite *s = &inPsi->s;
     PlayerSpriteInfo *psi = inPsi;
 
-    struct Camera *cam = &gCamera;
+    Camera *cam = &gCamera;
     s16 camX = cam->x;
     s16 camY = cam->y;
 
@@ -6505,7 +6505,7 @@ void SA2_LABEL(sub_8024F74)(Player *p, PlayerSpriteInfo *inPsi)
     Sprite *s = &inPsi->s;
     PlayerSpriteInfo *psi = inPsi;
 
-    struct Camera *cam = &gCamera;
+    Camera *cam = &gCamera;
     s16 camX = cam->x;
     s16 camY = cam->y;
 
@@ -8376,9 +8376,9 @@ void sub_8028478(Player *p)
 /* Starting here, callbacks appear to have a different style,
    but they still use macros like PLAYERFN_UPDATE_POSITION */
 
-struct Task *sub_8028640(s32 x, s32 y, s32 p2)
+Task *sub_8028640(s32 x, s32 y, s32 p2)
 {
-    struct Task *t;
+    Task *t;
     MultiplayerSpriteTask *taskStrc;
     Sprite *s;
 
@@ -9186,7 +9186,7 @@ void CallSetStageSpawnPos(u32 character, u32 level, u32 playerID, Player *p) { S
 #if COLLECT_RINGS_ROM
 void CreatePlayer(u32 UNUSED characterId, u32 UNUSED levelId, Player *player)
 {
-    struct Task *t;
+    Task *t;
     player_0_Task *gt;
 
     Player *p = player;
@@ -9587,7 +9587,7 @@ void PlayerFn_Cmd_UpdateAirFallSpeed(Player *p) { PLAYERFN_UPDATE_AIR_FALL_SPEED
 
 bool32 SA2_LABEL(sub_8029DE8)(Player *p)
 {
-    struct Camera *cam = &gCamera;
+    Camera *cam = &gCamera;
     s32 playerY = p->qWorldY;
 
 #ifndef COLLECT_RINGS_ROM
@@ -9623,7 +9623,7 @@ bool32 SA2_LABEL(sub_8029DE8)(Player *p)
 // Might've been an inline func, but doesn't match with it.
 UNUSED bool32 DeadPlayerLeftScreen_UnusedCopy(Player *p)
 {
-    struct Camera *cam = &gCamera;
+    Camera *cam = &gCamera;
     s32 playerY = p->qWorldY;
 
 #ifndef COLLECT_RINGS_ROM
@@ -9825,7 +9825,7 @@ void Player_InitializeDrowning(Player *p)
 }
 #endif
 
-void TaskDestructor_Player(struct Task *t)
+void TaskDestructor_Player(Task *t)
 {
     player_0_Task *gt = TASK_DATA(t);
     Player *p;
