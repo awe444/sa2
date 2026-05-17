@@ -14,7 +14,7 @@
 #include "game/sa2/stage/boss_results_transition.h"
 
 #include "constants/sa2/songs.h"
-#include "constants/sa2/zones.h"
+#include "constants/zones.h"
 
 // Seven unknown x/y positions
 const u16 gUnknown_080D6DE4[][2] = {
@@ -127,7 +127,7 @@ void Task_802EE78(void)
 
 void sub_802EF68(s16 p0, s16 p1, u8 p2)
 {
-    struct Task *t = TaskCreate(Task_802EE78, sizeof(StageResultsInit), 0x6080, 0, NULL);
+    Task *t = TaskCreate(Task_802EE78, sizeof(StageResultsInit), 0x6080, 0, NULL);
     StageResultsInit *sri = TASK_DATA(t);
     ScreenFade *ts = &sri->ts;
 

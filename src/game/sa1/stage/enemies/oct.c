@@ -7,7 +7,7 @@
 
 #include "constants/sa1/animations.h"
 #include "constants/sa1/vram_hardcoded.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 typedef struct {
     // NOTE: EntityShared HAS to be the first element,
@@ -38,7 +38,7 @@ void Task_OctProjectile(void);
 
 void CreateEntity_Oct(MapEntity *me, u16 regionX, u16 regionY, u8 id)
 {
-    struct Task *t = TaskCreate(Task_OctInit, sizeof(Oct), 0x2000, 0, TaskDestructor_EntityShared);
+    Task *t = TaskCreate(Task_OctInit, sizeof(Oct), 0x2000, 0, TaskDestructor_EntityShared);
     Oct *oct = TASK_DATA(t);
     Sprite *s = &oct->shared.s;
 
@@ -293,7 +293,7 @@ void sub_80706F0(void)
 
 void CreateOctProjectile(CamCoord worldX, CamCoord worldY)
 {
-    struct Task *t = TaskCreate(Task_OctProjectile, sizeof(OctProjectile), 0x3000, 0, NULL);
+    Task *t = TaskCreate(Task_OctProjectile, sizeof(OctProjectile), 0x3000, 0, NULL);
     OctProjectile *proj = TASK_DATA(t);
     Sprite *s = &proj->s;
 

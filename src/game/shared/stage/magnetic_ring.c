@@ -11,10 +11,10 @@
 
 #if (GAME == GAME_SA1)
 #include "constants/sa1/animations.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 #elif (GAME == GAME_SA2)
 #include "constants/sa2/animations.h"
-#include "constants/sa2/zones.h"
+#include "constants/zones.h"
 #endif
 
 typedef struct {
@@ -26,7 +26,7 @@ void Task_MagneticRing(void);
 
 void CreateMagneticRing(s16 x, s16 y)
 {
-    struct Task *t = TaskCreate(Task_MagneticRing, sizeof(StageRing), 0x2000, 0, NULL);
+    Task *t = TaskCreate(Task_MagneticRing, sizeof(StageRing), 0x2000, 0, NULL);
     StageRing *ring = TASK_DATA(t);
     Sprite *s;
 

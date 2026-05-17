@@ -11,7 +11,7 @@ u8 gMultiplayerLanguage = 0;
 #endif
 
 u16 ALIGNED(4) gRingCount = 0;
-struct Task *ALIGNED(4) gChaoTasks[3] = {};
+Task *ALIGNED(4) gChaoTasks[3] = {};
 
 #if (GAME == GAME_SA2)
 #ifndef NON_MATCHING
@@ -103,7 +103,7 @@ u16 ALIGNED(4) gSpecialStageReturnY = 0;
 #elif (GAME == GAME_SA2)
 u8 ALIGNED(4) gMultiplayerUnlockedLevels = 0;
 #endif
-struct Task *ALIGNED(4) gEntitiesManagerTask = NULL;
+Task *ALIGNED(4) gEntitiesManagerTask = NULL;
 
 #if (GAME == GAME_SA2)
 s32 ALIGNED(4) gWorldSpeedY = 0;
@@ -152,12 +152,12 @@ u8 ALIGNED(4) gMultiplayerUnlockedCharacters = 0;
 #endif
 
 #ifndef NON_MATCHING
-struct Task *ALIGNED(16) gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] = {};
+Task *ALIGNED(16) gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] = {};
 #else
 // ALIGNED(16) must be on the variable (not the element type) so the array's
 // start address is 16-byte aligned.  Clang -O2 vectorises the zeroing in
 // GameInit into movaps, which requires this alignment.
-struct Task *gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] ALIGNED(16) = {};
+Task *gMultiplayerPlayerTasks[MULTI_SIO_PLAYERS_MAX] ALIGNED(16) = {};
 #endif
 
 #if (GAME == GAME_SA1)

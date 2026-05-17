@@ -28,7 +28,7 @@
 #include "constants/sa2/animations.h"
 #include "constants/sa2/char_states.h"
 #include "constants/sa2/songs.h"
-#include "constants/sa2/zones.h"
+#include "constants/zones.h"
 
 #define EGG_HAMMER_TANK_II_STATE_RESET   0
 #define EGG_HAMMER_TANK_II_STATE_EXTEND  1
@@ -126,7 +126,7 @@ typedef struct {
 typedef void (*HammertankFunc)(EggHammerTankII *);
 
 static void Task_EggHammerTankII_RollIn(void);
-static void TaskDestructor_EggHammerTankII(struct Task *);
+static void TaskDestructor_EggHammerTankII(Task *);
 static void Task_EggHammerTankII_Main(void);
 static void Task_DestructionScene_Main(void);
 
@@ -194,7 +194,7 @@ static const ColorRaw sBoss1Palettes[][PALETTE_LEN_4BPP] = {
 
 void CreateEggHammerTankII(void)
 {
-    struct Task *t;
+    Task *t;
     EggHammerTankII *boss;
     Sprite *s;
     u32 i;
@@ -1473,7 +1473,7 @@ void EggHammerTankIIMove(s32 x, s32 y)
     ds->hammerY += y;
 }
 
-static void TaskDestructor_EggHammerTankII(struct Task *t)
+static void TaskDestructor_EggHammerTankII(Task *t)
 {
     EggHammerTankII *boss = TASK_DATA(t);
     VramFree(boss->body.graphics.dest);

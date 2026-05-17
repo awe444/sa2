@@ -19,7 +19,7 @@
 #include "constants/sa1/interactables.h"
 #include "constants/sa1/songs.h"
 #include "constants/sa1/vram_hardcoded.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 typedef struct {
     /* 0x00 */ SpriteBase base;
@@ -40,7 +40,7 @@ void Task_Track(void);
 
 void CreateEntity_Track(MapEntity *me, u16 regionX, u16 regionY, u8 id)
 {
-    struct Task *t = TaskCreate(Task_Track, sizeof(Track), me->d.uData[3] | 0x2000, 0, NULL);
+    Task *t = TaskCreate(Task_Track, sizeof(Track), me->d.uData[3] | 0x2000, 0, NULL);
     Track *track = TASK_DATA(t);
 
     track->base.regionX = regionX;

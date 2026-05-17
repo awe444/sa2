@@ -6,7 +6,7 @@
 #include "game/shared/stage/entities_manager.h"
 
 #include "constants/sa1/animations.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 typedef struct {
     /* 0x00 */ EntityShared shared;
@@ -23,7 +23,7 @@ void Task_8070CB4(void);
 
 void CreateEntity_Senbon(MapEntity *me, u16 regionX, u16 regionY, u8 id)
 {
-    struct Task *t;
+    Task *t;
     Senbon *senbon;
     Sprite *s;
 

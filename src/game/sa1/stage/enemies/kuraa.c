@@ -5,7 +5,7 @@
 #include "game/shared/stage/entities_manager.h"
 
 #include "constants/sa1/animations.h"
-#include "constants/sa1/zones.h"
+#include "constants/zones.h"
 
 typedef struct {
     // NOTE: EntityShared HAS to be the first element,
@@ -23,7 +23,7 @@ void Task_80737A8(void);
 
 void CreateEntity_Kuraa(MapEntity *me, u16 regionX, u16 regionY, u8 id)
 {
-    struct Task *t = TaskCreate(Task_KuraaInit, sizeof(Kuraa), 0x2000, 0, TaskDestructor_EntityShared);
+    Task *t = TaskCreate(Task_KuraaInit, sizeof(Kuraa), 0x2000, 0, TaskDestructor_EntityShared);
     Kuraa *kuraa = TASK_DATA(t);
     Sprite *s = &kuraa->shared.s;
 
