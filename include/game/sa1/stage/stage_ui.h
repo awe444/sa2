@@ -20,8 +20,9 @@ void sub_80543A4(StrcUi_805423C *param0);
 #define FROM_UI_DIGIT(_digit) ((_digit)-32)
 
 typedef struct {
-    u8 unk0[10];
-    u8 unkB;
+    /* 0x00 */ u8 unk0[10];
+    /* 0x0A */ u8 unkA; // unused; restores 12-byte size required by StageUI.digitLives offset (0x30)
+    /* 0x0B */ u8 unkB;
 } StageUI_10;
 
 typedef struct {
