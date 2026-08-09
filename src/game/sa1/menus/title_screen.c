@@ -131,8 +131,8 @@ void CreateSegaLogo(void)
     bg->tilemapId = TM_INTRO_PRESENTED_BY_SEGA;
     bg->unk1E = 0;
     bg->unk20 = 0;
-    bg->unk22 = 5;
-    bg->unk24 = 5;
+    bg->unk22 = ((DISPLAY_WIDTH / 8) - 20) / 2;
+    bg->unk24 = ((DISPLAY_HEIGHT / 8) - 10) / 2;
     bg->targetTilesX = 20;
     bg->targetTilesY = 10;
     bg->paletteOffset = 0;
@@ -208,8 +208,8 @@ void CreateSonicTeamLogo(void)
     bg->tilemapId = TM_INTRO_CREATED_BY_SONIC_TEAM;
     bg->unk1E = 0;
     bg->unk20 = 0;
-    bg->unk22 = 5;
-    bg->unk24 = 5;
+    bg->unk22 = ((DISPLAY_WIDTH / 8) - 20) / 2;
+    bg->unk24 = ((DISPLAY_HEIGHT / 8) - 10) / 2;
     bg->targetTilesX = 20;
     bg->targetTilesY = 10;
     bg->paletteOffset = 0;
@@ -220,30 +220,31 @@ void CreateSonicTeamLogo(void)
 
 void Task_800D268(void)
 {
-    s32 temp_r0;
-    s32 temp_r6;
-    u16 temp_r0_2;
     SonicTeamLogo *logo;
+    // Logo tilemap is 80px tall and vertically centered (GBA: 40..120).
+    const int_vcount logoTop = (DISPLAY_HEIGHT - 80) / 2;
+    const int_vcount logoBottom = logoTop + 80;
 
     logo = TASK_DATA(gCurTask);
     gDispCnt |= DISPCNT_BG2_ON;
 
     logo->unk0 += 2;
     if (logo->unk0 < 280) {
-        SA2_LABEL(sub_80078D4)(2, 0, 40, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
-        SA2_LABEL(sub_80078D4)(2, 120, 160, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
+        SA2_LABEL(sub_80078D4)(2, 0, logoTop, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
+        SA2_LABEL(sub_80078D4)(2, logoBottom, DISPLAY_HEIGHT, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
 
-#if !PORTABLE
-        // BUG: For some reason this currently overwrites memory it shouldn't be able to access.
-        //      Task memory gets fuzzed and the game crashes.
-        //      (In the 2nd call to SA2_LABEL(sub_8007958) )
         if (logo->unk0 < 200) {
-            SA2_LABEL(sub_8007958)(2U, 40, 120, (s16)(280 - logo->unk0), -1, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
+            SA2_LABEL(sub_8007958)
+            (2U, logoTop, logoBottom, (s16)(280 - logo->unk0), -1, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
         } else {
-            SA2_LABEL(sub_8007958)(2U, 40, (64 - logo->unk0), (280 - logo->unk0), -1, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
-            SA2_LABEL(sub_80078D4)(2U, (64 - logo->unk0), 120, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
+            // Original used (u8)(64 - unk0), which wraps into the GBA logo band.
+            // Compute the same shrink explicitly so u16 int_vcount (widescreen) is safe.
+            int_vcount wipeEnd = logoBottom - (logo->unk0 - 200);
+
+            SA2_LABEL(sub_8007958)
+            (2U, logoTop, wipeEnd, (s16)(280 - logo->unk0), -1, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
+            SA2_LABEL(sub_80078D4)(2U, wipeEnd, logoBottom, gBgScrollRegs[2][0], gBgScrollRegs[2][1]);
         }
-#endif
     } else {
         m4aSongNumStart(SE_RING);
         gFlags &= ~FLAGS_EXECUTE_HBLANK_COPY;
